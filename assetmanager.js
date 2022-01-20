@@ -8,6 +8,7 @@ class AssetManager {
 
     queueDownload(path) {
         console.log("Queueing " + path);
+        
         this.downloadQueue.push(path);
     };
 
