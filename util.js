@@ -1,5 +1,5 @@
 /** Global Parameters Object */
-const params = { };
+const params = {};
 
 /**
  * @param {Number} n
@@ -34,7 +34,8 @@ const hsl = (h, s, l) => `hsl(${h}, ${s}, ${l})`;
 
 /** Creates an alias for requestAnimationFrame for backwards compatibility */
 window.requestAnimFrame = (() => {
-    return window.requestAnimationFrame ||
+    return (
+        window.requestAnimationFrame ||
         window.webkitRequestAnimationFrame ||
         window.mozRequestAnimationFrame ||
         window.oRequestAnimationFrame ||
@@ -46,7 +47,8 @@ window.requestAnimFrame = (() => {
          */
         ((callback, element) => {
             window.setTimeout(callback, 1000 / 60);
-        });
+        })
+    );
 })();
 
 /**
