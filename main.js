@@ -2,7 +2,9 @@ const gameEngine = new GameEngine();
 
 const ASSET_MANAGER = new AssetManager();
 
-ASSET_MANAGER.queueDownload("./sprites/mettaur/mettaur-walk.png")
+//Mettaur Animations
+ASSET_MANAGER.queueDownload("./sprites/mettaur/mettaur-walk.png");
+ASSET_MANAGER.queueDownload("./sprites/mettaur/mettaur-jump.png")
 ASSET_MANAGER.downloadAll(() => {
   const canvas = document.getElementById('gameWorld');
   const ctx = canvas.getContext('2d');
