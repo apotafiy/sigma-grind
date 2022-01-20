@@ -20,7 +20,15 @@ class Animator {
     this.elapsedTime = 0;
     this.totalTime = frameCount * frameDuration;
   }
-
+  //TODO ADD SCALE COMMENTS!
+  /**
+   * 
+   * @param {*} tick 
+   * @param {*} ctx 
+   * @param {*} x 
+   * @param {*} y 
+   * @param {*} scale  <-- THIS IS NEEDED!
+   */
   drawFrame(tick, ctx, x, y, scale) {
     this.elapsedTime += tick;
     if (this.elapsedTime > this.totalTime) this.elapsedTime -= this.totalTime;
