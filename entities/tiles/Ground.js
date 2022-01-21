@@ -34,7 +34,7 @@ class Ground{
     }
 	draw(ctx) {
         let that = this;
-        console.log(that.vertical);
+        // console.log(that.vertical);
 		for(let i = 0; i < that.vertical; i++){
             for(let j = 0; j < that.horizontal; j++){
                 that.animations[0].drawFrame(that.game.clockTick, ctx, that.xstart + (64 * j) ,that.ystart + (64 * i), 1);

@@ -17,6 +17,7 @@ class Mettaur {
     this.x = x;
     this.y = y;
     this.gravity = gravity;
+    this.direction = 1;
     //bounding box
     this.BB = new BoundingBox(this.x, this.y, 32, 36);
     this.lastBB = this.BB;
@@ -77,7 +78,7 @@ class Mettaur {
     //apply gravity to the enemy
     that.yVelocity += that.gravity;
     //apply the velocity to the position
-    that.x += that.xVelocity;
+    that.x += that.xVelocity * that.direction;
     that.y += that.yVelocity;
     window.addEventListener(
       "keydown",
@@ -123,8 +124,22 @@ class Mettaur {
               that.updateBB();
             }
           }
+          console.log(that.direction)
+          //check for box to the left
+          if(that.direction == 1){
+            // console.log("Checking");
+            if((entity instanceof Ground) && that.lastBB.left < entity.BB.right  ){ // is in the wall
+              // console.log("HIT!")
+              that.x = entity.BB.right - that.BB.width;
+              that.direction = -1;
+              that.y = 300;
+              that.x = 300;
+            }
+          }
+
         }
       });
+      console.log(that.x, that.y)
 
   }
 
