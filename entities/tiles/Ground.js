@@ -17,6 +17,9 @@ class Ground{
         this.horizontal = horizontal;
         this.vertical = vertical;
         this.loadAnimation();
+        //set up the bounding box 
+        this.BB = new BoundingBox(this.xstart, this.ystart, 70 * horizontal, 70 * vertical);
+
 	};
     loadAnimation() {
         //shift over by the type of tile we want 
@@ -27,7 +30,7 @@ class Ground{
 	};
 
     BB() {
-        
+
     }
 	draw(ctx) {
         let that = this;
@@ -37,7 +40,9 @@ class Ground{
                 that.animations[0].drawFrame(that.game.clockTick, ctx, that.xstart + (64 * j) ,that.ystart + (64 * i), 1);
             }
         }
-		// console.log(this.game.clockTick);
-		// ctx.drawImage(ASSET_MANAGER.getAsset("./sprites/mettaur/mettaur-walk.png"),0,0);
+        //draw the bounding box for visual
+        ctx.strokeStyle ="Red";
+        ctx.rect(that.BB.x, that.BB.y, that.BB.width, that.BB.height);
+        ctx.stroke();
 	};
 }
