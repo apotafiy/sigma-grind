@@ -34,12 +34,17 @@ class Ground {
       70,
       70,
       1,
+      1,
+      0,
+      0,
       1
     );
   }
   update() {}
 
-  BB() {}
+  // BB() {
+
+  // }
   draw(ctx) {
     let that = this;
     // console.log(that.vertical);
@@ -57,5 +62,6 @@ class Ground {
     //draw the bounding box for visual
     ctx.strokeStyle = 'Red';
     ctx.strokeRect(that.BB.x, that.BB.y, that.BB.width, that.BB.height);
+    ctx.stroke();
   }
 }

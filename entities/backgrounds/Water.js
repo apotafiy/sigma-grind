@@ -1,4 +1,4 @@
-class Water{
+class Water {
     /**
      *  draw method params
      * start x position
@@ -6,7 +6,7 @@ class Water{
      * sprite width
      * sprite height
      * frame count
-     * 
+     *
      * time per frame
      */
     /**
@@ -14,20 +14,35 @@ class Water{
      * 1 = walk right
      * 2 = jump
      */
-	constructor(game){
-		this.game = game;
+    constructor(game) {
+        this.game = game;
         this.animations = [];
         this.xoffset = 0;
         this.loadAnimation();
-	};
-    loadAnimation() {
-        this.animations[0] = new Animator(ASSET_MANAGER.getAsset("./sprites/backgrounds/water.png"),0, 0,512,2800,1,1);
     }
-	update() {
+    loadAnimation() {
+        this.animations[0] = new Animator(
+            ASSET_MANAGER.getAsset('./sprites/backgrounds/water.png'),
+            0,
+            0,
+            2800,
+            240,
+            1,
+            1,
+            0,
+            0,
+            1
+        );
+    }
+    update() {}
 
-	};
-
-	draw(ctx) {
-		this.animations[0].drawFrame(this.game.clockTick, ctx, 0 + this.xoffset, 0, 2);
-	};
+    draw(ctx) {
+        this.animations[0].drawFrame(
+            this.game.clockTick,
+            ctx,
+            0 + this.xoffset--,
+            0,
+            2
+        );
+    }
 }
