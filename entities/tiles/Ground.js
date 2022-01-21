@@ -29,12 +29,12 @@ class Ground{
 
 	};
 
-    BB() {
+    // BB() {
 
-    }
+    // }
 	draw(ctx) {
         let that = this;
-        console.log(that.vertical);
+        // console.log(that.vertical);
 		for(let i = 0; i < that.vertical; i++){
             for(let j = 0; j < that.horizontal; j++){
                 that.animations[0].drawFrame(that.game.clockTick, ctx, that.xstart + (64 * j) ,that.ystart + (64 * i), 1);
@@ -42,7 +42,7 @@ class Ground{
         }
         //draw the bounding box for visual
         ctx.strokeStyle ="Red";
-        ctx.rect(that.BB.x, that.BB.y, that.BB.width, that.BB.height);
+        ctx.strokeRect(that.BB.x, that.BB.y, that.BB.width, that.BB.height);
         ctx.stroke();
 	};
 }

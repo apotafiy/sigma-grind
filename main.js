@@ -16,10 +16,14 @@ ASSET_MANAGER.downloadAll(() => {
   const ctx = canvas.getContext('2d');
   ctx.imageSmoothingEnabled = false;
   let gravity = 0.2;
-  gameEngine.addEntity(new Ground(gameEngine,1,0, 450, 18,4));
+  gameEngine.addEntity(new Ground(gameEngine,1,0, 450, 16,4));
+  gameEngine.addEntity(new Ground(gameEngine,0,640, 386,5 ,1));
+
+  gameEngine.addEntity(new Ground(gameEngine,0,0, 0, 1,8));
+  gameEngine.addEntity(new Ground(gameEngine,0,950, 0, 1,8));
   gameEngine.addEntity(new Mettaur(gameEngine, 800,0, gravity));
   gameEngine.addEntity(new Water(gameEngine));
-  gameEngine.addEntity(new GroundHorse(gameEngine));
+  // gameEngine.addEntity(new GroundHorse(gameEngine));
  
   gameEngine.init(ctx);
 
