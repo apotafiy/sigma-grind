@@ -169,13 +169,13 @@ class Mettaur {
     } else {
       that.currentState = 0;
     }
-    console.log(that.yVelocity);
-    console.log('end update');
+    // console.log(that.yVelocity);
+    // console.log('end update');
   }
 
   draw(ctx) {
     let that = this;
-    console.log(that.currentState, that.yVelocity);
+    //console.log(that.currentState, that.yVelocity);
     that.animations[that.dirIndex][that.currentState].drawFrame(
       that.game.clockTick,
       ctx,
