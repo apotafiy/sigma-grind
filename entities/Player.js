@@ -29,7 +29,7 @@ class Player {
 
   loadAnimations() {
     for (var i = 0; i < 4; i++) {
-      // six states
+      // four states
       this.animations.push([]);
       for (var k = 0; k < 2; k++) {
         // two directions
@@ -39,35 +39,66 @@ class Player {
 
     // Idle - State 0
     // Face right = 0
-    // this.animations[0][0] = new Animator(
-    //     ASSET_MANAGER.getAsset('./sprites/player/zerox4idle.png'),
-    //     0,
-    //     0,
-    //     54,
-    //     57,
-    //     5,
-    //     0.1,
-    //     false,
-    //     true
-    // )
+    this.animations[0][0] = new Animator(
+      ASSET_MANAGER.getAsset('./sprites/player/zerox4idle.png'),
+      0,
+      0,
+      44,
+      48,
+      5,
+      0.1,
+      4,
+      false,
+      true
+    );
 
-    // // Face left =
-    // this.animations[0][0] = new Animator(
-    //     ASSET_MANAGER.getAsset('./sprites/player/zerox4idle.png'),
-    //     510,
-    //     0,
-    //     54,
-    //     57,
-    //     5,
-    //     0.1
-    //     true,
-    //     true
-    // )
+    // // Face left = 1
+    this.animations[0][1] = new Animator(
+      ASSET_MANAGER.getAsset('./sprites/player/zerox4idle.png'),
+      254,
+      0,
+      44,
+      48,
+      5,
+      0.1,
+      4,
+      1,
+      true
+    );
+
+    // Run - State 1
+    // Face right = 0
+    this.animations[1][0] = new Animator(
+      ASSET_MANAGER.getAsset('./sprites/player/zerox4move.png'),
+      0,
+      0,
+      36,
+      49,
+      16,
+      0.05,
+      17,
+      false,
+      true
+    );
+
+    // // Face left = 1
+    this.animations[1][1] = new Animator(
+      ASSET_MANAGER.getAsset('./sprites/player/zerox4move.png'),
+      855,
+      0,
+      36,
+      49,
+      15,
+      0.05,
+      17,
+      true,
+      true
+    );
   }
 
   updateBB() {
     this.lastBB = this.BB;
-    this.BB = new BoundingBox(this.x, this.y, 54 * 2, 57 * 2);
+    this.BB = new BoundingBox(this.x, this.y, 48 * 2, 48 * 2);
   }
 
   // TODO
@@ -98,22 +129,7 @@ class Player {
     const MAX_FALL = 270;
 
     if (this.dead) {
-      //   this.velocity.y += RUN_FALL * TICK;
-      //   this.y += this.velocity.y * TICK * PARAMS.SCALE;
-      //   this.size = 0;
-      //   if (this.y > PARAMS.BLOCKWIDTH * 16) {
-      //     this.dead = false;
-      //     this.game.camera.lives--;
-      //     if (this.game.camera.lives < 0) this.game.camera.gameOver = true;
-      //     else
-      //       this.game.camera.loadLevel(
-      //         levelOne,
-      //         2.5 * PARAMS.BLOCKWIDTH,
-      //         0 * PARAMS.BLOCKWIDTH,
-      //         true,
-      //         false
-      //       );
-      //   }
+      // Do death stuff
     } else {
       // update velocity
 
@@ -148,7 +164,6 @@ class Player {
               this.velocity.x -= ACC_WALK * TICK;
             } else if (this.game.keys.KeyD && !this.game.keys.KeyA) {
               this.velocity.x += DEC_SKID * TICK;
-              this.state = 2;
             } else {
               this.velocity.x += DEC_REL * TICK;
             }
@@ -209,6 +224,16 @@ class Player {
 
   draw(ctx) {
     let that = this;
+
+    console.log(that.state);
+    console.log(that.facing);
+    that.animations[that.state][that.facing].drawFrame(
+      that.game.clockTick,
+      ctx,
+      that.x,
+      that.y,
+      2
+    );
     ctx.strokeStyle = 'Blue';
     ctx.strokeRect(that.BB.x, that.BB.y, that.BB.width, that.BB.height);
   }

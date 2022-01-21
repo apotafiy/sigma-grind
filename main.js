@@ -13,6 +13,9 @@ ASSET_MANAGER.queueDownload('./sprites/mettaur/mettaur-jump-right.png');
 ASSET_MANAGER.queueDownload('./sprites/mettaur/mettaur-duck.png');
 ASSET_MANAGER.queueDownload('./sprites/mettaur/mettaur-fall.png');
 ASSET_MANAGER.queueDownload('./sprites/groundhorse.png');
+ASSET_MANAGER.queueDownload('./sprites/player/zerox4idle.png');
+ASSET_MANAGER.queueDownload('./sprites/player/zerox4move.png');
+ASSET_MANAGER.queueDownload('./sprites/player/zerox4sheet.png');
 ASSET_MANAGER.downloadAll(() => {
   const canvas = document.getElementById('gameWorld');
   const ctx = canvas.getContext('2d');
