@@ -6,10 +6,11 @@ ASSET_MANAGER.queueDownload("./sprites/backgrounds/water.png")
 //Ground tiles
 ASSET_MANAGER.queueDownload("./sprites/ground/ground-tile.png");
 //Mettaur Animations
-ASSET_MANAGER.queueDownload("./sprites/mettaur/mettaur-walk.png");
-ASSET_MANAGER.queueDownload("./sprites/mettaur/mettaur-jump.png");
-ASSET_MANAGER.queueDownload("./sprites/mettaur/mettaur-duck.png");
-ASSET_MANAGER.queueDownload("./sprites/mettaur/mettaur-fall.png");
+ASSET_MANAGER.queueDownload('./sprites/mettaur/mettaur-walk.png');
+ASSET_MANAGER.queueDownload('./sprites/mettaur/mettaur-jump.png');
+ASSET_MANAGER.queueDownload('./sprites/mettaur/mettaur-duck.png');
+ASSET_MANAGER.queueDownload('./sprites/mettaur/mettaur-fall.png');
+ASSET_MANAGER.queueDownload('./sprites/groundhorse.png');
 ASSET_MANAGER.downloadAll(() => {
   const canvas = document.getElementById('gameWorld');
   const ctx = canvas.getContext('2d');
@@ -18,6 +19,7 @@ ASSET_MANAGER.downloadAll(() => {
   gameEngine.addEntity(new Ground(gameEngine,0,0, 450, 18,4));
   gameEngine.addEntity(new Mettaur(gameEngine, 600,0, gravity));
   gameEngine.addEntity(new Water(gameEngine));
+  gameEngine.addEntity(new GroundHorse(gameEngine));
  
   gameEngine.init(ctx);
 
