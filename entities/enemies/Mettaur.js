@@ -80,45 +80,56 @@ class Mettaur {
     //apply the velocity to the position
     that.x += that.xVelocity * that.direction;
     that.y += that.yVelocity;
-      //update out bounding box every frame
-      that.updateBB();
-
-      //collisions
-      this.game.entities.forEach(function(entity) {
-        if(entity.BB && that.BB.collide(entity.BB)){
-          //if falling check below
-          if(that.yVelocity > 0){
-            if((entity instanceof Ground) &&
-             that.lastBB.bottom <= entity.BB.top){ // ws above last tick
-              that.y = entity.BB.top - that.BB.height ; //set to top of bounding box of ground
-              that.yVelocity = 0;
-              that.updateBB();
-            }
-          }else if(that.direction == 1){
-            // console.log("Checking");
-            if((entity instanceof Ground) && that.lastBB.left < entity.BB.right  ){ // is in the wall
-              // console.log("HIT!")
-              that.x = entity.BB.right;
-              that.direction = -1;
-            } 
-          } else if(that.direction == -1){
-            // console.log("Checking");
-            if((entity instanceof Ground) && that.lastBB.right > entity.BB.left  ){ // is in the wall
-              //subtract because origin is on left
-              that.x = entity.BB.left - that.BB.width;
-              that.direction = 1;
-              
-            }
+    //update out bounding box every frame
+    that.updateBB();
+    //update the animation 
+    //collisions
+    this.game.entities.forEach(function (entity) {
+      if (entity.BB && that.BB.collide(entity.BB)) {
+        //if falling check below
+        if (that.yVelocity > 0) {
+          // console.log("triggered check 1")
+          if (entity instanceof Ground && that.lastBB.bottom <= entity.BB.top) {
+            // ws above last tick
+            that.y = entity.BB.top - that.BB.height; //set to top of bounding box of ground
+            that.yVelocity = 0;
+            that.updateBB();
           }
-
+        } else if (that.direction == 1) {
+          // console.log("Checking");
+          // console.log("triggered check 2")
+          if (entity instanceof Ground && that.lastBB.left < entity.BB.right) {
+            // is in the wall
+            // console.log("HIT!")
+            that.x = entity.BB.right;
+            that.direction = -1;
+          }
+        } else if (that.direction == -1) {
+          // console.log("triggered check 3")
+          // console.log("Checking");
+          if (entity instanceof Ground && that.lastBB.right > entity.BB.left) {
+            // is in the wall
+            //subtract because origin is on left
+            that.x = entity.BB.left - that.BB.width;
+            that.direction = 1;
+          }
         }
-      });
-      // console.log(that.x, that.y)
-
+      }
+    });
+    // console.log(that.x, that.y)
+    // console.log(that.xVelocity * that.direction, that.yVelocity );
+    if(that.yVelocity > 0){
+      that.currentState = 1;
+    } else{
+      that.currentState = 0;
+    }
+    console.log(that.yVelocity);
+    console.log("end update");
   }
 
   draw(ctx) {
     let that = this;
+    console.log(that.currentState, that.yVelocity);
     that.animations[that.currentState].drawFrame(
       that.game.clockTick,
       ctx,
