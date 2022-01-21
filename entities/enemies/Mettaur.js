@@ -80,35 +80,6 @@ class Mettaur {
     //apply the velocity to the position
     that.x += that.xVelocity * that.direction;
     that.y += that.yVelocity;
-    window.addEventListener(
-      "keydown",
-      function (event) {
-        if (event.defaultPrevented) {
-          return; // Do nothing if the event was already processed
-        }
-        //   console.log(event.key);
-        switch (event.key) {
-          case "q":
-            that.currentState = 0;
-            break;
-          case "w":
-            that.currentState = 1;
-            break;
-          case "e":
-            that.currentState = 2;
-            break;
-          case "r":
-            that.currentState = 3;
-            break;
-          default:
-            return; // Quit when this doesn't handle the key event.
-        }
-
-        // Cancel the default action to avoid it being handled twice
-        event.preventDefault();
-      },
-      true
-    );
       //update out bounding box every frame
       that.updateBB();
 
@@ -123,23 +94,26 @@ class Mettaur {
               that.yVelocity = 0;
               that.updateBB();
             }
-          }
-          console.log(that.direction)
-          //check for box to the left
-          if(that.direction == 1){
+          }else if(that.direction == 1){
             // console.log("Checking");
             if((entity instanceof Ground) && that.lastBB.left < entity.BB.right  ){ // is in the wall
               // console.log("HIT!")
-              that.x = entity.BB.right - that.BB.width;
+              that.x = entity.BB.right;
               that.direction = -1;
-              that.y = 300;
-              that.x = 300;
+            } 
+          } else if(that.direction == -1){
+            // console.log("Checking");
+            if((entity instanceof Ground) && that.lastBB.right > entity.BB.left  ){ // is in the wall
+              //subtract because origin is on left
+              that.x = entity.BB.left - that.BB.width;
+              that.direction = 1;
+              
             }
           }
 
         }
       });
-      console.log(that.x, that.y)
+      // console.log(that.x, that.y)
 
   }
 
