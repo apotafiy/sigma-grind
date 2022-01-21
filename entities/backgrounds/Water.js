@@ -33,11 +33,11 @@ class Water{
         //   console.log(event.key);
             switch (event.key) {
               case "a":
-                // that.xoffset += 2;
+                that.xoffset += 2;
                 console.log(that.xoffset);
                 break;
               case "d":
-                // that.xoffset -= 2;
+                that.xoffset -= 2;
                 console.log(that.xoffset);
                 break;
               default:

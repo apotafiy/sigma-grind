@@ -18,7 +18,7 @@ class Ground{
         this.vertical = vertical;
         this.loadAnimation();
         //set up the bounding box 
-        this.BB = new BoundingBox(this.xstart, this.ystart, 70 * horizontal, 70 * vertical);
+        this.BB = new BoundingBox(this.xstart, this.ystart+5, 65 * horizontal, 65 * vertical);
 
 	};
     loadAnimation() {
