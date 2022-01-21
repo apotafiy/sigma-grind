@@ -42,11 +42,17 @@ class Animator {
       if (this.loop) {
         this.elapsedTime -= this.totalTime;
       } else {
-        return;
+        //TODO This was changed to show the lat frame of the image rather than nothing and;
       }
     }
     let frame = this.currentFrame();
     if (this.reverse) frame = this.frameCount - frame - 1;
+    //update to the last frame if it does not loop
+    if(this.isDone()) {
+      frame = this.frameCount-1;
+      if (this.reverse) frame = 0;
+
+    }
     ctx.drawImage(
       this.spritesheet,
       this.xStart + frame * (this.width + this.framePadding),
