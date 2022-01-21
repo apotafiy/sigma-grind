@@ -26,6 +26,9 @@ ASSET_MANAGER.downloadAll(() => {
   let gravity = 0.2;
   gameEngine.addEntity(new GroundHorse(gameEngine, 60, 355));
 
+  gameEngine.addEntity(new Ground(gameEngine, 1, 0, 450, 16, 4));
+  gameEngine.addEntity(new Ground(gameEngine, 0, 640, 386, 5, 1));
+
   gameEngine.addEntity(new Ground(gameEngine, 0, 0, 0, 1, 8));
   gameEngine.addEntity(new Ground(gameEngine, 0, 950, 0, 1, 8));
 
