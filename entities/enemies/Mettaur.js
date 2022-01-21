@@ -16,8 +16,8 @@ class Mettaur {
     this.x = x;
     this.y = y;
     this.gravity = gravity;
-    this.direction = -1;
-    this.dirIndex = 0;
+    this.direction = 1;
+    this.dirIndex = 1;
     this.loadAnimation();
     //bounding box
     this.BB = new BoundingBox(this.x, this.y, 32, 36);
@@ -57,11 +57,11 @@ class Mettaur {
       0,
       32,
       36,
-      7,
+      6,
       0.1,
       0,
-      0,
-      1
+      1,
+      0
     );
     this.animations[1][3] = new Animator(
       ASSET_MANAGER.getAsset("./sprites/mettaur/mettaur-fall.png"),
@@ -113,6 +113,18 @@ class Mettaur {
       1,
       1
     );
+    this.animations[0][2] = new Animator(
+      ASSET_MANAGER.getAsset("./sprites/mettaur/mettaur-duck-right.png"),
+      0,
+      0,
+      32,
+      36,
+      7,
+      0.1,
+      0,
+      1,
+      0
+    );
   }
   updateBB() {
     this.lastBB = this.BB;
@@ -133,7 +145,6 @@ class Mettaur {
       if (entity.BB && that.BB.collide(entity.BB)) {
         //if falling check below
         if (that.yVelocity > 0) {
-          // console.log("triggered check 1")
           if (entity instanceof Ground && that.lastBB.bottom <= entity.BB.top) {
             // ws above last tick
             that.y = entity.BB.top - that.BB.height; //set to top of bounding box of ground
@@ -141,18 +152,12 @@ class Mettaur {
             that.updateBB();
           }
         } else if (that.direction == 1) {
-          // console.log("Checking");
-          // console.log("triggered check 2")
           if (entity instanceof Ground && that.lastBB.left < entity.BB.right) {
-            // is in the wall
-            // console.log("HIT!")
             that.x = entity.BB.right;
             that.direction = -1;
             that.dirIndex = 0;
           }
         } else if (that.direction == -1) {
-          // console.log("triggered check 3")
-          // console.log("Checking");
           if (entity instanceof Ground && that.lastBB.right > entity.BB.left) {
             // is in the wall
             //subtract because origin is on left
@@ -168,15 +173,13 @@ class Mettaur {
     if(that.yVelocity > 0){
       that.currentState = 1;
     } else{
-      that.currentState = 0;
+      that.currentState = 2;
     }
-    console.log(that.yVelocity);
-    console.log("end update");
   }
 
   draw(ctx) {
     let that = this;
-    console.log(that.currentState, that.yVelocity);
+    // console.log(that.currentState, that.yVelocity);
     that.animations[that.dirIndex][that.currentState].drawFrame(
       that.game.clockTick,
       ctx,

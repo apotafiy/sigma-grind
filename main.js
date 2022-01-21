@@ -11,6 +11,7 @@ ASSET_MANAGER.queueDownload('./sprites/mettaur/mettaur-walk-right.png');
 ASSET_MANAGER.queueDownload('./sprites/mettaur/mettaur-jump.png');
 ASSET_MANAGER.queueDownload('./sprites/mettaur/mettaur-jump-right.png');
 ASSET_MANAGER.queueDownload('./sprites/mettaur/mettaur-duck.png');
+ASSET_MANAGER.queueDownload('./sprites/mettaur/mettaur-right.png');
 ASSET_MANAGER.queueDownload('./sprites/mettaur/mettaur-fall.png');
 ASSET_MANAGER.queueDownload('./sprites/groundhorse.png');
 ASSET_MANAGER.downloadAll(() => {
