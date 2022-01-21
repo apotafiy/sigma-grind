@@ -22,7 +22,10 @@ class GroundHorse {
       28,
       37,
       7,
-      0.1
+      0.1,
+      0,
+      0,
+      1
     );
     this.animations[2] = new Animator( // up idle
       ASSET_MANAGER.getAsset('./sprites/groundhorse.png'),
@@ -31,7 +34,10 @@ class GroundHorse {
       28,
       37,
       2,
-      0.3
+      0.3,
+      0,
+      0,
+      1
     );
     this.animations[3] = new Animator( // go back down
       ASSET_MANAGER.getAsset('./sprites/groundhorse.png'),
@@ -40,7 +46,10 @@ class GroundHorse {
       28,
       37,
       5,
-      0.2
+      0.2,
+      0,
+      0,
+      1
     );
   }
 

@@ -23,7 +23,8 @@ class Ground{
 	};
     loadAnimation() {
         //shift over by the type of tile we want 
-        this.animations[0] = new Animator(ASSET_MANAGER.getAsset("./sprites/ground/ground-tile.png"),0 + (this.type * 70), 0,70,70,1,1);
+        this.animations[0] = new Animator(ASSET_MANAGER.getAsset("./sprites/ground/ground-tile.png"),0 + (this.type * 70), 0,70,70,1,1,0,
+        0,1);
     }
 	update() {
 

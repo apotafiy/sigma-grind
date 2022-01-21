@@ -10,63 +10,108 @@ class Mettaur {
   constructor(game, x, y, gravity) {
     this.game = game;
     this.currentState = 0;
-    this.animations = [];
-    this.loadAnimation();
+    this.animations = [[],[]];
     this.xVelocity = -2;
     this.yVelocity = 0;
     this.x = x;
     this.y = y;
     this.gravity = gravity;
-    this.direction = 1;
+    this.direction = -1;
+    this.dirIndex = 0;
+    this.loadAnimation();
     //bounding box
     this.BB = new BoundingBox(this.x, this.y, 32, 36);
     this.lastBB = this.BB;
   }
   loadAnimation() {
-    this.animations[0] = new Animator(
+    this.animations[1][0] = new Animator(
       ASSET_MANAGER.getAsset("./sprites/mettaur/mettaur-walk.png"),
       0,
       0,
       32,
       36,
       8,
-      0.1
+      0.1,
+      0,
+      0,
+      1
     );
-    this.animations[1] = new Animator(
+    this.animations[1][1] = new Animator(
       ASSET_MANAGER.getAsset("./sprites/mettaur/mettaur-jump.png"),
       0,
       0,
       32,
       36,
       7,
-      0.1
+      0.1,
+      0,
+      0,
+      1,
+      0,
+      0,
+      1
     );
-    this.animations[2] = new Animator(
+    this.animations[1][2] = new Animator(
       ASSET_MANAGER.getAsset("./sprites/mettaur/mettaur-duck.png"),
       0,
       0,
       32,
       36,
       7,
-      0.1
+      0.1,
+      0,
+      0,
+      1
     );
-    this.animations[3] = new Animator(
+    this.animations[1][3] = new Animator(
       ASSET_MANAGER.getAsset("./sprites/mettaur/mettaur-fall.png"),
       0,
       0,
       36,
       38,
       6,
-      0.1
+      0.1,
+      0,
+      0,
+      1
     );
-    this.animations[4] = new Animator(
+    this.animations[1][4] = new Animator(
       ASSET_MANAGER.getAsset("./sprites/mettaur/mettaur-fall.png"),
       0,
       0,
       36,
       38,
       6,
-      0.5
+      0.5,
+      0,
+      0,
+      1
+
+    );
+    //right facing Animations
+    this.animations[0][0] = new Animator(
+      ASSET_MANAGER.getAsset("./sprites/mettaur/mettaur-walk-right.png"),
+      0,
+      0,
+      32,
+      36,
+      8,
+      0.1,
+      0,
+      1,
+      1
+    );
+    this.animations[0][1] = new Animator(
+      ASSET_MANAGER.getAsset("./sprites/mettaur/mettaur-jump-right.png"),
+      0,
+      0,
+      32,
+      36,
+      7,
+      0.1,
+      0,
+      1,
+      1
     );
   }
   updateBB() {
@@ -103,6 +148,7 @@ class Mettaur {
             // console.log("HIT!")
             that.x = entity.BB.right;
             that.direction = -1;
+            that.dirIndex = 0;
           }
         } else if (that.direction == -1) {
           // console.log("triggered check 3")
@@ -112,6 +158,7 @@ class Mettaur {
             //subtract because origin is on left
             that.x = entity.BB.left - that.BB.width;
             that.direction = 1;
+            that.dirIndex = 1;
           }
         }
       }
@@ -130,7 +177,7 @@ class Mettaur {
   draw(ctx) {
     let that = this;
     console.log(that.currentState, that.yVelocity);
-    that.animations[that.currentState].drawFrame(
+    that.animations[that.dirIndex][that.currentState].drawFrame(
       that.game.clockTick,
       ctx,
       that.x,
