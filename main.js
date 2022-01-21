@@ -21,6 +21,9 @@ ASSET_MANAGER.downloadAll(() => {
 
   gameEngine.addEntity(new Ground(gameEngine, 0, 0, 0, 1, 8));
   gameEngine.addEntity(new Ground(gameEngine, 0, 950, 0, 1, 8));
+
+  gameEngine.addEntity(new Player(gameEngine, 90, 0, gravity));
+
   gameEngine.addEntity(new Mettaur(gameEngine, 800, 0, gravity));
   gameEngine.addEntity(new Water(gameEngine));
   gameEngine.addEntity(new GroundHorse(gameEngine));
