@@ -21,7 +21,7 @@ class Water{
         this.loadAnimation();
 	};
     loadAnimation() {
-        this.animations[0] = new Animator(ASSET_MANAGER.getAsset("./sprites/backgrounds/water.png"),0, 0,512,2600,1,1);
+        this.animations[0] = new Animator(ASSET_MANAGER.getAsset("./sprites/backgrounds/water.png"),0, 0,512,2600,1,1,0,0,1);
     }
 	update() {
 
