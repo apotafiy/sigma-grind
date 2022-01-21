@@ -6,6 +6,8 @@ class Mettaur {
    * 0 = walk left
    * 1 = walk right
    * 2 = jump
+   * 3 = ?
+   * 4 = get up
    */
   constructor(game, x, y, gravity) {
     this.game = game;
@@ -18,7 +20,10 @@ class Mettaur {
     this.gravity = gravity;
     this.direction = 1;
     this.dirIndex = 1;
+    this.internalTimer = 0;
+    this.duckTimer = 0;
     this.loadAnimation();
+    this.check = this.getRandomInt(100,400);
     //bounding box
     this.BB = new BoundingBox(this.x, this.y, 32, 36);
     this.lastBB = this.BB;
@@ -54,7 +59,7 @@ class Mettaur {
     this.animations[1][2] = new Animator(
       ASSET_MANAGER.getAsset("./sprites/mettaur/mettaur-duck.png"),
       0,
-      0,
+      -4,
       32,
       36,
       6,
@@ -76,17 +81,16 @@ class Mettaur {
       1
     );
     this.animations[1][4] = new Animator(
-      ASSET_MANAGER.getAsset("./sprites/mettaur/mettaur-fall.png"),
+      ASSET_MANAGER.getAsset("./sprites/mettaur/mettaur-duck.png"),
       0,
-      0,
+      -4,
+      32,
       36,
-      38,
       6,
-      0.5,
+      0.1,
       0,
       0,
-      1
-
+      0
     );
     //right facing Animations
     this.animations[0][0] = new Animator(
@@ -116,10 +120,23 @@ class Mettaur {
     this.animations[0][2] = new Animator(
       ASSET_MANAGER.getAsset("./sprites/mettaur/mettaur-duck-right.png"),
       0,
-      0,
+      -4,
       32,
       36,
-      7,
+      6,
+      0.1,
+      0,
+      0,
+      0
+    );
+
+    this.animations[0][4] = new Animator(
+      ASSET_MANAGER.getAsset("./sprites/mettaur/mettaur-duck-right.png"),
+      0,
+      -4,
+      32,
+      36,
+      6,
       0.1,
       0,
       1,
@@ -170,10 +187,33 @@ class Mettaur {
     });
     // console.log(that.x, that.y)
     // console.log(that.xVelocity * that.direction, that.yVelocity );
-    if(that.yVelocity > 0){
-      that.currentState = 1;
-    } else{
+
+    //handle ducking
+    that.internalTimer++;
+    // console.log(that.internalTimer);
+    //have a chance to duck every time 
+    if(that.internalTimer % that.check == 0){
       that.currentState = 2;
+      that.duckTimer = that.getRandomInt(100,400);
+    } else if(that.duckTimer <= 0){
+      if(that.yVelocity > 0){
+        that.currentState = 1;
+      } else{
+        that.currentState = 0;
+        that.xVelocity = -2;
+      }
+    } else {
+      // console.log("Timer :",that.duckTimer);
+      that.duckTimer--;
+      that.internalTimer = 1;
+      that.xVelocity= 0;
+      if(that.duckTimer == 25){
+        //reset time passed for non looing animations
+        that.animations[that.dirIndex][2].elapsedTime = 0;
+        that.animations[that.dirIndex][4].elapsedTime = 0;
+        that.currentState =4;
+        that.check = that.getRandomInt(100,400);
+      }
     }
   }
 
@@ -190,4 +230,10 @@ class Mettaur {
     ctx.strokeStyle = "Red";
     ctx.strokeRect(that.BB.x, that.BB.y, that.BB.width, that.BB.height);
   }
+
+   getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min) + min); 
+   }
 }
