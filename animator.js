@@ -17,34 +17,30 @@ class Animator {
             frameCount,
             frameDuration,
         });
+
         this.elapsedTime = 0;
         this.totalTime = frameCount * frameDuration;
     }
-    //TODO ADD SCALE COMMENTS!
-    /**
-     *
-     * @param {*} tick
-     * @param {*} ctx
-     * @param {*} x
-     * @param {*} y
-     * @param {*} scale  <-- THIS IS NEEDED!
-     */
-    drawFrame(tick, ctx, x, y, scale) {
+
+    drawFrame(tick, ctx, x, y) {
         this.elapsedTime += tick;
-        if (this.elapsedTime > this.totalTime)
+
+        if (this.elapsedTime > this.totalTime) {
             this.elapsedTime -= this.totalTime;
+        }
+
         const frame = this.currentFrame();
 
         ctx.drawImage(
             this.spritesheet,
-            this.xStart + this.width * frame,
+            this.xStart - this.width * frame,
             this.yStart,
             this.width,
             this.height,
             x,
             y,
-            this.width * scale,
-            this.height * scale
+            this.width,
+            this.height
         );
     }
 

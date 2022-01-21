@@ -9,30 +9,27 @@ class GameEngine {
         // Everything that will be updated and drawn each frame
         this.entities = [];
 
-        this.surfaceWidth = null;
-        this.surfaceHeight = null;
-
         // Information on the input
         this.click = null;
         this.mouse = null;
         this.wheel = null;
         this.keys = {};
 
+        // THE KILL SWITCH
+        this.running = false;
+
         // Options and the Details
         this.options = options || {
+            prevent: {
+                contextMenu: true,
+                scrolling: true,
+            },
             debugging: false,
         };
-
-        this.left = false;
-        this.right = false;
-        this.up = false;
-        this.down = false;
     }
 
     init(ctx) {
         this.ctx = ctx;
-        this.surfaceWidth = this.ctx.canvas.width;
-        this.surfaceHeight = this.ctx.canvas.height;
         this.startInput();
         this.timer = new Timer();
     }
@@ -41,7 +38,9 @@ class GameEngine {
         this.running = true;
         const gameLoop = () => {
             this.loop();
-            requestAnimFrame(gameLoop, this.ctx.canvas);
+            if (this.running) {
+                requestAnimFrame(gameLoop, this.ctx.canvas);
+            }
         };
         gameLoop();
     }
@@ -49,69 +48,111 @@ class GameEngine {
     startInput() {
         let that = this;
 
+        // Handles movement for the player character
         let gameWindow = this.ctx.canvas;
-        // console.log(gameWindow);
 
-        function print() {
-            console.log("test");
-        }
-
+        // Handles the key presses
         gameWindow.addEventListener(
             "keydown",
-            function (event) {
+            event => {
+                // console.log(event); // TODO: Remove later, for testing
                 switch (event.code) {
+                    case "KeyW":
+                    case "ArrowUp":
+                        console.log("Up: Pressed");
+                        break;
                     case "KeyA":
-                        console.log("a");
+                    case "ArrowLeft":
+                        console.log("Left: Pressed");
+                        break;
+                    case "KeyS":
+                    case "ArrowDown":
+                        console.log("Down: Pressed");
+                        break;
+                    case "KeyD":
+                    case "ArrowRight":
+                        console.log("Right: Pressed");
                         break;
                 }
             },
             false
         );
-        // console.log("in startInput()");
 
-        // const getXandY = e => ({
-        //     x: e.clientX - this.ctx.canvas.getBoundingClientRect().left,
-        //     y: e.clientY - this.ctx.canvas.getBoundingClientRect().top,
-        // });
-
-        // this.ctx.canvas.addEventListener("mousemove", e => {
-        //     if (this.options.debugging) {
-        //         console.log("MOUSE_MOVE", getXandY(e));
-        //     }
-        //     this.mouse = getXandY(e);
-        // });
-
-        // this.ctx.canvas.addEventListener("click", e => {
-        //     if (this.options.debugging) {
-        //         console.log("CLICK", getXandY(e));
-        //     }
-        //     this.click = getXandY(e);
-        // });
-
-        // this.ctx.canvas.addEventListener("wheel", e => {
-        //     if (this.options.debugging) {
-        //         console.log("WHEEL", getXandY(e), e.wheelDelta);
-        //     }
-        //     e.preventDefault(); // Prevent Scrolling
-        //     this.wheel = e;
-        // });
-
-        // this.ctx.canvas.addEventListener("contextmenu", e => {
-        //     if (this.options.debugging) {
-        //         console.log("RIGHT_CLICK", getXandY(e));
-        //     }
-        //     e.preventDefault(); // Prevent Context Menu
-        //     this.rightclick = getXandY(e);
-        // });
-
-        this.ctx.canvas.addEventListener(
-            "keydown",
-            event => (this.keys[event.key] = true)
-        );
-        this.ctx.canvas.addEventListener(
+        // Handles the key releases
+        gameWindow.addEventListener(
             "keyup",
-            event => (this.keys[event.key] = false)
+            event => {
+                // console.log(event); // TODO: Remove later, for testing
+                switch (event.code) {
+                    case "KeyW":
+                    case "ArrowUp":
+                        console.log("Up: Released");
+                        break;
+                    case "KeyA":
+                    case "ArrowLeft":
+                        console.log("Left: Released");
+                        break;
+                    case "KeyS":
+                    case "ArrowDown":
+                        console.log("Down: Released");
+                        break;
+                    case "KeyD":
+                    case "ArrowRight":
+                        console.log("Right: Released");
+                        break;
+                }
+            },
+            false
         );
+
+        const getXandY = e => ({
+            x: e.clientX - this.ctx.canvas.getBoundingClientRect().left,
+            y: e.clientY - this.ctx.canvas.getBoundingClientRect().top,
+        });
+
+        this.ctx.canvas.addEventListener("mousemove", e => {
+            if (this.options.debugging) {
+                console.log("MOUSE_MOVE", getXandY(e));
+            }
+            this.mouse = getXandY(e);
+        });
+
+        this.ctx.canvas.addEventListener("click", e => {
+            if (this.options.debugging) {
+                console.log("CLICK", getXandY(e));
+            }
+            this.click = getXandY(e);
+        });
+
+        this.ctx.canvas.addEventListener("wheel", e => {
+            if (this.options.debugging) {
+                console.log("WHEEL", getXandY(e), e.wheelDelta);
+            }
+            if (this.options.prevent.scrolling) {
+                e.preventDefault(); // Prevent Scrolling
+            }
+            this.wheel = e;
+        });
+
+        this.ctx.canvas.addEventListener("contextmenu", e => {
+            if (this.options.debugging) {
+                console.log("RIGHT_CLICK", getXandY(e));
+            }
+            if (this.options.prevent.contextMenu) {
+                e.preventDefault(); // Prevent Context Menu
+            }
+            this.rightclick = getXandY(e);
+        });
+
+        // TODO: Remove later
+        // window.addEventListener(
+        //     "keydown",
+        //     event => (this.keys[event.key] = true)
+        // );
+        // window.addEventListener(
+        //     "keyup",
+        //     event => (this.keys[event.key] = false)
+        // );
     }
 
     addEntity(entity) {
