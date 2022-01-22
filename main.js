@@ -24,18 +24,21 @@ ASSET_MANAGER.downloadAll(() => {
   const ctx = canvas.getContext('2d');
   ctx.imageSmoothingEnabled = false;
   let gravity = 0.2;
-  gameEngine.addEntity(new GroundHorse(gameEngine, 60, 355));
+  //scene manager for scrolling 
+  gameEngine.addEntity(new SceneManager(gameEngine))
+  // gameEngine.addEntity(new GroundHorse(gameEngine, 60, 355));
 
-  gameEngine.addEntity(new Ground(gameEngine, 1, 0, 450, 16, 4));
-  gameEngine.addEntity(new Ground(gameEngine, 0, 640, 386, 5, 1));
+  gameEngine.addEntity(new Ground(gameEngine, 1, 0, 450, 50, 4));
+  gameEngine.addEntity(new Ground(gameEngine, 0, 0, 386, 20, 1));
+  gameEngine.addEntity(new Ground(gameEngine, 0, 0, 322, 8, 1));
 
   gameEngine.addEntity(new Ground(gameEngine, 0, 0, 0, 1, 8));
-  gameEngine.addEntity(new Ground(gameEngine, 0, 950, 0, 1, 8));
+  // gameEngine.addEntity(new Ground(gameEngine, 0, 950, 0, 1, 8));
 
   gameEngine.addEntity(new Player(gameEngine, 120, 0, gravity));
 
   gameEngine.addEntity(new Mettaur(gameEngine, 800, 0, gravity));
-  for (let i = 0; i < 0; i++) {
+  for (let i = 0; i < 1; i++) {
     gameEngine.addEntity(new Mettaur(gameEngine, 200 + i * 50, 0, gravity));
   }
   gameEngine.addEntity(new Water(gameEngine));

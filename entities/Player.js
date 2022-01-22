@@ -225,16 +225,16 @@ class Player {
   draw(ctx) {
     let that = this;
 
-    console.log(that.state);
-    console.log(that.facing);
+    // console.log(that.state);
+    // console.log(that.facing);
     that.animations[that.state][that.facing].drawFrame(
       that.game.clockTick,
       ctx,
-      that.x,
+      that.x - that.game.camera.x, // camera sidescrolling
       that.y,
       2
     );
-    ctx.strokeStyle = 'Blue';
-    ctx.strokeRect(that.BB.x, that.BB.y, that.BB.width, that.BB.height);
+    // ctx.strokeStyle = 'Blue';
+    // ctx.strokeRect(that.BB.x - that.game.camera.x, that.BB.y, that.BB.width, that.BB.height);
   }
 }

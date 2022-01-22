@@ -53,7 +53,7 @@ class Ground {
         that.animations[0].drawFrame(
           that.game.clockTick,
           ctx,
-          that.xstart + 64 * j,
+          that.xstart + 64 * j - that.game.camera.x, //side scrolling
           that.ystart + 64 * i,
           1
         );
@@ -61,7 +61,7 @@ class Ground {
     }
     //draw the bounding box for visual
     ctx.strokeStyle = 'Red';
-    ctx.strokeRect(that.BB.x, that.BB.y, that.BB.width, that.BB.height);
+    ctx.strokeRect(that.BB.x - that.game.camera.x, that.BB.y, that.BB.width, that.BB.height);
     ctx.stroke();
   }
 }
