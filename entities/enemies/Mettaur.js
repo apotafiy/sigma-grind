@@ -13,22 +13,22 @@ class Mettaur {
   constructor(game, x, y, gravity) {
     this.game = game;
     this.currentState = 0;
-    this.animations = [[],[]];
-    this.xVelocity =  this.getRandomInt(-2,3);
+    this.animations = [[], []];
+    this.xVelocity = this.getRandomInt(-2, 3);
     this.yVelocity = 0;
     this.x = x;
     this.y = y;
     this.gravity = gravity;
     this.direction = 1;
     this.dirIndex = 1;
-    if(this.xVelocity > 0){
+    if (this.xVelocity > 0) {
       this.direction = -1;
       this.dirIndex = 0;
     }
     this.internalTimer = 0;
     this.duckTimer = 0;
     this.loadAnimation();
-    this.check = this.getRandomInt(100,400);
+    this.check = this.getRandomInt(100, 400);
     //bounding box
     this.BB = new BoundingBox(this.x, this.y, 32, 36);
     this.lastBB = this.BB;
@@ -39,7 +39,7 @@ class Mettaur {
   }
   loadAnimation() {
     this.animations[1][0] = new Animator(
-      ASSET_MANAGER.getAsset("./sprites/mettaur/mettaur-walk.png"),
+      ASSET_MANAGER.getAsset('./sprites/mettaur/mettaur-walk.png'),
       0,
       0,
       32,
@@ -51,7 +51,7 @@ class Mettaur {
       1
     );
     this.animations[1][1] = new Animator(
-      ASSET_MANAGER.getAsset("./sprites/mettaur/mettaur-jump.png"),
+      ASSET_MANAGER.getAsset('./sprites/mettaur/mettaur-jump.png'),
       0,
       0,
       32,
@@ -66,7 +66,7 @@ class Mettaur {
       1
     );
     this.animations[1][2] = new Animator(
-      ASSET_MANAGER.getAsset("./sprites/mettaur/mettaur-duck.png"),
+      ASSET_MANAGER.getAsset('./sprites/mettaur/mettaur-duck.png'),
       0,
       -4,
       32,
@@ -78,7 +78,7 @@ class Mettaur {
       0
     );
     this.animations[1][3] = new Animator(
-      ASSET_MANAGER.getAsset("./sprites/mettaur/mettaur-fall.png"),
+      ASSET_MANAGER.getAsset('./sprites/mettaur/mettaur-fall.png'),
       0,
       0,
       36,
@@ -90,7 +90,7 @@ class Mettaur {
       1
     );
     this.animations[1][4] = new Animator(
-      ASSET_MANAGER.getAsset("./sprites/mettaur/mettaur-duck.png"),
+      ASSET_MANAGER.getAsset('./sprites/mettaur/mettaur-duck.png'),
       0,
       -4,
       32,
@@ -102,7 +102,7 @@ class Mettaur {
       0
     );
     this.animations[1][5] = new Animator(
-      ASSET_MANAGER.getAsset("./sprites/mettaur/fire.png"),
+      ASSET_MANAGER.getAsset('./sprites/mettaur/fire.png'),
       0,
       0,
       32,
@@ -115,7 +115,7 @@ class Mettaur {
     );
     //right facing Animations
     this.animations[0][5] = new Animator(
-      ASSET_MANAGER.getAsset("./sprites/mettaur/death.png"),
+      ASSET_MANAGER.getAsset('./sprites/mettaur/death.png'),
       0,
       0,
       74,
@@ -127,7 +127,7 @@ class Mettaur {
       0
     );
     this.animations[0][0] = new Animator(
-      ASSET_MANAGER.getAsset("./sprites/mettaur/mettaur-walk-right.png"),
+      ASSET_MANAGER.getAsset('./sprites/mettaur/mettaur-walk-right.png'),
       0,
       0,
       32,
@@ -139,7 +139,7 @@ class Mettaur {
       1
     );
     this.animations[0][1] = new Animator(
-      ASSET_MANAGER.getAsset("./sprites/mettaur/mettaur-jump-right.png"),
+      ASSET_MANAGER.getAsset('./sprites/mettaur/mettaur-jump-right.png'),
       0,
       0,
       32,
@@ -151,7 +151,7 @@ class Mettaur {
       1
     );
     this.animations[0][2] = new Animator(
-      ASSET_MANAGER.getAsset("./sprites/mettaur/mettaur-duck-right.png"),
+      ASSET_MANAGER.getAsset('./sprites/mettaur/mettaur-duck-right.png'),
       0,
       -4,
       32,
@@ -164,7 +164,7 @@ class Mettaur {
     );
 
     this.animations[0][4] = new Animator(
-      ASSET_MANAGER.getAsset("./sprites/mettaur/mettaur-duck-right.png"),
+      ASSET_MANAGER.getAsset('./sprites/mettaur/mettaur-duck-right.png'),
       0,
       -4,
       32,
@@ -189,7 +189,7 @@ class Mettaur {
     that.y += that.yVelocity;
     //update out bounding box every frame
     that.updateBB();
-    //update the animation 
+    //update the animation
     //collisions
     this.game.entities.forEach(function (entity) {
       if (entity.BB && that.BB.collide(entity.BB)) {
@@ -224,22 +224,22 @@ class Mettaur {
     //handle ducking
     that.internalTimer++;
     // console.log(that.internalTimer);
-    //have a chance to duck every time 
-    if(that.internalTimer % that.check == 0){
+    //have a chance to duck every time
+    if (that.internalTimer % that.check == 0) {
       that.currentState = 2;
-      that.duckTimer = that.getRandomInt(100,400);
-    } else if(that.isDead) {
-      console.log("Dying in: ", that.deathtimer)
-        if(that.deathTimer <= 0){
-          //get rid of it after death;
-          that.removeFromWorld = true;
-        } else {
-          that.deathTimer--;
-        } 
-    } else if(that.duckTimer <= 0){
-      if(that.yVelocity > 0){
+      that.duckTimer = that.getRandomInt(100, 400);
+    } else if (that.isDead) {
+      console.log('Dying in: ', that.deathtimer);
+      if (that.deathTimer <= 0) {
+        //get rid of it after death;
+        that.removeFromWorld = true;
+      } else {
+        that.deathTimer--;
+      }
+    } else if (that.duckTimer <= 0) {
+      if (that.yVelocity > 0) {
         that.currentState = 1;
-      } else{
+      } else {
         that.currentState = 0;
         that.xVelocity = -2;
       }
@@ -247,19 +247,19 @@ class Mettaur {
       // console.log("Timer :",that.duckTimer);
       that.duckTimer--;
       that.internalTimer = 1;
-      that.xVelocity= 0;
-      if(that.duckTimer == 25){
+      that.xVelocity = 0;
+      if (that.duckTimer == 25) {
         //reset time passed for non looing animations
         that.animations[that.dirIndex][2].elapsedTime = 0;
         that.animations[that.dirIndex][4].elapsedTime = 0;
-        that.currentState =4;
-        that.check = that.getRandomInt(100,400);
+        that.currentState = 4;
+        that.check = that.getRandomInt(100, 400);
       }
     }
-    //temp death 
-    window.addEventListener("keypress",function(event){
+    //temp death
+    window.addEventListener('keypress', function (event) {
       console.log(event.code);
-      if(event.code == "KeyQ"){
+      if (event.code == 'KeyQ') {
         that.isDead = true;
         that.deathTimer = 20;
         that.xVelocity = 0;
@@ -270,7 +270,7 @@ class Mettaur {
   draw(ctx) {
     let that = this;
     // console.log(that.currentState, that.yVelocity);
-    if(!that.isDead){
+    if (!that.isDead) {
       that.animations[that.dirIndex][that.currentState].drawFrame(
         that.game.clockTick,
         ctx,
@@ -283,7 +283,7 @@ class Mettaur {
         that.game.clockTick,
         ctx,
         that.x,
-        that.y+ that.BB.height/4,
+        that.y + that.BB.height / 4,
         1.5
       );
     }
@@ -291,9 +291,9 @@ class Mettaur {
     // ctx.strokeRect(that.BB.x, that.BB.y, that.BB.width, that.BB.height);
   }
 
-   getRandomInt(min, max) {
+  getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min) + min); 
-   }
+    return Math.floor(Math.random() * (max - min) + min);
+  }
 }
