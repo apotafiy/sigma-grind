@@ -34,13 +34,21 @@ class Water {
             1
         );
     }
-    update() {}
+    update() {
+        let that = this;
+        this.game.entities.forEach(function (entity) {
+            if(entity instanceof Player){
+                //set x offset based on where the player is located
+                that.xoffset = - that.game.camera.x * 0.2;
+            }
+        });
+    }
 
     draw(ctx) {
         this.animations[0].drawFrame(
             this.game.clockTick,
             ctx,
-            0 + this.xoffset--,
+            0 + this.xoffset,
             0,
             2
         );

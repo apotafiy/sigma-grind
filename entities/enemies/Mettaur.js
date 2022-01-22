@@ -274,7 +274,7 @@ class Mettaur {
       that.animations[that.dirIndex][that.currentState].drawFrame(
         that.game.clockTick,
         ctx,
-        that.x,
+        that.x - that.game.camera.x,
         that.y,
         2
       );
@@ -282,13 +282,13 @@ class Mettaur {
       that.animations[1][5].drawFrame(
         that.game.clockTick,
         ctx,
-        that.x,
+        that.x - that.game.camera.x,
         that.y + that.BB.height / 4,
         1.5
       );
     }
     // ctx.strokeStyle = "Red";
-    // ctx.strokeRect(that.BB.x, that.BB.y, that.BB.width, that.BB.height);
+    // ctx.strokeRect(that.BB.x - that.game.camera.x, that.BB.y, that.BB.width, that.BB.height);
   }
 
   getRandomInt(min, max) {
