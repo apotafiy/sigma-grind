@@ -1,4 +1,4 @@
-class Animator {
+class Animator {z 
   constructor(
     spritesheet,
     xStart,
