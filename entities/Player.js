@@ -21,9 +21,17 @@ class Player {
     this.veloConst = 6.9;
     this.fallAcc = 562.5;
 
+    this.currentSize = { width: 0, height: 0 };
     this.updateBB();
 
     this.animations = [];
+    this.idleSprite = ASSET_MANAGER.getAsset(
+      './sprites/player/player-idle-43x48.png'
+    );
+    this.runSprite = ASSET_MANAGER.getAsset(
+      './sprites/player/player-run-51x49.png'
+    );
+
     this.loadAnimations();
   }
 
@@ -36,61 +44,62 @@ class Player {
         this.animations[i].push([]);
       }
     }
+    const that = this;
 
     // Idle - State 0
     // Face right = 0
     this.animations[0][0] = new Animator(
-      ASSET_MANAGER.getAsset('./sprites/player/zerox4idle.png'),
+      this.idleSprite,
       0,
       0,
-      44,
+      43,
       48,
       5,
-      0.1,
-      4,
+      0.18,
+      0,
       false,
       true
     );
 
     // // Face left = 1
     this.animations[0][1] = new Animator(
-      ASSET_MANAGER.getAsset('./sprites/player/zerox4idle.png'),
-      254,
+      this.idleSprite,
+      215,
       0,
-      44,
+      43,
       48,
       5,
-      0.1,
-      4,
-      1,
+      0.18,
+      0,
+      true,
       true
     );
 
     // Run - State 1
     // Face right = 0
     this.animations[1][0] = new Animator(
-      ASSET_MANAGER.getAsset('./sprites/player/zerox4move.png'),
+      this.runSprite,
+      95,
       0,
-      0,
-      36,
+      51,
       49,
-      16,
+      14,
       0.05,
-      17,
+      0,
       false,
       true
     );
 
     // // Face left = 1
     this.animations[1][1] = new Animator(
-      ASSET_MANAGER.getAsset('./sprites/player/zerox4move.png'),
-      855,
+      this.runSprite,
+      824,
       0,
-      36,
+      51,
       49,
-      15,
+      14,
       0.05,
-      17,
+      0,
       true,
       true
     );
@@ -98,7 +107,27 @@ class Player {
 
   updateBB() {
     this.lastBB = this.BB;
-    this.BB = new BoundingBox(this.x, this.y, 48 * 2, 48 * 2);
+    // Get the right bounding box size
+    const that = this;
+
+    const xOffset = 0;
+    const yOffset = 10; // Make player sprite goes below the ground slightly
+    switch (this.state) {
+      case 0:
+        that.currentSize.width = 43;
+        that.currentSize.height = 48;
+        break;
+      case 1:
+        that.currentSize.width = 51;
+        that.currentSize.height = 49;
+        break;
+    }
+    this.BB = new BoundingBox(
+      this.x,
+      this.y,
+      (this.currentSize.width - xOffset) * 2,
+      (this.currentSize.height - yOffset) * 2
+    );
   }
 
   // TODO
@@ -124,7 +153,7 @@ class Player {
     const ACC_WALK = 500;
 
     const DEC_REL = 600;
-    const DEC_SKID = 400;
+    const DEC_SKID = 500;
 
     const MAX_FALL = 270;
 
@@ -206,6 +235,19 @@ class Player {
             if (that.state === 3) that.state = 0; // set state to idle
             that.updateBB();
           }
+        } else if (that.velocity.x > 0) {
+          if (entity instanceof Ground && that.lastBB.left < entity.BB.right) {
+            that.x = entity.BB.left - that.BB.width;
+          }
+        } else if (that.velocity.x < 0) {
+          if (entity instanceof Ground && that.lastBB.right > entity.BB.left) {
+            that.x = entity.BB.right;
+          }
+        }
+        if (that.velocity.y < 0) {
+          // jumping
+          // hit ceiling...
+          // TODO
         }
       }
     });
@@ -225,8 +267,6 @@ class Player {
   draw(ctx) {
     let that = this;
 
-    // console.log(that.state);
-    // console.log(that.facing);
     that.animations[that.state][that.facing].drawFrame(
       that.game.clockTick,
       ctx,
