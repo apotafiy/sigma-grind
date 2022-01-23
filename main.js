@@ -19,9 +19,6 @@ ASSET_MANAGER.queueDownload('./sprites/groundhorse.png');
 ASSET_MANAGER.queueDownload('./sprites/player/player-idle-43x48.png');
 ASSET_MANAGER.queueDownload('./sprites/player/player-run-51x49.png');
 ASSET_MANAGER.queueDownload('./sprites/player/player-jump-47x80.png');
-ASSET_MANAGER.queueDownload(
-  './sprites/player/player-jump-47x80-alignedTop.png'
-);
 ASSET_MANAGER.queueDownload('./sprites/player/zerox4sheet.png');
 ASSET_MANAGER.downloadAll(() => {
   const canvas = document.getElementById('gameWorld');
@@ -39,8 +36,6 @@ ASSET_MANAGER.downloadAll(() => {
   gameEngine.addEntity(new Ground(gameEngine, 0, 0, 322, 8, 1));
 
   gameEngine.addEntity(new Ground(gameEngine, 0, 0, 0, 1, 8));
-  gameEngine.addEntity(new Ground(gameEngine, 0, 300, 0, 1, 8));
-  // gameEngine.addEntity(new Ground(gameEngine, 0, 950, 0, 1, 8));
 
   gameEngine.addEntity(new Mettaur(gameEngine, 800, 0, gravity));
   for (let i = 0; i < 1; i++) {

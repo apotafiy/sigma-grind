@@ -33,7 +33,7 @@ class Player {
       './sprites/player/player-run-51x49.png'
     );
     this.jumpSprite = ASSET_MANAGER.getAsset(
-      './sprites/player/player-jump-47x80-alignedTop.png'
+      './sprites/player/player-jump-47x80.png'
     );
 
     this.loadAnimations();
@@ -167,11 +167,12 @@ class Player {
 
   updateBB() {
     this.lastBB = this.BB;
-    // Get the right bounding box size
     const that = this;
 
     const xOffset = 0;
-    const yOffset = 0; // Make player sprite goes below the ground slightly
+    const yOffset = 10; // Make player sprite goes below the ground slightly not the bounding box itself
+
+    // Get the right bounding box for the different states
     switch (this.state) {
       case 0:
         that.currentSize.width = 43;
@@ -181,9 +182,10 @@ class Player {
         that.currentSize.width = 51;
         that.currentSize.height = 49;
         break;
+      case 4:
       case 3:
         that.currentSize.width = 47;
-        that.currentSize.height = 49;
+        that.currentSize.height = 49; //Supposed to be 80 but the bottom edge of box goes below the ground
         break;
     }
     this.BB = new BoundingBox(
@@ -264,13 +266,18 @@ class Player {
         // Jump
         if (this.game.keys.Space) {
           if (Math.abs(this.velocity.x) < 16) {
+            // Jump height while idle
             this.velocity.y = -240;
             this.fallAcc = STOP_FALL;
           } else {
+            // Jump height while there's side way momentum
             this.velocity.y = -300;
             this.fallAcc = RUN_FALL;
           }
+
+          // Set state to jump (3)
           this.state = 3;
+          // Set the jump animation to start at the beginning
           this.animations[this.state][this.facing].elapsedTime = 0;
         }
       } else {
@@ -285,6 +292,14 @@ class Player {
         } else if (this.velocity.y > 0 && !this.game.keys.Space) {
           this.state = 4;
         }
+        // if (
+        //   this.velocity.y > 0 &&
+        //   !this.game.keys.Space &&
+        //   !this.game.keys.KeyA &&
+        //   !this.game.keys.KeyD
+        // ) {
+        //   this.state = 4;
+        // }
 
         // horizontal physics
         if (this.game.keys.KeyD && !this.game.keys.KeyA) {
@@ -294,6 +309,11 @@ class Player {
         } else {
           // do nothing
         }
+      }
+
+      // Faling
+      if (this.velocity.y > 0) {
+        this.state = 4;
       }
     }
     this.velocity.y += this.fallAcc * TICK;
@@ -339,19 +359,20 @@ class Player {
             that.x = entity.BB.right;
           }
         }
+
+        // TODO
         if (that.velocity.y < 0) {
           // jumping
           // hit ceiling...
-          // TODO
         }
 
         // TODO: Wall hang
-        if (that.velocity.y < 0 && that.velocity.x < 0) {
-          console.log('Jump and to the left');
-        }
-        if (that.velocity.y < 0 && that.velocity.x > 0) {
-          console.log('Jump and to the right');
-        }
+        // if (that.velocity.y < 0 && that.velocity.x < 0) {
+        //   console.log('Jump and to the left');
+        // }
+        // if (that.velocity.y < 0 && that.velocity.x > 0) {
+        //   console.log('Jump and to the right');
+        // }
       }
     });
 
@@ -378,12 +399,12 @@ class Player {
       2
     );
 
-    // ctx.strokeStyle = 'Blue';
-    // ctx.strokeRect(
-    //   that.BB.x - that.game.camera.x,
-    //   that.BB.y,
-    //   that.BB.width,
-    //   that.BB.height
-    // );
+    ctx.strokeStyle = 'Blue';
+    ctx.strokeRect(
+      that.BB.x - that.game.camera.x,
+      that.BB.y,
+      that.BB.width,
+      that.BB.height
+    );
   }
 }
