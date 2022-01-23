@@ -12,6 +12,7 @@ class Player {
         1 - run
         2 - dash
         3 - jump
+        4 - falling
         ...
         */
     this.state = 0;
@@ -30,6 +31,9 @@ class Player {
     );
     this.runSprite = ASSET_MANAGER.getAsset(
       './sprites/player/player-run-51x49.png'
+    );
+    this.jumpSprite = ASSET_MANAGER.getAsset(
+      './sprites/player/player-jump-47x80-alignedTop.png'
     );
 
     this.loadAnimations();
@@ -93,11 +97,39 @@ class Player {
     // // Face left = 1
     this.animations[1][1] = new Animator(
       this.runSprite,
-      824,
+      823,
       0,
       51,
       49,
       14,
+      0.05,
+      0,
+      true,
+      true
+    );
+
+    // Jump - State 3
+    // Face right = 0
+    this.animations[3][0] = new Animator(
+      this.jumpSprite,
+      0,
+      0,
+      47,
+      80,
+      16,
+      0.07,
+      0,
+      false,
+      true
+    );
+    // Face left = 1
+    this.animations[3][1] = new Animator(
+      this.jumpSprite,
+      752,
+      0,
+      47,
+      80,
+      16,
       0.05,
       0,
       true,
@@ -121,6 +153,10 @@ class Player {
         that.currentSize.width = 51;
         that.currentSize.height = 49;
         break;
+      case 3:
+        that.currentSize.width = 47;
+        that.currentSize.height = 49;
+        break;
     }
     this.BB = new BoundingBox(
       this.x,
@@ -137,12 +173,6 @@ class Player {
   }
 
   update() {
-    // let that = this;
-    // that.velocity.y += that.gravity
-
-    // that.x += that.velocity.x * that.facing
-    // that.y += that.velocity.y;
-
     const TICK = this.game.clockTick;
 
     const MIN_RUN = 10;
@@ -155,6 +185,10 @@ class Player {
     const DEC_REL = 600;
     const DEC_SKID = 500;
 
+    const STOP_FALL = 1500;
+    const STOP_FALL_A = 450;
+    const RUN_FALL = 2025;
+    const RUN_FALL_A = 562.5;
     const MAX_FALL = 270;
 
     if (this.dead) {
@@ -198,9 +232,40 @@ class Player {
             }
           }
         }
+
+        // Jump
+        if (this.game.keys.Space) {
+          if (Math.abs(this.velocity.x) < 16) {
+            this.velocity.y = -240;
+            this.fallAcc = STOP_FALL;
+          } else {
+            this.velocity.y = -300;
+            this.fallAcc = RUN_FALL;
+          }
+          this.state = 3;
+          this.animations[this.state][this.facing].elapsedTime = 0;
+        }
+      } else {
+        // air physics
+        // vertical physics
+        if (this.velocity.y < 0 && this.game.keys.Space) {
+          // holding space while jumping jumps higher
+          if (this.fallAcc === STOP_FALL)
+            this.velocity.y -= (STOP_FALL - STOP_FALL_A) * TICK;
+          if (this.fallAcc === RUN_FALL)
+            this.velocity.y -= (RUN_FALL - RUN_FALL_A) * TICK;
+        }
+
+        // horizontal physics
+        if (this.game.keys.KeyD && !this.game.keys.KeyA) {
+          this.velocity.x += ACC_WALK * TICK;
+        } else if (this.game.keys.KeyA && !this.game.keys.KeyD) {
+          this.velocity.x -= ACC_WALK * TICK;
+        } else {
+          // do nothing
+        }
       }
     }
-
     this.velocity.y += this.fallAcc * TICK;
 
     // max speed calculation
@@ -253,7 +318,7 @@ class Player {
     });
 
     // update state
-    if (this.state !== 4) {
+    if (this.state !== 3) {
       if (Math.abs(this.velocity.x) >= MIN_RUN) this.state = 1;
       else this.state = 0;
     } else {
@@ -274,7 +339,13 @@ class Player {
       that.y,
       2
     );
+
     // ctx.strokeStyle = 'Blue';
-    // ctx.strokeRect(that.BB.x - that.game.camera.x, that.BB.y, that.BB.width, that.BB.height);
+    // ctx.strokeRect(
+    //   that.BB.x - that.game.camera.x,
+    //   that.BB.y,
+    //   that.BB.width,
+    //   that.BB.height
+    // );
   }
 }
