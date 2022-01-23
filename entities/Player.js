@@ -40,8 +40,8 @@ class Player {
   }
 
   loadAnimations() {
-    for (var i = 0; i < 4; i++) {
-      // four states
+    for (var i = 0; i < 5; i++) {
+      // five states
       this.animations.push([]);
       for (var k = 0; k < 2; k++) {
         // two directions
@@ -65,7 +65,7 @@ class Player {
       true
     );
 
-    // // Face left = 1
+    // Face left = 1
     this.animations[0][1] = new Animator(
       this.idleSprite,
       215,
@@ -94,7 +94,7 @@ class Player {
       true
     );
 
-    // // Face left = 1
+    // Face left = 1
     this.animations[1][1] = new Animator(
       this.runSprite,
       823,
@@ -135,6 +135,34 @@ class Player {
       true,
       true
     );
+
+    // Fall - State 4 - frames 10,11,12
+    // Face right = 0
+    this.animations[4][0] = new Animator(
+      this.jumpSprite,
+      423,
+      0,
+      47,
+      80,
+      3,
+      0.07,
+      0,
+      false,
+      true
+    );
+    // Face left = 1
+    this.animations[4][1] = new Animator(
+      this.jumpSprite,
+      940,
+      0,
+      47,
+      80,
+      3,
+      0.05,
+      0,
+      true,
+      true
+    );
   }
 
   updateBB() {
@@ -143,7 +171,7 @@ class Player {
     const that = this;
 
     const xOffset = 0;
-    const yOffset = 10; // Make player sprite goes below the ground slightly
+    const yOffset = 0; // Make player sprite goes below the ground slightly
     switch (this.state) {
       case 0:
         that.currentSize.width = 43;
@@ -180,7 +208,7 @@ class Player {
 
     const MAX_DASH = 200;
 
-    const ACC_WALK = 500;
+    const ACC_RUN = 500;
 
     const DEC_REL = 600;
     const DEC_SKID = 500;
@@ -196,7 +224,7 @@ class Player {
     } else {
       // update velocity
 
-      if (this.state !== 3) {
+      if (this.state !== 3 && this.state !== 4) {
         // not jumping
         // ground physics
         if (Math.abs(this.velocity.x) < MIN_RUN) {
@@ -215,7 +243,7 @@ class Player {
           // accelerating or decelerating
           if (this.facing === 0) {
             if (this.game.keys.KeyD && !this.game.keys.KeyA) {
-              this.velocity.x += ACC_WALK * TICK;
+              this.velocity.x += ACC_RUN * TICK;
             } else if (this.game.keys.KeyA && !this.game.keys.KeyD) {
               this.velocity.x -= DEC_SKID * TICK;
             } else {
@@ -224,7 +252,7 @@ class Player {
           }
           if (this.facing === 1) {
             if (this.game.keys.KeyA && !this.game.keys.KeyD) {
-              this.velocity.x -= ACC_WALK * TICK;
+              this.velocity.x -= ACC_RUN * TICK;
             } else if (this.game.keys.KeyD && !this.game.keys.KeyA) {
               this.velocity.x += DEC_SKID * TICK;
             } else {
@@ -254,13 +282,15 @@ class Player {
             this.velocity.y -= (STOP_FALL - STOP_FALL_A) * TICK;
           if (this.fallAcc === RUN_FALL)
             this.velocity.y -= (RUN_FALL - RUN_FALL_A) * TICK;
+        } else if (this.velocity.y > 0 && !this.game.keys.Space) {
+          this.state = 4;
         }
 
         // horizontal physics
         if (this.game.keys.KeyD && !this.game.keys.KeyA) {
-          this.velocity.x += ACC_WALK * TICK;
+          this.velocity.x += ACC_RUN * TICK;
         } else if (this.game.keys.KeyA && !this.game.keys.KeyD) {
-          this.velocity.x -= ACC_WALK * TICK;
+          this.velocity.x -= ACC_RUN * TICK;
         } else {
           // do nothing
         }
@@ -297,7 +327,7 @@ class Player {
           ) {
             that.y = entity.BB.top - that.BB.height; //set to top of bounding box of ground
             that.velocity.y = 0;
-            if (that.state === 3) that.state = 0; // set state to idle
+            if (that.state === 3 || that.state === 4) that.state = 0; // set state to idle
             that.updateBB();
           }
         } else if (that.velocity.x > 0) {
@@ -314,11 +344,19 @@ class Player {
           // hit ceiling...
           // TODO
         }
+
+        // TODO: Wall hang
+        if (that.velocity.y < 0 && that.velocity.x < 0) {
+          console.log('Jump and to the left');
+        }
+        if (that.velocity.y < 0 && that.velocity.x > 0) {
+          console.log('Jump and to the right');
+        }
       }
     });
 
     // update state
-    if (this.state !== 3) {
+    if (this.state !== 3 && that.state !== 4) {
       if (Math.abs(this.velocity.x) >= MIN_RUN) this.state = 1;
       else this.state = 0;
     } else {
