@@ -6,6 +6,7 @@ class GroundHorse {
         this.state = 0;
         this.animations = [];
         this.BB = new BoundingBox(this.x, this.y, 25 * 3, 35 * 3);
+        this.boxHolder = this.BB;
         this.loadAnimations();
     }
 
@@ -69,9 +70,9 @@ class GroundHorse {
             }
         }
         if (this.state == 0) {
-            this.BB = new BoundingBox(this.x, this.y, 0, 0);
+            this.BB = undefined;
         } else {
-            this.BB = new BoundingBox(this.x, this.y, 25 * 3, 35 * 3);
+            this.BB = this.boxHolder;
         }
     }
 
@@ -84,6 +85,8 @@ class GroundHorse {
             3
         );
         ctx.strokeStyle = 'Red';
-        ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
+        if (this.BB) {
+            ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
+        }
     }
 }
