@@ -257,14 +257,14 @@ class Mettaur {
       }
     }
     //temp death
-    window.addEventListener('keypress', function (event) {
-      console.log(event.code);
-      if (event.code == 'KeyQ') {
-        that.isDead = true;
-        that.deathTimer = 20;
-        that.xVelocity = 0;
-      }
-    });
+    // window.addEventListener('keypress', function (event) {
+    //   console.log(event.code);
+    //   if (event.code == 'KeyQ') {
+    //     that.isDead = true;
+    //     that.deathTimer = 20;
+    //     that.xVelocity = 0;
+    //   }
+    // });
   }
 
   draw(ctx) {
