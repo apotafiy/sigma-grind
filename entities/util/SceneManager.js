@@ -15,7 +15,7 @@ class SceneManager {
         // }
         // } else {this.x = this.game.player.x - midpoint};
         this.x = this.game.player.x - midpoint;
-        this.y = this.game.player.y - (midpoint/2);
+        this.y = this.game.player.y - (midpoint);
     }   
 
     draw(ctx) {
