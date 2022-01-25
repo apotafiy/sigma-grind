@@ -5,8 +5,6 @@ class GroundHorse {
         this.game = game;
         this.state = 0;
         this.animations = [];
-        this.BB = new BoundingBox(this.x, this.y, 25 * 3, 35 * 3);
-        this.boxHolder = this.BB;
         this.loadAnimations();
     }
 
@@ -72,7 +70,7 @@ class GroundHorse {
         if (this.state == 0) {
             this.BB = undefined;
         } else {
-            this.BB = this.boxHolder;
+            this.BB = new BoundingBox(this.x, this.y, 25 * 3, 35 * 3);
         }
     }
 
@@ -80,12 +78,14 @@ class GroundHorse {
         this.animations[this.state].drawFrame(
             this.game.clockTick,
             ctx,
-            this.x + 0,
-            this.y + 0,
+            this.x - this.game.camera.x,
+            this.y - this.game.camera.y,
             3
         );
         ctx.strokeStyle = 'Red';
         if (this.BB) {
+            this.BB.x = this.BB.x - this.game.camera.x;
+            this.BB.y = this.BB.y - this.game.camera.y;
             ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
         }
     }

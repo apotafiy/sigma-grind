@@ -297,8 +297,13 @@ class Mettaur {
                 1.5
             );
         }
-        // ctx.strokeStyle = "Red";
-        // ctx.strokeRect(that.BB.x - that.game.camera.x, that.BB.y - that.game.camera.y, that.BB.width, that.BB.height);
+        // ctx.strokeStyle = 'Red';
+        // ctx.strokeRect(
+        //     that.BB.x - that.game.camera.x,
+        //     that.BB.y - that.game.camera.y,
+        //     that.BB.width,
+        //     that.BB.height
+        // );
     }
 
     getRandomInt(min, max) {
