@@ -12,6 +12,10 @@ class Ground {
   constructor(game, type, xstart, ystart, horizontal, vertical, includeTop, leftEdge, rightEdge) {
     this.game = game;
     this.animations = [];
+    this.dontDrawGrass = [];
+    for(let i = 0; i < horizontal; i++){
+      this.dontDrawGrass.push(false);
+    }
     this.type = type;
     this.xstart = xstart * 64;
     this.ystart = ystart * 64;
@@ -28,6 +32,39 @@ class Ground {
       64 * horizontal,
       64 * vertical
     );
+
+  }
+  
+  checkForGrass(){
+    let that = this;
+    //itterate through all the entities and check if they are above this bounding box and a wall
+    //double check the < vs <=
+    let index = 0;
+   for(let i = that.xstart; i <= that.xstart + that.horizontal * 64; i+= 64){
+    this.game.entities.forEach(function (entity) {
+      //if it is a ground entity that is no more than 32 pixels above it  or it is within a block
+      if(entity instanceof Ground && 
+        entity.BB.bottom  <= that.BB.top
+         && 
+         ((Math.abs((entity.BB.bottom )- that.BB.top) <= 32) || 
+         (
+            that.BB.top <= entity.BB.bottom &&
+            that.BB.bottom >= entity.BB.top
+          ))) {
+        //here we know that we have found a ground block less than 32 above this one 
+        //check to see if it is in the x space of this block
+        if(entity.BB.left <= that.xstart + (64 * index) && entity.BB.right > that.xstart + (64 * index)){
+          that.dontDrawGrass[index] = true;
+          // console.log("found1")
+          //no grass stop looking
+          // break;
+        }
+      }
+    });
+    // that.drawGrass[index] = true;
+    index++;
+   }
+  //  console.log(that.dontDrawGrass)
   }
   loadAnimation() {
     //shift over by the type of tile we want
@@ -94,7 +131,7 @@ class Ground {
     // console.log(that.vertical);
     for (let i = 0; i < that.vertical; i++) {
       for (let j = 0; j < that.horizontal; j++) {
-        if(i === 0 && that.includeTop){
+        if(i === 0 && that.includeTop && !that.dontDrawGrass[j]){
          if(j != 0 && j != that.horizontal - 1){
           that.animations[1].drawFrame(
             that.game.clockTick,
@@ -156,8 +193,8 @@ class Ground {
       }
     }
     // //draw the bounding box for visual
-    // ctx.strokeStyle = 'Red';
-    // ctx.strokeRect(that.BB.x - that.game.camera.x, that.BB.y, that.BB.width, that.BB.height);
-    // ctx.stroke();
+    ctx.strokeStyle = 'Red';
+    ctx.strokeRect(that.BB.x - that.game.camera.x, that.BB.y, that.BB.width, that.BB.height);
+    ctx.stroke();
   }
 }
