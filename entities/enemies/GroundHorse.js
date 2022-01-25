@@ -1,7 +1,7 @@
 class GroundHorse {
     constructor(game, x, y) {
-        this.x = x;
-        this.y = y;
+        this.x = x * 64;
+        this.y = y * 64;
         this.game = game;
         this.state = 0;
         this.animations = [];
@@ -84,6 +84,7 @@ class GroundHorse {
         );
         ctx.strokeStyle = 'Red';
         if (this.BB) {
+
             this.BB.x = this.BB.x - this.game.camera.x;
             this.BB.y = this.BB.y - this.game.camera.y;
             ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
