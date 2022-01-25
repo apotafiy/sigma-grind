@@ -137,7 +137,7 @@ class Ground {
             that.game.clockTick,
             ctx,
             that.xstart + 64 * j - that.game.camera.x, //side scrolling
-            that.ystart + 64 * i,
+            that.ystart + 64 * i- that.game.camera.y,
             1
           );
          } else {
@@ -149,7 +149,7 @@ class Ground {
                 that.game.clockTick,
                 ctx,
                 that.xstart + 64 * j - that.game.camera.x, //side scrolling
-                that.ystart + 64 * i,
+                that.ystart + 64 * i- that.game.camera.y,
                 1
               );
             } else {
@@ -157,7 +157,7 @@ class Ground {
                 that.game.clockTick,
                 ctx,
                 that.xstart + 64 * j - that.game.camera.x, //side scrolling
-                that.ystart + 64 * i,
+                that.ystart + 64 * i- that.game.camera.y,
                 1
               );
             }
@@ -167,7 +167,7 @@ class Ground {
                 that.game.clockTick,
                 ctx,
                 that.xstart + 64 * j - that.game.camera.x, //side scrolling
-                that.ystart + 64 * i,
+                that.ystart + 64 * i- that.game.camera.y,
                 1
               );
             } else {
@@ -175,7 +175,7 @@ class Ground {
                 that.game.clockTick,
                 ctx,
                 that.xstart + 64 * j - that.game.camera.x, //side scrolling
-                that.ystart + 64 * i,
+                that.ystart + 64 * i- that.game.camera.y,
                 1
               );
             }
@@ -186,7 +186,7 @@ class Ground {
             that.game.clockTick,
             ctx,
             that.xstart + 64 * j - that.game.camera.x, //side scrolling
-            that.ystart + 64 * i,
+            that.ystart + 64 * i - that.game.camera.y,
             1
           );
         }
@@ -194,7 +194,7 @@ class Ground {
     }
     // //draw the bounding box for visual
     ctx.strokeStyle = 'Red';
-    ctx.strokeRect(that.BB.x - that.game.camera.x, that.BB.y, that.BB.width, that.BB.height);
+    ctx.strokeRect(that.BB.x - that.game.camera.x, that.BB.y - that.game.camera.y, that.BB.width, that.BB.height);
     ctx.stroke();
   }
 }

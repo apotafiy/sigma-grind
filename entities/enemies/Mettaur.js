@@ -275,7 +275,7 @@ class Mettaur {
         that.game.clockTick,
         ctx,
         that.x - that.game.camera.x,
-        that.y,
+        that.y - that.game.camera.y,
         2
       );
     } else {
@@ -283,12 +283,12 @@ class Mettaur {
         that.game.clockTick,
         ctx,
         that.x - that.game.camera.x,
-        that.y + that.BB.height / 4,
+        that.y - that.game.camera.y + that.BB.height / 4,
         1.5
       );
     }
     // ctx.strokeStyle = "Red";
-    // ctx.strokeRect(that.BB.x - that.game.camera.x, that.BB.y, that.BB.width, that.BB.height);
+    // ctx.strokeRect(that.BB.x - that.game.camera.x, that.BB.y - that.game.camera.y, that.BB.width, that.BB.height);
   }
 
   getRandomInt(min, max) {

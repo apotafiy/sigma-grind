@@ -38,7 +38,7 @@ ASSET_MANAGER.downloadAll(() => {
 
   // gameEngine.addEntity(new Ground(gameEngine, 1, 1, 7, 8, 1,0,0,1));
   //Changed 4-> 1 xoffset
-  gameEngine.addEntity(new Ground(gameEngine, 1, -1, 7, 15, 1,1,0,1));
+  gameEngine.addEntity(new Ground(gameEngine, 1, 1, 7, 15, 1,1,0,1));
   
   gameEngine.addEntity(new Ground(gameEngine, 1, 1, 6, 8, 1,1,0,1));
   gameEngine.addEntity(new Ground(gameEngine, 1, 3, 5,2, 1,1,0,0));
