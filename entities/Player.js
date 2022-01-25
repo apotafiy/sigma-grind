@@ -395,16 +395,16 @@ class Player {
       that.game.clockTick,
       ctx,
       that.x - that.game.camera.x, // camera sidescrolling
-      that.y,
+      that.y - that.game.camera.y,
       2
     );
 
-    ctx.strokeStyle = 'Blue';
-    ctx.strokeRect(
-      that.BB.x - that.game.camera.x,
-      that.BB.y,
-      that.BB.width,
-      that.BB.height
-    );
+    // ctx.strokeStyle = 'Blue';
+    // ctx.strokeRect(
+    //   that.BB.x - that.game.camera.x,
+    //   that.BB.y - that.game.camera.y,
+    //   that.BB.width,
+    //   that.BB.height
+    // );
   }
 }

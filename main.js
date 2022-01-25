@@ -5,6 +5,7 @@ const ASSET_MANAGER = new AssetManager();
 ASSET_MANAGER.queueDownload('./sprites/backgrounds/water.png');
 //Ground tiles
 ASSET_MANAGER.queueDownload('./sprites/ground/ground-tile.png');
+ASSET_MANAGER.queueDownload('./sprites/ground/ground_tiles.png');
 //Mettaur Animations
 ASSET_MANAGER.queueDownload('./sprites/mettaur/mettaur-walk.png');
 ASSET_MANAGER.queueDownload('./sprites/mettaur/mettaur-walk-right.png');
@@ -31,15 +32,29 @@ ASSET_MANAGER.downloadAll(() => {
 
   gameEngine.addEntity(new Player(gameEngine, 120, 0, gravity));
 
-  gameEngine.addEntity(new Ground(gameEngine, 1, 0, 450, 50, 4));
-  gameEngine.addEntity(new Ground(gameEngine, 0, 0, 386, 20, 1));
-  gameEngine.addEntity(new Ground(gameEngine, 0, 0, 322, 8, 1));
+  gameEngine.addEntity(new Ground(gameEngine, 1, 0, 8, 15, 4,1));
+  gameEngine.addEntity(new Ground(gameEngine, 1, 5, 8, 45, 8,1,0,0));
+  gameEngine.addEntity(new Ground(gameEngine, 1, 50, 2, 10,16,1,0,1));
 
-  gameEngine.addEntity(new Ground(gameEngine, 0, 0, 0, 1, 8));
+  // gameEngine.addEntity(new Ground(gameEngine, 1, 1, 7, 8, 1,0,0,1));
+  //Changed 4-> 1 xoffset
+  gameEngine.addEntity(new Ground(gameEngine, 1, 1, 7, 15, 1,1,0,1));
+  
+  gameEngine.addEntity(new Ground(gameEngine, 1, 1, 6, 8, 1,1,0,1));
+  gameEngine.addEntity(new Ground(gameEngine, 1, 3, 5,2, 1,1,0,0));
+  
+  gameEngine.addEntity(new Ground(gameEngine, 1, -6, 0, 6,12,1,0,0));
 
+
+  gameEngine.addEntity(new Ground(gameEngine, 1, 0, 0, 1, 8,1,0,1));
+  
+  //do all the grass checkForGrass
+  gameEngine.entities.forEach(function (entity) {
+    if(entity instanceof Ground) entity.checkForGrass();
+  });
   gameEngine.addEntity(new Mettaur(gameEngine, 800, 0, gravity));
-  for (let i = 0; i < 1; i++) {
-    gameEngine.addEntity(new Mettaur(gameEngine, 200 + i * 50, 0, gravity));
+  for (let i = 0; i < 8; i++) {
+    gameEngine.addEntity(new Mettaur(gameEngine, 200 + i * 400, 0, gravity));
   }
   gameEngine.addEntity(new Water(gameEngine));
   // gameEngine.addEntity(new GroundHorse(gameEngine));
