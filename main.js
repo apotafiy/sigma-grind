@@ -47,6 +47,15 @@ ASSET_MANAGER.downloadAll(() => {
 
 
   gameEngine.addEntity(new Ground(gameEngine, 1, 0, 0, 1, 8,1,0,1));
+
+  //add platforms for the player to jump on
+  gameEngine.addEntity(new Ground(gameEngine, 1, 20, 5, 14, 1,1,1,1));
+  gameEngine.addEntity(new Ground(gameEngine, 1, 24, 3, 5, 2,1,0,0));
+  gameEngine.addEntity(new Ground(gameEngine, 1, 32, 2, 2, 1,1,1,1));
+  gameEngine.addEntity(new Ground(gameEngine, 1, 36, 2, 2, 6,1,0,0));
+  gameEngine.addEntity(new Ground(gameEngine, 1, 40, 1, 2, 7,1,0,0));
+  gameEngine.addEntity(new Ground(gameEngine, 1, 44, 1, 2, 1,1,1,1));
+  // gameEngine.addEntity(new Ground(gameEngine, 1, 40, 0, 2, 1,1,1,1));
   
   //do all the grass checkForGrass
   gameEngine.entities.forEach(function (entity) {
@@ -56,8 +65,11 @@ ASSET_MANAGER.downloadAll(() => {
   for (let i = 0; i < 8; i++) {
     gameEngine.addEntity(new Mettaur(gameEngine, 200 + i * 400, 0, gravity));
   }
+  gameEngine.addEntity(new GroundHorse(gameEngine, 36,1));
+  gameEngine.addEntity(new GroundHorse(gameEngine, 10,6));
+  gameEngine.addEntity(new GroundHorse(gameEngine, 36,1));
   gameEngine.addEntity(new Water(gameEngine));
-  // gameEngine.addEntity(new GroundHorse(gameEngine));
+
 
   gameEngine.init(ctx);
 
