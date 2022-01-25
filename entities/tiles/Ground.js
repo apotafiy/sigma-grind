@@ -9,7 +9,7 @@
  * includeTop: Do you want to include the top grass layer?
  */
 class Ground {
-  constructor(game, type, xstart, ystart, horizontal, vertical, includeTop) {
+  constructor(game, type, xstart, ystart, horizontal, vertical, includeTop, leftEdge, rightEdge) {
     this.game = game;
     this.animations = [];
     this.type = type;
@@ -18,6 +18,8 @@ class Ground {
     this.horizontal = horizontal;
     this.vertical = vertical;
     this.includeTop = includeTop || false;
+    this.leftEdge = leftEdge || false;
+    this.rightEdge = rightEdge || false;
     this.loadAnimation();
     //set up the bounding box
     this.BB = new BoundingBox(
@@ -104,21 +106,42 @@ class Ground {
          } else {
            //draw the edge piece
            if( j == 0){
-            that.animations[2].drawFrame(
-              that.game.clockTick,
-              ctx,
-              that.xstart + 64 * j - that.game.camera.x, //side scrolling
-              that.ystart + 64 * i,
-              1
-            );
-           } else {
-            that.animations[3].drawFrame(
-              that.game.clockTick,
-              ctx,
-              that.xstart + 64 * j - that.game.camera.x, //side scrolling
-              that.ystart + 64 * i,
-              1
-            );
+            //check to see if we draw the edge or just ground
+            if(that.leftEdge){
+              that.animations[2].drawFrame(
+                that.game.clockTick,
+                ctx,
+                that.xstart + 64 * j - that.game.camera.x, //side scrolling
+                that.ystart + 64 * i,
+                1
+              );
+            } else {
+              that.animations[1].drawFrame(
+                that.game.clockTick,
+                ctx,
+                that.xstart + 64 * j - that.game.camera.x, //side scrolling
+                that.ystart + 64 * i,
+                1
+              );
+            }
+           } else  {
+            if(that.rightEdge){
+              that.animations[3].drawFrame(
+                that.game.clockTick,
+                ctx,
+                that.xstart + 64 * j - that.game.camera.x, //side scrolling
+                that.ystart + 64 * i,
+                1
+              );
+            } else {
+              that.animations[1].drawFrame(
+                that.game.clockTick,
+                ctx,
+                that.xstart + 64 * j - that.game.camera.x, //side scrolling
+                that.ystart + 64 * i,
+                1
+              );
+            }
            }
          }
         } else {
@@ -132,9 +155,9 @@ class Ground {
         }
       }
     }
-    //draw the bounding box for visual
-    ctx.strokeStyle = 'Red';
-    ctx.strokeRect(that.BB.x - that.game.camera.x, that.BB.y, that.BB.width, that.BB.height);
-    ctx.stroke();
+    // //draw the bounding box for visual
+    // ctx.strokeStyle = 'Red';
+    // ctx.strokeRect(that.BB.x - that.game.camera.x, that.BB.y, that.BB.width, that.BB.height);
+    // ctx.stroke();
   }
 }
