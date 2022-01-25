@@ -50,7 +50,7 @@ class Water {
             ctx,
             0 + this.xoffset,
             0,
-            3
+            4
         );
     }
 }

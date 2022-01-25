@@ -20,7 +20,6 @@ class Player {
 
     this.velocity = { x: 0, y: 0 };
     this.veloConst = 6.9;
-    // this.fallAcc = 400;
     this.fallAcc = 400;
 
     this.currentSize = { width: 0, height: 0 };
@@ -318,12 +317,7 @@ class Player {
         this.state = 4;
       }
     }
-
     this.velocity.y += this.fallAcc * TICK;
-
-    // max speed calculation
-    if (this.velocity.y >= MAX_FALL) this.velocity.y = MAX_FALL;
-    if (this.velocity.y <= -MAX_FALL) this.velocity.y = -MAX_FALL;
 
     if (this.velocity.x >= MAX_RUN) this.velocity.x = MAX_RUN;
     if (this.velocity.x <= -MAX_RUN) this.velocity.x = -MAX_RUN;
@@ -368,14 +362,6 @@ class Player {
           // jumping
           // hit ceiling...
         }
-
-        // TODO: Wall hang
-        // if (that.velocity.y < 0 && that.velocity.x < 0) {
-        //   console.log('Jump and to the left');
-        // }
-        // if (that.velocity.y < 0 && that.velocity.x > 0) {
-        //   console.log('Jump and to the right');
-        // }
       }
     });
 
@@ -398,16 +384,16 @@ class Player {
       that.game.clockTick,
       ctx,
       that.x - that.game.camera.x, // camera sidescrolling
-      that.y,
+      that.y - that.game.camera.y,
       2
     );
 
-    // ctx.strokeStyle = 'Blue';
-    // ctx.strokeRect(
-    //   that.BB.x - that.game.camera.x,
-    //   that.BB.y,
-    //   that.BB.width,
-    //   that.BB.height
-    // );
+    ctx.strokeStyle = 'Blue';
+    ctx.strokeRect(
+      that.BB.x - that.game.camera.x,
+      that.BB.y - that.game.camera.y,
+      that.BB.width,
+      that.BB.height
+    );
   }
 }
