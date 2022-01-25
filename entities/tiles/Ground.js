@@ -42,8 +42,15 @@ class Ground {
     let index = 0;
    for(let i = that.xstart; i <= that.xstart + that.horizontal * 64; i+= 64){
     this.game.entities.forEach(function (entity) {
-      //if it is a ground entity that is no more than 32 pixels above it 
-      if(entity instanceof Ground && entity.BB.bottom  <= that.BB.top && (Math.abs(entity.BB.bottom - that.BB.top) <= 32) ) {
+      //if it is a ground entity that is no more than 32 pixels above it  or it is within a block
+      if(entity instanceof Ground && 
+        entity.BB.bottom  <= that.BB.top
+         && 
+         ((Math.abs((entity.BB.bottom )- that.BB.top) <= 32) || 
+         (
+            that.BB.top <= entity.BB.bottom &&
+            that.BB.bottom >= entity.BB.top
+          ))) {
         //here we know that we have found a ground block less than 32 above this one 
         //check to see if it is in the x space of this block
         if(entity.BB.left <= that.xstart + (64 * index) && entity.BB.right > that.xstart + (64 * index)){
