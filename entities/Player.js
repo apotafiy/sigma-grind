@@ -20,7 +20,8 @@ class Player {
 
     this.velocity = { x: 0, y: 0 };
     this.veloConst = 6.9;
-    this.fallAcc = 562.5;
+    // this.fallAcc = 400;
+    this.fallAcc = 400;
 
     this.currentSize = { width: 0, height: 0 };
     this.updateBB();
@@ -169,8 +170,10 @@ class Player {
     this.lastBB = this.BB;
     const that = this;
 
-    const xOffset = 0;
-    const yOffset = 10; // Make player sprite goes below the ground slightly not the bounding box itself
+    let xOffset = 0;
+    let yOffset = 0;
+    const widthOffset = 0;
+    const heightOffset = 10; // Make player sprite goes below the ground slightly not the bounding box itself
 
     // Get the right bounding box for the different states
     switch (this.state) {
@@ -183,16 +186,21 @@ class Player {
         that.currentSize.height = 49;
         break;
       case 4:
+        that.currentSize.width = 47;
+        that.currentSize.height = 49; //Supposed to be 80 but the bottom edge of box goes below the ground
+        yOffset = 35;
+        break;
       case 3:
         that.currentSize.width = 47;
         that.currentSize.height = 49; //Supposed to be 80 but the bottom edge of box goes below the ground
+        yOffset = 0;
         break;
     }
     this.BB = new BoundingBox(
-      this.x,
-      this.y,
-      (this.currentSize.width - xOffset) * 2,
-      (this.currentSize.height - yOffset) * 2
+      this.x + xOffset,
+      this.y + yOffset,
+      (this.currentSize.width - widthOffset) * 2,
+      (this.currentSize.height - heightOffset) * 2
     );
   }
 
@@ -216,9 +224,9 @@ class Player {
     const DEC_SKID = 500;
 
     const STOP_FALL = 1500;
-    const STOP_FALL_A = 450;
+    const STOP_FALL_A = 400;
     const RUN_FALL = 2025;
-    const RUN_FALL_A = 562.5;
+    const RUN_FALL_A = 500;
     const MAX_FALL = 270;
 
     if (this.dead) {
@@ -263,6 +271,8 @@ class Player {
           }
         }
 
+        this.velocity.y += this.fallAcc * TICK;
+
         // Jump
         if (this.game.keys.Space) {
           if (Math.abs(this.velocity.x) < 16) {
@@ -292,14 +302,6 @@ class Player {
         } else if (this.velocity.y > 0 && !this.game.keys.Space) {
           this.state = 4;
         }
-        // if (
-        //   this.velocity.y > 0 &&
-        //   !this.game.keys.Space &&
-        //   !this.game.keys.KeyA &&
-        //   !this.game.keys.KeyD
-        // ) {
-        //   this.state = 4;
-        // }
 
         // horizontal physics
         if (this.game.keys.KeyD && !this.game.keys.KeyA) {
@@ -316,6 +318,7 @@ class Player {
         this.state = 4;
       }
     }
+
     this.velocity.y += this.fallAcc * TICK;
 
     // max speed calculation
