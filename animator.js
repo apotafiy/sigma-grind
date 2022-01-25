@@ -1,4 +1,4 @@
-class Animator {z 
+class Animator {
   constructor(
     spritesheet,
     xStart,
@@ -48,10 +48,9 @@ class Animator {z
     let frame = this.currentFrame();
     if (this.reverse) frame = this.frameCount - frame - 1;
     //update to the last frame if it does not loop
-    if(this.isDone()) {
-      frame = this.frameCount-1;
+    if (this.isDone()) {
+      frame = this.frameCount - 1;
       if (this.reverse) frame = 0;
-
     }
     ctx.drawImage(
       this.spritesheet,
