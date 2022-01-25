@@ -399,12 +399,12 @@ class Player {
       2
     );
 
-    ctx.strokeStyle = 'Blue';
-    ctx.strokeRect(
-      that.BB.x - that.game.camera.x,
-      that.BB.y,
-      that.BB.width,
-      that.BB.height
-    );
+    // ctx.strokeStyle = 'Blue';
+    // ctx.strokeRect(
+    //   that.BB.x - that.game.camera.x,
+    //   that.BB.y,
+    //   that.BB.width,
+    //   that.BB.height
+    // );
   }
 }

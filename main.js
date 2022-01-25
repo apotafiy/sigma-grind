@@ -5,6 +5,7 @@ const ASSET_MANAGER = new AssetManager();
 ASSET_MANAGER.queueDownload('./sprites/backgrounds/water.png');
 //Ground tiles
 ASSET_MANAGER.queueDownload('./sprites/ground/ground-tile.png');
+ASSET_MANAGER.queueDownload('./sprites/ground/ground_tiles.png');
 //Mettaur Animations
 ASSET_MANAGER.queueDownload('./sprites/mettaur/mettaur-walk.png');
 ASSET_MANAGER.queueDownload('./sprites/mettaur/mettaur-walk-right.png');
@@ -31,11 +32,11 @@ ASSET_MANAGER.downloadAll(() => {
 
   gameEngine.addEntity(new Player(gameEngine, 120, 0, gravity));
 
-  gameEngine.addEntity(new Ground(gameEngine, 1, 0, 450, 50, 4));
-  gameEngine.addEntity(new Ground(gameEngine, 0, 0, 386, 20, 1));
-  gameEngine.addEntity(new Ground(gameEngine, 0, 0, 322, 8, 1));
+  gameEngine.addEntity(new Ground(gameEngine, 1, 0, 8, 50, 4,0));
+  gameEngine.addEntity(new Ground(gameEngine, 1, 0, 7, 20, 1,1));
+  gameEngine.addEntity(new Ground(gameEngine, 1, 0, 6, 8, 1,1));
 
-  gameEngine.addEntity(new Ground(gameEngine, 0, 0, 0, 1, 8));
+  gameEngine.addEntity(new Ground(gameEngine, 1, 0, 0, 1, 8));
 
   gameEngine.addEntity(new Mettaur(gameEngine, 800, 0, gravity));
   for (let i = 0; i < 1; i++) {
