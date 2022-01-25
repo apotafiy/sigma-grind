@@ -51,6 +51,7 @@ ASSET_MANAGER.downloadAll(() => {
     gameEngine.entities.forEach(function (entity) {
         if (entity instanceof Ground) entity.checkForGrass();
     });
+
     gameEngine.addEntity(new Mettaur(gameEngine, 800, 0, gravity));
     for (let i = 0; i < 8; i++) {
         gameEngine.addEntity(
