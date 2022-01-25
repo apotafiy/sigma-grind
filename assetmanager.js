@@ -4,16 +4,18 @@ class AssetManager {
         this.errorCount = 0;
         this.cache = [];
         this.downloadQueue = [];
-    };
+    }
 
     queueDownload(path) {
         console.log("Queueing " + path);
         this.downloadQueue.push(path);
-    };
+    }
 
     isDone() {
-        return this.downloadQueue.length === this.successCount + this.errorCount;
-    };
+        return (
+            this.downloadQueue.length === this.successCount + this.errorCount
+        );
+    }
 
     downloadAll(callback) {
         if (this.downloadQueue.length === 0) setTimeout(callback, 10);
@@ -38,10 +40,9 @@ class AssetManager {
             img.src = path;
             this.cache[path] = img;
         }
-    };
+    }
 
     getAsset(path) {
         return this.cache[path];
-    };
-};
-
+    }
+}

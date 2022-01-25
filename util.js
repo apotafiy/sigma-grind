@@ -1,11 +1,11 @@
 /** Global Parameters Object */
-const params = { };
+const params = {};
 
 /**
  * @param {Number} n
  * @returns Random Integer Between 0 and n-1
  */
-const randomInt = n => Math.floor(random() * n);
+const randomInt = (n) => Math.floor(random() * n);
 
 /**
  * @param {Number} r Red Value
@@ -30,23 +30,25 @@ const rgba = (r, g, b, a) => `rgba(${r}, ${g}, ${b}, ${a})`;
  * @param {Number} l Lightness
  * @returns String that can be used as a hsl web color
  */
-const hsl = (h, s, l) => `hsl(${h}, ${s}, ${l})`;
+const hsl = (h, s, l) => `hsl(${h}, ${s}%, ${l}%)`;
 
 /** Creates an alias for requestAnimationFrame for backwards compatibility */
 window.requestAnimFrame = (() => {
-    return window.requestAnimationFrame ||
-        window.webkitRequestAnimationFrame ||
-        window.mozRequestAnimationFrame ||
-        window.oRequestAnimationFrame ||
-        window.msRequestAnimationFrame ||
-        /**
-         * Compatibility for requesting animation frames in older browsers
-         * @param {Function} callback Function
-         * @param {DOM} element DOM ELEMENT
-         */
-        ((callback, element) => {
-            window.setTimeout(callback, 1000 / 60);
-        });
+  return (
+    window.requestAnimationFrame ||
+    window.webkitRequestAnimationFrame ||
+    window.mozRequestAnimationFrame ||
+    window.oRequestAnimationFrame ||
+    window.msRequestAnimationFrame ||
+    /**
+     * Compatibility for requesting animation frames in older browsers
+     * @param {Function} callback Function
+     * @param {DOM} element DOM ELEMENT
+     */
+    ((callback, element) => {
+      window.setTimeout(callback, 1000 / 60);
+    })
+  );
 })();
 
 /**
@@ -55,5 +57,5 @@ window.requestAnimFrame = (() => {
  * @returns Distance between the two points
  */
 const getDistance = (p1, p2) => {
-    return sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+  return sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
 };
