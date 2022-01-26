@@ -319,6 +319,9 @@ class Player {
     }
     this.velocity.y += this.fallAcc * TICK;
 
+    if (this.velocity.y >= MAX_FALL) this.velocity.y = MAX_FALL;
+    if (this.velocity.y <= -MAX_FALL) this.velocity.y = -MAX_FALL;
+
     if (this.velocity.x >= MAX_RUN) this.velocity.x = MAX_RUN;
     if (this.velocity.x <= -MAX_RUN) this.velocity.x = -MAX_RUN;
 
@@ -347,20 +350,28 @@ class Player {
             if (that.state === 3 || that.state === 4) that.state = 0; // set state to idle
             that.updateBB();
           }
-        } else if (that.velocity.x > 0) {
-          if (entity instanceof Ground && that.lastBB.left < entity.BB.right) {
-            that.x = entity.BB.left - that.BB.width;
-          }
-        } else if (that.velocity.x < 0) {
-          if (entity instanceof Ground && that.lastBB.right > entity.BB.left) {
-            that.x = entity.BB.right;
-          }
         }
-
-        // TODO
         if (that.velocity.y < 0) {
           // jumping
           // hit ceiling...
+          if (entity instanceof Ground && that.lastBB.top >= entity.BB.bottom) {
+            that.velocity.y = 0;
+          }
+        }
+        if (
+          entity instanceof Ground &&
+          entity.type &&
+          that.BB.collide(entity.BB)
+        ) {
+          // Left side collision
+          if (that.BB.collide(entity.leftBB)) {
+            that.x = entity.BB.left - that.BB.width;
+            if (that.velocity.x > 0) that.velocity.x = 0;
+          } else if (that.BB.collide(entity.rightBB)) {
+            that.x = entity.BB.right;
+            if (that.velocity.x < 0) that.velocity.x = 0;
+          }
+          that.updateBB();
         }
       }
     });
@@ -388,12 +399,14 @@ class Player {
       2
     );
 
-    ctx.strokeStyle = 'Blue';
-    ctx.strokeRect(
-      that.BB.x - that.game.camera.x,
-      that.BB.y - that.game.camera.y,
-      that.BB.width,
-      that.BB.height
-    );
+    if (params.debug) {
+      ctx.strokeStyle = 'Blue';
+      ctx.strokeRect(
+        that.BB.x - that.game.camera.x,
+        that.BB.y - that.game.camera.y,
+        that.BB.width,
+        that.BB.height
+      );
+    }
   }
 }
