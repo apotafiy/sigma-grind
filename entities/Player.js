@@ -21,6 +21,7 @@ class Player {
     this.velocity = { x: 0, y: 0 };
     this.veloConst = 6.9;
     this.fallAcc = 400;
+    // this.fallAcc = 0.1;
 
     this.currentSize = { width: 0, height: 0 };
     this.updateBB();
@@ -130,7 +131,7 @@ class Player {
       47,
       80,
       16,
-      0.05,
+      0.07,
       0,
       true,
       true
@@ -158,7 +159,7 @@ class Player {
       47,
       80,
       3,
-      0.05,
+      0.07,
       0,
       true,
       true
@@ -173,6 +174,7 @@ class Player {
     let yOffset = 0;
     const widthOffset = 0;
     const heightOffset = 10; // Make player sprite goes below the ground slightly not the bounding box itself
+    // Offsetting the bounding box like this might make things look weird later when it comes to implementing pogo
 
     // Get the right bounding box for the different states
     switch (this.state) {
@@ -181,18 +183,22 @@ class Player {
         that.currentSize.height = 48;
         break;
       case 1:
-        that.currentSize.width = 51;
+        that.currentSize.width = 45;
         that.currentSize.height = 49;
-        break;
-      case 4:
-        that.currentSize.width = 47;
-        that.currentSize.height = 49; //Supposed to be 80 but the bottom edge of box goes below the ground
-        yOffset = 35;
+        xOffset = 0;
+        if (this.facing === 0) {
+          xOffset = 10;
+        }
         break;
       case 3:
-        that.currentSize.width = 47;
+        that.currentSize.width = 45;
         that.currentSize.height = 49; //Supposed to be 80 but the bottom edge of box goes below the ground
         yOffset = 0;
+        break;
+      case 4:
+        that.currentSize.width = 45;
+        that.currentSize.height = 49;
+        yOffset = 35;
         break;
     }
     this.BB = new BoundingBox(
@@ -378,8 +384,10 @@ class Player {
 
     // update state
     if (this.state !== 3 && that.state !== 4) {
-      if (Math.abs(this.velocity.x) >= MIN_RUN) this.state = 1;
-      else this.state = 0;
+      if (Math.abs(this.velocity.x) >= MIN_RUN) {
+        this.state = 1;
+        this.updateBB();
+      } else this.state = 0;
     } else {
     }
 
