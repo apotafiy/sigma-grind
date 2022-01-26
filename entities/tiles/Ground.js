@@ -48,13 +48,13 @@ class Ground {
       this.xstart,
       this.ystart + 5,
       (64 * horizontal) / 2,
-      64 * vertical - 10
+      64 * vertical - 15
     );
     this.rightBB = new BoundingBox(
       this.xstart + (64 * horizontal) / 2,
       this.ystart + 5,
       (64 * horizontal) / 2,
-      64 * vertical - 10
+      64 * vertical - 15
     );
   }
 
