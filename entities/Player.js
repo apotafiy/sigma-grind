@@ -421,7 +421,10 @@ class Player {
             if (that.velocity.x < 0) that.velocity.x = 0;
           }
           // wall hanging
-          if (!that.BB.collide(entity.bottomBB)) {
+          if (
+            !that.BB.collide(entity.bottomBB) &&
+            !that.BB.collide(entity.topBB)
+          ) {
             if (that.velocity.y > 0 && !that.game.keys.Space) {
               // falling and not holding jump
               // Set state to wall hang
