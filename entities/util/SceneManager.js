@@ -9,7 +9,6 @@ class SceneManager {
   update() {
     // Update debug value
     params.debug = document.getElementById('debug').checked;
-    console.log(params.debug);
 
     //this is relying on canvas width
     let midpoint = 1024 / 2;
