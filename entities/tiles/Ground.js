@@ -221,27 +221,30 @@ class Ground {
         }
       }
     }
-    // //draw the bounding box for visual
-    ctx.strokeStyle = 'Red';
-    ctx.strokeRect(
-      that.BB.x - that.game.camera.x,
-      that.BB.y - that.game.camera.y,
-      that.BB.width,
-      that.BB.height
-    );
-    // Draw left and right boxes
-    ctx.strokeRect(
-      that.leftBB.x - that.game.camera.x,
-      that.leftBB.y - that.game.camera.y,
-      that.leftBB.width,
-      that.leftBB.height
-    );
-    ctx.strokeRect(
-      that.rightBB.x - that.game.camera.x,
-      that.rightBB.y - that.game.camera.y,
-      that.rightBB.width,
-      that.rightBB.height
-    );
-    ctx.stroke();
+
+    if (params.debug) {
+      // //draw the bounding box for visual
+      ctx.strokeStyle = 'Red';
+      ctx.strokeRect(
+        that.BB.x - that.game.camera.x,
+        that.BB.y - that.game.camera.y,
+        that.BB.width,
+        that.BB.height
+      );
+      // Draw left and right boxes
+      ctx.strokeRect(
+        that.leftBB.x - that.game.camera.x,
+        that.leftBB.y - that.game.camera.y,
+        that.leftBB.width,
+        that.leftBB.height
+      );
+      ctx.strokeRect(
+        that.rightBB.x - that.game.camera.x,
+        that.rightBB.y - that.game.camera.y,
+        that.rightBB.width,
+        that.rightBB.height
+      );
+    }
+    // ctx.stroke();
   }
 }
