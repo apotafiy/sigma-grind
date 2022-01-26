@@ -44,6 +44,18 @@ class Ground {
       64 * horizontal,
       64 * vertical
     );
+    this.leftBB = new BoundingBox(
+      this.xstart,
+      this.ystart + 5,
+      (64 * horizontal) / 2,
+      64 * vertical - 10
+    );
+    this.rightBB = new BoundingBox(
+      this.xstart + (64 * horizontal) / 2,
+      this.ystart + 5,
+      (64 * horizontal) / 2,
+      64 * vertical - 10
+    );
   }
 
   checkForGrass() {
@@ -86,7 +98,7 @@ class Ground {
   loadAnimation() {
     //shift over by the type of tile we want
     this.animations[0] = new Animator(
-      ASSET_MANAGER.getAsset("./sprites/ground/ground_tiles.png"),
+      ASSET_MANAGER.getAsset('./sprites/ground/ground_tiles.png'),
       0 + this.type * 64,
       0,
       64,
@@ -99,7 +111,7 @@ class Ground {
     );
     //general grass tile
     this.animations[1] = new Animator(
-      ASSET_MANAGER.getAsset("./sprites/ground/ground_tiles.png"),
+      ASSET_MANAGER.getAsset('./sprites/ground/ground_tiles.png'),
       0 + this.type * 64 * 2,
       0,
       64,
@@ -113,7 +125,7 @@ class Ground {
     //left grass tile
     //shift over by the type of tile we want
     this.animations[2] = new Animator(
-      ASSET_MANAGER.getAsset("./sprites/ground/ground_tiles.png"),
+      ASSET_MANAGER.getAsset('./sprites/ground/ground_tiles.png'),
       0 + this.type * 64 * 3,
       0,
       64,
@@ -126,7 +138,7 @@ class Ground {
     );
     //right facing grass edge
     this.animations[3] = new Animator(
-      ASSET_MANAGER.getAsset("./sprites/ground/ground_tiles.png"),
+      ASSET_MANAGER.getAsset('./sprites/ground/ground_tiles.png'),
       0 + this.type * 64 * 4,
       0,
       64,
@@ -210,12 +222,25 @@ class Ground {
       }
     }
     // //draw the bounding box for visual
-    ctx.strokeStyle = "Red";
+    ctx.strokeStyle = 'Red';
     ctx.strokeRect(
       that.BB.x - that.game.camera.x,
       that.BB.y - that.game.camera.y,
       that.BB.width,
       that.BB.height
+    );
+    // Draw left and right boxes
+    ctx.strokeRect(
+      that.leftBB.x - that.game.camera.x,
+      that.leftBB.y - that.game.camera.y,
+      that.leftBB.width,
+      that.leftBB.height
+    );
+    ctx.strokeRect(
+      that.rightBB.x - that.game.camera.x,
+      that.rightBB.y - that.game.camera.y,
+      that.rightBB.width,
+      that.rightBB.height
     );
     ctx.stroke();
   }
