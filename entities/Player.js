@@ -13,6 +13,7 @@ class Player {
         2 - dash
         3 - jump
         4 - falling
+        5 - wall hang
         ...
         */
     this.state = 0;
@@ -36,13 +37,16 @@ class Player {
     this.jumpSprite = ASSET_MANAGER.getAsset(
       './sprites/player/player-jump-47x80.png'
     );
+    this.wallhangSprite = ASSET_MANAGER.getAsset(
+      './sprites/player/player-wallhang-36x65.png'
+    );
 
     this.loadAnimations();
   }
 
   loadAnimations() {
-    for (var i = 0; i < 5; i++) {
-      // five states
+    for (var i = 0; i < 6; i++) {
+      // six states
       this.animations.push([]);
       for (var k = 0; k < 2; k++) {
         // two directions
@@ -164,6 +168,34 @@ class Player {
       true,
       true
     );
+
+    // Wall hang - State 5
+    // Face right = 0
+    this.animations[5][0] = new Animator(
+      this.wallhangSprite,
+      0,
+      0,
+      45,
+      65,
+      2,
+      0.12,
+      0,
+      false,
+      true
+    );
+    // Face left = 1
+    this.animations[5][1] = new Animator(
+      this.wallhangSprite,
+      90,
+      0,
+      45,
+      65,
+      2,
+      0.12,
+      0,
+      true,
+      true
+    );
   }
 
   updateBB() {
@@ -172,8 +204,8 @@ class Player {
 
     let xOffset = 0;
     let yOffset = 0;
-    const widthOffset = 0;
-    const heightOffset = 10; // Make player sprite goes below the ground slightly not the bounding box itself
+    let widthOffset = 0;
+    let heightOffset = 10; // Make player sprite goes below the ground slightly not the bounding box itself
     // Offsetting the bounding box like this might make things look weird later when it comes to implementing pogo
 
     // Get the right bounding box for the different states
@@ -199,6 +231,13 @@ class Player {
         that.currentSize.width = 45;
         that.currentSize.height = 49;
         yOffset = 35;
+        break;
+      case 5:
+        that.currentSize.width = 34;
+        that.currentSize.height = 50;
+        if (this.facing === 0) {
+          xOffset = 20;
+        }
         break;
     }
     this.BB = new BoundingBox(
@@ -239,7 +278,7 @@ class Player {
     } else {
       // update velocity
 
-      if (this.state !== 3 && this.state !== 4) {
+      if (this.state !== 3 && this.state !== 4 && this.state !== 5) {
         // not jumping
         // ground physics
         if (Math.abs(this.velocity.x) < MIN_RUN) {
@@ -364,18 +403,41 @@ class Player {
             that.velocity.y = 0;
           }
         }
+
+        // Side collisions
         if (
           entity instanceof Ground &&
           entity.type &&
           that.BB.collide(entity.BB)
         ) {
-          // Left side collision
           if (that.BB.collide(entity.leftBB)) {
+            // Right side collision
             that.x = entity.BB.left - that.BB.width;
             if (that.velocity.x > 0) that.velocity.x = 0;
-          } else if (that.BB.collide(entity.rightBB)) {
+          }
+          if (that.BB.collide(entity.rightBB)) {
+            // Left side collision
             that.x = entity.BB.right;
             if (that.velocity.x < 0) that.velocity.x = 0;
+          }
+          // wall hanging
+          if (!that.BB.collide(entity.bottomBB)) {
+            if (that.velocity.y > 0 && !that.game.keys.Space) {
+              // falling and not holding jump
+              // Set state to wall hang
+              that.state = 5;
+              that.velocity.y -= 36;
+            } else if (that.velocity.y > 0 && that.game.keys.Space) {
+              // falling then hit jump, bounce from wall
+              if (that.facing === 1) {
+                that.velocity.x = 100;
+              } else {
+                that.velocity.x = -100;
+              }
+              that.velocity.y = -200;
+              that.fallAcc = STOP_FALL;
+              that.state = 3;
+            }
           }
           that.updateBB();
         }
@@ -383,7 +445,7 @@ class Player {
     });
 
     // update state
-    if (this.state !== 3 && that.state !== 4) {
+    if (this.state !== 3 && that.state !== 4 && that.state !== 5) {
       if (Math.abs(this.velocity.x) >= MIN_RUN) {
         this.state = 1;
         this.updateBB();
