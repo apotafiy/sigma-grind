@@ -47,6 +47,7 @@ class GameEngine {
     this.stats = new Stats();
     this.stats.showPanel(0);
     this.stats.dom.id = 'fpsCounter';
+    this.stats.dom.style.marginLeft = '7em';
   }
 
   start() {

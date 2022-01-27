@@ -18,32 +18,12 @@ class SceneManager {
     this.gui = new dat.GUI();
     this.cameraFolder = this.gui.addFolder('Camera values');
     this.testValues = {
-      xvelo: this.xVelocity,
-      yvelo: this.yVelocity,
       accel: this.acceleration,
       frixn: this.friction,
       frixnMult: this.FRICTON_MULT,
       frictionx: this.FRICTON_X,
       frictiony: this.FRICTON_Y,
     };
-    this.cameraFolder
-      .add(this.testValues, 'xvelo')
-      .min(-10)
-      .max(10)
-      .step(0.01)
-      .onChange((val) => {
-        this.xVelocity = val;
-      })
-      .name('X Velocity');
-    this.cameraFolder
-      .add(this.testValues, 'yvelo')
-      .min(-10)
-      .max(10)
-      .step(0.01)
-      .onChange((val) => {
-        this.yVelocity = val;
-      })
-      .name('Y Velocity');
     this.cameraFolder
       .add(this.testValues, 'accel')
       .min(0)
@@ -70,7 +50,7 @@ class SceneManager {
       .onChange((val) => {
         this.FRICTON_MULT = val;
       })
-      .name('Friction Multiplier');
+      .name('FrictionMultiplier');
     this.cameraFolder
       .add(this.testValues, 'frictionx')
       .min(0.000000001)
