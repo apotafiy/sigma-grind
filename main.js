@@ -28,11 +28,10 @@ ASSET_MANAGER.downloadAll(() => {
   ctx.imageSmoothingEnabled = false;
   let gravity = 0.2;
   //scene manager for scrolling
-  gameEngine.addEntity(new SceneManager(gameEngine));
   gameEngine.addEntity(new GroundHorse(gameEngine, 256 * 3, 355));
 
   gameEngine.addEntity(new Player(gameEngine, 200, 0, gravity));
-
+  gameEngine.addEntity(new SceneManager(gameEngine));
   gameEngine.addEntity(new Ground(gameEngine, 1, 0, 8, 15, 4, 1));
   gameEngine.addEntity(new Ground(gameEngine, 1, 5, 8, 45, 8, 1, 0, 0));
   gameEngine.addEntity(new Ground(gameEngine, 1, 50, 2, 10, 16, 1, 0, 1));
