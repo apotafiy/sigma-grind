@@ -92,6 +92,11 @@ class SceneManager {
       this.game.player.x,
       this.game.player.y
     );
+    if(dist  > 500){
+      this.FRICTON_MULT = 1;
+    } else {
+      this.FRICTON_MULT = 10;
+    }
     let xdif =
       (this.game.player.x - this.x - midpoint + this.player_width) / dist;
     let ydif = (this.game.player.y - this.y - vertmidpoint) / dist;
@@ -111,7 +116,7 @@ class SceneManager {
       this.yVelocity;
 
     document.getElementById('xvel').innerHTML =
-      ' Camera xVel ' + this.xVelocity;
+      ' Distance ' + dist;
     document.getElementById('yvel').innerHTML =
       'Camera yVel: ' + this.yVelocity;
 
