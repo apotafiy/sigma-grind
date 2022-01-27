@@ -43,12 +43,22 @@ class GameEngine {
     this.ctx = ctx;
     this.startInput();
     this.timer = new Timer();
+    // FPS counter
+    this.stats = new Stats();
+    this.stats.showPanel(0);
+    this.stats.dom.id = 'fpsCounter';
   }
 
   start() {
     this.running = true;
     const gameLoop = () => {
-      this.loop();
+      if (params.debug) {
+        this.stats.begin();
+        this.loop();
+        this.stats.end();
+      } else {
+        this.loop();
+      }
       requestAnimFrame(gameLoop, this.ctx.canvas);
     };
     gameLoop();
@@ -129,6 +139,12 @@ class GameEngine {
       if (this.entities[i].removeFromWorld) {
         this.entities.splice(i, 1);
       }
+    }
+
+    if (params.debug) {
+      document.body.appendChild(this.stats.dom);
+    } else if (!params.debug && document.getElementById('fpsCounter')) {
+      document.getElementById('fpsCounter').remove();
     }
   }
 

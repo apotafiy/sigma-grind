@@ -22,7 +22,6 @@ class Player {
     this.velocity = { x: 0, y: 0 };
     this.veloConst = 6.9;
     this.fallAcc = 400;
-    // this.fallAcc = 0.1;
 
     this.currentSize = { width: 0, height: 0 };
     this.updateBB();
