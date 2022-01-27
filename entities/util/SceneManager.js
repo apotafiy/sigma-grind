@@ -6,12 +6,13 @@ class SceneManager {
     this.y = game.player.y - 768 / 2;
     this.xVelocity = 0;
     this.yVelocity = 0;
-    this.acceleration = 1000;
-    this.friction = 0.0000001;
-    this.FRICTON_MULT = 1;
-    this.FRICTON_Y = 0;
-    this.FRICTON_X = 0.0000001;
-
+    this.acceleration = 2000;
+    this.friction = 2;
+    this.FRICTON_MULT = 10;
+    this.FRICTON_Y = 2;
+    this.FRICTON_X = 2;
+    this.maxdist = 0;
+    this.mindist = 999999;
     this.player_width = 45 / 2;
 
     // Dat GUI stuff
@@ -86,16 +87,24 @@ class SceneManager {
      * this.x = this.game.player.x - midpoint;
      * this.y = this.game.player.y - midpoint;
      */
-    let dist = this.distance(
-      this.x - midpoint + this.player_width,
-      this.y - vertmidpoint,
-      this.game.player.x,
-      this.game.player.y
-    );
-    if(dist  > 500){
-      this.FRICTON_MULT = 1;
+    // let newdist = getDistance(this, this.game.player);
+    let dist = getDistance(this, this.game.player);
+    this.maxdist = Math.max(this.maxdist, dist);
+    this.mindist = Math.min(this.mindist, dist);
+    // this.distance(
+    //   this.x - midpoint + this.player_width,
+    //   this.y - vertmidpoint,
+    //   this.game.player.x,
+    //   this.game.player.y
+    // );
+    if(dist  > 850 || dist < 450){
+      if(this.FRICTON_MULT > 1){
+        this.FRICTON_MULT  -= 0.1;
+      }
     } else {
-      this.FRICTON_MULT = 10;
+      if(this.FRICTON_MULT < 5 ){
+        this.FRICTON_MULT  += 0.1;
+      }
     }
     let xdif =
       (this.game.player.x - this.x - midpoint + this.player_width) / dist;
@@ -109,16 +118,16 @@ class SceneManager {
     this.xVelocity -=
       (this.FRICTON_MULT - this.FRICTON_X) *
       this.game.clockTick *
-      (this.xVelocity * 1.75);
+      (this.xVelocity * 1);
     this.yVelocity -=
       (this.FRICTON_MULT - this.FRICTON_Y) *
       this.game.clockTick *
-      this.yVelocity;
+      this.yVelocity * 1.75;
 
     document.getElementById('xvel').innerHTML =
-      ' Distance ' + dist;
+      'Distance ' + dist;
     document.getElementById('yvel').innerHTML =
-      'Camera yVel: ' + this.yVelocity;
+      'max: ' + this.maxdist + " min: " + this.mindist;
 
     this.x += this.xVelocity;
     this.y += this.yVelocity;
@@ -127,7 +136,18 @@ class SceneManager {
   draw(ctx) {
     let that = this;
     ctx.strokeStyle = 'Blue';
-    ctx.strokeRect(that.x, that.y, 10, 10);
+    ctx.strokelin
+    ctx.strokeRect(1024/2 - that.player_width -5, 768/2 - 5, 10, 10);
+
+    //draw line Between ctx.beginPath();
+    // ctx.moveTo(1024/2 - that.player_width, 768/2);
+    // ctx.lineTo(that.game.player.x - that.x, that.game.player.y - that.y);
+    ctx.strokeRect(
+      1024/2 - that.player_width, 
+      768/2,
+      that.game.player.x - that.x -  1024/2 + 25  ,
+      that.game.player.y - that.y -   768/2, )
+    ctx.stroke();
   }
 
   //find distance between two points
