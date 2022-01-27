@@ -65,6 +65,16 @@ class Ground {
       64 * horizontal - 20,
       (64 * vertical) / 12 // Making it thinner
     );
+
+    // Need this to fix player wall hanging
+    // too high with his hand in the air
+    // like he just dont care
+    this.topBB = new BoundingBox(
+      this.xstart,
+      this.ystart - (64 * vertical) / 20 + 5, // Making it goes above the ground a bit
+      64 * horizontal,
+      (64 * vertical) / 20 // Making it thinner
+    );
   }
 
   checkForGrass() {
@@ -259,6 +269,14 @@ class Ground {
         that.bottomBB.y - that.game.camera.y,
         that.bottomBB.width,
         that.bottomBB.height
+      );
+      // Draw top box
+      ctx.strokeStyle = 'Yellow';
+      ctx.strokeRect(
+        that.topBB.x - that.game.camera.x,
+        that.topBB.y - that.game.camera.y,
+        that.topBB.width,
+        that.topBB.height
       );
     }
     // ctx.stroke();

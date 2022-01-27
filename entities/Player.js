@@ -233,11 +233,11 @@ class Player {
         yOffset = 35;
         break;
       case 5:
-        that.currentSize.width = 34;
+        that.currentSize.width = 45;
         that.currentSize.height = 50;
-        if (this.facing === 0) {
-          xOffset = 20;
-        }
+        // if (this.facing === 0) {
+        //   xOffset = 20;
+        // }
         break;
     }
     this.BB = new BoundingBox(
@@ -421,12 +421,15 @@ class Player {
             if (that.velocity.x < 0) that.velocity.x = 0;
           }
           // wall hanging
-          if (!that.BB.collide(entity.bottomBB)) {
+          if (
+            !that.BB.collide(entity.bottomBB) &&
+            !that.BB.collide(entity.topBB)
+          ) {
             if (that.velocity.y > 0 && !that.game.keys.Space) {
               // falling and not holding jump
               // Set state to wall hang
               that.state = 5;
-              that.velocity.y -= 36;
+              that.velocity.y = -12;
             } else if (that.velocity.y > 0 && that.game.keys.Space) {
               // falling then hit jump, bounce from wall
               if (that.facing === 1) {
@@ -437,6 +440,10 @@ class Player {
               that.velocity.y = -200;
               that.fallAcc = STOP_FALL;
               that.state = 3;
+            } else if (that.velocity.y === 0) {
+              // Prevent player from being stuck in wall hang animation
+              // when touches the ground
+              that.state = 0;
             }
           }
           that.updateBB();
