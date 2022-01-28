@@ -59,8 +59,8 @@ ASSET_MANAGER.downloadAll(() => {
     if (entity instanceof Ground) entity.checkForGrass();
   });
   gameEngine.addEntity(new Mettaur(gameEngine, 800, 0, gravity));
-  for (let i = 0; i < 8; i++) {
-    gameEngine.addEntity(new Mettaur(gameEngine, 200 + i * 400, 0, gravity));
+  for (let i = 0; i < 100; i++) {
+    gameEngine.addEntity(new Mettaur(gameEngine, 200 + i * 100, 0, gravity));
   }
   gameEngine.addEntity(new GroundHorse(gameEngine, 36, 1));
   gameEngine.addEntity(new GroundHorse(gameEngine, 10, 6));
