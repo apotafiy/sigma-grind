@@ -11,6 +11,7 @@ class SceneManager {
         this.FRICTON_MULT = 10;
         this.FRICTON_Y = 2;
         this.FRICTON_X = 2;
+        this.DISTANCE_MULT = 0.5;
         this.maxdist = 0;
         this.mindist = 999999;
         this.player_width = 45 / 2;
@@ -73,30 +74,13 @@ class SceneManager {
     }
 
     update() {
-        // Update debug value
         params.debug = document.getElementById("debug").checked;
-        // console.log(this);
-        //this is relying on canvas width
+        //set up midpoints for calculatoin
         let midpoint = 1024 / 2 - 44;
         let vertmidpoint = 768 / 2 - 44;
-        // if(this.x < this.game.player.x - midpoint ){
-        //     this.x = this.game.player.x - midpoint;
-        // }
-        // } else {this.x = this.game.player.x - midpoint};
-        /**
-         * this.x = this.game.player.x - midpoint;
-         * this.y = this.game.player.y - midpoint;
-         */
-        // let newdist = getDistance(this, this.game.player);
         let dist = getDistance(this, this.game.player);
-        this.maxdist = Math.max(this.maxdist, dist);
-        this.mindist = Math.min(this.mindist, dist);
-        // this.distance(
-        //   this.x - midpoint + this.player_width,
-        //   this.y - vertmidpoint,
-        //   this.game.player.x,
-        //   this.game.player.y
-        // );
+
+        //make the camera move faster if it is too far from the player
         if (dist > 850 || dist < 450) {
             if (this.FRICTON_MULT > 1) {
                 this.FRICTON_MULT -= 0.1;
@@ -106,15 +90,15 @@ class SceneManager {
                 this.FRICTON_MULT += 0.1;
             }
         }
-        let xdif =
-            (this.game.player.x - this.x - midpoint + this.player_width) / dist;
+        //find the unit vector components of the distance
+        let xdif =(this.game.player.x - this.x - midpoint + this.player_width) / dist;
         let ydif = (this.game.player.y - this.y - vertmidpoint) / dist;
-        // console.log(Math.sqrt(xdif * xdif + ydif * ydif));
-        //  console.log(xdif, ydif);
-        //x y comp of normal vectorS
-        this.xVelocity += (xdif * this.acceleration) / (dist * 0.5);
-        this.yVelocity += (ydif * this.acceleration * 2) / (dist * 0.5);
-        //friction
+        
+        //increase the velocity of the camera based on the ditance
+        this.xVelocity += (xdif * this.acceleration) / (dist * this.DISTANCE_MULT);
+        this.yVelocity += (ydif * this.acceleration * 2) / (dist * this.DISTANCE_MULT);
+        
+        //removed a percentage of the velocity for friction
         this.xVelocity -=
             (this.FRICTON_MULT - this.FRICTON_X) *
             this.game.clockTick *
@@ -124,17 +108,15 @@ class SceneManager {
             this.game.clockTick *
             this.yVelocity *
             1.75;
-
-        document.getElementById("xvel").innerHTML = "Distance " + dist;
-        document.getElementById("yvel").innerHTML =
-            "max: " + this.maxdist + " min: " + this.mindist;
-
+        
+        //move the camera over by the veoloity
         this.x += this.xVelocity;
         this.y += this.yVelocity;
     }
 
     draw(ctx) {
-        let that = this;
+        if(params.debug) {
+          let that = this;
         ctx.strokeStyle = "Blue";
         ctx.strokelin;
         ctx.strokeRect(1024 / 2 - that.player_width - 5, 768 / 2 - 5, 10, 10);
@@ -150,6 +132,7 @@ class SceneManager {
         );
         ctx.stroke();
     }
+        }
 
     //find distance between two points
     /**

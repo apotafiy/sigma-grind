@@ -4,6 +4,7 @@ class Player {
 
     this.game.player = this;
     this.gravity = gravity;
+    this.animationTick = 0;
 
     this.facing = 0; // 0 = right, 1 = left
 
@@ -40,11 +41,21 @@ class Player {
       './sprites/player/player-wallhang-36x65.png'
     );
 
+    this.attackRight = ASSET_MANAGER.getAsset(
+      './sprites/player/zero_attack_right_one_92_64_2.png'
+    );
+    this.attackRightTwo = ASSET_MANAGER.getAsset(
+      './sprites/player/zero_attack_right_two.png'
+    );
+    this.attackRightThree = ASSET_MANAGER.getAsset(
+      './sprites/player/zero_attack_right_three_114x64-Sheet.png'
+    );
+
     this.loadAnimations();
   }
 
   loadAnimations() {
-    for (var i = 0; i < 6; i++) {
+    for (var i = 0; i < 9; i++) {
       // six states
       this.animations.push([]);
       for (var k = 0; k < 2; k++) {
@@ -193,6 +204,45 @@ class Player {
       0.12,
       0,
       true,
+      true
+    );
+     // Face right = 0
+     this.animations[6][0] = new Animator(
+      this.attackRight,
+      0,
+      0,
+      92,
+      64,
+      12,
+      0.05,
+      2,
+      false,
+      true
+    );
+    // Face right slash two
+    this.animations[7][0] = new Animator(
+      this.attackRightTwo,
+      0,
+      0,
+      114,
+      64,
+      11,
+      0.05,
+      1,
+      false,
+      true
+    );
+    // Face right slash 3
+    this.animations[8][0] = new Animator(
+      this.attackRightThree,
+      0,
+      0,
+      112,
+      74,
+      12,
+      0.05,
+      2,
+      false,
       true
     );
   }
@@ -466,15 +516,45 @@ class Player {
 
   draw(ctx) {
     let that = this;
-
-    that.animations[that.state][that.facing].drawFrame(
-      that.game.clockTick,
-      ctx,
-      that.x - that.game.camera.x, // camera sidescrolling
-      that.y - that.game.camera.y,
-      2
-    );
-
+    //actual animation code
+    // that.animations[that.state][that.facing].drawFrame(
+    //   that.game.clockTick,
+    //   ctx,
+    //   that.x - that.game.camera.x, // camera sidescrolling
+    //   that.y - that.game.camera.y,
+    //   2
+    // );
+    //12,11,10
+    //testing attack code
+    if(this.animationTick < 12){
+      that.animations[6][0].drawFrame(
+        that.game.clockTick,
+        ctx,
+        that.x - that.game.camera.x, // camera sidescrolling
+        that.y - that.game.camera.y,
+        2
+      );
+    } else if (this.animationTick >=12 && this.animationTick <=22){
+      that.animations[7][0].drawFrame(
+        that.game.clockTick,
+        ctx,
+        that.x - that.game.camera.x, // camera sidescrolling
+        that.y - that.game.camera.y,
+        2
+      );
+    } else {
+      that.animations[8][0].drawFrame(
+        that.game.clockTick,
+        ctx,
+        that.x - that.game.camera.x, // camera sidescrolling
+        that.y - that.game.camera.y,
+        2
+      );
+    }
+      this.animationTick++;
+      if(this.animationTick > 12 + 11 + 12){
+        this.animationTick = 0;
+      }
     if (params.debug) {
       ctx.strokeStyle = 'Blue';
       ctx.strokeRect(
