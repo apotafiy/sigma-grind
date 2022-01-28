@@ -71,6 +71,7 @@ class SceneManager {
                 this.FRICTON_y = val;
             })
             .name("Friction Y");
+
     }
 
     update() {

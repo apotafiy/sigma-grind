@@ -5,7 +5,7 @@ class Player {
     this.game.player = this;
     this.gravity = gravity;
     this.animationTick = 0;
-
+    this.attackSpeed = 0.01
     this.facing = 0; // 0 = right, 1 = left
 
     /* States:
@@ -52,6 +52,23 @@ class Player {
     );
 
     this.loadAnimations();
+
+      // Dat GUI stuff
+      this.gui = new dat.GUI();
+      this.playerFolder = this.gui.addFolder("Player values");
+      this.testValues = {
+        attackSpeed: this.attackSpeed
+      };
+      this.playerFolder
+          .add(this.testValues, "attackSpeed")
+          .min(0.005)
+          .max(0.5)
+          .step(0.005)
+          .onChange(val => {
+              this.attackSpeed = val;
+              this.loadAnimations();
+          })
+          .name("Attack Speed");
   }
 
   loadAnimations() {
@@ -214,10 +231,10 @@ class Player {
       92,
       64,
       12,
-      0.05,
+      this.attackSpeed,
       2,
       false,
-      true
+      false
     );
     // Face right slash two
     this.animations[7][0] = new Animator(
@@ -227,10 +244,10 @@ class Player {
       114,
       64,
       11,
-      0.05,
+      this.attackSpeed,
       1,
       false,
-      true
+      false
     );
     // Face right slash 3
     this.animations[8][0] = new Animator(
@@ -240,10 +257,10 @@ class Player {
       112,
       74,
       12,
-      0.05,
+      this.attackSpeed,
       2,
       false,
-      true
+      false
     );
   }
 
@@ -321,6 +338,12 @@ class Player {
     const RUN_FALL = 2025;
     const RUN_FALL_A = 500;
     const MAX_FALL = 270;
+
+    //testing
+    if(this.game.keys.KeyJ) this.animationTick = 0;
+    if(this.game.keys.KeyK) this.animationTick = 1;
+    if(this.game.keys.KeyL) this.animationTick = 2;
+
 
     if (this.dead) {
       // Do death stuff
@@ -526,24 +549,24 @@ class Player {
     // );
     //12,11,10
     //testing attack code
-    if(this.animationTick < 12){
-      that.animations[6][0].drawFrame(
+    if(this.animationTick == 0){
+      that.animations[6+ this.animationTick][0].drawFrame(
         that.game.clockTick,
         ctx,
         that.x - that.game.camera.x, // camera sidescrolling
         that.y - that.game.camera.y,
         2
       );
-    } else if (this.animationTick >=12 && this.animationTick <=22){
-      that.animations[7][0].drawFrame(
+    } else if (this.animationTick == 1){
+      that.animations[6 + this.animationTick][0].drawFrame(
         that.game.clockTick,
         ctx,
-        that.x - that.game.camera.x, // camera sidescrolling
+        that.x - that.game.camera.x - 20, // camera sidescrolling
         that.y - that.game.camera.y,
         2
       );
-    } else {
-      that.animations[8][0].drawFrame(
+    } else if(this.animationTick == 2){
+      that.animations[6 + this.animationTick][0].drawFrame(
         that.game.clockTick,
         ctx,
         that.x - that.game.camera.x, // camera sidescrolling
@@ -551,10 +574,37 @@ class Player {
         2
       );
     }
-      this.animationTick++;
-      if(this.animationTick > 12 + 11 + 12){
-        this.animationTick = 0;
-      }
+    console.log(this.animations[6][0].isDone(), this.animations[6][0].elapsedTime)
+    if(this.animations[6 + this.animationTick][0].isDone()){
+      this.animations[6 + this.animationTick][0].elapsedTime = 0;
+      this.animationTick = (this.animationTick+ 1) % 3;
+
+    }
+    // if(this.animationTick == 0){
+    //   that.animations[6][0].drawFrame(
+    //     that.game.clockTick,
+    //     ctx,
+    //     that.x - that.game.camera.x, // camera sidescrolling
+    //     that.y - that.game.camera.y,
+    //     2
+    //   );
+    // } else if (this.animationTick == 1){
+    //   that.animations[7][0].drawFrame(
+    //     that.game.clockTick,
+    //     ctx,
+    //     that.x - that.game.camera.x - 20, // camera sidescrolling
+    //     that.y - that.game.camera.y,
+    //     2
+    //   );
+    // } else if(this.animationTick == 2){
+    //   that.animations[8][0].drawFrame(
+    //     that.game.clockTick,
+    //     ctx,
+    //     that.x - that.game.camera.x, // camera sidescrolling
+    //     that.y - that.game.camera.y,
+    //     2
+    //   );
+    // }
     if (params.debug) {
       ctx.strokeStyle = 'Blue';
       ctx.strokeRect(
