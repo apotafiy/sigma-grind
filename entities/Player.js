@@ -631,48 +631,50 @@ class Player {
     draw(ctx) {
         let that = this;
         //actual animation code
-        // that.animations[that.state][that.facing].drawFrame(
-        //   that.game.clockTick,
-        //   ctx,
-        //   that.x - that.game.camera.x, // camera sidescrolling
-        //   that.y - that.game.camera.y,
-        //   2
-        // );
+        that.animations[that.state][that.facing].drawFrame(
+            that.game.clockTick,
+            ctx,
+            that.x - that.game.camera.x + this.spriteOffset.xOffset, // camera sidescrolling
+            that.y - that.game.camera.y + this.spriteOffset.yOffset,
+            2
+        );
+
         //12,11,10
         //testing attack code
-        if (this.animationTick == 0) {
-            that.animations[6 + this.animationTick][0].drawFrame(
-                that.game.clockTick,
-                ctx,
-                that.x - that.game.camera.x, // camera sidescrolling
-                that.y - that.game.camera.y,
-                2
-            );
-        } else if (this.animationTick == 1) {
-            that.animations[6 + this.animationTick][0].drawFrame(
-                that.game.clockTick,
-                ctx,
-                that.x - that.game.camera.x - 20, // camera sidescrolling
-                that.y - that.game.camera.y,
-                2
-            );
-        } else if (this.animationTick == 2) {
-            that.animations[6 + this.animationTick][0].drawFrame(
-                that.game.clockTick,
-                ctx,
-                that.x - that.game.camera.x, // camera sidescrolling
-                that.y - that.game.camera.y,
-                2
-            );
-        }
-        console.log(
-            this.animations[6][0].isDone(),
-            this.animations[6][0].elapsedTime
-        );
-        if (this.animations[6 + this.animationTick][0].isDone()) {
-            this.animations[6 + this.animationTick][0].elapsedTime = 0;
-            this.animationTick = (this.animationTick + 1) % 3;
-        }
+        // if (this.animationTick == 0) {
+        //     that.animations[6 + this.animationTick][0].drawFrame(
+        //         that.game.clockTick,
+        //         ctx,
+        //         that.x - that.game.camera.x, // camera sidescrolling
+        //         that.y - that.game.camera.y,
+        //         2
+        //     );
+        // } else if (this.animationTick == 1) {
+        //     that.animations[6 + this.animationTick][0].drawFrame(
+        //         that.game.clockTick,
+        //         ctx,
+        //         that.x - that.game.camera.x - 20, // camera sidescrolling
+        //         that.y - that.game.camera.y,
+        //         2
+        //     );
+        // } else if (this.animationTick == 2) {
+        //     that.animations[6 + this.animationTick][0].drawFrame(
+        //         that.game.clockTick,
+        //         ctx,
+        //         that.x - that.game.camera.x, // camera sidescrolling
+        //         that.y - that.game.camera.y,
+        //         2
+        //     );
+        // }
+        // console.log(
+        //     this.animations[6][0].isDone(),
+        //     this.animations[6][0].elapsedTime
+        // );
+        // if (this.animations[6 + this.animationTick][0].isDone()) {
+        //     this.animations[6 + this.animationTick][0].elapsedTime = 0;
+        //     this.animationTick = (this.animationTick + 1) % 3;
+        // }
+
         // if(this.animationTick == 0){
         //   that.animations[6][0].drawFrame(
         //     that.game.clockTick,
