@@ -6,6 +6,7 @@ class Drill {
         this.isActive = false;
         this.player = this.game.getPlayer();
         this.xVelocity = 0;
+        this.isDead = false;
         this.yVelocity = 0;
         this.acceleration = 15;
         this.DISTANCE_MULT = 0.9;
@@ -18,6 +19,11 @@ class Drill {
         );
         this.animations = [];
         this.loadAnimations();
+    }
+
+    die() {
+        this.BB = undefined;
+        this.isDead = true;
     }
 
     loadAnimations() {
@@ -48,8 +54,14 @@ class Drill {
     }
 
     update() {
+        if (this.isDead) {
+            return;
+        }
         let dist = getDistance(this, this.player);
         if (dist < 400) {
+            setTimeout(() => {
+                this.die();
+            }, 1000 * 10);
             this.isActive = true;
         }
         if (!this.isActive) {
@@ -69,6 +81,9 @@ class Drill {
     }
 
     draw(ctx) {
+        if (this.isDead) {
+            return;
+        }
         this.animations[1].drawFrame(
             this.game.clockTick,
             ctx,
