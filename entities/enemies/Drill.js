@@ -3,7 +3,19 @@ class Drill {
         this.x = x * 64;
         this.y = y * 64;
         this.game = game;
-        this.BB = new BoundingBox(this.x, this.y, 51 * 3, 20 * 3);
+        this.isActive = false;
+        this.player = this.game.getPlayer();
+        this.xVelocity = 0;
+        this.yVelocity = 0;
+        this.acceleration = 15;
+        this.DISTANCE_MULT = 0.9;
+        this.scale = 2.5;
+        this.BB = new BoundingBox(
+            this.x,
+            this.y,
+            51 * this.scale,
+            20 * this.scale
+        );
         this.animations = [];
         this.loadAnimations();
     }
@@ -28,29 +40,41 @@ class Drill {
             51,
             19,
             3,
-            0.05,
+            0.04,
             0,
             false,
             true
         );
     }
 
-    update() {}
+    update() {
+        let dist = getDistance(this, this.player);
+        if (dist < 400) {
+            this.isActive = true;
+        }
+        if (!this.isActive) {
+            return;
+        }
+        let xdif = (this.player.x - this.x) / dist;
+        let ydif = (this.game.player.y - this.y) / dist;
+
+        this.xVelocity -= this.game.clockTick * (this.xVelocity * 0.5);
+        this.yVelocity -= this.game.clockTick * this.yVelocity * 0.5;
+        this.xVelocity +=
+            (xdif * this.acceleration) / (dist * this.DISTANCE_MULT);
+        this.yVelocity +=
+            (ydif * this.acceleration * 2) / (dist * this.DISTANCE_MULT);
+        this.x += this.xVelocity;
+        this.y += this.yVelocity;
+    }
 
     draw(ctx) {
-        this.animations[0].drawFrame(
-            this.game.clockTick,
-            ctx,
-            this.x + 210 - this.game.camera.x, //- this.game.camera.x,
-            this.y + 50 - this.game.camera.y, //- this.game.camera.y,
-            3
-        );
         this.animations[1].drawFrame(
             this.game.clockTick,
             ctx,
-            this.x - this.game.camera.x, //- this.game.camera.x,
-            this.y - this.game.camera.y, //- this.game.camera.y,
-            3
+            this.x - this.game.camera.x,
+            this.y - this.game.camera.y,
+            this.scale
         );
         if (params.debug) {
             ctx.strokeStyle = 'Red';

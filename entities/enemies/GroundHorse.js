@@ -1,10 +1,12 @@
 class GroundHorse {
-    constructor(game, x, y) {
+    constructor(game, x, y, isStable) {
         const yOffSet = 35;
         const xOffSet = -10;
+        this.isStable = isStable;
         this.x = x * 64 + xOffSet;
         this.y = y * 64 + yOffSet;
         this.game = game;
+        this.visionDistance = 200;
         this.state = 0;
         this.animations = [];
         this.loadAnimations();
@@ -62,8 +64,15 @@ class GroundHorse {
     }
 
     update() {
+        if (this.isStable) {
+            this.state = 2;
+        }
         let player = this.game.getPlayer();
-        if (player && (getDistance(player, this) < 200 || this.state !== 0)) {
+        if (
+            player &&
+            (getDistance(player, this) < this.visionDistance ||
+                this.state !== 0)
+        ) {
             if (this.animations[this.state].isDone()) {
                 this.animations[this.state].elapsedTime = 0;
                 this.state = this.state + 1;
