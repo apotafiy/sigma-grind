@@ -39,32 +39,30 @@ class Drill {
             let radians = (angle / 360) * 2 * Math.PI;
             let offscreenCanvas = document.createElement('canvas');
 
-            offscreenCanvas.width = 51;
-            offscreenCanvas.height = 51;
+            offscreenCanvas.width = 51 * this.scale;
+            offscreenCanvas.height = 51 * this.scale;
 
             let offscreenCtx = offscreenCanvas.getContext('2d');
             offscreenCtx.imageSmoothingEnabled = false;
 
             offscreenCtx.save();
-            offscreenCtx.translate(25, 25);
+            offscreenCtx.translate(25 * this.scale, 25 * this.scale);
             offscreenCtx.rotate(radians);
-            offscreenCtx.translate(-25, -25);
+            offscreenCtx.translate(-25 * this.scale, -25 * this.scale);
             offscreenCtx.drawImage(
                 this.animations[this.state].spritesheet,
                 0,
                 0,
-                51,
-                51,
+                50,
+                50,
                 0,
-                9,
-                51,
-                51
+                9 * this.scale,
+                51 * this.scale,
+                51 * this.scale
             );
             offscreenCtx.restore();
             this.cache[angle] = offscreenCanvas;
         }
-        var xOffset = 25;
-        var yOffset = 25;
 
         ctx.drawImage(
             this.cache[angle],
