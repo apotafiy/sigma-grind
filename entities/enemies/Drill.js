@@ -17,12 +17,14 @@ class Drill {
             51 * this.scale,
             20 * this.scale
         );
+        this.state = 0;
         this.animations = [];
         this.loadAnimations();
     }
 
     die() {
         this.BB = undefined;
+        this.state = 3;
         this.isDead = true;
     }
 
@@ -33,13 +35,25 @@ class Drill {
             0,
             51,
             44,
-            5,
-            0.2,
+            1,
+            1,
             0,
             false,
             true
         );
         this.animations[1] = new Animator(
+            ASSET_MANAGER.getAsset('./sprites/drill/drill_ready.png'),
+            0,
+            0,
+            51,
+            44,
+            5,
+            0.2,
+            0,
+            false,
+            false
+        );
+        this.animations[2] = new Animator(
             ASSET_MANAGER.getAsset('./sprites/drill/drill.png'),
             0,
             0,
@@ -51,18 +65,35 @@ class Drill {
             false,
             true
         );
+        this.animations[3] = new Animator(
+            ASSET_MANAGER.getAsset('./sprites/mettaur/fire.png'),
+            0,
+            0,
+            32,
+            60,
+            7,
+            0.08,
+            0,
+            false,
+            false
+        );
     }
 
     update() {
         if (this.isDead) {
             return;
         }
+        if (this.state == 1 && this.animations[this.state].isDone()) {
+            this.state += 1;
+            this.isActive = true;
+        }
+
         let dist = getDistance(this, this.player);
-        if (dist < 400) {
+        if (dist < 400 && this.state == 0) {
             setTimeout(() => {
                 this.die();
-            }, 1000 * 10);
-            this.isActive = true;
+            }, 1000 * 4);
+            this.state = 1;
         }
         if (!this.isActive) {
             return;
@@ -78,20 +109,25 @@ class Drill {
             (ydif * this.acceleration * 2) / (dist * this.DISTANCE_MULT);
         this.x += this.xVelocity;
         this.y += this.yVelocity;
+        this.BB.x = this.x;
+        this.BB.y = this.y;
     }
 
     draw(ctx) {
         if (this.isDead) {
-            return;
+            this.animations[this.state].loop = false;
+            if (this.animations[this.state].isDone()) {
+                return;
+            }
         }
-        this.animations[1].drawFrame(
+        this.animations[this.state].drawFrame(
             this.game.clockTick,
             ctx,
             this.x - this.game.camera.x,
             this.y - this.game.camera.y,
             this.scale
         );
-        if (params.debug) {
+        if (params.debug && this.BB) {
             ctx.strokeStyle = 'Red';
             ctx.strokeRect(
                 this.BB.x - this.game.camera.x,
