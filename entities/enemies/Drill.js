@@ -7,11 +7,14 @@ class Drill {
         this.player = this.game.getPlayer();
         this.isDead = false;
         this.lifeExpectancy = lifeExpectancy;
+        this.cache = [];
         this.xVelocity = 0;
         this.yVelocity = 0;
         this.acceleration = 15;
         this.DISTANCE_MULT = 0.9;
+        this.frames = 0;
         this.scale = 2.5;
+        this.angle = 0;
         this.BB = new BoundingBox(
             this.x,
             this.y,
@@ -27,6 +30,52 @@ class Drill {
         this.BB = undefined;
         this.state = 3;
         this.isDead = true;
+    }
+
+    drawAngle(ctx, angle) {
+        if (angle < 0 || angle > 359) return;
+
+        if (!this.cache[angle]) {
+            let radians = (angle / 360) * 2 * Math.PI;
+            let offscreenCanvas = document.createElement('canvas');
+
+            offscreenCanvas.width = 51;
+            offscreenCanvas.height = 51;
+
+            let offscreenCtx = offscreenCanvas.getContext('2d');
+
+            offscreenCtx.save();
+            offscreenCtx.translate(25, 25);
+            offscreenCtx.rotate(radians);
+            offscreenCtx.translate(-25, -25);
+            offscreenCtx.drawImage(
+                this.animations[this.state].spritesheet,
+                0,
+                0,
+                51,
+                51,
+                0,
+                9,
+                51,
+                51
+            );
+            offscreenCtx.restore();
+            this.cache[angle] = offscreenCanvas;
+        }
+        var xOffset = 25;
+        var yOffset = 25;
+
+        ctx.drawImage(
+            this.cache[angle],
+            this.x,
+            this.y,
+            50 * this.scale,
+            50 * this.scale
+        );
+        if (params.debug) {
+            ctx.strokeStyle = 'Green';
+            ctx.strokeRect(this.x, this.y, 50, 50);
+        }
     }
 
     loadAnimations() {
@@ -114,6 +163,13 @@ class Drill {
         this.BB.x = this.x;
         this.BB.y = this.y;
 
+        if (this.angle >= 360) {
+            this.angle = 0;
+        } else if (this.frames % 2 == 0) {
+            this.angle += 1;
+        }
+        this.frames += 1;
+
         // TODO: rotation
     }
 
@@ -124,6 +180,7 @@ class Drill {
                 return;
             }
         }
+        this.drawAngle(ctx, this.angle);
         this.animations[this.state].drawFrame(
             this.game.clockTick,
             ctx,
