@@ -77,7 +77,7 @@ ASSET_MANAGER.downloadAll(() => {
         );
     }
     gameEngine.addEntity(new GroundHorse(gameEngine, 36, 0));
-    gameEngine.addEntity(new GroundHorse(gameEngine, 9, 5));
+    gameEngine.addEntity(new GroundHorse(gameEngine, 9, 5, true));
     gameEngine.addEntity(new GroundHorse(gameEngine, 10, 5));
     gameEngine.addEntity(new GroundHorse(gameEngine, 11, 5));
     gameEngine.addEntity(new GroundHorse(gameEngine, 12, 5));
