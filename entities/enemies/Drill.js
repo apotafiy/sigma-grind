@@ -43,6 +43,7 @@ class Drill {
             offscreenCanvas.height = 51;
 
             let offscreenCtx = offscreenCanvas.getContext('2d');
+            offscreenCtx.imageSmoothingEnabled = false;
 
             offscreenCtx.save();
             offscreenCtx.translate(25, 25);
@@ -74,7 +75,7 @@ class Drill {
         );
         if (params.debug) {
             ctx.strokeStyle = 'Green';
-            ctx.strokeRect(this.x, this.y, 50, 50);
+            ctx.strokeRect(this.x, this.y, 50 * this.scale, 50 * this.scale);
         }
     }
 
