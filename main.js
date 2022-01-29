@@ -43,6 +43,9 @@ ASSET_MANAGER.downloadAll(() => {
 
     gameEngine.addEntity(new Player(gameEngine, 200, 0, gravity));
     gameEngine.addEntity(new Drill(gameEngine, 11, 2, 5));
+    gameEngine.addEntity(new Drill(gameEngine, 14, 2, 5));
+    gameEngine.addEntity(new Drill(gameEngine, 17, 2, 5));
+
     gameEngine.addEntity(new SceneManager(gameEngine));
     gameEngine.addEntity(new Ground(gameEngine, 1, 0, 8, 15, 4, 1));
     gameEngine.addEntity(new Ground(gameEngine, 1, 5, 8, 45, 8, 1, 0, 0));
