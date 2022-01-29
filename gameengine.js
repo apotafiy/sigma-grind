@@ -43,12 +43,23 @@ class GameEngine {
         this.ctx = ctx;
         this.startInput();
         this.timer = new Timer();
+        // FPS counter
+        this.stats = new Stats();
+        this.stats.showPanel(0);
+        this.stats.dom.id = 'fpsCounter';
+        this.stats.dom.style.marginLeft = '7em';
     }
 
     start() {
         this.running = true;
         const gameLoop = () => {
-            this.loop();
+            if (params.debug) {
+                this.stats.begin();
+                this.loop();
+                this.stats.end();
+            } else {
+                this.loop();
+            }
             requestAnimFrame(gameLoop, this.ctx.canvas);
         };
         gameLoop();
@@ -90,10 +101,24 @@ class GameEngine {
             this.rightclick = getXandY(e);
         });
 
-        this.ctx.canvas.addEventListener(
-            'keydown',
-            (event) => (this.keys[event.code] = true)
-        );
+        this.ctx.canvas.addEventListener('keydown', (event) => {
+            // Prevent Dashing continuously when holding down 'k' button
+            if (event.code === 'KeyK') if (event.repeat) return;
+
+            this.keys[event.code] = true;
+
+            // Prevent scrolling while using the canvas
+            if (
+                [
+                    'Space',
+                    'ArrowUp',
+                    'ArrowDown',
+                    'ArrowLeft',
+                    'ArrowRight',
+                ].indexOf(event.code) > -1
+            )
+                event.preventDefault();
+        });
         this.ctx.canvas.addEventListener(
             'keyup',
             (event) => (this.keys[event.code] = false)
@@ -129,6 +154,12 @@ class GameEngine {
             if (this.entities[i].removeFromWorld) {
                 this.entities.splice(i, 1);
             }
+        }
+
+        if (params.debug) {
+            document.body.appendChild(this.stats.dom);
+        } else if (!params.debug && document.getElementById('fpsCounter')) {
+            document.getElementById('fpsCounter').remove();
         }
     }
 
