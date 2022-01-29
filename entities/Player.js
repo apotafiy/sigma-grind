@@ -5,7 +5,7 @@ class Player {
     this.game.player = this;
     this.gravity = gravity;
     this.animationTick = 0;
-    this.attackSpeed = 0.01
+    this.attackSpeed = 0.01;
     this.facing = 0; // 0 = right, 1 = left
 
     /* States:
@@ -25,6 +25,7 @@ class Player {
     this.fallAcc = 400;
 
     this.currentSize = { width: 0, height: 0 };
+    this.spriteOffset = { xOffset: 0, yOffset: 0 };
     this.updateBB();
 
     this.animations = [];
@@ -40,6 +41,9 @@ class Player {
     this.wallhangSprite = ASSET_MANAGER.getAsset(
       './sprites/player/player-wallhang-36x65.png'
     );
+    this.dashSprite = ASSET_MANAGER.getAsset(
+      './sprites/player/player-dash-97x52.png'
+    );
 
     this.attackRight = ASSET_MANAGER.getAsset(
       './sprites/player/zero_attack_right_one_92_64_2.png'
@@ -53,22 +57,22 @@ class Player {
 
     this.loadAnimations();
 
-      // Dat GUI stuff
-      this.gui = new dat.GUI();
-      this.playerFolder = this.gui.addFolder("Player values");
-      this.testValues = {
-        attackSpeed: this.attackSpeed
-      };
-      this.playerFolder
-          .add(this.testValues, "attackSpeed")
-          .min(0.005)
-          .max(0.5)
-          .step(0.005)
-          .onChange(val => {
-              this.attackSpeed = val;
-              this.loadAnimations();
-          })
-          .name("Attack Speed");
+    // Dat GUI stuff
+    this.gui = new dat.GUI();
+    this.playerFolder = this.gui.addFolder('Player values');
+    this.testValues = {
+      attackSpeed: this.attackSpeed,
+    };
+    this.playerFolder
+      .add(this.testValues, 'attackSpeed')
+      .min(0.005)
+      .max(0.5)
+      .step(0.005)
+      .onChange((val) => {
+        this.attackSpeed = val;
+        this.loadAnimations();
+      })
+      .name('Attack Speed');
   }
 
   loadAnimations() {
@@ -134,6 +138,35 @@ class Player {
       51,
       49,
       14,
+      0.05,
+      0,
+      true,
+      true
+    );
+
+    // Dash - State 2
+    // Face right = 0
+    this.animations[2][0] = new Animator(
+      this.dashSprite,
+      0,
+      0,
+      97,
+      52,
+      11,
+      0.05,
+      0,
+      false,
+      true
+    );
+
+    // Face left = 1
+    this.animations[2][1] = new Animator(
+      this.dashSprite,
+      1067,
+      0,
+      97,
+      52,
+      11,
       0.05,
       0,
       true,
@@ -223,8 +256,8 @@ class Player {
       true,
       true
     );
-     // Face right = 0
-     this.animations[6][0] = new Animator(
+    // Face right = 0
+    this.animations[6][0] = new Animator(
       this.attackRight,
       0,
       0,
@@ -277,10 +310,12 @@ class Player {
     // Get the right bounding box for the different states
     switch (this.state) {
       case 0:
+        that.spriteOffset.xOffset = 0;
         that.currentSize.width = 43;
         that.currentSize.height = 48;
         break;
       case 1:
+        that.spriteOffset.xOffset = 0;
         that.currentSize.width = 45;
         that.currentSize.height = 49;
         xOffset = 0;
@@ -288,22 +323,27 @@ class Player {
           xOffset = 10;
         }
         break;
+      case 2:
+        that.spriteOffset.xOffset = this.facing === 0 ? -90 : -10;
+        that.currentSize.width = 45;
+        that.currentSize.height = 49;
+        break;
       case 3:
+        that.spriteOffset.xOffset = 0;
         that.currentSize.width = 45;
         that.currentSize.height = 49; //Supposed to be 80 but the bottom edge of box goes below the ground
         yOffset = 0;
         break;
       case 4:
+        that.spriteOffset.xOffset = 0;
         that.currentSize.width = 45;
         that.currentSize.height = 49;
         yOffset = 35;
         break;
       case 5:
+        that.spriteOffset.xOffset = 0;
         that.currentSize.width = 45;
         that.currentSize.height = 50;
-        // if (this.facing === 0) {
-        //   xOffset = 20;
-        // }
         break;
     }
     this.BB = new BoundingBox(
@@ -326,7 +366,7 @@ class Player {
     const MIN_RUN = 10;
     const MAX_RUN = 120;
 
-    const MAX_DASH = 200;
+    const MAX_DASH = 300;
 
     const ACC_RUN = 500;
 
@@ -340,15 +380,44 @@ class Player {
     const MAX_FALL = 270;
 
     //testing
-    if(this.game.keys.KeyJ) this.animationTick = 0;
-    if(this.game.keys.KeyK) this.animationTick = 1;
-    if(this.game.keys.KeyL) this.animationTick = 2;
-
+    if (this.game.keys.KeyJ) this.animationTick = 0;
+    if (this.game.keys.KeyK) this.animationTick = 1;
+    if (this.game.keys.KeyL) this.animationTick = 2;
 
     if (this.dead) {
       // Do death stuff
     } else {
       // update velocity
+
+      // Dashing
+      if (this.game.keys.KeyK && !this.game.keys.Space) {
+        if (this.state !== 5) {
+          if (this.game.keys.KeyA && !this.game.keys.KeyD) {
+            this.velocity.x = -MAX_DASH;
+          } else {
+            this.velocity.x = MAX_DASH;
+          }
+          this.velocity.y = 0;
+          this.fallAcc = 0;
+          this.state = 2;
+          if (this.animations[2][this.facing].elapsedTime >= 0.5) {
+            this.fallAcc = RUN_FALL;
+            if (this.facing === 0) {
+              this.velocity.x += ACC_RUN * TICK;
+              this.velocity.y += this.fallAcc * TICK;
+            } else {
+              this.velocity.x -= ACC_RUN * TICK;
+              this.velocity.y -= this.fallAcc * TICK;
+            }
+            this.game.keys.KeyK = false;
+          }
+        }
+      } else if (this.game.keys.KeyK && this.game.keys.Space) {
+        console.log('fucked up shit');
+      } else {
+        this.animations[2][this.facing].elapsedTime = 0;
+        this.fallAcc = STOP_FALL;
+      }
 
       if (this.state !== 3 && this.state !== 4 && this.state !== 5) {
         // not jumping
@@ -390,7 +459,7 @@ class Player {
         this.velocity.y += this.fallAcc * TICK;
 
         // Jump
-        if (this.game.keys.Space) {
+        if (this.game.keys.Space && !this.game.keys.KeyK) {
           if (Math.abs(this.velocity.x) < 16) {
             // Jump height while idle
             this.velocity.y = -240;
@@ -439,8 +508,12 @@ class Player {
     if (this.velocity.y >= MAX_FALL) this.velocity.y = MAX_FALL;
     if (this.velocity.y <= -MAX_FALL) this.velocity.y = -MAX_FALL;
 
-    if (this.velocity.x >= MAX_RUN) this.velocity.x = MAX_RUN;
-    if (this.velocity.x <= -MAX_RUN) this.velocity.x = -MAX_RUN;
+    if (this.velocity.x >= MAX_DASH) this.velocity.x = MAX_DASH;
+    if (this.velocity.x <= -MAX_DASH) this.velocity.x = -MAX_DASH;
+    if (this.velocity.x >= MAX_RUN && !this.game.keys.KeyK)
+      this.velocity.x = MAX_RUN;
+    if (this.velocity.x <= -MAX_RUN && !this.game.keys.KeyK)
+      this.velocity.x = -MAX_RUN;
 
     // update position
     // scale = 3
@@ -525,7 +598,13 @@ class Player {
 
     // update state
     if (this.state !== 3 && that.state !== 4 && that.state !== 5) {
-      if (Math.abs(this.velocity.x) >= MIN_RUN) {
+      if (
+        Math.abs(this.velocity.x) > MAX_RUN ||
+        Math.abs(this.velocity.x) === MAX_DASH
+      ) {
+        this.state = 2;
+        this.updateBB();
+      } else if (Math.abs(this.velocity.x) >= MIN_RUN) {
         this.state = 1;
         this.updateBB();
       } else this.state = 0;
@@ -549,15 +628,15 @@ class Player {
     // );
     //12,11,10
     //testing attack code
-    if(this.animationTick == 0){
-      that.animations[6+ this.animationTick][0].drawFrame(
+    if (this.animationTick == 0) {
+      that.animations[6 + this.animationTick][0].drawFrame(
         that.game.clockTick,
         ctx,
         that.x - that.game.camera.x, // camera sidescrolling
         that.y - that.game.camera.y,
         2
       );
-    } else if (this.animationTick == 1){
+    } else if (this.animationTick == 1) {
       that.animations[6 + this.animationTick][0].drawFrame(
         that.game.clockTick,
         ctx,
@@ -565,7 +644,7 @@ class Player {
         that.y - that.game.camera.y,
         2
       );
-    } else if(this.animationTick == 2){
+    } else if (this.animationTick == 2) {
       that.animations[6 + this.animationTick][0].drawFrame(
         that.game.clockTick,
         ctx,
@@ -574,11 +653,13 @@ class Player {
         2
       );
     }
-    console.log(this.animations[6][0].isDone(), this.animations[6][0].elapsedTime)
-    if(this.animations[6 + this.animationTick][0].isDone()){
+    console.log(
+      this.animations[6][0].isDone(),
+      this.animations[6][0].elapsedTime
+    );
+    if (this.animations[6 + this.animationTick][0].isDone()) {
       this.animations[6 + this.animationTick][0].elapsedTime = 0;
-      this.animationTick = (this.animationTick+ 1) % 3;
-
+      this.animationTick = (this.animationTick + 1) % 3;
     }
     // if(this.animationTick == 0){
     //   that.animations[6][0].drawFrame(

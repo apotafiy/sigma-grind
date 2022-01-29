@@ -22,11 +22,16 @@ ASSET_MANAGER.queueDownload('./sprites/player/player-idle-43x48.png');
 ASSET_MANAGER.queueDownload('./sprites/player/player-run-51x49.png');
 ASSET_MANAGER.queueDownload('./sprites/player/player-jump-47x80.png');
 ASSET_MANAGER.queueDownload('./sprites/player/player-wallhang-36x65.png');
+ASSET_MANAGER.queueDownload('./sprites/player/player-dash-97x52.png');
 ASSET_MANAGER.queueDownload('./sprites/player/zerox4sheet.png');
 //player attack Animations
-ASSET_MANAGER.queueDownload('./sprites/player/zero_attack_right_one_92_64_2.png')
-ASSET_MANAGER.queueDownload('./sprites/player/zero_attack_right_two.png')
-ASSET_MANAGER.queueDownload('./sprites/player/zero_attack_right_three_114x64-Sheet.png')
+ASSET_MANAGER.queueDownload(
+  './sprites/player/zero_attack_right_one_92_64_2.png'
+);
+ASSET_MANAGER.queueDownload('./sprites/player/zero_attack_right_two.png');
+ASSET_MANAGER.queueDownload(
+  './sprites/player/zero_attack_right_three_114x64-Sheet.png'
+);
 ASSET_MANAGER.downloadAll(() => {
   const canvas = document.getElementById('gameWorld');
   const ctx = canvas.getContext('2d');
