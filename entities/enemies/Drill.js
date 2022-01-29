@@ -1,12 +1,13 @@
 class Drill {
-    constructor(game, x, y) {
+    constructor(game, x, y, lifeExpectancy) {
         this.x = x * 64;
         this.y = y * 64;
         this.game = game;
         this.isActive = false;
         this.player = this.game.getPlayer();
-        this.xVelocity = 0;
         this.isDead = false;
+        this.lifeExpectancy = lifeExpectancy;
+        this.xVelocity = 0;
         this.yVelocity = 0;
         this.acceleration = 15;
         this.DISTANCE_MULT = 0.9;
@@ -89,10 +90,11 @@ class Drill {
         }
 
         let dist = getDistance(this, this.player);
+        const that = this;
         if (dist < 400 && this.state == 0) {
             setTimeout(() => {
                 this.die();
-            }, 1000 * 4);
+            }, 1000 * that.lifeExpectancy);
             this.state = 1;
         }
         if (!this.isActive) {
@@ -111,6 +113,8 @@ class Drill {
         this.y += this.yVelocity;
         this.BB.x = this.x;
         this.BB.y = this.y;
+
+        // TODO: rotation
     }
 
     draw(ctx) {
