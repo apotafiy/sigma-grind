@@ -197,8 +197,7 @@ class Mettaur {
                 //if falling check below
                 if (that.yVelocity > 0) {
                     if (
-                        (entity instanceof Ground ||
-                            entity instanceof Player) &&
+                        entity instanceof Ground &&
                         that.lastBB.bottom <= entity.BB.top
                     ) {
                         // ws above last tick
@@ -208,8 +207,7 @@ class Mettaur {
                     }
                 } else if (that.direction == 1) {
                     if (
-                        (entity instanceof Ground ||
-                            entity instanceof Player) &&
+                        entity instanceof Ground &&
                         that.lastBB.left < entity.BB.right
                     ) {
                         that.x = entity.BB.right;
@@ -219,8 +217,7 @@ class Mettaur {
                     }
                 } else if (that.direction == -1) {
                     if (
-                        (entity instanceof Ground ||
-                            entity instanceof Player) &&
+                        entity instanceof Ground &&
                         that.lastBB.right > entity.BB.left
                     ) {
                         // is in the wall
