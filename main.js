@@ -42,9 +42,9 @@ ASSET_MANAGER.downloadAll(() => {
     //scene manager for scrolling
 
     gameEngine.addEntity(new Player(gameEngine, 200, 0, gravity));
-    // gameEngine.addEntity(new Drill(gameEngine, 11, 2, 60));
-    // gameEngine.addEntity(new Drill(gameEngine, 14, 2, 60));
-    // gameEngine.addEntity(new Drill(gameEngine, 17, 2, 60));
+    gameEngine.addEntity(new Drill(gameEngine, 11, 2, 60));
+    gameEngine.addEntity(new Drill(gameEngine, 14, 2, 60));
+    gameEngine.addEntity(new Drill(gameEngine, 17, 2, 60));
 
     gameEngine.addEntity(new SceneManager(gameEngine));
     gameEngine.addEntity(new Ground(gameEngine, 1, 0, 8, 15, 4, 1));
@@ -73,19 +73,19 @@ ASSET_MANAGER.downloadAll(() => {
     gameEngine.entities.forEach(function (entity) {
         if (entity instanceof Ground) entity.checkForGrass();
     });
-    // gameEngine.addEntity(new Mettaur(gameEngine, 800, 0, gravity));
-    // for (let i = 0; i < 100; i++) {
-    //     gameEngine.addEntity(
-    //         new Mettaur(gameEngine, 200 + i * 100, 0, gravity)
-    //     );
-    // }
-    // gameEngine.addEntity(new GroundHorse(gameEngine, 36, 0));
-    // gameEngine.addEntity(new GroundHorse(gameEngine, 9, 5, true));
-    // gameEngine.addEntity(new GroundHorse(gameEngine, 10, 5));
-    // gameEngine.addEntity(new GroundHorse(gameEngine, 11, 5));
-    // gameEngine.addEntity(new GroundHorse(gameEngine, 12, 5));
-    // gameEngine.addEntity(new GroundHorse(gameEngine, 13, 5));
-    // gameEngine.addEntity(new GroundHorse(gameEngine, 14, 5));
+    gameEngine.addEntity(new Mettaur(gameEngine, 800, 0, gravity));
+    for (let i = 0; i < 100; i++) {
+        gameEngine.addEntity(
+            new Mettaur(gameEngine, 200 + i * 100, 0, gravity)
+        );
+    }
+    gameEngine.addEntity(new GroundHorse(gameEngine, 36, 0));
+    gameEngine.addEntity(new GroundHorse(gameEngine, 9, 5, true));
+    gameEngine.addEntity(new GroundHorse(gameEngine, 10, 5));
+    gameEngine.addEntity(new GroundHorse(gameEngine, 11, 5));
+    gameEngine.addEntity(new GroundHorse(gameEngine, 12, 5));
+    gameEngine.addEntity(new GroundHorse(gameEngine, 13, 5));
+    gameEngine.addEntity(new GroundHorse(gameEngine, 14, 5));
 
     // gameEngine.addEntity(new GroundHorse(gameEngine, 36, 0));
     gameEngine.addEntity(new Water(gameEngine));
