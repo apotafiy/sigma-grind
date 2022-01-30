@@ -24,7 +24,7 @@ class Player {
         this.veloConst = 6.9;
         this.fallAcc = 400;
 
-        this.currentSize = { width: 0, height: 0 };
+        this.currentSize = { width: 40, height: 50 };
         this.spriteOffset = { xOffset: 0, yOffset: 0 };
         this.updateBB();
 
@@ -300,8 +300,6 @@ class Player {
         this.lastBB = this.BB;
         const that = this;
 
-        let xOffset = 0;
-        let yOffset = 0;
         let widthOffset = 0;
         let heightOffset = 10; // Make player sprite goes below the ground slightly not the bounding box itself
         // Offsetting the bounding box like this might make things look weird later when it comes to implementing pogo
@@ -309,45 +307,35 @@ class Player {
         // Get the right bounding box for the different states
         switch (this.state) {
             case 0:
-                that.spriteOffset.xOffset = 0;
-                that.currentSize.width = 43;
-                that.currentSize.height = 48;
+                that.spriteOffset.xOffset = this.facing === 0 ? 0 : -6;
+                that.spriteOffset.yOffset = 0;
                 break;
             case 1:
-                that.spriteOffset.xOffset = 0;
-                that.currentSize.width = 45;
-                that.currentSize.height = 49;
-                xOffset = 0;
-                if (this.facing === 0) {
-                    xOffset = 10;
-                }
+                that.spriteOffset.xOffset = this.facing === 0 ? -15 : -6;
+                that.spriteOffset.yOffset = 0;
                 break;
             case 2:
-                that.spriteOffset.xOffset = this.facing === 0 ? -90 : -10;
-                that.currentSize.width = 45;
-                that.currentSize.height = 49;
+                if (that.velocity.x === 0)
+                    that.spriteOffset.xOffset = this.facing === 0 ? 0 : -6;
+                else that.spriteOffset.xOffset = this.facing === 0 ? -102 : -10;
+                that.spriteOffset.yOffset = 0;
                 break;
             case 3:
-                that.spriteOffset.xOffset = 0;
-                that.currentSize.width = 45;
-                that.currentSize.height = 49; //Supposed to be 80 but the bottom edge of box goes below the ground
-                yOffset = 0;
+                that.spriteOffset.xOffset = this.facing === 0 ? -10 : -3;
+                that.spriteOffset.yOffset = 0;
                 break;
             case 4:
-                that.spriteOffset.xOffset = 0;
-                that.currentSize.width = 45;
-                that.currentSize.height = 49;
-                yOffset = 35;
+                that.spriteOffset.xOffset = this.facing === 0 ? -10 : -3;
+                that.spriteOffset.yOffset = -42;
                 break;
             case 5:
                 that.spriteOffset.xOffset = 0;
-                that.currentSize.width = 45;
-                that.currentSize.height = 50;
+                that.spriteOffset.yOffset = -20;
                 break;
         }
         this.BB = new BoundingBox(
-            this.x + xOffset,
-            this.y + yOffset,
+            this.x,
+            this.y,
             (this.currentSize.width - widthOffset) * 2,
             (this.currentSize.height - heightOffset) * 2
         );
