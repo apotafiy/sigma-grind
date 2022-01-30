@@ -15,11 +15,12 @@ class Drill {
         this.frames = 0;
         this.scale = 2.5;
         this.angle = 0;
+        this.offSetBB = 32;
         this.BB = new BoundingBox(
-            this.x,
-            this.y,
-            51 * this.scale,
-            20 * this.scale
+            this.x + this.offSetBB,
+            this.y + this.offSetBB,
+            (51 / 2) * this.scale,
+            (51 / 2) * this.scale
         );
         this.state = 0;
         this.animations = [];
@@ -34,46 +35,77 @@ class Drill {
 
     drawAngle(ctx, angle) {
         if (angle < 0 || angle > 359) return;
+        const width = 51;
 
-        if (!this.cache[angle]) {
+        if (!this.cache[this.state]) {
+            this.cache[this.state] = [];
+        }
+        if (
+            !this.cache[this.state][this.animations[this.state].currentFrame()]
+        ) {
+            // if doesnt have array for frame
+            this.cache[this.state][this.animations[this.state].currentFrame()] =
+                [];
+        }
+        if (
+            !this.cache[this.state][this.animations[this.state].currentFrame()][
+                angle
+            ]
+        ) {
             let radians = (angle / 360) * 2 * Math.PI;
             let offscreenCanvas = document.createElement('canvas');
 
-            offscreenCanvas.width = 51 * this.scale;
-            offscreenCanvas.height = 51 * this.scale;
+            offscreenCanvas.width = width * this.scale;
+            offscreenCanvas.height = width * this.scale;
 
             let offscreenCtx = offscreenCanvas.getContext('2d');
             offscreenCtx.imageSmoothingEnabled = false;
 
             offscreenCtx.save();
-            offscreenCtx.translate(25 * this.scale, 25 * this.scale);
+            offscreenCtx.translate(
+                (width / 2) * this.scale,
+                (width / 2) * this.scale
+            );
             offscreenCtx.rotate(radians);
-            offscreenCtx.translate(-25 * this.scale, -25 * this.scale);
+            offscreenCtx.translate(
+                ((-1 * width) / 2) * this.scale,
+                ((-1 * width) / 2) * this.scale
+            );
             offscreenCtx.drawImage(
                 this.animations[this.state].spritesheet,
+                0 + this.animations[this.state].currentFrame() * width,
                 0,
-                0,
-                50,
-                50,
+                width,
+                width,
                 0,
                 9 * this.scale,
-                51 * this.scale,
-                51 * this.scale
+                width * this.scale,
+                width * this.scale
             );
             offscreenCtx.restore();
-            this.cache[angle] = offscreenCanvas;
+            this.cache[this.state][this.animations[this.state].currentFrame()][
+                angle
+            ] = offscreenCanvas;
         }
 
         ctx.drawImage(
-            this.cache[angle],
-            this.x,
-            this.y,
-            50 * this.scale,
-            50 * this.scale
+            this.cache[this.state][this.animations[this.state].currentFrame()][
+                angle
+            ],
+            this.x - this.game.camera.x,
+            this.y - this.game.camera.y,
+            width * this.scale,
+            width * this.scale
         );
+
         if (params.debug) {
             ctx.strokeStyle = 'Green';
-            ctx.strokeRect(this.x, this.y, 50 * this.scale, 50 * this.scale);
+            ctx.strokeRect(
+                this.x - this.game.camera.x,
+                this.y - this.game.camera.y,
+                width * this.scale,
+                width * this.scale
+            );
         }
     }
 
@@ -159,17 +191,18 @@ class Drill {
             (ydif * this.acceleration * 2) / (dist * this.DISTANCE_MULT);
         this.x += this.xVelocity;
         this.y += this.yVelocity;
-        this.BB.x = this.x;
-        this.BB.y = this.y;
+        this.BB.x = this.x + this.offSetBB;
+        this.BB.y = this.y + this.offSetBB;
 
-        if (this.angle >= 360) {
-            this.angle = 0;
-        } else if (this.frames % 2 == 0) {
-            this.angle += 1;
+        this.angle =
+            Math.atan(this.yVelocity / this.xVelocity) * (180 / Math.PI);
+        if (this.angle < 0) {
+            this.angle += 360;
         }
-        this.frames += 1;
-
-        // TODO: rotation
+        if (this.xVelocity < 0) {
+            this.angle += 180;
+            this.angle = this.angle % 360;
+        }
     }
 
     draw(ctx) {
@@ -180,13 +213,7 @@ class Drill {
             }
         }
         this.drawAngle(ctx, this.angle);
-        this.animations[this.state].drawFrame(
-            this.game.clockTick,
-            ctx,
-            this.x - this.game.camera.x,
-            this.y - this.game.camera.y,
-            this.scale
-        );
+        this.myDrawFrame(this.game.clockTick, ctx);
         if (params.debug && this.BB) {
             ctx.strokeStyle = 'Red';
             ctx.strokeRect(
@@ -196,5 +223,45 @@ class Drill {
                 this.BB.height
             );
         }
+    }
+
+    /**
+     * Regular animator.drawFrame() does not work well with rotations and such.
+     * So I create my own version.
+     * Actually this only does the administrative tasks. this.drawAngle() does the drawing.
+     * Half of this was copied from the animator.js file.
+     *
+     * @param {*} tick
+     * @param {*} ctx
+     */
+    myDrawFrame(tick, ctx) {
+        const animator = this.animations[this.state];
+        animator.elapsedTime += tick;
+        //add looping functionality
+        if (animator.isDone()) {
+            if (animator.loop) {
+                animator.elapsedTime -= animator.totalTime;
+            } else {
+                //TODO This was changed to show the lat frame of the image rather than nothing and;
+            }
+        }
+        let frame = animator.currentFrame();
+        if (animator.reverse) frame = animator.frameCount - frame - 1;
+        //update to the last frame if it does not loop
+        if (animator.isDone()) {
+            frame = animator.frameCount - 1;
+            if (animator.reverse) frame = 0;
+        }
+        // ctx.drawImage(
+        //     this.spritesheet,
+        //     this.xStart + frame * (this.width + this.framePadding),
+        //     this.yStart, //source from sheet
+        //     this.width,
+        //     this.height,
+        //     x,
+        //     y,
+        //     this.width * scale,
+        //     this.height * scale
+        // );
     }
 }
