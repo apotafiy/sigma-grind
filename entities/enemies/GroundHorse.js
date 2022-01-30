@@ -1,7 +1,7 @@
 class GroundHorse {
     constructor(game, x, y, isStable) {
         const yOffSet = 35;
-        const xOffSet = -10;
+        const xOffSet = 0;
         this.isStable = isStable;
         this.x = x * 64 + xOffSet;
         this.y = y * 64 + yOffSet;
@@ -34,7 +34,7 @@ class GroundHorse {
             7,
             0.1,
             0,
-            0,
+            false,
             false
         );
         this.animations[2] = new Animator( // up idle
@@ -46,7 +46,7 @@ class GroundHorse {
             2,
             0.3,
             0,
-            0,
+            false,
             false
         );
         this.animations[3] = new Animator( // go back down
@@ -58,7 +58,7 @@ class GroundHorse {
             5,
             0.2,
             0,
-            0,
+            false,
             false
         );
     }
