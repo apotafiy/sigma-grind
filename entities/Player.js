@@ -392,9 +392,14 @@ class Player {
             if (this.game.keys.KeyK && !this.game.keys.Space) {
                 if (this.state !== 5) {
                     if (this.game.keys.KeyA && !this.game.keys.KeyD) {
+                        this.facing === 1;
                         this.velocity.x = -MAX_DASH;
-                    } else {
+                    } else if (this.game.keys.KeyD && !this.game.keys.KeyA) {
+                        this.facing === 0;
                         this.velocity.x = MAX_DASH;
+                    } else {
+                        this.velocity.x =
+                            this.facing === 0 ? MAX_DASH : -MAX_DASH;
                     }
                     this.velocity.y = 0;
                     this.fallAcc = 0;
@@ -404,7 +409,7 @@ class Player {
                         if (this.facing === 0) {
                             this.velocity.x += ACC_RUN * TICK;
                             this.velocity.y += this.fallAcc * TICK;
-                        } else {
+                        } else if (this.facing === 1) {
                             this.velocity.x -= ACC_RUN * TICK;
                             this.velocity.y -= this.fallAcc * TICK;
                         }
