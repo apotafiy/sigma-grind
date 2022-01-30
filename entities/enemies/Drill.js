@@ -37,20 +37,22 @@ class Drill {
         if (angle < 0 || angle > 359) return;
         const width = 51;
 
-        if (!this.cache[this.state]) {
+        if (this.cache[this.state] === undefined) {
             this.cache[this.state] = [];
         }
         if (
-            !this.cache[this.state][this.animations[this.state].currentFrame()]
+            this.cache[this.state][
+                this.animations[this.state].currentFrame()
+            ] === undefined
         ) {
             // if doesnt have array for frame
             this.cache[this.state][this.animations[this.state].currentFrame()] =
                 [];
         }
         if (
-            !this.cache[this.state][this.animations[this.state].currentFrame()][
+            this.cache[this.state][this.animations[this.state].currentFrame()][
                 angle
-            ]
+            ] === undefined
         ) {
             let radians = (angle / 360) * 2 * Math.PI;
             let offscreenCanvas = document.createElement('canvas');
@@ -97,7 +99,6 @@ class Drill {
             width * this.scale,
             width * this.scale
         );
-
         if (params.debug) {
             ctx.strokeStyle = 'Green';
             ctx.strokeRect(
@@ -194,14 +195,18 @@ class Drill {
         this.BB.x = this.x + this.offSetBB;
         this.BB.y = this.y + this.offSetBB;
 
-        this.angle =
-            Math.atan(this.yVelocity / this.xVelocity) * (180 / Math.PI);
+        this.angle = Math.floor(
+            Math.atan(this.yVelocity / this.xVelocity) * (180 / Math.PI)
+        );
+
         if (this.angle < 0) {
             this.angle += 360;
         }
         if (this.xVelocity < 0) {
             this.angle += 180;
-            this.angle = this.angle % 360;
+        }
+        if (this.angle > 359) {
+            this.angle -= 360;
         }
     }
 
@@ -252,16 +257,5 @@ class Drill {
             frame = animator.frameCount - 1;
             if (animator.reverse) frame = 0;
         }
-        // ctx.drawImage(
-        //     this.spritesheet,
-        //     this.xStart + frame * (this.width + this.framePadding),
-        //     this.yStart, //source from sheet
-        //     this.width,
-        //     this.height,
-        //     x,
-        //     y,
-        //     this.width * scale,
-        //     this.height * scale
-        // );
     }
 }
