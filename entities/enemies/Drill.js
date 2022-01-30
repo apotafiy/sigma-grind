@@ -1,21 +1,26 @@
 class Drill {
-    constructor(game, x, y) {
+    constructor(game, x, y, lifeExpectancy) {
         this.x = x * 64;
         this.y = y * 64;
         this.game = game;
         this.isActive = false;
         this.player = this.game.getPlayer();
-        this.xVelocity = 0;
         this.isDead = false;
+        this.lifeExpectancy = lifeExpectancy;
+        this.cache = [];
+        this.xVelocity = 0;
         this.yVelocity = 0;
         this.acceleration = 15;
         this.DISTANCE_MULT = 0.9;
+        this.frames = 0;
         this.scale = 2.5;
+        this.angle = 0;
+        this.offSetBB = 32;
         this.BB = new BoundingBox(
-            this.x,
-            this.y,
-            51 * this.scale,
-            20 * this.scale
+            this.x + this.offSetBB,
+            this.y + this.offSetBB,
+            (51 / 2) * this.scale,
+            (51 / 2) * this.scale
         );
         this.state = 0;
         this.animations = [];
@@ -26,6 +31,83 @@ class Drill {
         this.BB = undefined;
         this.state = 3;
         this.isDead = true;
+    }
+
+    drawAngle(ctx, angle) {
+        if (angle < 0 || angle > 359) return;
+        const width = 51;
+
+        if (this.cache[this.state] === undefined) {
+            this.cache[this.state] = [];
+        }
+        if (
+            this.cache[this.state][
+                this.animations[this.state].currentFrame()
+            ] === undefined
+        ) {
+            // if doesnt have array for frame
+            this.cache[this.state][this.animations[this.state].currentFrame()] =
+                [];
+        }
+        if (
+            this.cache[this.state][this.animations[this.state].currentFrame()][
+                angle
+            ] === undefined
+        ) {
+            let radians = (angle / 360) * 2 * Math.PI;
+            let offscreenCanvas = document.createElement('canvas');
+
+            offscreenCanvas.width = width * this.scale;
+            offscreenCanvas.height = width * this.scale;
+
+            let offscreenCtx = offscreenCanvas.getContext('2d');
+            offscreenCtx.imageSmoothingEnabled = false;
+
+            offscreenCtx.save();
+            offscreenCtx.translate(
+                (width / 2) * this.scale,
+                (width / 2) * this.scale
+            );
+            offscreenCtx.rotate(radians);
+            offscreenCtx.translate(
+                ((-1 * width) / 2) * this.scale,
+                ((-1 * width) / 2) * this.scale
+            );
+            offscreenCtx.drawImage(
+                this.animations[this.state].spritesheet,
+                0 + this.animations[this.state].currentFrame() * width,
+                0,
+                width,
+                width,
+                0,
+                9 * this.scale,
+                width * this.scale,
+                width * this.scale
+            );
+            offscreenCtx.restore();
+            this.cache[this.state][this.animations[this.state].currentFrame()][
+                angle
+            ] = offscreenCanvas;
+        }
+
+        ctx.drawImage(
+            this.cache[this.state][this.animations[this.state].currentFrame()][
+                angle
+            ],
+            this.x - this.game.camera.x,
+            this.y - this.game.camera.y,
+            width * this.scale,
+            width * this.scale
+        );
+        if (params.debug) {
+            ctx.strokeStyle = 'Green';
+            ctx.strokeRect(
+                this.x - this.game.camera.x,
+                this.y - this.game.camera.y,
+                width * this.scale,
+                width * this.scale
+            );
+        }
     }
 
     loadAnimations() {
@@ -89,10 +171,11 @@ class Drill {
         }
 
         let dist = getDistance(this, this.player);
+        const that = this;
         if (dist < 400 && this.state == 0) {
             setTimeout(() => {
                 this.die();
-            }, 1000 * 4);
+            }, 1000 * that.lifeExpectancy);
             this.state = 1;
         }
         if (!this.isActive) {
@@ -109,8 +192,22 @@ class Drill {
             (ydif * this.acceleration * 2) / (dist * this.DISTANCE_MULT);
         this.x += this.xVelocity;
         this.y += this.yVelocity;
-        this.BB.x = this.x;
-        this.BB.y = this.y;
+        this.BB.x = this.x + this.offSetBB;
+        this.BB.y = this.y + this.offSetBB;
+
+        this.angle = Math.floor(
+            Math.atan(this.yVelocity / this.xVelocity) * (180 / Math.PI)
+        );
+
+        if (this.angle < 0) {
+            this.angle += 360;
+        }
+        if (this.xVelocity < 0) {
+            this.angle += 180;
+        }
+        if (this.angle > 359) {
+            this.angle -= 360;
+        }
     }
 
     draw(ctx) {
@@ -120,13 +217,8 @@ class Drill {
                 return;
             }
         }
-        this.animations[this.state].drawFrame(
-            this.game.clockTick,
-            ctx,
-            this.x - this.game.camera.x,
-            this.y - this.game.camera.y,
-            this.scale
-        );
+        this.drawAngle(ctx, this.angle);
+        this.myDrawFrame(this.game.clockTick, ctx);
         if (params.debug && this.BB) {
             ctx.strokeStyle = 'Red';
             ctx.strokeRect(
@@ -135,6 +227,35 @@ class Drill {
                 this.BB.width,
                 this.BB.height
             );
+        }
+    }
+
+    /**
+     * Regular animator.drawFrame() does not work well with rotations and such.
+     * So I create my own version.
+     * Actually this only does the administrative tasks. this.drawAngle() does the drawing.
+     * Half of this was copied from the animator.js file.
+     *
+     * @param {*} tick
+     * @param {*} ctx
+     */
+    myDrawFrame(tick, ctx) {
+        const animator = this.animations[this.state];
+        animator.elapsedTime += tick;
+        //add looping functionality
+        if (animator.isDone()) {
+            if (animator.loop) {
+                animator.elapsedTime -= animator.totalTime;
+            } else {
+                //TODO This was changed to show the lat frame of the image rather than nothing and;
+            }
+        }
+        let frame = animator.currentFrame();
+        if (animator.reverse) frame = animator.frameCount - frame - 1;
+        //update to the last frame if it does not loop
+        if (animator.isDone()) {
+            frame = animator.frameCount - 1;
+            if (animator.reverse) frame = 0;
         }
     }
 }

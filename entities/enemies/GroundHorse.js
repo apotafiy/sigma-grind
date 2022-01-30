@@ -34,7 +34,7 @@ class GroundHorse {
             7,
             0.1,
             0,
-            0,
+            false,
             false
         );
         this.animations[2] = new Animator( // up idle
@@ -46,7 +46,7 @@ class GroundHorse {
             2,
             0.3,
             0,
-            0,
+            false,
             false
         );
         this.animations[3] = new Animator( // go back down
@@ -58,7 +58,7 @@ class GroundHorse {
             5,
             0.2,
             0,
-            0,
+            false,
             false
         );
     }
