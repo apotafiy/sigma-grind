@@ -22,6 +22,8 @@ class Player {
 
         this.velocity = { x: 0, y: 0 };
         this.veloConst = 6.9;
+        this.isInAir = true;
+        this.dashInAir = 0;
         this.fallAcc = 400;
 
         this.currentSize = { width: 40, height: 50 };
@@ -355,6 +357,7 @@ class Player {
             this.velocity.x -= ACC_RUN * TICK;
             this.velocity.y -= this.fallAcc * TICK;
         }
+        if (this.isInAir) this.dashInAir++;
         this.game.keys.KeyK = false;
     }
 
@@ -487,6 +490,7 @@ class Player {
                 } else if (this.velocity.y > 0 && !this.game.keys.Space) {
                     this.state = 4;
                 }
+                this.isInAir = true;
 
                 // horizontal physics
                 if (this.game.keys.KeyD && !this.game.keys.KeyA) {
@@ -501,6 +505,7 @@ class Player {
             // Faling
             if (this.velocity.y > 0) {
                 this.state = 4;
+                this.isInAir = true;
             }
         }
         this.velocity.y += this.fallAcc * TICK;
@@ -539,6 +544,11 @@ class Player {
                         that.velocity.y = 0;
                         if (that.state === 3 || that.state === 4)
                             that.state = 0; // set state to idle
+
+                        that.isInAir = false;
+
+                        // Reset number of air dashes to 0 when touch the ground
+                        that.dashInAir = 0;
                         that.updateBB();
                     }
                 }
@@ -583,6 +593,9 @@ class Player {
                             // Set state to wall hang
                             that.state = 5;
                             that.velocity.y = 1;
+                            that.isInAir = false;
+                            // Reset number of air dashes to 0 when wall hang
+                            that.dashInAir = 0;
                         } else if (
                             that.velocity.y > 0 &&
                             that.game.keys.Space
@@ -595,6 +608,7 @@ class Player {
                             }
                             that.velocity.y = -240;
                             that.fallAcc = STOP_FALL;
+                            that.isInAir = true;
                             // Reset jump animation to the beginning
                             that.state = 3;
                             that.animations[3][0].elapsedTime = 0;
@@ -644,6 +658,7 @@ class Player {
                 this.updateBB();
             } else this.state = 0;
         } else {
+            if (this.state === 3 || this.state === 4) this.isInAir = true;
         }
 
         // update direction
