@@ -546,8 +546,10 @@ class Player {
                     // jumping
                     // hit ceiling...
                     if (
+                        // entity instanceof Ground &&
+                        // that.lastBB.top >= entity.BB.bottom
                         entity instanceof Ground &&
-                        that.lastBB.top >= entity.BB.bottom
+                        that.BB.collide(entity.bottomBB)
                     ) {
                         that.velocity.y = 0;
                     }
@@ -562,11 +564,13 @@ class Player {
                     if (that.BB.collide(entity.leftBB)) {
                         // Right side collision
                         that.x = entity.BB.left - that.BB.width;
+                        that.facing = 0;
                         if (that.velocity.x > 0) that.velocity.x = 0;
                     }
                     if (that.BB.collide(entity.rightBB)) {
                         // Left side collision
                         that.x = entity.BB.right;
+                        that.facing = 1;
                         if (that.velocity.x < 0) that.velocity.x = 0;
                     }
                     // wall hanging
@@ -596,9 +600,30 @@ class Player {
                             that.animations[3][0].elapsedTime = 0;
                             that.animations[3][1].elapsedTime = 0;
                         } else if (that.velocity.y === 0) {
+                            if (that.game.keys.KeyK) {
+                                // Prevent player idle at wall when dashing into wall
+                                that.state = 5;
+                                that.handleDashEnding(RUN_FALL, ACC_RUN, TICK);
+                            } else that.state = 0;
                             // Prevent player from being stuck in wall hang animation
                             // when touches the ground
-                            that.state = 0;
+                        }
+                    } else {
+                        if (
+                            that.BB.collide(entity.topBB) ||
+                            that.BB.collide(entity.bottomBB)
+                        ) {
+                            if (that.game.keys.Space) {
+                                // Do nothing lol
+                                // this will prevent player stuck at jump loop
+                            } else {
+                                that.velocity.x = 0;
+                                that.velocity.y += that.fallAcc * TICK;
+                                that.game.keys.KeyK = false;
+                            }
+                        } else {
+                            that.state = 5;
+                            that.handleDashEnding(RUN_FALL, ACC_RUN, TICK);
                         }
                     }
                     that.updateBB();
