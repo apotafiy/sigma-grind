@@ -165,14 +165,33 @@ class Drill {
         if (this.isDead) {
             return;
         }
-        if (this.state == 1 && this.animations[this.state].isDone()) {
-            this.state += 1;
-            this.isActive = true;
+        if (this.state === 1 || this.state === 0) {
+            if (this.animations[this.state].isDone()) {
+                this.state += 1;
+                this.isActive = true;
+            }
+            this.angle = Math.floor(
+                Math.atan(
+                    (this.y - this.game.getPlayer().y) /
+                        (this.x - this.game.getPlayer().x)
+                ) *
+                    (180 / Math.PI)
+            );
+
+            if (this.angle < 0) {
+                this.angle += 360;
+            }
+            if (this.x < this.game.getPlayer().x) {
+                this.angle += 180;
+            }
+            if (this.angle > 359) {
+                this.angle -= 360;
+            }
         }
 
         let dist = getDistance(this, this.player);
         const that = this;
-        if (dist < 400 && this.state == 0) {
+        if (dist < 450 && this.state == 0) {
             setTimeout(() => {
                 this.die();
             }, 1000 * that.lifeExpectancy);
