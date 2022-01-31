@@ -176,11 +176,11 @@ class Player {
         // Face right = 0
         this.animations[3][0] = new Animator(
             this.jumpSprite,
-            0,
+            47,
             0,
             47,
             80,
-            16,
+            15,
             0.07,
             0,
             false,
@@ -193,7 +193,7 @@ class Player {
             0,
             47,
             80,
-            16,
+            15,
             0.07,
             0,
             true,
@@ -316,7 +316,7 @@ class Player {
                 break;
             case 3:
                 this.spriteOffset.xOffset = this.facing === 0 ? -10 : -3;
-                this.spriteOffset.yOffset = 0;
+                this.spriteOffset.yOffset = -50;
                 break;
             case 4:
                 this.spriteOffset.xOffset = this.facing === 0 ? -10 : -3;
@@ -466,7 +466,7 @@ class Player {
                         this.fallAcc = STOP_FALL;
                     } else {
                         // Jump height while there's side way momentum
-                        this.velocity.y = -250;
+                        this.velocity.y = -300;
                         this.fallAcc = RUN_FALL;
                     }
 
@@ -578,7 +578,7 @@ class Player {
                             // falling and not holding jump
                             // Set state to wall hang
                             that.state = 5;
-                            that.velocity.y = -12;
+                            that.velocity.y = 1;
                         } else if (
                             that.velocity.y > 0 &&
                             that.game.keys.Space
@@ -591,7 +591,10 @@ class Player {
                             }
                             that.velocity.y = -240;
                             that.fallAcc = STOP_FALL;
+                            // Reset jump animation to the beginning
                             that.state = 3;
+                            that.animations[3][0].elapsedTime = 0;
+                            that.animations[3][1].elapsedTime = 0;
                         } else if (that.velocity.y === 0) {
                             // Prevent player from being stuck in wall hang animation
                             // when touches the ground
