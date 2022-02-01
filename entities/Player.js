@@ -22,9 +22,11 @@ class Player {
 
         this.velocity = { x: 0, y: 0 };
         this.veloConst = 6.9;
+        this.airDash = 0;
+        this.isInAir = true;
         this.fallAcc = 400;
 
-        this.currentSize = { width: 0, height: 0 };
+        this.currentSize = { width: 40, height: 50 };
         this.spriteOffset = { xOffset: 0, yOffset: 0 };
         this.updateBB();
 
@@ -176,11 +178,11 @@ class Player {
         // Face right = 0
         this.animations[3][0] = new Animator(
             this.jumpSprite,
-            0,
+            47,
             0,
             47,
             80,
-            16,
+            15,
             0.07,
             0,
             false,
@@ -193,7 +195,7 @@ class Player {
             0,
             47,
             80,
-            16,
+            15,
             0.07,
             0,
             true,
@@ -298,56 +300,43 @@ class Player {
 
     updateBB() {
         this.lastBB = this.BB;
-        const that = this;
 
-        let xOffset = 0;
-        let yOffset = 0;
+        switch (this.state) {
+            case 0:
+                this.spriteOffset.xOffset = this.facing === 0 ? 0 : -6;
+                this.spriteOffset.yOffset = 0;
+                break;
+            case 1:
+                this.spriteOffset.xOffset = this.facing === 0 ? -15 : -6;
+                this.spriteOffset.yOffset = 0;
+                break;
+            case 2:
+                if (this.velocity.x === 0)
+                    this.spriteOffset.xOffset = this.facing === 0 ? 0 : -6;
+                else this.spriteOffset.xOffset = this.facing === 0 ? -102 : -10;
+                this.spriteOffset.yOffset = 0;
+                break;
+            case 3:
+                this.spriteOffset.xOffset = this.facing === 0 ? -10 : -3;
+                this.spriteOffset.yOffset = -50;
+                break;
+            case 4:
+                this.spriteOffset.xOffset = this.facing === 0 ? -10 : -3;
+                this.spriteOffset.yOffset = -42;
+                break;
+            case 5:
+                this.spriteOffset.xOffset = this.facing === 0 ? -10 : 0;
+                this.spriteOffset.yOffset = -20;
+                break;
+        }
+
         let widthOffset = 0;
         let heightOffset = 10; // Make player sprite goes below the ground slightly not the bounding box itself
         // Offsetting the bounding box like this might make things look weird later when it comes to implementing pogo
 
-        // Get the right bounding box for the different states
-        switch (this.state) {
-            case 0:
-                that.spriteOffset.xOffset = 0;
-                that.currentSize.width = 43;
-                that.currentSize.height = 48;
-                break;
-            case 1:
-                that.spriteOffset.xOffset = 0;
-                that.currentSize.width = 45;
-                that.currentSize.height = 49;
-                xOffset = 0;
-                if (this.facing === 0) {
-                    xOffset = 10;
-                }
-                break;
-            case 2:
-                that.spriteOffset.xOffset = this.facing === 0 ? -90 : -10;
-                that.currentSize.width = 45;
-                that.currentSize.height = 49;
-                break;
-            case 3:
-                that.spriteOffset.xOffset = 0;
-                that.currentSize.width = 45;
-                that.currentSize.height = 49; //Supposed to be 80 but the bottom edge of box goes below the ground
-                yOffset = 0;
-                break;
-            case 4:
-                that.spriteOffset.xOffset = 0;
-                that.currentSize.width = 45;
-                that.currentSize.height = 49;
-                yOffset = 35;
-                break;
-            case 5:
-                that.spriteOffset.xOffset = 0;
-                that.currentSize.width = 45;
-                that.currentSize.height = 50;
-                break;
-        }
         this.BB = new BoundingBox(
-            this.x + xOffset,
-            this.y + yOffset,
+            this.x,
+            this.y,
             (this.currentSize.width - widthOffset) * 2,
             (this.currentSize.height - heightOffset) * 2
         );
@@ -357,6 +346,19 @@ class Player {
     die() {
         // this.velocity.y = -640;
         this.dead = true;
+    }
+
+    handleDashEnding(RUN_FALL, ACC_RUN, TICK) {
+        this.fallAcc = RUN_FALL;
+        if (this.facing === 0) {
+            this.velocity.x += ACC_RUN * TICK;
+            this.velocity.y += this.fallAcc * TICK;
+        } else if (this.facing === 1) {
+            this.velocity.x -= ACC_RUN * TICK;
+            this.velocity.y -= this.fallAcc * TICK;
+        }
+        if (this.isInAir) this.airDash++;
+        this.game.keys.KeyK = false;
     }
 
     update() {
@@ -389,30 +391,34 @@ class Player {
             // update velocity
 
             // Dashing
-            if (this.game.keys.KeyK && !this.game.keys.Space) {
+            if (
+                this.game.keys.KeyK &&
+                !this.game.keys.Space &&
+                this.airDash < 1
+            ) {
                 if (this.state !== 5) {
                     if (this.game.keys.KeyA && !this.game.keys.KeyD) {
+                        this.facing === 1;
                         this.velocity.x = -MAX_DASH;
-                    } else {
+                    } else if (this.game.keys.KeyD && !this.game.keys.KeyA) {
+                        this.facing === 0;
                         this.velocity.x = MAX_DASH;
+                    } else {
+                        this.velocity.x =
+                            this.facing === 0 ? MAX_DASH : -MAX_DASH;
                     }
                     this.velocity.y = 0;
                     this.fallAcc = 0;
                     this.state = 2;
-                    if (this.animations[2][this.facing].elapsedTime >= 0.5) {
-                        this.fallAcc = RUN_FALL;
-                        if (this.facing === 0) {
-                            this.velocity.x += ACC_RUN * TICK;
-                            this.velocity.y += this.fallAcc * TICK;
-                        } else {
-                            this.velocity.x -= ACC_RUN * TICK;
-                            this.velocity.y -= this.fallAcc * TICK;
-                        }
-                        this.game.keys.KeyK = false;
-                    }
+                    if (this.animations[2][this.facing].elapsedTime >= 0.5)
+                        this.handleDashEnding(RUN_FALL, ACC_RUN, TICK);
                 }
-            } else if (this.game.keys.KeyK && this.game.keys.Space) {
-                console.log('fucked up shit');
+            } else if (
+                this.game.keys.KeyK &&
+                this.game.keys.Space &&
+                this.airDash < 1
+            ) {
+                this.handleDashEnding(RUN_FALL, ACC_RUN, TICK);
             } else {
                 this.animations[2][this.facing].elapsedTime = 0;
                 this.fallAcc = STOP_FALL;
@@ -483,7 +489,7 @@ class Player {
             } else {
                 // air physics
                 // vertical physics
-                if (this.velocity.y < 0 && this.game.keys.Space) {
+                if (this.velocity.y <= 0 && this.game.keys.Space) {
                     // holding space while jumping jumps higher
                     if (this.fallAcc === STOP_FALL)
                         this.velocity.y -= (STOP_FALL - STOP_FALL_A) * TICK;
@@ -492,6 +498,7 @@ class Player {
                 } else if (this.velocity.y > 0 && !this.game.keys.Space) {
                     this.state = 4;
                 }
+                this.isInAir = true;
 
                 // horizontal physics
                 if (this.game.keys.KeyD && !this.game.keys.KeyA) {
@@ -506,6 +513,7 @@ class Player {
             // Faling
             if (this.velocity.y > 0) {
                 this.state = 4;
+                this.isInAir = true;
             }
         }
         this.velocity.y += this.fallAcc * TICK;
@@ -544,15 +552,22 @@ class Player {
                         that.velocity.y = 0;
                         if (that.state === 3 || that.state === 4)
                             that.state = 0; // set state to idle
+
+                        that.isInAir = false;
+
+                        // Reset number of air dashes to 0 when touch the ground
+                        that.airDash = 0;
                         that.updateBB();
                     }
                 }
-                if (that.velocity.y < 0) {
+                if (that.velocity.y <= 0) {
                     // jumping
                     // hit ceiling...
                     if (
+                        // entity instanceof Ground &&
+                        // that.lastBB.top >= entity.BB.bottom
                         entity instanceof Ground &&
-                        that.lastBB.top >= entity.BB.bottom
+                        that.BB.collide(entity.bottomBB)
                     ) {
                         that.velocity.y = 0;
                     }
@@ -567,11 +582,13 @@ class Player {
                     if (that.BB.collide(entity.leftBB)) {
                         // Right side collision
                         that.x = entity.BB.left - that.BB.width;
+                        that.facing = 0;
                         if (that.velocity.x > 0) that.velocity.x = 0;
                     }
                     if (that.BB.collide(entity.rightBB)) {
                         // Left side collision
                         that.x = entity.BB.right;
+                        that.facing = 1;
                         if (that.velocity.x < 0) that.velocity.x = 0;
                     }
                     // wall hanging
@@ -583,7 +600,10 @@ class Player {
                             // falling and not holding jump
                             // Set state to wall hang
                             that.state = 5;
-                            that.velocity.y = -12;
+                            that.velocity.y = 1;
+                            that.isInAir = false;
+                            // Reset number of air dashes to 0 when wall hang
+                            that.airDash = 0;
                         } else if (
                             that.velocity.y > 0 &&
                             that.game.keys.Space
@@ -594,13 +614,38 @@ class Player {
                             } else {
                                 that.velocity.x = -100;
                             }
-                            that.velocity.y = -200;
+                            that.velocity.y = -240;
                             that.fallAcc = STOP_FALL;
+                            that.isInAir = true;
+                            // Reset jump animation to the beginning
                             that.state = 3;
+                            that.animations[3][0].elapsedTime = 0;
+                            that.animations[3][1].elapsedTime = 0;
                         } else if (that.velocity.y === 0) {
+                            if (that.game.keys.KeyK) {
+                                // Prevent player idle at wall when dashing into wall
+                                that.state = 5;
+                                that.handleDashEnding(RUN_FALL, ACC_RUN, TICK);
+                            } else that.state = 0;
                             // Prevent player from being stuck in wall hang animation
                             // when touches the ground
-                            that.state = 0;
+                        }
+                    } else {
+                        if (
+                            that.BB.collide(entity.topBB) ||
+                            that.BB.collide(entity.bottomBB)
+                        ) {
+                            if (that.game.keys.Space) {
+                                // Do nothing lol
+                                // this will prevent player stuck at jump loop
+                            } else {
+                                that.velocity.x = 0;
+                                that.velocity.y += that.fallAcc * TICK;
+                                that.game.keys.KeyK = false;
+                            }
+                        } else {
+                            that.state = 5;
+                            that.handleDashEnding(RUN_FALL, ACC_RUN, TICK);
                         }
                     }
                     that.updateBB();
@@ -621,6 +666,7 @@ class Player {
                 this.updateBB();
             } else this.state = 0;
         } else {
+            if (this.state === 3 || this.state === 4) this.isInAir = true;
         }
 
         // update direction
@@ -629,40 +675,39 @@ class Player {
     }
 
     draw(ctx) {
-        let that = this;
         //actual animation code
-        that.animations[that.state][that.facing].drawFrame(
-            that.game.clockTick,
+        this.animations[this.state][this.facing].drawFrame(
+            this.game.clockTick,
             ctx,
-            that.x - that.game.camera.x + this.spriteOffset.xOffset, // camera sidescrolling
-            that.y - that.game.camera.y + this.spriteOffset.yOffset,
+            this.x - this.game.camera.x + this.spriteOffset.xOffset, // camera sidescrolling
+            this.y - this.game.camera.y + this.spriteOffset.yOffset,
             2
         );
 
         //12,11,10
         //testing attack code
         // if (this.animationTick == 0) {
-        //     that.animations[6 + this.animationTick][0].drawFrame(
-        //         that.game.clockTick,
+        //     this.animations[6 + this.animationTick][0].drawFrame(
+        //         this.game.clockTick,
         //         ctx,
-        //         that.x - that.game.camera.x, // camera sidescrolling
-        //         that.y - that.game.camera.y,
+        //         this.x - this.game.camera.x, // camera sidescrolling
+        //         this.y - this.game.camera.y,
         //         2
         //     );
         // } else if (this.animationTick == 1) {
-        //     that.animations[6 + this.animationTick][0].drawFrame(
-        //         that.game.clockTick,
+        //     this.animations[6 + this.animationTick][0].drawFrame(
+        //         this.game.clockTick,
         //         ctx,
-        //         that.x - that.game.camera.x - 20, // camera sidescrolling
-        //         that.y - that.game.camera.y,
+        //         this.x - this.game.camera.x - 20, // camera sidescrolling
+        //         this.y - this.game.camera.y,
         //         2
         //     );
         // } else if (this.animationTick == 2) {
-        //     that.animations[6 + this.animationTick][0].drawFrame(
-        //         that.game.clockTick,
+        //     this.animations[6 + this.animationTick][0].drawFrame(
+        //         this.game.clockTick,
         //         ctx,
-        //         that.x - that.game.camera.x, // camera sidescrolling
-        //         that.y - that.game.camera.y,
+        //         this.x - this.game.camera.x, // camera sidescrolling
+        //         this.y - this.game.camera.y,
         //         2
         //     );
         // }
@@ -676,37 +721,37 @@ class Player {
         // }
 
         // if(this.animationTick == 0){
-        //   that.animations[6][0].drawFrame(
-        //     that.game.clockTick,
+        //   this.animations[6][0].drawFrame(
+        //     this.game.clockTick,
         //     ctx,
-        //     that.x - that.game.camera.x, // camera sidescrolling
-        //     that.y - that.game.camera.y,
+        //     this.x - this.game.camera.x, // camera sidescrolling
+        //     this.y - this.game.camera.y,
         //     2
         //   );
         // } else if (this.animationTick == 1){
-        //   that.animations[7][0].drawFrame(
-        //     that.game.clockTick,
+        //   this.animations[7][0].drawFrame(
+        //     this.game.clockTick,
         //     ctx,
-        //     that.x - that.game.camera.x - 20, // camera sidescrolling
-        //     that.y - that.game.camera.y,
+        //     this.x - this.game.camera.x - 20, // camera sidescrolling
+        //     this.y - this.game.camera.y,
         //     2
         //   );
         // } else if(this.animationTick == 2){
-        //   that.animations[8][0].drawFrame(
-        //     that.game.clockTick,
+        //   this.animations[8][0].drawFrame(
+        //     this.game.clockTick,
         //     ctx,
-        //     that.x - that.game.camera.x, // camera sidescrolling
-        //     that.y - that.game.camera.y,
+        //     this.x - this.game.camera.x, // camera sidescrolling
+        //     this.y - this.game.camera.y,
         //     2
         //   );
         // }
         if (params.debug) {
             ctx.strokeStyle = 'Blue';
             ctx.strokeRect(
-                that.BB.x - that.game.camera.x,
-                that.BB.y - that.game.camera.y,
-                that.BB.width,
-                that.BB.height
+                this.BB.x - this.game.camera.x,
+                this.BB.y - this.game.camera.y,
+                this.BB.width,
+                this.BB.height
             );
         }
     }
