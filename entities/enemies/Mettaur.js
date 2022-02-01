@@ -39,7 +39,7 @@ class Mettaur {
     }
     loadAnimation() {
         this.animations[1][0] = new Animator(
-            ASSET_MANAGER.getAsset("./sprites/mettaur/mettaur-walk.png"),
+            ASSET_MANAGER.getAsset('./sprites/mettaur/mettaur-walk.png'),
             0,
             0,
             32,
@@ -51,7 +51,7 @@ class Mettaur {
             1
         );
         this.animations[1][1] = new Animator(
-            ASSET_MANAGER.getAsset("./sprites/mettaur/mettaur-jump.png"),
+            ASSET_MANAGER.getAsset('./sprites/mettaur/mettaur-jump.png'),
             0,
             0,
             32,
@@ -66,7 +66,7 @@ class Mettaur {
             1
         );
         this.animations[1][2] = new Animator(
-            ASSET_MANAGER.getAsset("./sprites/mettaur/mettaur-duck.png"),
+            ASSET_MANAGER.getAsset('./sprites/mettaur/mettaur-duck.png'),
             0,
             -4,
             32,
@@ -78,7 +78,7 @@ class Mettaur {
             0
         );
         this.animations[1][3] = new Animator(
-            ASSET_MANAGER.getAsset("./sprites/mettaur/mettaur-fall.png"),
+            ASSET_MANAGER.getAsset('./sprites/mettaur/mettaur-fall.png'),
             0,
             0,
             36,
@@ -90,7 +90,7 @@ class Mettaur {
             1
         );
         this.animations[1][4] = new Animator(
-            ASSET_MANAGER.getAsset("./sprites/mettaur/mettaur-duck.png"),
+            ASSET_MANAGER.getAsset('./sprites/mettaur/mettaur-duck.png'),
             0,
             -4,
             32,
@@ -102,7 +102,7 @@ class Mettaur {
             0
         );
         this.animations[1][5] = new Animator(
-            ASSET_MANAGER.getAsset("./sprites/mettaur/fire.png"),
+            ASSET_MANAGER.getAsset('./sprites/mettaur/fire.png'),
             0,
             0,
             32,
@@ -115,7 +115,7 @@ class Mettaur {
         );
         //right facing Animations
         this.animations[0][5] = new Animator(
-            ASSET_MANAGER.getAsset("./sprites/mettaur/death.png"),
+            ASSET_MANAGER.getAsset('./sprites/mettaur/death.png'),
             0,
             0,
             74,
@@ -127,7 +127,7 @@ class Mettaur {
             0
         );
         this.animations[0][0] = new Animator(
-            ASSET_MANAGER.getAsset("./sprites/mettaur/mettaur-walk-right.png"),
+            ASSET_MANAGER.getAsset('./sprites/mettaur/mettaur-walk-right.png'),
             0,
             0,
             32,
@@ -139,7 +139,7 @@ class Mettaur {
             1
         );
         this.animations[0][1] = new Animator(
-            ASSET_MANAGER.getAsset("./sprites/mettaur/mettaur-jump-right.png"),
+            ASSET_MANAGER.getAsset('./sprites/mettaur/mettaur-jump-right.png'),
             0,
             0,
             32,
@@ -151,7 +151,7 @@ class Mettaur {
             1
         );
         this.animations[0][2] = new Animator(
-            ASSET_MANAGER.getAsset("./sprites/mettaur/mettaur-duck-right.png"),
+            ASSET_MANAGER.getAsset('./sprites/mettaur/mettaur-duck-right.png'),
             0,
             -4,
             32,
@@ -164,7 +164,7 @@ class Mettaur {
         );
 
         this.animations[0][4] = new Animator(
-            ASSET_MANAGER.getAsset("./sprites/mettaur/mettaur-duck-right.png"),
+            ASSET_MANAGER.getAsset('./sprites/mettaur/mettaur-duck-right.png'),
             0,
             -4,
             32,
@@ -241,7 +241,7 @@ class Mettaur {
             that.currentState = 2;
             that.duckTimer = that.getRandomInt(100, 400);
         } else if (that.isDead) {
-            console.log("Dying in: ", that.deathtimer);
+            console.log('Dying in: ', that.deathtimer);
             if (that.deathTimer <= 0) {
                 //get rid of it after death;
                 that.removeFromWorld = true;
@@ -301,7 +301,7 @@ class Mettaur {
         }
 
         if (params.debug) {
-            ctx.strokeStyle = "Red";
+            ctx.strokeStyle = 'Red';
             ctx.strokeRect(
                 that.BB.x - that.game.camera.x,
                 that.BB.y - that.game.camera.y,
