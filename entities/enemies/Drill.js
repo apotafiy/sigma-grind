@@ -28,7 +28,7 @@ class Drill {
     }
 
     die() {
-        this.BB = undefined;
+        this.removeFromWorld = true;
         this.state = 3;
         this.isDead = true;
     }

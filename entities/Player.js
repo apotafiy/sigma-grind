@@ -7,9 +7,10 @@ class Player {
         this.animationTick = 0;
         this.attackSpeed = 0.025;
         this.facing = 0; // 0 = right, 1 = left
-        this.comboState = 0;
+        this.comboState = 0; // for adding combo attack later
         this.attackCooldown = 0;
         this.attacking = false;
+        this.attackBB = new BoundingBox(0,0,0,0);
 
         /* States:
         0 - idle
@@ -371,6 +372,32 @@ class Player {
         this.dead = true;
     }
 
+    updateAttackBB(){  
+        //adjust the BB into the correct direction
+        let facing = 0;
+        let xoffset = 0;
+        if(this.facing == 0){
+            facing = 1;
+            xoffset = 80
+        } else {
+            facing = -1;
+        }
+        if(this.attacking){
+            this.attackBB = new BoundingBox(
+                this.x + xoffset, 
+                this.y-20, 
+                (80) * facing,
+                120
+            );
+        } else {
+            this.attackBB = new BoundingBox(
+                0, 
+                0, 
+                0,
+                0
+            );
+        }
+    }
     handleDashEnding(RUN_FALL, ACC_RUN, TICK) {
         this.fallAcc = RUN_FALL;
         if (this.facing === 0) {
@@ -557,10 +584,10 @@ class Player {
         //handle attacking
         if((this.game.keys.KeyJ && this.state != 5 && this.attackCooldown <= 0)){
             //set the player to attacking state
-            // debugger;    
             this.attackCooldown = 10;
             if(!this.animations[6][this.facing].isDone()){
                 this.state = 6;
+                
             }
             
             this.updateBB();
@@ -573,6 +600,7 @@ class Player {
                 }
             }
         }  
+        this.updateAttackBB(); //TODO potentially costly
         //stop when attacking
         if(this.attacking && 
             ((this.state == 6 && this.velocity.y < this.fallAcc && this.velocity.y >= 0)  ||
@@ -591,6 +619,18 @@ class Player {
         // collision
         var that = this;
         this.game.entities.forEach(function (entity) {
+            //check for the enemy colliding with sword
+            // || entity instanceof Drill
+            if(entity && (entity instanceof Mettaur ) && entity.duckTimer <= 0 && that.attackBB.collide(entity.BB)){
+                console.log("Kill Mettaur");
+                //if it has die method it should die
+                entity.die();
+            }
+            if(entity && (entity instanceof Drill ) &&  that.attackBB.collide(entity.BB)){
+                console.log("kILL dRILL");
+                //if it has die method it should die
+                entity.die();
+            }
             if (entity.BB && that.BB.collide(entity.BB)) {
                 if (that.velocity.y > 0) {
                     // falling
@@ -789,6 +829,13 @@ class Player {
                 this.BB.y - this.game.camera.y,
                 this.BB.width,
                 this.BB.height
+            );
+            ctx.strokeStyle = "Orange";
+            ctx.strokeRect(
+                this.attackBB.x - this.game.camera.x,
+                this.attackBB.y - this.game.camera.y,
+                this.attackBB.width ,
+                this.attackBB.height
             );
         }
     }
