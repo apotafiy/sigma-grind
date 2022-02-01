@@ -15,6 +15,7 @@ class Player {
         3 - jump
         4 - falling
         5 - wall hang
+        6 - Attack
         ...
         */
         this.state = 0;
@@ -387,7 +388,6 @@ class Player {
             // Do death stuff
         } else {
             // update velocity
-
             // Dashing
             if (this.game.keys.KeyK && !this.game.keys.Space) {
                 if (this.state !== 5) {
@@ -417,7 +417,9 @@ class Player {
                 this.animations[2][this.facing].elapsedTime = 0;
                 this.fallAcc = STOP_FALL;
             }
-
+            if(this.game.keys.KeyJ && this.state != 5){
+                //handle attacking
+            }
             if (this.state !== 3 && this.state !== 4 && this.state !== 5) {
                 // not jumping
                 // ground physics
