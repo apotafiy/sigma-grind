@@ -5,8 +5,11 @@ class Player {
         this.game.player = this;
         this.gravity = gravity;
         this.animationTick = 0;
-        this.attackSpeed = 0.01;
+        this.attackSpeed = 0.025;
         this.facing = 0; // 0 = right, 1 = left
+        this.comboState = 0;
+        this.attackCooldown = 0;
+        this.attacking = false;
 
         /* States:
         0 - idle
@@ -15,7 +18,9 @@ class Player {
         3 - jump
         4 - falling
         5 - wall hang
-        6 - Attack
+        6 - Attack part 1
+        7 - attack part 2
+        8 - attack part 3
         ...
         */
         this.state = 0;
@@ -258,7 +263,7 @@ class Player {
             true,
             true
         );
-        // Face right = 0
+        // Face right = slash 1
         this.animations[6][0] = new Animator(
             this.attackRight,
             0,
@@ -329,6 +334,10 @@ class Player {
                 this.spriteOffset.xOffset = this.facing === 0 ? -10 : 0;
                 this.spriteOffset.yOffset = -20;
                 break;
+            case 6:
+                this.spriteOffset.xOffset = -10;
+                this.spriteOffset.yOffset = 0;
+                break;
         }
 
         let widthOffset = 0;
@@ -385,7 +394,8 @@ class Player {
         if (this.game.keys.KeyJ) this.animationTick = 0;
         if (this.game.keys.KeyK) this.animationTick = 1;
         if (this.game.keys.KeyL) this.animationTick = 2;
-
+        //adjust the attack cooldown
+        this.attackCooldown--;
         if (this.dead) {
             // Do death stuff
         } else {
@@ -394,7 +404,8 @@ class Player {
             if (
                 this.game.keys.KeyK &&
                 !this.game.keys.Space &&
-                this.airDash < 1
+                this.airDash < 1 &&
+                !this.attacking
             ) {
                 if (this.state !== 5) {
                     if (this.game.keys.KeyA && !this.game.keys.KeyD) {
@@ -423,10 +434,8 @@ class Player {
                 this.animations[2][this.facing].elapsedTime = 0;
                 this.fallAcc = STOP_FALL;
             }
-            if(this.game.keys.KeyJ && this.state != 5){
-                //handle attacking
-            }
-            if (this.state !== 3 && this.state !== 4 && this.state !== 5) {
+
+            if (!this.attacking && this.state !== 3 && this.state !== 4 && this.state !== 5) {
                 // not jumping
                 // ground physics
                 if (Math.abs(this.velocity.x) < MIN_RUN) {
@@ -434,10 +443,10 @@ class Player {
                     // starting, stopping or turning around
                     this.velocity.x = 0;
                     this.state = 0;
-                    if (this.game.keys.KeyA) {
+                    if (this.game.keys.KeyA ) {
                         this.velocity.x -= MIN_RUN;
                     }
-                    if (this.game.keys.KeyD) {
+                    if (this.game.keys.KeyD ) {
                         this.velocity.x += MIN_RUN;
                     }
                 } else if (Math.abs(this.velocity.x) >= MIN_RUN) {
@@ -472,7 +481,7 @@ class Player {
                 this.velocity.y += this.fallAcc * TICK;
 
                 // Jump
-                if (this.game.keys.Space && !this.game.keys.KeyK) {
+                if (!this.attacking && this.game.keys.Space && !this.game.keys.KeyK && !this.game.keys.KeyJ && !this.isInAir) {
                     if (Math.abs(this.velocity.x) < 16) {
                         // Jump height while idle
                         this.velocity.y = -240;
@@ -484,7 +493,7 @@ class Player {
                     }
 
                     // Set state to jump (3)
-                    this.state = 3;
+                    if(!this.attacking) this.state = 3;
                     // Set the jump animation to start at the beginning
                     this.animations[this.state][this.facing].elapsedTime = 0;
                 }
@@ -497,7 +506,7 @@ class Player {
                         this.velocity.y -= (STOP_FALL - STOP_FALL_A) * TICK;
                     if (this.fallAcc === RUN_FALL)
                         this.velocity.y -= (RUN_FALL - RUN_FALL_A) * TICK;
-                } else if (this.velocity.y > 0 && !this.game.keys.Space) {
+                } else if (!this.attacking && this.velocity.y > 0 && !this.game.keys.Space) {
                     this.state = 4;
                 }
                 this.isInAir = true;
@@ -513,7 +522,7 @@ class Player {
             }
 
             // Faling
-            if (this.velocity.y > 0) {
+            if (this.velocity.y > 0 && !this.attacking) {
                 this.state = 4;
                 this.isInAir = true;
             }
@@ -532,6 +541,32 @@ class Player {
 
         // update position
         // scale = 3
+        //handle attacking
+        if((this.game.keys.KeyJ && this.state != 5 && this.attackCooldown <= 0)){
+            //set the player to attacking state
+            // debugger;    
+            this.attackCooldown = 10;
+            if(!this.animations[6][0].isDone()){
+                this.state = 6;
+            }
+            
+            this.updateBB();
+            if(!this.attacking){
+                this.attacking = true;
+            } else {
+
+                if(this.state == 6){
+                  
+                }
+            }
+        }  
+        //stop when attacking
+        if(this.attacking && 
+            ((this.state == 6 && this.velocity.y < this.fallAcc && this.velocity.y >= 0)  ||
+             this.state == 2)) {
+            this.velocity.x = 0;
+        } 
+        document.getElementById("attacking").innerHTML = "YVelocity: " + this.velocity.y + " " + this.attacking;
         this.x += this.velocity.x * TICK * 3;
         this.y += this.velocity.y * TICK * 3;
         this.updateBB();
@@ -628,7 +663,9 @@ class Player {
                                 // Prevent player idle at wall when dashing into wall
                                 that.state = 5;
                                 that.handleDashEnding(RUN_FALL, ACC_RUN, TICK);
-                            } else that.state = 0;
+                            } else {
+                                that.state = 0;
+                            }
                             // Prevent player from being stuck in wall hang animation
                             // when touches the ground
                         }
@@ -654,9 +691,9 @@ class Player {
                 }
             }
         });
-
         // update state
-        if (this.state !== 3 && that.state !== 4 && that.state !== 5) {
+        if (!this.attacking && this.state != 6 && this.state != 7 && this.state != 8 && 
+            this.state !== 3 && that.state !== 4 && that.state !== 5) {
             if (
                 Math.abs(this.velocity.x) > MAX_RUN ||
                 Math.abs(this.velocity.x) === MAX_DASH
@@ -666,7 +703,9 @@ class Player {
             } else if (Math.abs(this.velocity.x) >= MIN_RUN) {
                 this.state = 1;
                 this.updateBB();
-            } else this.state = 0;
+            } else if(!this.attacking) {
+                this.state = 0;
+            }
         } else {
             if (this.state === 3 || this.state === 4) this.isInAir = true;
         }
@@ -674,79 +713,53 @@ class Player {
         // update direction
         if (this.velocity.x < 0) this.facing = 1;
         if (this.velocity.x > 0) this.facing = 0;
+        document.getElementById("state").innerHTML = "State: " + this.state;
+        if(this.state == 5) {
+        }
     }
 
     draw(ctx) {
         //actual animation code
-        this.animations[this.state][this.facing].drawFrame(
-            this.game.clockTick,
-            ctx,
-            this.x - this.game.camera.x + this.spriteOffset.xOffset, // camera sidescrolling
-            this.y - this.game.camera.y + this.spriteOffset.yOffset,
-            2
-        );
-
-        //12,11,10
-        //testing attack code
-        // if (this.animationTick == 0) {
-        //     this.animations[6 + this.animationTick][0].drawFrame(
-        //         this.game.clockTick,
-        //         ctx,
-        //         this.x - this.game.camera.x, // camera sidescrolling
-        //         this.y - this.game.camera.y,
-        //         2
-        //     );
-        // } else if (this.animationTick == 1) {
-        //     this.animations[6 + this.animationTick][0].drawFrame(
-        //         this.game.clockTick,
-        //         ctx,
-        //         this.x - this.game.camera.x - 20, // camera sidescrolling
-        //         this.y - this.game.camera.y,
-        //         2
-        //     );
-        // } else if (this.animationTick == 2) {
-        //     this.animations[6 + this.animationTick][0].drawFrame(
-        //         this.game.clockTick,
-        //         ctx,
-        //         this.x - this.game.camera.x, // camera sidescrolling
-        //         this.y - this.game.camera.y,
-        //         2
-        //     );
-        // }
-        // console.log(
-        //     this.animations[6][0].isDone(),
-        //     this.animations[6][0].elapsedTime
+        // this.animations[this.state][this.facing].drawFrame(
+        //     this.game.clockTick,
+        //     ctx,
+        //     this.x - this.game.camera.x + this.spriteOffset.xOffset, // camera sidescrolling
+        //     this.y - this.game.camera.y + this.spriteOffset.yOffset,
+        //     2
         // );
-        // if (this.animations[6 + this.animationTick][0].isDone()) {
-        //     this.animations[6 + this.animationTick][0].elapsedTime = 0;
-        //     this.animationTick = (this.animationTick + 1) % 3;
-        // }
 
-        // if(this.animationTick == 0){
-        //   this.animations[6][0].drawFrame(
-        //     this.game.clockTick,
-        //     ctx,
-        //     this.x - this.game.camera.x, // camera sidescrolling
-        //     this.y - this.game.camera.y,
-        //     2
-        //   );
-        // } else if (this.animationTick == 1){
-        //   this.animations[7][0].drawFrame(
-        //     this.game.clockTick,
-        //     ctx,
-        //     this.x - this.game.camera.x - 20, // camera sidescrolling
-        //     this.y - this.game.camera.y,
-        //     2
-        //   );
-        // } else if(this.animationTick == 2){
-        //   this.animations[8][0].drawFrame(
-        //     this.game.clockTick,
-        //     ctx,
-        //     this.x - this.game.camera.x, // camera sidescrolling
-        //     this.y - this.game.camera.y,
-        //     2
-        //   );
-        // }
+        if(this.state == 6 || this.state == 7|| this.state == 8 ){
+            //attacking update to this.facing
+            this.animations[this.state][0].drawFrame(
+                this.game.clockTick,
+                ctx,
+                this.x - this.game.camera.x + this.spriteOffset.xOffset-10, // camera sidescrolling
+                this.y - this.game.camera.y + this.spriteOffset.yOffset - 30,
+                2
+            );
+            //update to this.facing
+            if(this.animations[this.state][0].isDone()){
+                console.log("finished")
+                this.attacking = false;
+                this.comboState = (this.comboState + 1) %3;
+                this.animations[this.state][0].elapsedTime = 0;
+                //TODO possibly remove this 
+                
+            }
+            // console.log("attackl anim");
+        } else {
+            //all other animations
+            this.animations[this.state][this.facing].drawFrame(
+                this.game.clockTick,
+                ctx,
+                this.x - this.game.camera.x + this.spriteOffset.xOffset, // camera sidescrolling
+                this.y - this.game.camera.y + this.spriteOffset.yOffset,
+                2
+            );
+            //obviously not attacking 
+            this.attacking = false;
+            // console.log("normal anim");
+        }
         if (params.debug) {
             ctx.strokeStyle = 'Blue';
             ctx.strokeRect(
