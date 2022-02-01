@@ -41,7 +41,7 @@ ASSET_MANAGER.downloadAll(() => {
     let gravity = 0.2;
     //scene manager for scrolling
 
-    gameEngine.addEntity(new Player(gameEngine, 200, 0, gravity));
+    gameEngine.addEntity(new Player(gameEngine, 200, 0));
     gameEngine.addEntity(new Drill(gameEngine, 11, 2, 120));
     gameEngine.addEntity(new Drill(gameEngine, 14, 2, 120));
     gameEngine.addEntity(new Drill(gameEngine, 17, 2, 120));
@@ -52,7 +52,7 @@ ASSET_MANAGER.downloadAll(() => {
     gameEngine.addEntity(new Ground(gameEngine, 1, 50, 2, 10, 16, 1, 0, 1));
     gameEngine.addEntity(new Ground(gameEngine, 1, 60, -10, 10, 30, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 1, 50, -15, 5, 8, 1, 0, 0));
-    gameEngine.addEntity(new Ground(gameEngine, 1, 40, -20, 5,9, 1, 0, 0));
+    gameEngine.addEntity(new Ground(gameEngine, 1, 40, -20, 5, 9, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 1, 30, -15, 5, 8, 1, 0, 0));
 
     // gameEngine.addEntity(new Ground(gameEngine, 1, 1, 7, 8, 1,0,0,1));
