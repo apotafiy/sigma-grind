@@ -276,6 +276,19 @@ class Player {
             false,
             false
         );
+         // Face left = slash 1
+         this.animations[6][1] = new Animator(
+            this.attackRight,
+            1090,
+            0,
+            92,
+            64,
+            12,
+            this.attackSpeed,
+            2,
+            true,
+            false
+        );
         // Face right slash two
         this.animations[7][0] = new Animator(
             this.attackRightTwo,
@@ -286,7 +299,7 @@ class Player {
             11,
             this.attackSpeed,
             1,
-            false,
+            true,
             false
         );
         // Face right slash 3
@@ -546,7 +559,7 @@ class Player {
             //set the player to attacking state
             // debugger;    
             this.attackCooldown = 10;
-            if(!this.animations[6][0].isDone()){
+            if(!this.animations[6][this.facing].isDone()){
                 this.state = 6;
             }
             
@@ -729,20 +742,29 @@ class Player {
         // );
 
         if(this.state == 6 || this.state == 7|| this.state == 8 ){
+            let tempXOffset = 0;
+            let tempYOffset = 0
+            if(this.facing == 0){
+                tempXOffset = -10;
+                tempYOffset = -30;
+            } else {
+                tempXOffset = -80;
+                tempYOffset = -30;
+            }
             //attacking update to this.facing
-            this.animations[this.state][0].drawFrame(
+            this.animations[this.state][this.facing].drawFrame(
                 this.game.clockTick,
                 ctx,
-                this.x - this.game.camera.x + this.spriteOffset.xOffset-10, // camera sidescrolling
-                this.y - this.game.camera.y + this.spriteOffset.yOffset - 30,
+                this.x - this.game.camera.x + this.spriteOffset.xOffset + tempXOffset, // camera sidescrolling
+                this.y - this.game.camera.y + this.spriteOffset.yOffset + tempYOffset,
                 2
             );
             //update to this.facing
-            if(this.animations[this.state][0].isDone()){
+            if(this.animations[this.state][this.facing].isDone()){
                 console.log("finished")
                 this.attacking = false;
                 this.comboState = (this.comboState + 1) %3;
-                this.animations[this.state][0].elapsedTime = 0;
+                this.animations[this.state][this.facing].elapsedTime = 0;
                 //TODO possibly remove this 
                 
             }
