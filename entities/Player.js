@@ -383,12 +383,21 @@ class Player {
             facing = -1;
         }
         if(this.attacking){
+           if(facing == 1){
             this.attackBB = new BoundingBox(
                 this.x + xoffset, 
                 this.y-20, 
-                (80) * facing,
+                (80) ,
                 120
             );
+           } else {
+            this.attackBB = new BoundingBox(
+                this.x + xoffset - 80, 
+                this.y-20, 
+                (80),
+                120
+            );
+           }
         } else {
             this.attackBB = new BoundingBox(
                 0, 
