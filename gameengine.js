@@ -103,7 +103,7 @@ class GameEngine {
 
         this.ctx.canvas.addEventListener('keydown', (event) => {
             // Prevent Dashing continuously when holding down 'k' button
-            if (event.code === 'KeyK') if (event.repeat) return;
+            if (event.code === 'KeyK' && event.repeat) return;
 
             this.keys[event.code] = true;
 
