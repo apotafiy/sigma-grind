@@ -22,8 +22,8 @@ class Player {
 
         this.velocity = { x: 0, y: 0 };
         this.veloConst = 6.9;
+        this.airDash = 0;
         this.isInAir = true;
-        this.dashInAir = 0;
         this.fallAcc = 400;
 
         this.currentSize = { width: 40, height: 50 };
@@ -357,7 +357,7 @@ class Player {
             this.velocity.x -= ACC_RUN * TICK;
             this.velocity.y -= this.fallAcc * TICK;
         }
-        if (this.isInAir) this.dashInAir++;
+        if (this.isInAir) this.airDash++;
         this.game.keys.KeyK = false;
     }
 
@@ -391,7 +391,11 @@ class Player {
             // update velocity
 
             // Dashing
-            if (this.game.keys.KeyK && !this.game.keys.Space) {
+            if (
+                this.game.keys.KeyK &&
+                !this.game.keys.Space &&
+                this.airDash < 1
+            ) {
                 if (this.state !== 5) {
                     if (this.game.keys.KeyA && !this.game.keys.KeyD) {
                         this.facing === 1;
@@ -409,7 +413,11 @@ class Player {
                     if (this.animations[2][this.facing].elapsedTime >= 0.5)
                         this.handleDashEnding(RUN_FALL, ACC_RUN, TICK);
                 }
-            } else if (this.game.keys.KeyK && this.game.keys.Space) {
+            } else if (
+                this.game.keys.KeyK &&
+                this.game.keys.Space &&
+                this.airDash < 1
+            ) {
                 this.handleDashEnding(RUN_FALL, ACC_RUN, TICK);
             } else {
                 this.animations[2][this.facing].elapsedTime = 0;
@@ -548,7 +556,7 @@ class Player {
                         that.isInAir = false;
 
                         // Reset number of air dashes to 0 when touch the ground
-                        that.dashInAir = 0;
+                        that.airDash = 0;
                         that.updateBB();
                     }
                 }
@@ -595,7 +603,7 @@ class Player {
                             that.velocity.y = 1;
                             that.isInAir = false;
                             // Reset number of air dashes to 0 when wall hang
-                            that.dashInAir = 0;
+                            that.airDash = 0;
                         } else if (
                             that.velocity.y > 0 &&
                             that.game.keys.Space
