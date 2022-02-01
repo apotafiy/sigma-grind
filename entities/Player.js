@@ -733,6 +733,7 @@ class Player {
                             that.state = that.states.wallHang;
                             that.velocity.y = 1;
                             that.isInAir = false;
+                            that.airDashed = false;
                             // Reset number of air dashes to 0 when wall hang
                         } else if (
                             that.velocity.y > 0 &&
