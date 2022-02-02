@@ -494,6 +494,7 @@ class Player {
                 !this.attacking &&
                 this.state !== this.states.jump &&
                 this.state !== this.states.fall &&
+                this.state !== this.states.attack2 && //falling attack state
                 this.state !== this.states.wallHang
             ) {
                 // not jumping
