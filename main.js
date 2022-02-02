@@ -25,6 +25,7 @@ ASSET_MANAGER.queueDownload('./sprites/player/player-run-51x49.png');
 ASSET_MANAGER.queueDownload('./sprites/player/player-jump-47x80.png');
 ASSET_MANAGER.queueDownload('./sprites/player/player-wallhang-36x65.png');
 ASSET_MANAGER.queueDownload('./sprites/player/player-dash-97x52.png');
+ASSET_MANAGER.queueDownload('./sprites/player/player-fall-attack-102x80.png');
 ASSET_MANAGER.queueDownload('./sprites/player/zerox4sheet.png');
 //player attack Animations
 ASSET_MANAGER.queueDownload(
