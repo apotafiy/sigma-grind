@@ -113,6 +113,11 @@ class SceneManager {
         //move the camera over by the veoloity
         this.x += this.xVelocity;
         this.y += this.yVelocity;
+
+        //doodoo camera system
+        // this.x = this.game.player.x - midpoint;
+        // this.y = this.game.player.y - vertmidpoint;
+
     }
 
     draw(ctx) {
