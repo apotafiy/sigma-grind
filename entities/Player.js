@@ -465,11 +465,7 @@ class Player {
             // Do death stuff
         } else {
             // Dashing
-            if (
-                this.game.keys.KeyK &&
-                !this.game.keys.Space &&
-                !this.attacking
-            ) {
+            if (this.game.keys.KeyK && !this.attacking) {
                 if (this.isInAir) this.airDashed = true;
                 if (this.state !== this.states.wallHang) {
                     if (this.game.keys.KeyA && !this.game.keys.KeyD) {
@@ -488,9 +484,6 @@ class Player {
                     if (this.animations[2][this.facing].elapsedTime >= 0.5)
                         this.handleDashEnding(RUN_FALL, ACC_RUN, TICK);
                 }
-            } else if (this.game.keys.KeyK && this.game.keys.Space) {
-                if (this.isInAir) this.airDashed = true;
-                this.handleDashEnding(RUN_FALL, ACC_RUN, TICK);
             } else {
                 this.animations[2][this.facing].elapsedTime = 0;
                 this.fallAcc = STOP_FALL;
@@ -794,9 +787,15 @@ class Player {
                             that.BB.collide(entity.topBB) ||
                             that.BB.collide(entity.bottomBB)
                         ) {
-                            if (that.game.keys.Space) {
+                            if (that.game.keys.Space && that.game.keys.KeyK) {
+                                that.state = that.states.idle;
+                                that.handleDashEnding(RUN_FALL, ACC_RUN, TICK);
+                            } else if (that.game.keys.Space) {
                                 // Do nothing lol
                                 // this will prevent player stuck at jump loop
+                            } else if (that.game.keys.KeyK) {
+                                that.state = that.states.idle;
+                                that.handleDashEnding(RUN_FALL, ACC_RUN, TICK);
                             } else {
                                 that.velocity.x = 0;
                                 that.velocity.y += that.fallAcc * TICK;
