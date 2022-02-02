@@ -71,7 +71,7 @@ class Player {
             './sprites/player/zero_attack_right_one_92_64_2.png'
         );
         this.attackRightTwo = ASSET_MANAGER.getAsset(
-            './sprites/player/zero_attack_right_two.png'
+            './sprites/player/player-fall-attack-102x80.png'
         );
         this.attackRightThree = ASSET_MANAGER.getAsset(
             './sprites/player/zero_attack_right_three_114x64-Sheet.png'
@@ -303,16 +303,30 @@ class Player {
             false
         );
 
-        // Face right slash two
+        // Face right air attack two
         this.animations[7][0] = new Animator(
             this.attackRightTwo,
             0,
             0,
-            114,
-            64,
-            11,
-            this.attackSpeed,
-            1,
+            102,
+            80,
+            9,
+            this.attackSpeed +0.01,
+            0,
+            false,
+            false
+        );
+
+        // Face left air attack two
+        this.animations[7][1] = new Animator(
+            this.attackRightTwo,
+            918,
+            0,
+            102,
+            80,
+            9,
+            this.attackSpeed +0.01,
+            0,
             true,
             false
         );
@@ -446,7 +460,7 @@ class Player {
         if (this.game.keys.KeyL) this.animationTick = 2;
         //adjust the attack cooldown
         this.attackCooldown--;
-
+        debugger
         if (this.dead) {
             // Do death stuff
         } else {
@@ -525,7 +539,6 @@ class Player {
                 }
 
                 this.velocity.y += this.fallAcc * TICK;
-
                 // Jump
                 if (
                     !this.attacking &&
@@ -558,14 +571,17 @@ class Player {
                         this.velocity.y -= (STOP_FALL - STOP_FALL_A) * TICK;
                     if (this.fallAcc === RUN_FALL)
                         this.velocity.y -= (RUN_FALL - RUN_FALL_A) * TICK;
+                    this.isInAir = true; // moved into block
                 } else if (
                     !this.attacking &&
                     this.velocity.y > 0 &&
                     !this.game.keys.Space
                 ) {
                     this.state = this.states.fall;
+                    console.log("set to fall")
+                    this.isInAir = true; // moved into the block
                 }
-                this.isInAir = true;
+                
 
                 // horizontal physics
                 if (this.game.keys.KeyD && !this.game.keys.KeyA) {
@@ -579,8 +595,14 @@ class Player {
 
             // Faling
             if (this.velocity.y > 0 && !this.attacking) {
-                this.state = this.states.fall;
-                this.isInAir = true;
+                if(this.state == this.states.idle ||
+                     this.state == this.states.run ) {
+
+                     } else {
+                         this.state == this.states.fall;
+                         this.inAir = true;
+                     }
+            
             }
         }
 
@@ -605,19 +627,26 @@ class Player {
             this.state !== this.states.wallHang &&
             this.attackCooldown <= 0
         ) {
+            // debugger;
             //set the player to attacking state
             this.attackCooldown = 10;
-            if (!this.animations[6][this.facing].isDone()) {
-                this.state = this.states.attack1;
+            debugger;
+            if(this.isInAir){
+                this.state = this.states.attack2
+                if (!this.animations[7][this.facing].isDone()) {
+                    this.state = this.states.attack2;
+                }
+            } else {
+                this.state = this.states.attack1
+                if (!this.animations[6][this.facing].isDone()) {
+                    this.state = this.states.attack1;
+                }
+    
             }
-
             this.updateBB();
             if (!this.attacking) {
                 this.attacking = true;
-            } else {
-                if (this.state == this.states.attack1) {
-                }
-            }
+            } 
         }
         this.updateAttackBB(); //TODO potentially costly
         //stop when attacking
@@ -820,7 +849,7 @@ class Player {
 
         // Display values for debugging
         document.getElementById('attacking').innerHTML =
-            'YVelocity: ' + this.velocity.y + ' ' + this.attacking;
+            'YVelocity: ' + this.velocity.y + ' ' + this.isInAir;
         document.getElementById('state').innerHTML = 'State: ' + this.state;
     }
 
@@ -866,7 +895,7 @@ class Player {
             if (this.animations[this.state][this.facing].isDone()) {
                 console.log('finished');
                 this.attacking = false;
-                this.comboState = (this.comboState + 1) % 3;
+                // this.comboState = (this.comboState + 1) % 3;
                 this.animations[this.state][this.facing].elapsedTime = 0;
                 //TODO possibly remove this
             }

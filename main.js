@@ -25,6 +25,7 @@ ASSET_MANAGER.queueDownload('./sprites/player/player-run-51x49.png');
 ASSET_MANAGER.queueDownload('./sprites/player/player-jump-47x80.png');
 ASSET_MANAGER.queueDownload('./sprites/player/player-wallhang-36x65.png');
 ASSET_MANAGER.queueDownload('./sprites/player/player-dash-97x52.png');
+ASSET_MANAGER.queueDownload('./sprites/player/player-fall-attack-102x80.png');
 ASSET_MANAGER.queueDownload('./sprites/player/zerox4sheet.png');
 //player attack Animations
 ASSET_MANAGER.queueDownload(
@@ -52,7 +53,7 @@ ASSET_MANAGER.downloadAll(() => {
     gameEngine.addEntity(new Ground(gameEngine, 1, 50, 2, 10, 16, 1, 0, 1));
     gameEngine.addEntity(new Ground(gameEngine, 1, 60, -10, 10, 30, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 1, 50, -15, 5, 8, 1, 0, 0));
-    gameEngine.addEntity(new Ground(gameEngine, 1, 40, -20, 5, 9, 1, 0, 0));
+    gameEngine.addEntity(new Ground(gameEngine, 1, 40, -80, 5, 65, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 1, 30, -15, 5, 8, 1, 0, 0));
 
     // gameEngine.addEntity(new Ground(gameEngine, 1, 1, 7, 8, 1,0,0,1));
