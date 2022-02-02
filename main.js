@@ -50,6 +50,10 @@ ASSET_MANAGER.downloadAll(() => {
     gameEngine.addEntity(new Ground(gameEngine, 1, 0, 8, 15, 4, 1));
     gameEngine.addEntity(new Ground(gameEngine, 1, 5, 8, 45, 8, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 1, 50, 2, 10, 16, 1, 0, 1));
+    gameEngine.addEntity(new Ground(gameEngine, 1, 60, -10, 10, 30, 1, 0, 0));
+    gameEngine.addEntity(new Ground(gameEngine, 1, 50, -15, 5, 8, 1, 0, 0));
+    gameEngine.addEntity(new Ground(gameEngine, 1, 40, -20, 5, 9, 1, 0, 0));
+    gameEngine.addEntity(new Ground(gameEngine, 1, 30, -15, 5, 8, 1, 0, 0));
 
     // gameEngine.addEntity(new Ground(gameEngine, 1, 1, 7, 8, 1,0,0,1));
     //Changed 4-> 1 xoffset
@@ -74,7 +78,7 @@ ASSET_MANAGER.downloadAll(() => {
         if (entity instanceof Ground) entity.checkForGrass();
     });
     gameEngine.addEntity(new Mettaur(gameEngine, 800, 0, gravity));
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 5; i++) {
         gameEngine.addEntity(
             new Mettaur(gameEngine, 200 + i * 100, 0, gravity)
         );
@@ -87,7 +91,7 @@ ASSET_MANAGER.downloadAll(() => {
     gameEngine.addEntity(new GroundHorse(gameEngine, 13, 5));
     gameEngine.addEntity(new GroundHorse(gameEngine, 14, 5));
 
-    gameEngine.addEntity(new GroundHorse(gameEngine, 36, 0));
+    // gameEngine.addEntity(new GroundHorse(gameEngine, 36, 0));
     gameEngine.addEntity(new Water(gameEngine));
 
     gameEngine.addEntity(new Ground(gameEngine, 1, 0, 0, 1, 8, 1, 0, 1));

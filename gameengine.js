@@ -48,6 +48,8 @@ class GameEngine {
         this.stats.showPanel(0);
         this.stats.dom.id = 'fpsCounter';
         this.stats.dom.style.marginLeft = '7em';
+
+        this.player = this.getPlayer();
     }
 
     start() {
@@ -103,9 +105,14 @@ class GameEngine {
 
         this.ctx.canvas.addEventListener('keydown', (event) => {
             // Prevent Dashing continuously when holding down 'k' button
-            if (event.code === 'KeyK') if (event.repeat) return;
+            if (event.code === 'KeyK' && event.repeat) return;
 
-            this.keys[event.code] = true;
+            // Can only press dash once while in air
+            if (event.code === 'KeyK' && this.player.airDashed) {
+                this.keys[event.code] = false;
+            } else {
+                this.keys[event.code] = true;
+            }
 
             // Prevent scrolling while using the canvas
             if (

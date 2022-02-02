@@ -176,6 +176,13 @@ class Mettaur {
             0
         );
     }
+    die(){
+        if(!this.isDead){
+            this.isDead = true;
+            this.deathTimer = 20;
+            this.xVelocity = 0;
+        }
+    }
     updateBB() {
         this.lastBB = this.BB;
         const yOffSet = 6; // Make sprite goes below the ground slightly not the bounding box itself
@@ -241,7 +248,6 @@ class Mettaur {
             that.currentState = 2;
             that.duckTimer = that.getRandomInt(100, 400);
         } else if (that.isDead) {
-            console.log('Dying in: ', that.deathtimer);
             if (that.deathTimer <= 0) {
                 //get rid of it after death;
                 that.removeFromWorld = true;
