@@ -71,7 +71,7 @@ class Player {
             './sprites/player/zero_attack_right_one_92_64_2.png'
         );
         this.attackRightTwo = ASSET_MANAGER.getAsset(
-            './sprites/player/zero_attack_right_two.png'
+            './sprites/player/player-fall-attack-102x80.png'
         );
         this.attackRightThree = ASSET_MANAGER.getAsset(
             './sprites/player/zero_attack_right_three_114x64-Sheet.png'
@@ -303,16 +303,30 @@ class Player {
             false
         );
 
-        // Face right slash two
+        // Face right air attack two
         this.animations[7][0] = new Animator(
             this.attackRightTwo,
             0,
             0,
-            114,
-            64,
-            11,
-            this.attackSpeed,
-            1,
+            102,
+            80,
+            9,
+            this.attackSpeed + 0.01,
+            0,
+            false,
+            false
+        );
+
+        // Face left air attack two
+        this.animations[7][1] = new Animator(
+            this.attackRightTwo,
+            918,
+            0,
+            102,
+            80,
+            9,
+            this.attackSpeed + 0.01,
+            0,
             true,
             false
         );
@@ -366,6 +380,10 @@ class Player {
             case this.states.attack1:
                 this.spriteOffset.xOffset = -10;
                 this.spriteOffset.yOffset = 0;
+                break;
+            case this.states.attack2:
+                this.spriteOffset.xOffset = this.facing === 0 ? -10 : -3;
+                this.spriteOffset.yOffset = -10;
                 break;
         }
 
@@ -423,17 +441,12 @@ class Player {
 
     update() {
         const TICK = this.game.clockTick;
-
         const MIN_RUN = 10;
         const MAX_RUN = 120;
-
         const MAX_DASH = 300;
-
         const ACC_RUN = 500;
-
         const DEC_REL = 600;
         const DEC_SKID = 500;
-
         const STOP_FALL = 1500;
         const STOP_FALL_A = 400;
         const RUN_FALL = 2025;
@@ -444,49 +457,20 @@ class Player {
         if (this.game.keys.KeyJ) this.animationTick = 0;
         if (this.game.keys.KeyK) this.animationTick = 1;
         if (this.game.keys.KeyL) this.animationTick = 2;
+
         //adjust the attack cooldown
         this.attackCooldown--;
 
+        // debugger
         if (this.dead) {
             // Do death stuff
         } else {
-            // Dashing
-            if (
-                this.game.keys.KeyK &&
-                !this.game.keys.Space &&
-                !this.attacking
-            ) {
-                if (this.isInAir) this.airDashed = true;
-                if (this.state !== this.states.wallHang) {
-                    if (this.game.keys.KeyA && !this.game.keys.KeyD) {
-                        this.facing === 1;
-                        this.velocity.x = -MAX_DASH;
-                    } else if (this.game.keys.KeyD && !this.game.keys.KeyA) {
-                        this.facing === 0;
-                        this.velocity.x = MAX_DASH;
-                    } else {
-                        this.velocity.x =
-                            this.facing === 0 ? MAX_DASH : -MAX_DASH;
-                    }
-                    this.velocity.y = 0;
-                    this.fallAcc = 0;
-                    this.state = this.states.dash;
-                    if (this.animations[2][this.facing].elapsedTime >= 0.5)
-                        this.handleDashEnding(RUN_FALL, ACC_RUN, TICK);
-                }
-            } else if (this.game.keys.KeyK && this.game.keys.Space) {
-                if (this.isInAir) this.airDashed = true;
-                this.handleDashEnding(RUN_FALL, ACC_RUN, TICK);
-            } else {
-                this.animations[2][this.facing].elapsedTime = 0;
-                this.fallAcc = STOP_FALL;
-            }
-            // End Dashing
-
+            // PHYSICS
             if (
                 !this.attacking &&
                 this.state !== this.states.jump &&
                 this.state !== this.states.fall &&
+                this.state !== this.states.attack2 && //falling attack state
                 this.state !== this.states.wallHang
             ) {
                 // not jumping
@@ -535,7 +519,6 @@ class Player {
 
                 // Jump
                 if (
-                    !this.attacking &&
                     this.game.keys.Space &&
                     !this.game.keys.KeyK &&
                     !this.game.keys.KeyJ &&
@@ -551,28 +534,32 @@ class Player {
                         this.fallAcc = RUN_FALL;
                     }
 
-                    // Set state to jump (3)
+                    // Set state to jump if not attack (3)
+                    // set to attack2 if it is
                     if (!this.attacking) this.state = this.states.jump;
+                    else this.state = this.states.attack2;
                     // Set the jump animation to start at the beginning
                     this.animations[this.state][this.facing].elapsedTime = 0;
                 }
             } else {
                 // air physics
                 // vertical physics
-                if (this.velocity.y <= 0 && this.game.keys.Space) {
+                if (this.velocity.y < 0 && this.game.keys.Space) {
                     // holding space while jumping jumps higher
                     if (this.fallAcc === STOP_FALL)
                         this.velocity.y -= (STOP_FALL - STOP_FALL_A) * TICK;
                     if (this.fallAcc === RUN_FALL)
                         this.velocity.y -= (RUN_FALL - RUN_FALL_A) * TICK;
+                    this.isInAir = true; // moved into block
                 } else if (
                     !this.attacking &&
                     this.velocity.y > 0 &&
                     !this.game.keys.Space
                 ) {
                     this.state = this.states.fall;
+                    // console.log('set to fall');
+                    this.isInAir = true; // moved into the block
                 }
-                this.isInAir = true;
 
                 // horizontal physics
                 if (this.game.keys.KeyD && !this.game.keys.KeyA) {
@@ -583,17 +570,75 @@ class Player {
                     // do nothing
                 }
             }
+            // END PHYSICS
 
-            // Faling
-            if (this.velocity.y > 0 && !this.attacking) {
-                this.state = this.states.fall;
-                this.isInAir = true;
+            // ACTIONS GOES BELOW HERE
+
+            // Dashing
+            if (this.game.keys.KeyK && !this.attacking) {
+                if (this.isInAir) this.airDashed = true;
+                if (this.state !== this.states.wallHang) {
+                    if (this.game.keys.KeyA && !this.game.keys.KeyD) {
+                        this.facing === 1;
+                        this.velocity.x = -MAX_DASH;
+                    } else if (this.game.keys.KeyD && !this.game.keys.KeyA) {
+                        this.facing === 0;
+                        this.velocity.x = MAX_DASH;
+                    } else {
+                        this.velocity.x =
+                            this.facing === 0 ? MAX_DASH : -MAX_DASH;
+                    }
+                    this.velocity.y = 0;
+                    this.fallAcc = 0;
+                    this.state = this.states.dash;
+                    if (this.animations[2][this.facing].elapsedTime >= 0.5)
+                        this.handleDashEnding(RUN_FALL, ACC_RUN, TICK);
+                }
+            } else {
+                this.animations[2][this.facing].elapsedTime = 0;
+                this.fallAcc = STOP_FALL;
+                if (this.velocity.y > 0 && this.state !== this.states.wallHang)
+                    this.state = this.states.fall;
             }
+            // End Dashing
+
+            //handle attacking
+            if (this.game.keys.KeyJ && this.game.keys.KeyK) {
+                // Do nothing
+            } else if (
+                this.game.keys.KeyJ &&
+                this.state !== this.states.wallHang &&
+                this.attackCooldown <= 0
+            ) {
+                // debugger;
+                //set the player to attacking state
+                this.attackCooldown = 10;
+                // debugger;
+                if (this.isInAir) {
+                    this.state = this.states.attack2;
+                    if (!this.animations[7][this.facing].isDone()) {
+                        this.state = this.states.attack2;
+                    }
+                } else {
+                    this.state = this.states.attack1;
+                    if (!this.animations[6][this.facing].isDone()) {
+                        this.state = this.states.attack1;
+                    }
+                }
+                this.updateBB();
+                if (!this.attacking) {
+                    this.attacking = true;
+                }
+            }
+            this.updateAttackBB(); //TODO potentially costly
+            //stop when attacking
+
+            // END ACTIONS
         }
 
         this.velocity.y += this.fallAcc * TICK;
 
-        // Update velocity
+        // UPDATE VELOCITY
         if (this.velocity.y >= MAX_FALL) this.velocity.y = MAX_FALL;
         if (this.velocity.y <= -MAX_FALL) this.velocity.y = -MAX_FALL;
 
@@ -603,31 +648,6 @@ class Player {
             this.velocity.x = MAX_RUN;
         if (this.velocity.x <= -MAX_RUN && !this.game.keys.KeyK)
             this.velocity.x = -MAX_RUN;
-
-        // update position
-        // scale = 3
-        //handle attacking
-        if (
-            this.game.keys.KeyJ &&
-            this.state !== this.states.wallHang &&
-            this.attackCooldown <= 0
-        ) {
-            //set the player to attacking state
-            this.attackCooldown = 10;
-            if (!this.animations[6][this.facing].isDone()) {
-                this.state = this.states.attack1;
-            }
-
-            this.updateBB();
-            if (!this.attacking) {
-                this.attacking = true;
-            } else {
-                if (this.state == this.states.attack1) {
-                }
-            }
-        }
-        this.updateAttackBB(); //TODO potentially costly
-        //stop when attacking
         if (
             this.attacking &&
             ((this.state == this.states.attack1 &&
@@ -638,6 +658,8 @@ class Player {
             this.velocity.x = 0;
         }
 
+        // UPDATE POSITION
+        // scale = 3
         this.x += this.velocity.x * TICK * 3;
         this.y += this.velocity.y * TICK * 3;
         this.updateBB();
@@ -646,149 +668,150 @@ class Player {
         // Assuming block width is 64
         if (this.y > 64 * 16) this.die();
 
-        // collision
-        let that = this;
-        this.game.entities.forEach(function (entity) {
+        // COLLISION
+        this.game.entities.forEach((entity) => {
             //check for the enemy colliding with sword
             // || entity instanceof Drill
-            if (entity.BB && that.attackBB.collide(entity.BB)) {
+            if (entity.BB && this.attackBB.collide(entity.BB)) {
                 if (
                     entity &&
                     entity instanceof Mettaur &&
                     entity.duckTimer <= 0
                 ) {
-                    console.log('Kill Mettaur');
+                    // console.log('Kill Mettaur');
                     //if it has die method it should die
                     entity.die();
                 }
                 if (entity && entity instanceof Drill) {
-                    console.log('kILL dRILL');
+                    // console.log('kILL dRILL');
                     //if it has die method it should die
                     entity.die();
                 }
             }
-
             // Collision with player's box
-            if (entity.BB && that.BB.collide(entity.BB)) {
-                if (that.velocity.y > 0) {
+            if (entity.BB && this.BB.collide(entity.BB)) {
+                if (this.velocity.y > 0) {
                     // falling
                     if (
                         entity instanceof Ground && // landing
-                        that.lastBB.bottom <= entity.BB.top
+                        this.lastBB.bottom <= entity.BB.top
                     ) {
-                        that.y = entity.BB.top - that.BB.height; //set to top of bounding box of ground
-                        that.velocity.y = 0;
+                        this.y = entity.BB.top - this.BB.height; //set to top of bounding box of ground
+                        this.velocity.y = 0;
                         if (
-                            that.state === that.states.jump ||
-                            that.state === that.states.fall
+                            this.state === this.states.jump ||
+                            this.state === this.states.fall
                         )
-                            that.state = that.states.idle; // set state to idle
+                            this.state = this.states.idle; // set state to idle
 
-                        that.isInAir = false;
-                        that.airDashed = false;
+                        this.isInAir = false;
+                        this.airDashed = false;
 
                         // Reset number of air dashes to 0 when touch the ground
-                        that.updateBB();
+                        this.updateBB();
                     }
                 }
-                if (that.velocity.y <= 0) {
+                if (this.velocity.y <= 0) {
                     // jumping
                     // hit ceiling...
                     if (
                         // entity instanceof Ground &&
-                        // that.lastBB.top >= entity.BB.bottom
+                        // this.lastBB.top >= entity.BB.bottom
                         entity instanceof Ground &&
-                        that.BB.collide(entity.bottomBB)
+                        this.BB.collide(entity.bottomBB)
                     ) {
-                        that.velocity.y = 0;
+                        this.velocity.y = 0;
                     }
                 }
-
                 // Side collisions
                 if (
                     entity instanceof Ground &&
                     entity.type &&
-                    that.BB.collide(entity.BB)
+                    this.BB.collide(entity.BB)
                 ) {
-                    if (that.BB.collide(entity.leftBB)) {
+                    if (this.BB.collide(entity.leftBB)) {
                         // Right side collision
-                        that.x = entity.BB.left - that.BB.width;
-                        that.facing = 0;
-                        if (that.velocity.x > 0) that.velocity.x = 0;
+                        this.x = entity.BB.left - this.BB.width;
+                        this.facing = 0;
+                        if (this.velocity.x > 0) this.velocity.x = 0;
                     }
-                    if (that.BB.collide(entity.rightBB)) {
+                    if (this.BB.collide(entity.rightBB)) {
                         // Left side collision
-                        that.x = entity.BB.right;
-                        that.facing = 1;
-                        if (that.velocity.x < 0) that.velocity.x = 0;
+                        this.x = entity.BB.right;
+                        this.facing = 1;
+                        if (this.velocity.x < 0) this.velocity.x = 0;
                     }
                     // wall hanging
                     if (
-                        !that.BB.collide(entity.bottomBB) &&
-                        !that.BB.collide(entity.topBB)
+                        !this.BB.collide(entity.bottomBB) &&
+                        !this.BB.collide(entity.topBB)
                     ) {
-                        if (that.velocity.y > 0 && !that.game.keys.Space) {
+                        if (this.velocity.y > 0 && !this.game.keys.Space) {
                             // falling and not holding jump
                             // Set state to wall hang
-                            that.state = that.states.wallHang;
-                            that.velocity.y = 1;
-                            that.isInAir = false;
-                            that.airDashed = false;
+                            this.state = this.states.wallHang;
+                            this.velocity.y = 1;
+                            this.isInAir = false;
+                            this.airDashed = false;
                             // Reset number of air dashes to 0 when wall hang
                         } else if (
-                            that.velocity.y > 0 &&
-                            that.game.keys.Space
+                            this.velocity.y > 0 &&
+                            this.game.keys.Space
                         ) {
                             // falling then hit jump, bounce from wall
-                            if (that.facing === 1) {
-                                that.velocity.x = 100;
+                            if (this.facing === 1) {
+                                this.velocity.x = 100;
                             } else {
-                                that.velocity.x = -100;
+                                this.velocity.x = -100;
                             }
-                            that.velocity.y = -240;
-                            that.fallAcc = STOP_FALL;
-                            that.isInAir = true;
+                            this.velocity.y = -240;
+                            this.fallAcc = STOP_FALL;
+                            this.isInAir = true;
                             // Reset jump animation to the beginning
-                            that.state = that.states.jump;
-                            that.animations[3][0].elapsedTime = 0;
-                            that.animations[3][1].elapsedTime = 0;
-                        } else if (that.velocity.y === 0) {
-                            if (that.game.keys.KeyK) {
+                            this.state = this.states.jump;
+                            this.animations[3][0].elapsedTime = 0;
+                            this.animations[3][1].elapsedTime = 0;
+                        } else if (this.velocity.y === 0) {
+                            if (this.game.keys.KeyK) {
                                 // Prevent player idle at wall when dashing into wall
-                                // that.state = that.states.wallHang;
-                                that.handleDashEnding(RUN_FALL, ACC_RUN, TICK);
+                                // this.state = this.states.wallHang;
+                                this.handleDashEnding(RUN_FALL, ACC_RUN, TICK);
                             }
-                            that.state = that.states.idle;
+                            this.state = this.states.idle;
                         }
                     } else {
                         if (
-                            that.BB.collide(entity.topBB) ||
-                            that.BB.collide(entity.bottomBB)
+                            this.BB.collide(entity.topBB) ||
+                            this.BB.collide(entity.bottomBB)
                         ) {
-                            if (that.game.keys.Space) {
+                            if (this.game.keys.Space && this.game.keys.KeyK) {
+                                this.state = this.states.idle;
+                                this.handleDashEnding(RUN_FALL, ACC_RUN, TICK);
+                            } else if (this.game.keys.Space) {
                                 // Do nothing lol
                                 // this will prevent player stuck at jump loop
+                            } else if (this.game.keys.KeyK) {
+                                this.state = this.states.idle;
+                                this.handleDashEnding(RUN_FALL, ACC_RUN, TICK);
                             } else {
-                                that.velocity.x = 0;
-                                that.velocity.y += that.fallAcc * TICK;
-                                that.game.keys.KeyK = false;
+                                this.velocity.x = 0;
+                                this.velocity.y += this.fallAcc * TICK;
+                                this.game.keys.KeyK = false;
                             }
                         } else {
-                            that.state = that.states.wallHang;
-                            that.handleDashEnding(RUN_FALL, ACC_RUN, TICK);
+                            this.state = this.states.wallHang;
+                            this.handleDashEnding(RUN_FALL, ACC_RUN, TICK);
                         }
                     }
-                    that.updateBB();
+                    this.updateBB();
                 }
             }
         });
+        // END COLLISION
 
         // update state
         if (
             !this.attacking &&
-            this.state !== this.states.attack1 &&
-            this.state !== this.states.attack2 &&
-            this.state !== this.state.attack3 &&
             this.state !== this.states.jump &&
             this.state !== this.states.fall &&
             this.state !== this.states.wallHang
@@ -805,12 +828,21 @@ class Player {
             } else if (!this.attacking) {
                 this.state = this.states.idle;
             }
+        }
+        // Falling or jumping
+        else if (
+            (this.velocity.y > 0 || this.velocity.y < 0) &&
+            this.state !== this.states.wallHang
+        ) {
+            // Set state to either Air Attack, Jump, or Fall
+            this.state = this.attacking
+                ? this.states.attack2
+                : this.velocity.y > 0
+                ? this.states.fall
+                : this.states.jump;
+            this.isInAir = true;
         } else {
-            if (
-                this.state === this.states.jump ||
-                this.state === this.states.fall
-            )
-                this.isInAir = true;
+            // do nothing
         }
 
         // update direction
@@ -821,7 +853,7 @@ class Player {
 
         // Display values for debugging
         document.getElementById('attacking').innerHTML =
-            'YVelocity: ' + this.velocity.y + ' ' + this.attacking;
+            'YVelocity: ' + this.velocity.y + ' ' + this.isInAir;
         document.getElementById('state').innerHTML = 'State: ' + this.state;
     }
 
@@ -865,9 +897,9 @@ class Player {
             );
             //update to this.facing
             if (this.animations[this.state][this.facing].isDone()) {
-                console.log('finished');
+                // console.log('finished');
                 this.attacking = false;
-                this.comboState = (this.comboState + 1) % 3;
+                // this.comboState = (this.comboState + 1) % 3;
                 this.animations[this.state][this.facing].elapsedTime = 0;
                 //TODO possibly remove this
             }
