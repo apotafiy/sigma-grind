@@ -1,11 +1,12 @@
 class GroundHorse {
     constructor(game, x, y, isStable) {
-        const yOffSet = 35;
+        const yOffSet = 48;
         const xOffSet = 0;
         this.isStable = isStable;
         this.x = x * 64 + xOffSet;
         this.y = y * 64 + yOffSet;
         this.game = game;
+        this.scale = 2.5;
         this.visionDistance = 200;
         this.state = 0;
         this.animations = [];
@@ -85,7 +86,12 @@ class GroundHorse {
         if (this.state == 0) {
             this.BB = undefined;
         } else {
-            this.BB = new BoundingBox(this.x, this.y, 25 * 3, 35 * 3);
+            this.BB = new BoundingBox(
+                this.x,
+                this.y,
+                25 * this.scale,
+                35 * this.scale
+            );
         }
     }
 
@@ -95,7 +101,7 @@ class GroundHorse {
             ctx,
             this.x - this.game.camera.x,
             this.y - this.game.camera.y,
-            3
+            this.scale
         );
         if (params.debug) {
             ctx.strokeStyle = 'Red';

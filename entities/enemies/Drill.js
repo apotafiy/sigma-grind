@@ -28,7 +28,6 @@ class Drill {
     }
 
     die() {
-        this.removeFromWorld = true;
         this.state = 3;
         this.isDead = true;
     }
@@ -163,6 +162,9 @@ class Drill {
 
     update() {
         if (this.isDead) {
+            if (this.animations[this.state].isDone()) {
+                this.removeFromWorld = true;
+            }
             return;
         }
         if (this.state === 1 || this.state === 0) {
