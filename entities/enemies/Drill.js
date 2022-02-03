@@ -5,7 +5,6 @@ class Drill {
         this.game = game;
         this.isActive = false;
         this.player = this.game.getPlayer();
-        this.isDead = false;
         this.lifeExpectancy = lifeExpectancy;
         this.cache = [];
         this.xVelocity = 0;
@@ -29,7 +28,6 @@ class Drill {
 
     die() {
         this.state = 3;
-        this.isDead = true;
     }
 
     drawAngle(ctx, angle) {
@@ -161,7 +159,7 @@ class Drill {
     }
 
     update() {
-        if (this.isDead) {
+        if (this.animations[this.state] === 3) {
             if (this.animations[this.state].isDone()) {
                 this.removeFromWorld = true;
             }
@@ -232,7 +230,7 @@ class Drill {
     }
 
     draw(ctx) {
-        if (this.isDead) {
+        if (this.animations[this.state] === 3) {
             this.animations[this.state].loop = false;
             if (this.animations[this.state].isDone()) {
                 return;
