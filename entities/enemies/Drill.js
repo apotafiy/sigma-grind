@@ -5,7 +5,6 @@ class Drill {
         this.game = game;
         this.isActive = false;
         this.player = this.game.getPlayer();
-        this.isDead = false;
         this.lifeExpectancy = lifeExpectancy;
         this.cache = [];
         this.xVelocity = 0;
@@ -29,7 +28,6 @@ class Drill {
 
     die() {
         this.state = 3;
-        this.isDead = true;
     }
 
     drawAngle(ctx, angle) {
@@ -110,7 +108,7 @@ class Drill {
     }
 
     loadAnimations() {
-        this.animations[0] = new Animator(
+        this.animations[0] = new Animator( // idle
             ASSET_MANAGER.getAsset('./sprites/drill/drill_ready.png'),
             0,
             0,
@@ -122,7 +120,7 @@ class Drill {
             false,
             true
         );
-        this.animations[1] = new Animator(
+        this.animations[1] = new Animator( // ready
             ASSET_MANAGER.getAsset('./sprites/drill/drill_ready.png'),
             0,
             0,
@@ -134,7 +132,7 @@ class Drill {
             false,
             false
         );
-        this.animations[2] = new Animator(
+        this.animations[2] = new Animator( // fly
             ASSET_MANAGER.getAsset('./sprites/drill/drill.png'),
             0,
             0,
@@ -146,7 +144,7 @@ class Drill {
             false,
             true
         );
-        this.animations[3] = new Animator(
+        this.animations[3] = new Animator( // die
             ASSET_MANAGER.getAsset('./sprites/mettaur/fire.png'),
             0,
             0,
@@ -161,13 +159,25 @@ class Drill {
     }
 
     update() {
-        if (this.isDead) {
+        let dist = getDistance(this, this.player);
+        const that = this;
+
+        if (this.state === 3) {
+            // death animation
             if (this.animations[this.state].isDone()) {
                 this.removeFromWorld = true;
             }
             return;
         }
         if (this.state === 1 || this.state === 0) {
+            // idle or ready
+            if (dist < 450 && this.state == 0) {
+                setTimeout(() => {
+                    this.die();
+                }, 1000 * that.lifeExpectancy);
+                this.state = 1;
+            }
+
             if (this.animations[this.state].isDone()) {
                 this.state += 1;
                 this.isActive = true;
@@ -189,55 +199,44 @@ class Drill {
             if (this.angle > 359) {
                 this.angle -= 360;
             }
-        }
+        } else if (this.isActive) {
+            let xdif = (this.player.x - this.x) / dist;
+            let ydif = (this.game.player.y - this.y) / dist;
 
-        let dist = getDistance(this, this.player);
-        const that = this;
-        if (dist < 450 && this.state == 0) {
-            setTimeout(() => {
-                this.die();
-            }, 1000 * that.lifeExpectancy);
-            this.state = 1;
-        }
-        if (!this.isActive) {
-            return;
-        }
-        let xdif = (this.player.x - this.x) / dist;
-        let ydif = (this.game.player.y - this.y) / dist;
+            this.xVelocity -= this.game.clockTick * (this.xVelocity * 0.5);
+            this.yVelocity -= this.game.clockTick * this.yVelocity * 0.5;
+            this.xVelocity +=
+                (xdif * this.acceleration) / (dist * this.DISTANCE_MULT);
+            this.yVelocity +=
+                (ydif * this.acceleration * 2) / (dist * this.DISTANCE_MULT);
+            this.x += this.xVelocity;
+            this.y += this.yVelocity;
+            this.BB.x = this.x + this.offSetBB;
+            this.BB.y = this.y + this.offSetBB;
 
-        this.xVelocity -= this.game.clockTick * (this.xVelocity * 0.5);
-        this.yVelocity -= this.game.clockTick * this.yVelocity * 0.5;
-        this.xVelocity +=
-            (xdif * this.acceleration) / (dist * this.DISTANCE_MULT);
-        this.yVelocity +=
-            (ydif * this.acceleration * 2) / (dist * this.DISTANCE_MULT);
-        this.x += this.xVelocity;
-        this.y += this.yVelocity;
-        this.BB.x = this.x + this.offSetBB;
-        this.BB.y = this.y + this.offSetBB;
+            this.angle = Math.floor(
+                Math.atan(this.yVelocity / this.xVelocity) * (180 / Math.PI)
+            );
 
-        this.angle = Math.floor(
-            Math.atan(this.yVelocity / this.xVelocity) * (180 / Math.PI)
-        );
-
-        if (this.angle < 0) {
-            this.angle += 360;
-        }
-        if (this.xVelocity < 0) {
-            this.angle += 180;
-        }
-        if (this.angle > 359) {
-            this.angle -= 360;
+            if (this.angle < 0) {
+                this.angle += 360;
+            }
+            if (this.xVelocity < 0) {
+                this.angle += 180;
+            }
+            if (this.angle > 359) {
+                this.angle -= 360;
+            }
         }
     }
 
     draw(ctx) {
-        if (this.isDead) {
-            this.animations[this.state].loop = false;
-            if (this.animations[this.state].isDone()) {
-                return;
-            }
-        }
+        // if (this.animations[this.state] === 3) {
+        //     //this.animations[this.state].loop = false;
+        //     if (this.animations[this.state].isDone()) {
+        //         return;
+        //     }
+        // }
         this.drawAngle(ctx, this.angle);
         this.myDrawFrame(this.game.clockTick, ctx);
         if (params.debug && this.BB) {
