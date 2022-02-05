@@ -1,19 +1,41 @@
 class GroundHorse {
-    constructor(game, x, y, isStable) {
-        const yOffSet = 48;
-        const xOffSet = 0;
+    /**
+     *
+     * @param {object} game
+     * @param {num} x
+     * @param {num} y
+     * @param {boolean} isStable
+     * @param {int} spriteVersion version 0 is horse and version 1 is electric spikes
+     */
+    constructor(game, x, y, isStable, spriteVersion) {
+        let yOffSet;
+        let xOffSet;
+        this.game = game;
+        this.animations = [];
+
+        if (spriteVersion == 0) {
+            this.width = 28;
+            this.height = 37;
+            this.scale = 2.5;
+            yOffSet = 48;
+            xOffSet = 0;
+            this.loadAnimationsV0();
+        } else {
+            this.width = 25;
+            this.height = 64;
+            this.scale = 1.5;
+            yOffSet = 40;
+            xOffSet = 10;
+            this.loadAnimationsV1();
+        }
         this.isStable = isStable;
         this.x = x * 64 + xOffSet;
         this.y = y * 64 + yOffSet;
-        this.game = game;
-        this.scale = 2.5;
         this.visionDistance = 200;
         this.state = 0;
-        this.animations = [];
-        this.loadAnimations();
     }
 
-    loadAnimations() {
+    loadAnimationsV0() {
         this.animations[0] = new Animator( // down idle
             ASSET_MANAGER.getAsset('./sprites/groundhorse.png'),
             0,
@@ -64,6 +86,57 @@ class GroundHorse {
         );
     }
 
+    loadAnimationsV1() {
+        this.animations[0] = new Animator( // down idle
+            ASSET_MANAGER.getAsset('./sprites/sparky.png'),
+            0,
+            0,
+            25,
+            64,
+            3,
+            0.2,
+            0,
+            false,
+            false
+        );
+        this.animations[1] = new Animator( // jumps up
+            ASSET_MANAGER.getAsset('./sprites/sparky.png'),
+            75,
+            0,
+            25,
+            64,
+            3,
+            0.1,
+            0,
+            false,
+            false
+        );
+        this.animations[2] = new Animator( // up idle
+            ASSET_MANAGER.getAsset('./sprites/sparky.png'),
+            150,
+            0,
+            25,
+            64,
+            6,
+            0.1,
+            0,
+            false,
+            false
+        );
+        this.animations[3] = new Animator( // go back down
+            ASSET_MANAGER.getAsset('./sprites/sparky.png'),
+            300,
+            0,
+            25,
+            64,
+            2,
+            0.1,
+            0,
+            false,
+            false
+        );
+    }
+
     update() {
         if (this.isStable) {
             this.state = 2;
@@ -89,8 +162,8 @@ class GroundHorse {
             this.BB = new BoundingBox(
                 this.x,
                 this.y,
-                25 * this.scale,
-                35 * this.scale
+                this.width * this.scale,
+                this.height * this.scale
             );
         }
     }
