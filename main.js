@@ -95,10 +95,11 @@ ASSET_MANAGER.downloadAll(() => {
     gameEngine.addEntity(new PopUpEnemy(gameEngine, 13, 5, false, 0));
     gameEngine.addEntity(new PopUpEnemy(gameEngine, 14, 5, false, 0));
 
-    gameEngine.addEntity(new Spike(gameEngine, 16, 7, 0));
-    gameEngine.addEntity(new Spike(gameEngine, 17, 7, 1));
-    gameEngine.addEntity(new Spike(gameEngine, 18, 7, 2));
-    gameEngine.addEntity(new Spike(gameEngine, 19, 7, 3));
+    gameEngine.addEntity(new Spike(gameEngine, 16, 1, 4, 1, 0));
+    gameEngine.addEntity(new Spike(gameEngine, 16, 2, 4, 1, 1));
+    gameEngine.addEntity(new Spike(gameEngine, 16, 3, 4, 1, 2));
+    gameEngine.addEntity(new Spike(gameEngine, 16, 4, 4, 1, 3));
+    gameEngine.addEntity(new Spike(gameEngine, 15, 1, 1, 4, 3));
 
     // gameEngine.addEntity(new GroundHorse(gameEngine, 36, 0));
     gameEngine.addEntity(new Water(gameEngine));
