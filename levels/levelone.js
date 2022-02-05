@@ -16,29 +16,36 @@ function loadLevelOne(gameEngine){
     // LVL 1 TUNNEL ADD SPIKES
     //tunnel top
     gameEngine.addEntity(new Ground(gameEngine, 1, 40, -35, 5, 20, 1, 0, 0));
+        //spikes (for now ground horse lol)
+        for(let i = 0; i <5; i++ ){
+            gameEngine.addEntity(new GroundHorse(gameEngine,40+i, -13,true));
+        }
     //TUNNEL BOTTOM
-    gameEngine.addEntity(new Ground(gameEngine, 1, 40, -11, 5, 5, 1, 0, 0));
+    gameEngine.addEntity(new Ground(gameEngine, 1, 40, -11, 5, 4, 1, 0, 0));
     //expand into tunnel going left 
     gameEngine.addEntity(new Ground(gameEngine, 1, 9, -10, 25, 6, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 1, 15, -30, 25, 13, 1, 0, 0));
     //dash wall jump tutorial
-    gameEngine.addEntity(new Ground(gameEngine, 1, 0, -40, 9, 36, 1, 0, 0));
+    gameEngine.addEntity(new Ground(gameEngine, 1, 0, -45, 9, 41, 1, 0, 0));
         //nubs on wall to force dash
         gameEngine.addEntity(new Ground(gameEngine, 1, 13, -25, 2, 1, 1, 0, 0));
         gameEngine.addEntity(new Ground(gameEngine, 1, 9, -21, 2, 1, 1, 0, 0));
     //top of wall dash tutorial tunnel
-    gameEngine.addEntity(new Ground(gameEngine, 1, 9, -40, 10, 4, 1, 0, 0));
-      //close gap this is just so i can get in lol^
-    gameEngine.addEntity(new Ground(gameEngine, 1, 23, -40, 10, 4, 1, 0, 0));
+    gameEngine.addEntity(new Ground(gameEngine, 1, 9, -45, 10, 9, 1, 0, 0));
+      //close gap this is just so i can get in lol^ ( or make this a secret because it is hard to access lol)
+    gameEngine.addEntity(new Ground(gameEngine, 1, 23, -45, 12, 9, 1, 0, 0));
 
     //well for enemies 
     gameEngine.addEntity(new Ground(gameEngine, 1, 15, -31, 3, 1, 1, 0, 0));
         //enemies for player to Kill
-        gameEngine.addEntity(new Mettaur(gameEngine, 17,-31, gravity));
-        gameEngine.addEntity(new Mettaur(gameEngine, 19,-31, gravity));
-        gameEngine.addEntity(new Mettaur(gameEngine, 21,-31, gravity));
+        gameEngine.addEntity(new Mettaur(gameEngine, 20,-32, gravity));
+        gameEngine.addEntity(new Mettaur(gameEngine, 21,-32, gravity));
+        gameEngine.addEntity(new Mettaur(gameEngine, 22,-32, gravity));
     gameEngine.addEntity(new Ground(gameEngine, 1, 37, -32, 3, 2, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 1, 34, -31, 3, 2, 1, 0, 0));
+
+    //top of tunnel to start new levels
+    gameEngine.addEntity(new Ground(gameEngine, 1, 35, -50,17, 9, 1, 0, 0));
     
     
   

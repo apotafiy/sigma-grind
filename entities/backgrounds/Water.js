@@ -48,7 +48,7 @@ class Water {
         this.animations[0].drawFrame(
             this.game.clockTick,
             ctx,
-            -100 + this.xoffset,
+            -200 + this.xoffset,
             0,
             4
         );
