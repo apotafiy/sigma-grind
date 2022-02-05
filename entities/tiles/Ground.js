@@ -90,7 +90,7 @@ class Ground {
             this.game.entities.forEach(function (entity) {
                 //if it is a ground entity that is no more than 32 pixels above it  or it is within a block
                 if (
-                    entity instanceof Ground &&
+                   ( entity instanceof Ground || entity instanceof Spike) &&
                     entity.BB.bottom <= that.BB.top &&
                     (Math.abs(entity.BB.bottom - that.BB.top) <= 32 ||
                         (that.BB.top <= entity.BB.bottom &&

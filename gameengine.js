@@ -19,6 +19,8 @@ class GameEngine {
             KeyA: false,
             KeyS: false,
             KeyD: false,
+            //give height!
+            ArrowUp:false,
 
             // Jump
             Space: false,
@@ -112,6 +114,13 @@ class GameEngine {
                 this.keys[event.code] = false;
             } else {
                 this.keys[event.code] = true;
+            }
+                //debug for level building
+                //TODO REMOVE!
+            if (event.code === 'ArrowUp') {
+                this.keys["ArrowsUp"] = true;
+            } else {
+                this.keys["ArrowUp"] = false;
             }
 
             // Prevent scrolling while using the canvas

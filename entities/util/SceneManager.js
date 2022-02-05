@@ -122,6 +122,13 @@ class SceneManager {
 
     draw(ctx) {
         if(params.debug) {
+            //draw the grid of text 
+            // for(let i = -100; i < 0; i++){
+            //     for(let j = 0;j < 100; j++){
+            //         ctx.font = "5px Arial";
+            //         ctx.strokeText("X: " + i + "\nY: " + j, i * 64, j * 64); 
+            //     }
+            // }
           let that = this;
         ctx.strokeStyle = "Blue";
         ctx.strokelin;
