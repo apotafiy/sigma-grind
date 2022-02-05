@@ -1,4 +1,4 @@
-class GroundHorse {
+class PopUpEnemy {
     /**
      *
      * @param {object} game

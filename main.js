@@ -86,13 +86,13 @@ ASSET_MANAGER.downloadAll(() => {
             new Mettaur(gameEngine, 200 + i * 100, 0, gravity)
         );
     }
-    gameEngine.addEntity(new GroundHorse(gameEngine, 36, 0, false, 0));
-    gameEngine.addEntity(new GroundHorse(gameEngine, 9, 5, true, 1));
-    gameEngine.addEntity(new GroundHorse(gameEngine, 10, 5, false, 1));
-    gameEngine.addEntity(new GroundHorse(gameEngine, 11, 5, false, 1));
-    gameEngine.addEntity(new GroundHorse(gameEngine, 12, 5, false, 0));
-    gameEngine.addEntity(new GroundHorse(gameEngine, 13, 5, false, 0));
-    gameEngine.addEntity(new GroundHorse(gameEngine, 14, 5, false, 0));
+    gameEngine.addEntity(new PopUpEnemy(gameEngine, 36, 0, false, 0));
+    gameEngine.addEntity(new PopUpEnemy(gameEngine, 9, 5, true, 1));
+    gameEngine.addEntity(new PopUpEnemy(gameEngine, 10, 5, false, 1));
+    gameEngine.addEntity(new PopUpEnemy(gameEngine, 11, 5, false, 1));
+    gameEngine.addEntity(new PopUpEnemy(gameEngine, 12, 5, false, 0));
+    gameEngine.addEntity(new PopUpEnemy(gameEngine, 13, 5, false, 0));
+    gameEngine.addEntity(new PopUpEnemy(gameEngine, 14, 5, false, 0));
 
     // gameEngine.addEntity(new GroundHorse(gameEngine, 36, 0));
     gameEngine.addEntity(new Water(gameEngine));
