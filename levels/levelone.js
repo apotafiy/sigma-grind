@@ -1,11 +1,11 @@
 function loadLevelOne(gameEngine){
     let gravity = 0.2;
-    // gameEngine.addEntity(new Player(gameEngine, 68, -40, gravity));
+    // gameEngine.addEntity(new Player(gameEngine, 90, -5, gravity));
     gameEngine.addEntity(new Player(gameEngine, 3
         , 0, gravity));
     //add camera
     gameEngine.addEntity(new SceneManager(gameEngine));
-    gameEngine.addEntity(new Ground(gameEngine, 1, 0, -4 , 1, 12, 1, 0, 1));
+    gameEngine.addEntity(new Ground(gameEngine, 1, -5, -6 , 6, 20, 1, 0, 1));
     //start ground
     gameEngine.addEntity(new Ground(gameEngine, 1, 1, 7, 15, 1, 1, 0, 1));
 
@@ -78,7 +78,7 @@ function loadLevelOne(gameEngine){
 
     //Start of second part (actual level!)
     //slide down spiked walls with dashing NEEDED
-    gameEngine.addEntity(new Ground(gameEngine, 1, 77, -50,8, 44, 1, 0, 0));
+    gameEngine.addEntity(new Ground(gameEngine, 1, 77, -50,6, 44, 1, 0, 0));
         //near wall spikes!
         gameEngine.addEntity(new Spike(gameEngine, 70,-34,1,5,1));
 
@@ -91,13 +91,35 @@ function loadLevelOne(gameEngine){
         //alternate wall spike force dash
         gameEngine.addEntity(new Spike(gameEngine, 76,-11,1,5,3));
         gameEngine.addEntity(new Spike(gameEngine, 76,-3,1,4,3));
-    gameEngine.addEntity(new Ground(gameEngine, 1, 77, -3,8, 15, 1, 0, 0));
+        //bottom tunnel wall
+    gameEngine.addEntity(new Ground(gameEngine, 1, 77, -3,8, 16, 1, 0, 0));
     //block off the bottom
     gameEngine.addEntity(new Ground(gameEngine, 1, 70, 2,7, 6, 0, 0, 0));
         gameEngine.addEntity(new Spike(gameEngine, 70,1,6,1,0));
 
-
-
+    //bottom pit with mettaurs
+    gameEngine.addEntity(new Ground(gameEngine, 1, 85,-2,18, 6, 1, 0, 0));
+        gameEngine.addEntity(new Mettaur(gameEngine, 89,-4, gravity));
+        gameEngine.addEntity(new Mettaur(gameEngine, 90,-4, gravity));
+        gameEngine.addEntity(new Mettaur(gameEngine, 92,-4, gravity));
+    //wall extending up  a little
+    gameEngine.addEntity(new Ground(gameEngine, 1, 95,-6,4,4, 1, 0, 0));
+     //big wall force dash distance
+     gameEngine.addEntity(new Ground(gameEngine, 1, 103,-32,4,36, 1, 0, 0));
+        //platform to dash too
+        gameEngine.addEntity(new Ground(gameEngine, 1, 92,-13,2,1, 1, 1, 1));
+        // gameEngine.addEntity(new Spike(gameEngine,95,-12,2,1,2)); <--- Maybe?
+        //spikes to stop player from going higher
+        gameEngine.addEntity(new Spike(gameEngine,102,-31,1,15,3));
+    //set up cavern to jump into from platforms
+    gameEngine.addEntity(new Ground(gameEngine, 1, 83, -50,3, 30, 1, 0, 0));
+    gameEngine.addEntity(new Ground(gameEngine, 1, 83, -15,3, 5, 1, 0, 1));
+        //hang spikes on bottom to stop player from getting up
+        gameEngine.addEntity(new Spike(gameEngine,83,-10,3,1,2));
+    //higher platform  to dash too
+    gameEngine.addEntity(new Ground(gameEngine, 1, 92,-20,2,1, 1, 1, 1));
+    //even higher! platform  to dash too
+    gameEngine.addEntity(new Ground(gameEngine, 1, 92,-30,2,1, 1, 1, 1));
     //do all the grass checkForGrass
     gameEngine.entities.forEach(function (entity) {
         if (entity instanceof Ground) entity.checkForGrass();
