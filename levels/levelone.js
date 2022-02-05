@@ -4,6 +4,26 @@ function loadLevelOne(gameEngine){
     // gameEngine.addEntity(new Player(gameEngine, 200, 0, gravity));
     //add camera
     gameEngine.addEntity(new SceneManager(gameEngine));
+
+    //start ground
+    gameEngine.addEntity(new Ground(gameEngine, 1, 1, 7, 15, 1, 1, 0, 1));
+
+    gameEngine.addEntity(new Ground(gameEngine, 1, 1, 6, 8, 1, 1, 0, 1));
+    gameEngine.addEntity(new Ground(gameEngine, 1, 3, 5, 2, 1, 1, 0, 0));
+
+    //add platforms for the player to jump on
+    gameEngine.addEntity(new Ground(gameEngine, 1, 20, 5, 14, 1, 1, 1, 1));
+    gameEngine.addEntity(new Ground(gameEngine, 1, 24, 3, 5, 2, 1, 0, 0));
+    gameEngine.addEntity(new Ground(gameEngine, 1, 32, 2, 2, 1, 1, 1, 1));
+    //2 pillars
+    gameEngine.addEntity(new Ground(gameEngine, 1, 36, 2, 2, 6, 1, 0, 0));
+        //spikes in between them
+        gameEngine.addEntity(new Spike(gameEngine, 38,7,2,1,0));
+    gameEngine.addEntity(new Ground(gameEngine, 1, 40, 1, 2, 7, 1, 0, 0));
+    //little platform at end
+    gameEngine.addEntity(new Ground(gameEngine, 1, 44, 1, 2, 1, 1, 1, 1));
+        gameEngine.addEntity(new Spike(gameEngine, 42,7,8,1,0));
+
     //back wall
     // gameEngine.addEntity(new Ground(gameEngine, 1, -9,-10, 10, 25, 1, 0, 1));
     gameEngine.addEntity(new Ground(gameEngine, 1, 0, 8, 15, 4, 1));
@@ -23,6 +43,11 @@ function loadLevelOne(gameEngine){
     gameEngine.addEntity(new Ground(gameEngine, 1, 40, -11, 5, 4, 1, 0, 0));
     //expand into tunnel going left 
     gameEngine.addEntity(new Ground(gameEngine, 1, 9, -10, 25, 6, 1, 0, 0));
+        //spikes for pogo 
+         //spikes in between them
+         gameEngine.addEntity(new Spike(gameEngine, 15,-11,13,1,0));
+         gameEngine.addEntity(new Spike(gameEngine, 15,-17,13,1,2));
+    //top of tunnel
     gameEngine.addEntity(new Ground(gameEngine, 1, 15, -30, 25, 13, 1, 0, 0));
     //dash wall jump tutorial
     gameEngine.addEntity(new Ground(gameEngine, 1, 0, -45, 9, 41, 1, 0, 0));
@@ -49,27 +74,6 @@ function loadLevelOne(gameEngine){
      gameEngine.addEntity(new Ground(gameEngine, 1, 45, -35, 25, 6, 1, 0, 0));
     
   
-
-    //start ground
-    gameEngine.addEntity(new Ground(gameEngine, 1, 1, 7, 15, 1, 1, 0, 1));
-
-    gameEngine.addEntity(new Ground(gameEngine, 1, 1, 6, 8, 1, 1, 0, 1));
-    gameEngine.addEntity(new Ground(gameEngine, 1, 3, 5, 2, 1, 1, 0, 0));
-
-    
-
-    //add platforms for the player to jump on
-    gameEngine.addEntity(new Ground(gameEngine, 1, 20, 5, 14, 1, 1, 1, 1));
-    gameEngine.addEntity(new Ground(gameEngine, 1, 24, 3, 5, 2, 1, 0, 0));
-    gameEngine.addEntity(new Ground(gameEngine, 1, 32, 2, 2, 1, 1, 1, 1));
-    //2 pillars
-    gameEngine.addEntity(new Ground(gameEngine, 1, 36, 2, 2, 6, 1, 0, 0));
-        //spikes in between them
-        gameEngine.addEntity(new Spike(gameEngine, 38,7,2,1,0));
-    gameEngine.addEntity(new Ground(gameEngine, 1, 40, 1, 2, 7, 1, 0, 0));
-    //little platform at end
-    gameEngine.addEntity(new Ground(gameEngine, 1, 44, 1, 2, 1, 1, 1, 1));
-        gameEngine.addEntity(new Spike(gameEngine, 42,7,8,1,0));
 
     //do all the grass checkForGrass
     gameEngine.entities.forEach(function (entity) {
