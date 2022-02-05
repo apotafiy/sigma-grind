@@ -11,6 +11,7 @@ function loadLevelOne(gameEngine){
     gameEngine.addEntity(new Ground(gameEngine, 1, 50, 2, 10, 16, 1, 0, 1));
     //RIGHT WALL!
     gameEngine.addEntity(new Ground(gameEngine, 1, 60, -20, 10, 40, 1, 0, 0));
+        gameEngine.addEntity(new Ground(gameEngine, 1, 65, -29, 5, 9, 1, 0, 0));
     //PLATFORMS
     gameEngine.addEntity(new Ground(gameEngine, 1, 50, -15, 5, 8, 1, 0, 0));
     // LVL 1 TUNNEL ADD SPIKES
@@ -45,8 +46,9 @@ function loadLevelOne(gameEngine){
     gameEngine.addEntity(new Ground(gameEngine, 1, 34, -31, 3, 2, 1, 0, 0));
 
     //top of tunnel to start new levels
-    gameEngine.addEntity(new Ground(gameEngine, 1, 35, -50,17, 9, 1, 0, 0));
-    
+    gameEngine.addEntity(new Ground(gameEngine, 1, 35, -50,35, 9, 1, 0, 0));
+     //botom of that tunnel
+     gameEngine.addEntity(new Ground(gameEngine, 1, 45, -35, 25, 6, 1, 0, 0));
     
   
 
