@@ -1,10 +1,11 @@
 function loadLevelOne(gameEngine){
     let gravity = 0.2;
-    gameEngine.addEntity(new Player(gameEngine, 200, 0, gravity));
-    // gameEngine.addEntity(new Player(gameEngine, 200, 0, gravity));
+    // gameEngine.addEntity(new Player(gameEngine, 68, -40, gravity));
+    gameEngine.addEntity(new Player(gameEngine, 3
+        , 0, gravity));
     //add camera
     gameEngine.addEntity(new SceneManager(gameEngine));
-
+    gameEngine.addEntity(new Ground(gameEngine, 1, 0, -4 , 1, 12, 1, 0, 1));
     //start ground
     gameEngine.addEntity(new Ground(gameEngine, 1, 1, 7, 15, 1, 1, 0, 1));
 
@@ -69,21 +70,44 @@ function loadLevelOne(gameEngine){
     gameEngine.addEntity(new Ground(gameEngine, 1, 34, -31, 3, 2, 1, 0, 0));
 
     //top of tunnel to start new levels
-    gameEngine.addEntity(new Ground(gameEngine, 1, 35, -50,35, 9, 1, 0, 0));
+    gameEngine.addEntity(new Ground(gameEngine, 1, 35, -50,42, 9, 1, 0, 0));
      //botom of that tunnel
      gameEngine.addEntity(new Ground(gameEngine, 1, 45, -35, 25, 6, 1, 0, 0));
     
-  
+    
+
+    //Start of second part (actual level!)
+    //slide down spiked walls with dashing NEEDED
+    gameEngine.addEntity(new Ground(gameEngine, 1, 77, -50,8, 44, 1, 0, 0));
+        //near wall spikes!
+        gameEngine.addEntity(new Spike(gameEngine, 70,-34,1,5,1));
+
+        //alternate wall spike force dash
+        gameEngine.addEntity(new Spike(gameEngine, 76,-26,1,5,3));
+
+         //alternate wall spike force dash
+         gameEngine.addEntity(new Spike(gameEngine, 70,-18,1,5,1));
+
+        //alternate wall spike force dash
+        gameEngine.addEntity(new Spike(gameEngine, 76,-11,1,5,3));
+        gameEngine.addEntity(new Spike(gameEngine, 76,-3,1,4,3));
+    gameEngine.addEntity(new Ground(gameEngine, 1, 77, -3,8, 15, 1, 0, 0));
+    //block off the bottom
+    gameEngine.addEntity(new Ground(gameEngine, 1, 70, 2,7, 6, 0, 0, 0));
+        gameEngine.addEntity(new Spike(gameEngine, 70,1,6,1,0));
+
+
 
     //do all the grass checkForGrass
     gameEngine.entities.forEach(function (entity) {
         if (entity instanceof Ground) entity.checkForGrass();
     });
 
+
+
+
     // gameEngine.addEntity(new GroundHorse(gameEngine, 36, 0));
     gameEngine.addEntity(new Water(gameEngine));
 
-    gameEngine.addEntity(new Ground(gameEngine, 1, 0, 0, 1, 8, 1, 0, 1));
-
-    gameEngine.addEntity(new Water(gameEngine));
+    // gameEngine.addEntity(new Water(gameEngine));
 }
