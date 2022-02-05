@@ -179,11 +179,9 @@ class PopUpEnemy {
         if (params.debug) {
             ctx.strokeStyle = 'Red';
             if (this.BB) {
-                this.BB.x = this.BB.x - this.game.camera.x;
-                this.BB.y = this.BB.y - this.game.camera.y;
                 ctx.strokeRect(
-                    this.BB.x,
-                    this.BB.y,
+                    this.BB.x - this.game.camera.x,
+                    this.BB.y - this.game.camera.y,
                     this.BB.width,
                     this.BB.height
                 );

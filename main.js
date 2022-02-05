@@ -20,6 +20,7 @@ ASSET_MANAGER.queueDownload('./sprites/drill/drill.png');
 ASSET_MANAGER.queueDownload('./sprites/drill/drill_ready.png');
 ASSET_MANAGER.queueDownload('./sprites/groundhorse.png');
 ASSET_MANAGER.queueDownload('./sprites/sparky.png');
+ASSET_MANAGER.queueDownload('./sprites/spike1.png');
 
 //player animations
 ASSET_MANAGER.queueDownload('./sprites/player/player-idle-43x48.png');
@@ -93,6 +94,11 @@ ASSET_MANAGER.downloadAll(() => {
     gameEngine.addEntity(new PopUpEnemy(gameEngine, 12, 5, false, 0));
     gameEngine.addEntity(new PopUpEnemy(gameEngine, 13, 5, false, 0));
     gameEngine.addEntity(new PopUpEnemy(gameEngine, 14, 5, false, 0));
+
+    gameEngine.addEntity(new Spike(gameEngine, 16, 7, 0));
+    gameEngine.addEntity(new Spike(gameEngine, 17, 7, 1));
+    gameEngine.addEntity(new Spike(gameEngine, 18, 7, 2));
+    gameEngine.addEntity(new Spike(gameEngine, 19, 7, 3));
 
     // gameEngine.addEntity(new GroundHorse(gameEngine, 36, 0));
     gameEngine.addEntity(new Water(gameEngine));
