@@ -18,9 +18,7 @@ function loadLevelOne(gameEngine){
     //tunnel top
     gameEngine.addEntity(new Ground(gameEngine, 1, 40, -35, 5, 20, 1, 0, 0));
         //spikes (for now ground horse lol)
-        for(let i = 0; i <5; i++ ){
-            gameEngine.addEntity(new GroundHorse(gameEngine,40+i, -13,true));
-        }
+        gameEngine.addEntity(new Spike(gameEngine, 40,-12,5,1,0));
     //TUNNEL BOTTOM
     gameEngine.addEntity(new Ground(gameEngine, 1, 40, -11, 5, 4, 1, 0, 0));
     //expand into tunnel going left 
@@ -52,7 +50,7 @@ function loadLevelOne(gameEngine){
     
   
 
-
+    //start ground
     gameEngine.addEntity(new Ground(gameEngine, 1, 1, 7, 15, 1, 1, 0, 1));
 
     gameEngine.addEntity(new Ground(gameEngine, 1, 1, 6, 8, 1, 1, 0, 1));
@@ -64,9 +62,14 @@ function loadLevelOne(gameEngine){
     gameEngine.addEntity(new Ground(gameEngine, 1, 20, 5, 14, 1, 1, 1, 1));
     gameEngine.addEntity(new Ground(gameEngine, 1, 24, 3, 5, 2, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 1, 32, 2, 2, 1, 1, 1, 1));
+    //2 pillars
     gameEngine.addEntity(new Ground(gameEngine, 1, 36, 2, 2, 6, 1, 0, 0));
+        //spikes in between them
+        gameEngine.addEntity(new Spike(gameEngine, 38,7,2,1,0));
     gameEngine.addEntity(new Ground(gameEngine, 1, 40, 1, 2, 7, 1, 0, 0));
+    //little platform at end
     gameEngine.addEntity(new Ground(gameEngine, 1, 44, 1, 2, 1, 1, 1, 1));
+        gameEngine.addEntity(new Spike(gameEngine, 42,7,8,1,0));
 
     //do all the grass checkForGrass
     gameEngine.entities.forEach(function (entity) {
