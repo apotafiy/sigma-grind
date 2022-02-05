@@ -1,48 +1,77 @@
 ﻿<!DOCTYPE html>
 <html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Sigma Grind</title>
+        <style>
+            body {
+                font-family: Helvetica, sans-serif;
+                font-size: 24px;
+                padding: 20px;
+            }
+        </style>
 
-<head>
-  <meta charset="utf-8" />
-  <title>Sigma Grind</title>
-  <style>
-    body {
-      font-family: Helvetica, sans-serif;
-      font-size: 24px;
-      padding: 20px;
-    }
-  </style>
+        <script type="text/javascript" src="./assetmanager.js"></script>
+        <script type="text/javascript" src="./timer.js"></script>
+        <script type="text/javascript" src="./gameengine.js"></script>
+        <script type="text/javascript" src="./util.js"></script>
+        <script
+            type="text/javascript"
+            src="./entities/util/SceneManager.js"
+        ></script>
+        <script
+            type="text/javascript"
+            src="./entities/util/BoundingBox.js"
+        ></script>
+        <script
+            type="text/javascript"
+            src="./entities/tiles/Ground.js"
+        ></script>
+        <script
+            type="text/javascript"
+            src="./entities/backgrounds/Water.js"
+        ></script>
+        <script
+            type="text/javascript"
+            src="./entities/enemies/PopUpEnemy.js"
+        ></script>
+        <script
+            type="text/javascript"
+            src="./entities/enemies/Spike.js"
+        ></script>
+        <script
+            type="text/javascript"
+            src="./entities/enemies/Drill.js"
+        ></script>
+        <script
+            type="text/javascript"
+            src="./entities/enemies/Mettaur.js"
+        ></script>
+        <script type="text/javascript" src="./entities/Player.js"></script>
+        <script type="text/javascript" src="./animator.js"></script>
+        <script type="text/javascript" src="./main.js"></script>
+        <script type="text/javascript" src="./dat.gui.min.js"></script>
+        <script type="text/javascript" src="./stats.min.js"></script>
+    </head>
 
-  <script type="text/javascript" src="./assetmanager.js"></script>
-  <script type="text/javascript" src="./timer.js"></script>
-  <script type="text/javascript" src="./gameengine.js"></script>
-  <script type="text/javascript" src="./util.js"></script>
-  <script type="text/javascript" src="./entities/util/SceneManager.js"></script>
-  <script type="text/javascript" src="./entities/util/BoundingBox.js"></script>
-  <script type="text/javascript" src="./entities/tiles/Ground.js"></script>
-  <script type="text/javascript" src="./entities/backgrounds/Water.js"></script>
-  <script type="text/javascript" src="./entities/enemies/GroundHorse.js"></script>
-  <script type="text/javascript" src="./entities/enemies/Drill.js"></script>
-  <script type="text/javascript" src="./entities/enemies/Mettaur.js"></script>
-  <script type="text/javascript" src="./entities/Player.js"></script>
-  <script type="text/javascript" src="./animator.js"></script>
-  <script type="text/javascript" src="./main.js"></script>
-  <script type="text/javascript" src="./dat.gui.min.js"></script>
-  <script type="text/javascript" src="./stats.min.js"></script>
-</head>
-
-<body style="margin: 0; height: 100%">
-  <div>
-    Sigma Grind
-    <br />
-  </div>
-  <canvas id="gameWorld" width="1024" height="768" style="background: rgb(255, 255, 255); border: 1px solid black"
-    tabindex="0" autofocus></canvas>
-  <div>
-    <br />
-    <input type="checkbox" id="debug" /> Debug
-  </div>
-  <p id="state"></p>
-  <p id="attacking"></p>
-</body>
-
+    <body style="margin: 0; height: 100%">
+        <div>
+            Sigma Grind
+            <br />
+        </div>
+        <canvas
+            id="gameWorld"
+            width="1024"
+            height="768"
+            style="background: rgb(255, 255, 255); border: 1px solid black"
+            tabindex="0"
+            autofocus
+        ></canvas>
+        <div>
+            <br />
+            <input type="checkbox" id="debug" /> Debug
+        </div>
+        <p id="state"></p>
+        <p id="attacking"></p>
+    </body>
 </html>
