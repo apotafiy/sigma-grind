@@ -10,8 +10,9 @@
       font-size: 24px;
       padding: 20px;
     }
-  </style>
-
+  </style>    
+  <link rel="stylesheet" href="./index.css">
+  <script type="text/javascript" src="./levels/levelone.js"></script>
   <script type="text/javascript" src="./assetmanager.js"></script>
   <script type="text/javascript" src="./timer.js"></script>
   <script type="text/javascript" src="./gameengine.js"></script>
@@ -31,11 +32,11 @@
 </head>
 
 <body style="margin: 0; height: 100%">
-  <div>
-    Sigma Grind
+  <div class ="center">
+    <img class = "center" src="./sprites/titlecard.png" alt="Italian Trulli" style="width:50%; height:50%">
     <br />
   </div>
-  <canvas id="gameWorld" width="1024" height="768" style="background: rgb(255, 255, 255); border: 1px solid black"
+  <canvas id="gameWorld" width="1024" height="768" class="center" style="background: rgb(255, 255, 255); border: 4px solid rgb(29, 0, 158); padding:0px"
     tabindex="0" autofocus></canvas>
   <div>
     <br />

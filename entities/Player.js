@@ -571,7 +571,8 @@ class Player {
                 }
             }
             // END PHYSICS
-
+            //TODO remove this is debug!
+           
             // ACTIONS GOES BELOW HERE
 
             // Dashing
@@ -659,6 +660,10 @@ class Player {
         }
 
         // UPDATE POSITION
+        if(this.game.keys.ArrowUp){
+            console.log("pressed")
+            this.velocity.y -= 80;
+        }
         // scale = 3
         this.x += this.velocity.x * TICK * 3;
         this.y += this.velocity.y * TICK * 3;
