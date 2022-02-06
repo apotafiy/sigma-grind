@@ -21,7 +21,10 @@ ASSET_MANAGER.queueDownload('./sprites/drill/drill_ready.png');
 ASSET_MANAGER.queueDownload('./sprites/groundhorse.png');
 ASSET_MANAGER.queueDownload('./sprites/sparky.png');
 ASSET_MANAGER.queueDownload('./sprites/spike1.png');
-
+//DogBosds animations
+ASSET_MANAGER.queueDownload('./sprites/dogboss/dogboss_walk_130x96.png');
+ASSET_MANAGER.queueDownload('./sprites/dogboss/dogboss_front_facing_128x96.png');
+ASSET_MANAGER.queueDownload('./sprites/dogboss/dogboss_projectile_37x32.png');
 //player animations
 ASSET_MANAGER.queueDownload('./sprites/player/player-idle-43x48.png');
 ASSET_MANAGER.queueDownload('./sprites/player/player-run-51x49.png');

@@ -1,10 +1,10 @@
 function loadLevelOne(gameEngine){
     let gravity = 0.2;
-    // gameEngine.addEntity(new Player(gameEngine, 90, -5, gravity));
-    gameEngine.addEntity(new Player(gameEngine, 3
-        , 0, gravity));
+    gameEngine.addEntity(new Player(gameEngine, 108, -35, gravity));
+    // gameEngine.addEntity(new Player(gameEngine, 3
+    //     , 0, gravity));
     //add camera
-    gameEngine.addEntity(new SceneManager(gameEngine));
+  
     gameEngine.addEntity(new Ground(gameEngine, 1, -5, -6 , 6, 20, 1, 0, 1));
     //start ground
     gameEngine.addEntity(new Ground(gameEngine, 1, 1, 7, 15, 1, 1, 0, 1));
@@ -105,7 +105,7 @@ function loadLevelOne(gameEngine){
     //wall extending up  a little
     gameEngine.addEntity(new Ground(gameEngine, 1, 95,-6,4,4, 1, 0, 0));
      //big wall force dash distance
-     gameEngine.addEntity(new Ground(gameEngine, 1, 103,-32,4,36, 1, 0, 0));
+     gameEngine.addEntity(new Ground(gameEngine, 1, 103,-34,4,38, 1, 0, 0));
         //platform to dash too
         gameEngine.addEntity(new Ground(gameEngine, 1, 92,-13,2,1, 1, 1, 1));
         // gameEngine.addEntity(new Spike(gameEngine,95,-12,2,1,2)); <--- Maybe?
@@ -121,6 +121,15 @@ function loadLevelOne(gameEngine){
     //even higher! platform  to dash too
     gameEngine.addEntity(new Ground(gameEngine, 1, 92,-30,2,1, 1, 1, 1));
     //do all the grass checkForGrass
+
+    //boss arena
+    gameEngine.addEntity(new Ground(gameEngine, 1, 107,-31,30,5, 1, 0, 0));
+    gameEngine.addEntity(new Ground(gameEngine, 1, 107,-32,3, 1, 1, 0, 0));
+        gameEngine.addEntity(new DogBoss(gameEngine,115,-40, gravity))
+        // gameEngine.addEntity(new GroundProjectile(gameEngine,7360,-2560,2,-2, gravity))
+    gameEngine.addEntity(new Ground(gameEngine, 1, 135,-32,2, 1, 1, 0, 0));
+
+    //Grass Check
     gameEngine.entities.forEach(function (entity) {
         if (entity instanceof Ground) entity.checkForGrass();
     });
@@ -130,6 +139,6 @@ function loadLevelOne(gameEngine){
 
     // gameEngine.addEntity(new GroundHorse(gameEngine, 36, 0));
     gameEngine.addEntity(new Water(gameEngine));
-
+    gameEngine.addEntity(new SceneManager(gameEngine));
     // gameEngine.addEntity(new Water(gameEngine));
 }
