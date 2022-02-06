@@ -5,7 +5,7 @@ class GroundProjectile {
     
     constructor(game, x, y, xVel, yVel,direction, gravity) {
         this.scale = 2.5;
-        this.time = this.getRandomInt(100,200);
+        this.time =  200;//this.getRandomInt(100,200);
         this.attacking = 0;
         this.game = game;
         this.currentState = 0;

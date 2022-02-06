@@ -694,6 +694,14 @@ class Player {
                     //if it has die method it should die
                     entity.die();
                 }
+                if (entity && entity instanceof DogBoss) {
+                    // console.log('kILL dRILL');
+                    //if it has die method it should die
+                    if(entity.iframes <= 0){
+                        entity.health -=5;
+                        entity.iframes = 20;
+                    }
+                }
             }
             // Collision with player's box
             if (entity.BB && this.BB.collide(entity.BB)) {
