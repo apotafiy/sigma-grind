@@ -1,9 +1,25 @@
+// GLOBAL VALUES FOR PLAYER
+// CHANGE TO CONST ONCE FINALIZED
+let MIN_RUN = 10;
+let MAX_RUN = 120;
+let MAX_DASH = 300;
+let ACC_RUN = 500;
+let DEC_REL = 600;
+let DEC_SKID = 500;
+let STOP_FALL = 1500;
+let STOP_FALL_A = 400;
+let RUN_FALL = 2025;
+let RUN_FALL_A = 500;
+let MAX_FALL = 270;
+let STOP_JUMP = -240;
+let RUN_JUMP = -300;
+let WALL_JUMP = 100;
 class Player {
     constructor(game, x, y) {
         Object.assign(this, { game, x, y });
 
-        this.x = x*64;
-        this.y = y*64;
+        this.x = x * 64;
+        this.y = y * 64;
         this.game.player = this;
         this.animationTick = 0;
 
@@ -86,6 +102,20 @@ class Player {
         this.playerFolder = this.gui.addFolder('Player values');
         this.testValues = {
             attackSpeed: this.attackSpeed,
+            MIN_RUN: MIN_RUN,
+            MAX_RUN: MAX_RUN,
+            MAX_DASH: MAX_DASH,
+            ACC_RUN: ACC_RUN,
+            DEC_REL: DEC_REL,
+            DEC_SKID: DEC_SKID,
+            STOP_FALL: STOP_FALL,
+            STOP_FALL_A: STOP_FALL_A,
+            RUN_FALL: RUN_FALL,
+            RUN_FALL_A: RUN_FALL_A,
+            MAX_FALL: MAX_FALL,
+            STOP_JUMP: STOP_JUMP,
+            RUN_JUMP: RUN_JUMP,
+            WALL_JUMP: WALL_JUMP,
         };
         this.playerFolder
             .add(this.testValues, 'attackSpeed')
@@ -97,6 +127,132 @@ class Player {
                 this.loadAnimations();
             })
             .name('Attack Speed');
+        this.playerFolder
+            .add(this.testValues, 'MIN_RUN')
+            .min(0)
+            .max(50)
+            .step(1)
+            .onChange((val) => {
+                MIN_RUN = val;
+            })
+            .name('MIN_RUN');
+        this.playerFolder
+            .add(this.testValues, 'MAX_RUN')
+            .min(0)
+            .max(300)
+            .step(1)
+            .onChange((val) => {
+                MAX_RUN = val;
+            })
+            .name('MAX_RUN');
+        this.playerFolder
+            .add(this.testValues, 'MAX_DASH')
+            .min(0)
+            .max(1000)
+            .step(1)
+            .onChange((val) => {
+                MAX_DASH = val;
+            })
+            .name('MAX_DASH');
+        this.playerFolder
+            .add(this.testValues, 'ACC_RUN')
+            .min(0)
+            .max(1000)
+            .step(1)
+            .onChange((val) => {
+                ACC_RUN = val;
+            })
+            .name('ACC_RUN');
+        this.playerFolder
+            .add(this.testValues, 'DEC_REL')
+            .min(0)
+            .max(1000)
+            .step(1)
+            .onChange((val) => {
+                DEC_REL = val;
+            })
+            .name('DEC_REL');
+        this.playerFolder
+            .add(this.testValues, 'DEC_SKID')
+            .min(0)
+            .max(1000)
+            .step(1)
+            .onChange((val) => {
+                DEC_SKID = val;
+            })
+            .name('DEC_SKID');
+        this.playerFolder
+            .add(this.testValues, 'STOP_FALL')
+            .min(0)
+            .max(3000)
+            .step(1)
+            .onChange((val) => {
+                STOP_FALL = val;
+            })
+            .name('STOP_FALL');
+        this.playerFolder
+            .add(this.testValues, 'STOP_FALL_A')
+            .min(0)
+            .max(1000)
+            .step(1)
+            .onChange((val) => {
+                STOP_FALL_A = val;
+            })
+            .name('STOP_FALL_A');
+        this.playerFolder
+            .add(this.testValues, 'RUN_FALL')
+            .min(0)
+            .max(4000)
+            .step(1)
+            .onChange((val) => {
+                RUN_FALL = val;
+            })
+            .name('RUN_FALL');
+        this.playerFolder
+            .add(this.testValues, 'RUN_FALL_A')
+            .min(0)
+            .max(1000)
+            .step(1)
+            .onChange((val) => {
+                RUN_FALL_A = val;
+            })
+            .name('RUN_FALL_A');
+        this.playerFolder
+            .add(this.testValues, 'MAX_FALL')
+            .min(0)
+            .max(1000)
+            .step(1)
+            .onChange((val) => {
+                MAX_FALL = val;
+            })
+            .name('MAX_FALL');
+        this.playerFolder
+            .add(this.testValues, 'STOP_JUMP')
+            .min(-1000)
+            .max(0)
+            .step(1)
+            .onChange((val) => {
+                STOP_JUMP = val;
+            })
+            .name('STOP_JUMP');
+        this.playerFolder
+            .add(this.testValues, 'RUN_JUMP')
+            .min(-1000)
+            .max(0)
+            .step(1)
+            .onChange((val) => {
+                RUN_JUMP = val;
+            })
+            .name('RUN_JUMP');
+        this.playerFolder
+            .add(this.testValues, 'WALL_JUMP')
+            .min(0)
+            .max(600)
+            .step(1)
+            .onChange((val) => {
+                WALL_JUMP = val;
+            })
+            .name('WALL_JUMP');
     }
 
     loadAnimations() {
@@ -443,17 +599,6 @@ class Player {
 
     update() {
         const TICK = this.game.clockTick;
-        const MIN_RUN = 10;
-        const MAX_RUN = 120;
-        const MAX_DASH = 300;
-        const ACC_RUN = 500;
-        const DEC_REL = 600;
-        const DEC_SKID = 500;
-        const STOP_FALL = 1500;
-        const STOP_FALL_A = 400;
-        const RUN_FALL = 2025;
-        const RUN_FALL_A = 500;
-        const MAX_FALL = 270;
 
         //testing
         if (this.game.keys.KeyJ) this.animationTick = 0;
@@ -528,11 +673,11 @@ class Player {
                 ) {
                     if (Math.abs(this.velocity.x) < 16) {
                         // Jump height while idle
-                        this.velocity.y = -240;
+                        this.velocity.y = STOP_JUMP;
                         this.fallAcc = STOP_FALL;
                     } else {
                         // Jump height while there's side way momentum
-                        this.velocity.y = -300;
+                        this.velocity.y = RUN_JUMP;
                         this.fallAcc = RUN_FALL;
                     }
 
@@ -574,7 +719,7 @@ class Player {
             }
             // END PHYSICS
             //TODO remove this is debug!
-           
+
             // ACTIONS GOES BELOW HERE
 
             // Dashing
@@ -662,8 +807,8 @@ class Player {
         }
 
         // UPDATE POSITION
-        if(this.game.keys.ArrowUp){
-            console.log("pressed")
+        if (this.game.keys.ArrowUp) {
+            console.log('pressed');
             this.velocity.y -= 80;
         }
         // scale = 3
@@ -767,11 +912,11 @@ class Player {
                         ) {
                             // falling then hit jump, bounce from wall
                             if (this.facing === 1) {
-                                this.velocity.x = 100;
+                                this.velocity.x = WALL_JUMP;
                             } else {
-                                this.velocity.x = -100;
+                                this.velocity.x = -WALL_JUMP;
                             }
-                            this.velocity.y = -240;
+                            this.velocity.y = STOP_JUMP;
                             this.fallAcc = STOP_FALL;
                             this.isInAir = true;
                             // Reset jump animation to the beginning
@@ -800,9 +945,18 @@ class Player {
                             } else if (this.game.keys.KeyK) {
                                 this.state = this.states.idle;
                                 this.handleDashEnding(RUN_FALL, ACC_RUN, TICK);
+                            } else if (
+                                this.game.keys.KeyA ||
+                                this.game.keys.KeyD
+                            ) {
+                                this.velocity.y +=
+                                    this.velocity.x === 0
+                                        ? 0
+                                        : this.fallAcc * TICK;
                             } else {
                                 this.velocity.x = 0;
                                 this.velocity.y += this.fallAcc * TICK;
+                                // this.state = this.states.idle;
                                 this.game.keys.KeyK = false;
                             }
                         } else {
@@ -942,11 +1096,12 @@ class Player {
 
             ctx.font = '20px sans-serif';
             ctx.textAlign = 'center';
-            ctx.fillStyle = "black"
+            ctx.fillStyle = 'black';
             ctx.fillText(
-                (Math.floor(this.x / 64) + ", " + Math.floor(this.y / 64)),
+                Math.floor(this.x / 64) + ', ' + Math.floor(this.y / 64),
                 this.x - this.game.camera.x + this.spriteOffset.xOffset + 40, // camera sidescrolling
-                this.y - this.game.camera.y + this.spriteOffset.yOffset - 20);
+                this.y - this.game.camera.y + this.spriteOffset.yOffset - 20
+            );
         }
     }
 }
