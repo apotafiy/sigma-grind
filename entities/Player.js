@@ -2,6 +2,8 @@ class Player {
     constructor(game, x, y) {
         Object.assign(this, { game, x, y });
 
+        this.x = x*64;
+        this.y = y*64;
         this.game.player = this;
         this.animationTick = 0;
 
@@ -937,6 +939,14 @@ class Player {
                 this.attackBB.width,
                 this.attackBB.height
             );
+
+            ctx.font = '20px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillStyle = "black"
+            ctx.fillText(
+                (Math.floor(this.x / 64) + ", " + Math.floor(this.y / 64)),
+                this.x - this.game.camera.x + this.spriteOffset.xOffset + 40, // camera sidescrolling
+                this.y - this.game.camera.y + this.spriteOffset.yOffset - 20);
         }
     }
 }
