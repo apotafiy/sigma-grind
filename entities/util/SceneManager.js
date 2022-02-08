@@ -15,7 +15,11 @@ class SceneManager {
         this.maxdist = 0;
         this.mindist = 999999;
         this.player_width = 45 / 2;
-
+        this.shakeX = 0;
+        this.shakeY = 0;
+        this.background_songs = {};
+        this.background_songs.intro = new Audio("../sounds/background_song_1.mp3");
+        // this.background_songs.intro.play();
         // Dat GUI stuff
         this.gui = new dat.GUI();
         this.cameraFolder = this.gui.addFolder("Camera values");
@@ -73,7 +77,10 @@ class SceneManager {
             .name("Friction Y");
 
     }
-
+    shake(x,y) {
+        this.shakeX += x;
+        this.shakeY += y;
+    }
     update() {
         params.debug = document.getElementById("debug").checked;
         //set up midpoints for calculatoin
@@ -96,8 +103,8 @@ class SceneManager {
         let ydif = (this.game.player.y - this.y - vertmidpoint) / dist;
         
         //increase the velocity of the camera based on the ditance
-        this.xVelocity += (xdif * this.acceleration) / (dist * this.DISTANCE_MULT);
-        this.yVelocity += (ydif * this.acceleration * 2) / (dist * this.DISTANCE_MULT);
+        this.xVelocity += (this.shakeX  + xdif * this.acceleration ) / (dist * this.DISTANCE_MULT);
+        this.yVelocity += (this.shakeY + ydif * this.acceleration * 2) / (dist * this.DISTANCE_MULT);
         
         //removed a percentage of the velocity for friction
         this.xVelocity -=
@@ -109,7 +116,17 @@ class SceneManager {
             this.game.clockTick *
             this.yVelocity *
             1.75;
-        
+        //remove some of the shake for friction
+        this.shakeX -=
+         (this.FRICTON_MULT - this.FRICTON_X) *
+        this.game.clockTick *
+        (this.shakeX * 1);
+
+        this.shakeY -=
+        (this.FRICTON_MULT - this.FRICTON_Y) *
+        this.game.clockTick *
+        this.shakeY *
+        1.75;
         //move the camera over by the veoloity
         this.x += this.xVelocity;
         this.y += this.yVelocity;
