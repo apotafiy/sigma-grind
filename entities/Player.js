@@ -46,6 +46,18 @@ class Player {
             attack3: 8,
         };
         this.dead = false;
+        
+        //player sound imports
+        this.soundEffects = {};
+        this.soundEffects.attack = new Audio("../sounds/player/sword_attack_short.wav");
+        this.soundEffects.jump_voice = new Audio("../sounds/player/jump_voice.wav");
+        this.soundEffects.run = new Audio("../sounds/player/player_walk.wav");
+        this.soundEffects.dash = new Audio("../sounds/player/player_dash.wav");
+        this.soundEffects.grunt1 = new Audio("../sounds/player/grunt_1.wav");
+        this.soundEffects.grunt2 = new Audio("../sounds/player/grunt_2.wav");
+        this.soundEffects.grunt3 = new Audio("../sounds/player/grunt_3.wav");
+        this.soundEffects.grunt4 = new Audio("../sounds/player/grunt_4.wav");
+        this.soundEffects.land = new Audio("../sounds/player/land.wav");
 
         // Size and bounding box
         this.currentSize = { width: 40, height: 50 };
@@ -462,7 +474,10 @@ class Player {
 
         //adjust the attack cooldown
         this.attackCooldown--;
-
+        //play walk sound 
+        // if(this.state == 1){
+        //     this.soundEffects.run.play()
+        // }
         // debugger
         if (this.dead) {
             // Do death stuff
@@ -526,6 +541,7 @@ class Player {
                     !this.game.keys.KeyJ &&
                     !this.isInAir
                 ) {
+                    this.soundEffects.jump_voice.play();
                     if (Math.abs(this.velocity.x) < 16) {
                         // Jump height while idle
                         this.velocity.y = -240;
@@ -581,6 +597,8 @@ class Player {
             if (this.game.keys.KeyK && !this.attacking) {
                 if (this.isInAir) this.airDashed = true;
                 if (this.state !== this.states.wallHang) {
+                    //play dash sound effect
+                    this.soundEffects.dash.play();
                     if (this.game.keys.KeyA && !this.game.keys.KeyD) {
                         this.facing === 1;
                         this.velocity.x = -MAX_DASH;
@@ -600,6 +618,9 @@ class Player {
             } else {
                 this.animations[2][this.facing].elapsedTime = 0;
                 this.fallAcc = STOP_FALL;
+                //stop the dash sound if needed
+                // this.soundEffects.dash.pause();
+                // this.soundEffects.dash.load();
                 if (this.velocity.y > 0 && this.state !== this.states.wallHang)
                     this.state = this.states.fall;
             }
@@ -614,6 +635,8 @@ class Player {
                 this.attackCooldown <= 0
             ) {
                 // debugger;
+                //play the attack sound
+                this.soundEffects.attack.play();
                 //set the player to attacking state
                 this.attackCooldown = 10;
                 // debugger;
@@ -718,7 +741,9 @@ class Player {
                             this.state === this.states.fall
                         )
                             this.state = this.states.idle; // set state to idle
-
+                            
+                        ///if we were falling play the soundEffect
+                        if(this.isInAir) this.soundEffects.land.play();
                         this.isInAir = false;
                         this.airDashed = false;
 
@@ -774,6 +799,8 @@ class Player {
                             this.game.keys.Space
                         ) {
                             // falling then hit jump, bounce from wall
+                            //play wall jump soundEffect
+                            this.getRandomGrunt().play();
                             if (this.facing === 1) {
                                 this.velocity.x = 100;
                             } else {
@@ -954,4 +981,25 @@ class Player {
                 this.y - this.game.camera.y + this.spriteOffset.yOffset - 20);
         }
     }
+    getRandomGrunt(){
+        let theGrunt = this.getRandomInt(1,5);
+        switch(theGrunt) {
+            case 1:
+                return this.soundEffects.grunt1;
+            case 2:
+                return this.soundEffects.grunt2;
+            case 3:
+                return this.soundEffects.grunt3;
+            case 4:
+                return this.soundEffects.grunt4;
+            default:
+                return this.soundEffects.grunt1;
+        }
+    }
+
+    getRandomInt(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min) + min);
+      }
 }

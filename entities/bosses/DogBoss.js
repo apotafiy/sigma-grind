@@ -28,7 +28,7 @@ class DogBoss {
       this.direction = -1;
       this.dirIndex = 0;
     }
-    this.maxHealth = 400;
+    this.maxHealth = 200;
     this.health = this.maxHealth;
 
     this.loadAnimation();

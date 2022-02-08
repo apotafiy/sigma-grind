@@ -91,7 +91,7 @@ class GroundProjectile {
                         entity instanceof Ground &&
                         that.lastBB.left < entity.BB.right
                     ) {
-                        if(this.dieOnCollide) this.removeFromWorld = true;
+                        if(that.dieOnCollide) that.removeFromWorld = true;
                         that.x = entity.BB.right;
                         that.direction = -1;
                         that.dirIndex = 0;

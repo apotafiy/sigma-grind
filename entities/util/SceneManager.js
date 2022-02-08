@@ -17,7 +17,9 @@ class SceneManager {
         this.player_width = 45 / 2;
         this.shakeX = 0;
         this.shakeY = 0;
-
+        this.background_songs = {};
+        this.background_songs.intro = new Audio("../sounds/background_song_1.mp3");
+        // this.background_songs.intro.play();
         // Dat GUI stuff
         this.gui = new dat.GUI();
         this.cameraFolder = this.gui.addFolder("Camera values");
