@@ -23,12 +23,13 @@ class DogBoss {
     this.direction = 1;
     this.dirIndex = 1;
     this.iframes = 0;
+    this.wallAttackDir = -1;
     if (this.xVelocity > 0) {
       this.direction = -1;
       this.dirIndex = 0;
     }
     this.maxHealth = 400;
-    this.health = this.maxHealth
+    this.health = this.maxHealth;
 
     this.loadAnimation();
     //bounding box
@@ -103,33 +104,63 @@ class DogBoss {
 
     //use same animation for the 8 directoin attack animation
     this.animations[0][2] = new Animator(
-        ASSET_MANAGER.getAsset(
-          "./sprites/dogboss/dogboss_front_facing_128x96.png"
-        ),
-        0,
-        0,
-        128,
-        96,
-        9,
-        0.12,
-        0,
-        0,
-        1
-      );
-      this.animations[1][2] = new Animator(
-        ASSET_MANAGER.getAsset(
-          "./sprites/dogboss/dogboss_front_facing_128x96.png"
-        ),
-        0,
-        0,
-        128,
-        96,
-        9,
-        0.12,
-        0,
-        0,
-        1
-      );
+      ASSET_MANAGER.getAsset(
+        "./sprites/dogboss/dogboss_front_facing_128x96.png"
+      ),
+      0,
+      0,
+      128,
+      96,
+      9,
+      0.12,
+      0,
+      0,
+      1
+    );
+    this.animations[1][2] = new Animator(
+      ASSET_MANAGER.getAsset(
+        "./sprites/dogboss/dogboss_front_facing_128x96.png"
+      ),
+      0,
+      0,
+      128,
+      96,
+      9,
+      0.12,
+      0,
+      0,
+      1
+    );
+    //wall attack ( swap in better animation later on)
+    //use same animation for the 8 directoin attack animation
+    this.animations[0][3] = new Animator(
+      ASSET_MANAGER.getAsset(
+        "./sprites/dogboss/dogboss_front_facing_128x96.png"
+      ),
+      0,
+      0,
+      128,
+      96,
+      9,
+      0.12,
+      0,
+      0,
+      1
+    );
+    this.animations[1][3] = new Animator(
+      ASSET_MANAGER.getAsset(
+        "./sprites/dogboss/dogboss_front_facing_128x96.png"
+      ),
+      0,
+      0,
+      128,
+      96,
+      9,
+      0.12,
+      0,
+      0,
+      1
+    );
   }
   die() {
     if (!this.isDead) {
@@ -149,7 +180,7 @@ class DogBoss {
     );
   }
   update() {
-    if(this.health <= 0) this.removeFromWorld = true;
+    if (this.health <= 0) this.removeFromWorld = true;
     let that = this;
     this.attackCooldown--;
     this.iframes--;
@@ -158,15 +189,15 @@ class DogBoss {
       //apply gravity to the enemy
       that.yVelocity += that.gravity;
       //move in the direction of the player
-     if(Math.abs(this.x - this.game.player.x) > 30){
+      if (Math.abs(this.x - this.game.player.x) > 30) {
         if (this.x < this.game.player.x) {
-            that.direction = -1;
-            that.dirIndex = 0;
-          } else {
-            that.direction = 1;
-            that.dirIndex = 1;
-          }
-     }
+          that.direction = -1;
+          that.dirIndex = 0;
+        } else {
+          that.direction = 1;
+          that.dirIndex = 1;
+        }
+      }
       that.x += that.xVelocity * that.direction;
       that.y += that.yVelocity;
       //update out bounding box every frame
@@ -179,10 +210,10 @@ class DogBoss {
         this.attackCooldown = 500;
         this.attacking = 200;
         //choose random attacks to do
-        this.currentState = this.getRandomInt(1,3);
+        this.currentState = this.getRandomInt(1, 4);
       }
     } else if (this.currentState == 1) {
-      //stand and attack with side la
+      //stand and attack with side lasers
       if (this.attacking > 60 && this.attacking % 8 == 0) {
         //spwan the little things!
         this.game.addEntityAtIndex(
@@ -195,7 +226,7 @@ class DogBoss {
             -1,
             this.gravity
           ),
-          this.entityArrayPos-1
+          this.entityArrayPos - 1
         );
         this.game.addEntityAtIndex(
           new GroundProjectile(
@@ -207,124 +238,97 @@ class DogBoss {
             1,
             this.gravity
           ),
-          this.entityArrayPos-1
+          this.entityArrayPos - 1
         );
-        let shakex = this.getRandomInt(80,120);
-        let shakey = this.getRandomInt(80,120);
-        this.game.camera.shake(this.getRandomInt(-1,1) * shakex,this.getRandomInt(-1,1 ) * shakey);
-       
+        let shakex = this.getRandomInt(80, 120);
+        let shakey = this.getRandomInt(80, 120);
+        this.game.camera.shake(
+          this.getRandomInt(-1, 1) * shakex,
+          this.getRandomInt(-1, 1) * shakey
+        );
       }
-      if (this.attacking > 0) {
-        this.attacking--;       
-      } else {
-        this.currentState = 0;
-      } 
-      //8 direction attack! les go
-    } else if(this.currentState == 2) {
-        if (this.attacking > 60 && this.attacking %20 == 0) {
-            // this.game.addEntityAtIndex(
-            //   new GroundProjectile(
-            //     this.game,
-            //     that.x + 40,
-            //     that.y + 150,
-            //     6,
-            //     0,
-            //     -1,
-            //     0
-            //   ),
-            //   this.entityArrayPos-1
-            // );
-            // this.game.addEntityAtIndex(
-            //   new GroundProjectile(
-            //     this.game,
-            //     that.x + 260,
-            //     that.y + 150,
-            //     6,
-            //     0,
-            //     1,
-            //     0
-            //   ),
-            //   this.entityArrayPos-1
-            // );
-            
-            //up
-            // this.game.addEntityAtIndex(
-            //     new GroundProjectile(
-            //       this.game,
-            //       that.x + 40,
-            //       that.y + 150,
-            //       0,
-            //       -4,
-            //       -1,
-            //       0
-            //     ),
-            //     this.entityArrayPos-1
-            //   );
-            //   this.game.addEntityAtIndex(
-            //     new GroundProjectile(
-            //       this.game,
-            //       that.x + 260,
-            //       that.y + 150,
-            //       4,
-            //       -4,
-            //       1,
-            //       0
-            //     ),
-            //     this.entityArrayPos-1
-            //   );
-               //LEFT RIGHT
-            this.game.addEntityAtIndex(
-                new GroundProjectile(
-                  this.game,
-                  that.x + 40,
-                  that.y + 150,
-                  4,
-                  -4,
-                  -1,
-                  this.gravity /4
-                ),
-                this.entityArrayPos-1
-              );
-              this.game.addEntityAtIndex(
-                new GroundProjectile(
-                  this.game,
-                  that.x + 260,
-                  that.y + 150,
-                  4,
-                  -4,
-                  1,
-                  this.gravity /4 
-                ),
-                this.entityArrayPos-1
-              );
-
-           if(this.attacking % 80 == 0){
-            //head down
-            this.game.addEntityAtIndex(
-                new GroundProjectile(
-                  this.game,
-                  that.x + 140,
-                  that.y + 80,
-                  0,
-                  0,
-                  -1,
-                  this.gravity
-                ),
-                this.entityArrayPos-1
-              );
-           }
-            let shakex = this.getRandomInt(80,120);
-            let shakey = this.getRandomInt(80,120);
-            this.game.camera.shake(this.getRandomInt(-1,1) * shakex,this.getRandomInt(-1,1 ) * shakey);
-           
-          }
-          if (this.attacking > 0) {
-            this.attacking--;       
-          } else {
-            this.currentState = 0;
-          } 
+      // if (this.attacking > 0) {
+      //   this.attacking--;
+      // } else {
+      //   this.currentState = 0;
+      // }
+    } else if (this.currentState == 2) {
+      //up facing rain down attack
+      if (this.attacking > 60 && this.attacking % 40 == 0) {
+        for (let i = 0; i <= 6; i += 2) {
+          this.game.addEntityAtIndex(
+            new GroundProjectile(
+              this.game,
+              that.x + 130,
+              that.y + 150,
+              i,
+              -8,
+              1,
+              this.gravity / 1.8
+            ),
+            this.entityArrayPos - 1
+          );
+          //make them live longer
+          this.game.entities[this.entityArrayPos - 1].time = 200;
+          this.game.addEntityAtIndex(
+            new GroundProjectile(
+              this.game,
+              that.x + 130,
+              that.y + 150,
+              i,
+              -8,
+              -1,
+              this.gravity / 1.8
+            ),
+            this.entityArrayPos - 1
+          );
+          //make them live longer
+          this.game.entities[this.entityArrayPos - 1].time = 200;
+        }
+        let shakex = this.getRandomInt(80, 120);
+        let shakey = this.getRandomInt(80, 120);
+        this.game.camera.shake(
+          this.getRandomInt(-1, 1) * shakex,
+          this.getRandomInt(-1, 1) * shakey
+        );
+      }
+    } 
+    else if (this.currentState == 3) {
+      //LEFT AND RIGHT WALL
+      //choose the direction of the wall right at the start of phase
+      if (this.attacking == 198) {
+        if (this.getRandomInt(0, 2) == 1) {
+          this.wallAttackDir = 1;
+        } else {
+          this.wallAttackDir = -1;
+        }
+      }
+      if (this.attacking <= 100 && this.attacking % 30 == 0) {
+        //we only want it to attack once with the wall
+        for (let i = 0; i < 10; i++) {
+          this.game.addEntityAtIndex(
+            new GroundProjectile(
+              this.game,
+              that.x + 100,
+              that.y + 150 - i * 64,
+              4,
+              0,
+              this.wallAttackDir,
+              0
+            ),
+            this.entityArrayPos - 1
+          );
+            //die on hitting a wall to avoid weird stuff
+            this.game.entities[this.entityArrayPos - 1].dieOnCollide = true;
+        }
+      }
     }
-
+    //decrement attacking state
+    if (this.attacking > 0) {
+      this.attacking--;
+    } else {
+      this.currentState = 0;
+    }
     //collisions
     this.game.entities.forEach(function (entity) {
       if (entity.BB && that.BB.collide(entity.BB)) {
@@ -355,6 +359,11 @@ class DogBoss {
         }
       }
     });
+
+      // Display values for debugging
+      document.getElementById('attacking').innerHTML =
+      "Wall dir " + this.wallAttackDir; 
+  document.getElementById('state').innerHTML = 'State: ' + this.currentState;
   }
 
   draw(ctx) {
@@ -367,23 +376,44 @@ class DogBoss {
       that.y - that.game.camera.y, // + that.BB.height / 4,
       that.scale
     );
-      //draw health bar bove him
-   
-      ctx.lineWidth = 10;
-      ctx.strokeStyle = "#00FF00"
-      ctx.strokeRect( this.x - this.game.camera.x +60,this.y - this.game.camera.y   - 40, (this.health / this.maxHealth) * 200,30);
-      
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = "#000000"
-      ctx.strokeRect( this.x - this.game.camera.x +60,this.y - this.game.camera.y   - 40, 200,30);
-      // ctx.font = '20px sans-serif';
-    //   ctx.textAlign = 'center';
-    //   ctx.fillStyle = "black"
-    //   ctx.fillText(
-    //       this.health,
-    //       this.x - this.game.camera.x +40, // camera sidescrolling
-    //       this.y - this.game.camera.y   - 20);
-  
+    //draw health bar bove him
+
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "#000000";
+    ctx.strokeRect(
+      this.x - this.game.camera.x + 60,
+      this.y - this.game.camera.y - 40,
+      200,
+      30
+    );
+
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "#00FF00";
+    ctx.fillStyle = "#00FF00";
+    ctx.fillRect(
+      this.x - this.game.camera.x + 60,
+      this.y - this.game.camera.y - 40,
+      (this.health / this.maxHealth) * 200,
+      30
+    );
+
+    //signal wall attack
+    if (this.currentState === 3) {
+      //signal the attack
+      ctx.font = '300px serif';
+      if (this.attacking < 198 && this.attacking > 50) {
+        //draw ! to that side
+        // ctx.lineWidth = 2;
+        ctx.strokeStyle = "#000000"
+        ctx.fillStyle = "#FF0000"
+        //TODO fix x alignment
+        ctx.fillText(
+          "!",
+          this.x - this.game.camera.x + 60 + 200 * this.wallAttackDir,
+          this.y - this.game.camera.y +80 
+        );
+      }
+    }
     if (params.debug) {
       ctx.strokeStyle = "Orange";
       ctx.strokeRect(

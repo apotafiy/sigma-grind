@@ -866,10 +866,7 @@ class Player {
         if (this.state == this.states.wallHang) {
         }
 
-        // Display values for debugging
-        document.getElementById('attacking').innerHTML =
-            'YVelocity: ' + this.velocity.y + ' ' + this.isInAir;
-        document.getElementById('state').innerHTML = 'State: ' + this.state;
+      
     }
 
     draw(ctx) {

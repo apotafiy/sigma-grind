@@ -17,6 +17,7 @@ class GroundProjectile {
         this.y = y ;
         this.gravity = gravity;
         this.direction = direction;
+        this.dieOnCollide = false;
 
 
         this.loadAnimation();
@@ -90,6 +91,7 @@ class GroundProjectile {
                         entity instanceof Ground &&
                         that.lastBB.left < entity.BB.right
                     ) {
+                        if(this.dieOnCollide) this.removeFromWorld = true;
                         that.x = entity.BB.right;
                         that.direction = -1;
                         that.dirIndex = 0;
@@ -102,6 +104,7 @@ class GroundProjectile {
                     ) {
                         // is in the wall
                         //subtract because origin is on left
+                        if(that.dieOnCollide) that.removeFromWorld = true;
                         that.x = entity.BB.left - that.BB.width;
                         that.direction = 1;
                         that.dirIndex = 1;
