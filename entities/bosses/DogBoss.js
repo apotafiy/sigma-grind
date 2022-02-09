@@ -31,6 +31,10 @@ class DogBoss {
     this.maxHealth = 200;
     this.health = this.maxHealth;
 
+    //player sound imports
+    this.soundEffects = {};
+    this.soundEffects.attack = new Audio("../sounds/dogboss/roar.wav");
+
     this.loadAnimation();
     //bounding box
     this.BB = new BoundingBox(
@@ -209,6 +213,8 @@ class DogBoss {
       ) {
         this.attackCooldown = 500;
         this.attacking = 200;
+        //play the attack sound
+        this.soundEffects.attack.play();
         //choose random attacks to do
         this.currentState = this.getRandomInt(1, 4);
       }
@@ -363,7 +369,7 @@ class DogBoss {
       // Display values for debugging
       document.getElementById('attacking').innerHTML =
       "Wall dir " + this.wallAttackDir; 
-  document.getElementById('state').innerHTML = 'State: ' + this.currentState;
+  document.getElementById('state').innerHTML = 'Entity Count: ' + this.game.entities.length;
   }
 
   draw(ctx) {

@@ -133,6 +133,94 @@ function loadLevelOne(gameEngine) {
         if (entity instanceof Ground) entity.checkForGrass();
     });
 
+    //Rush tutorials
+    gameEngine.addEntity(
+        new Rush(
+            gameEngine,
+            10,
+            6,
+            5,
+            "You're Finally Awake. Sigma Must Have Done A Number On You. Do You Remember Me? I'm Rush. Don't Worry. I'll Help You Remember Everything."
+        )
+    );
+
+    gameEngine.addEntity(
+        new Rush(gameEngine, 25, 2, 5, "Use 'K' To Dash Accross The Gaps!")
+    );
+    gameEngine.addEntity(
+        new Rush(
+            gameEngine,
+            54,
+            1,
+            5,
+            'Run At The Wall And Press Space To Climb It!'
+        )
+    );
+    gameEngine.addEntity(
+        new Rush(
+            gameEngine,
+            60,
+            -21,
+            5,
+            'Move Towards The Wall While Falling To Slide Down!'
+        )
+    );
+    gameEngine.addEntity(
+        new Rush(
+            gameEngine,
+            50,
+            -16,
+            5,
+            'Try Dashing Through That Gap! Be Careful The Spikes Are Sharp!'
+        )
+    );
+
+    gameEngine.addEntity(
+        new Rush(
+            gameEngine,
+            29,
+            -11,
+            5,
+            "Hold 'S' And Press 'J' To Do A Downward Stab! This Will Let You Bounce On Spikes!"
+        )
+    );
+
+    gameEngine.addEntity(
+        new Rush(
+            gameEngine,
+            11,
+            -11,
+            5,
+            "Hold The Direction Away From The Wall And Press 'K' To Do A Wall Dash!"
+        )
+    );
+    gameEngine.addEntity(
+        new Rush(
+            gameEngine,
+            15,
+            -32,
+            5,
+            "Oh No! Mettaurs! Quick! Press 'J' To Use Your Sword!"
+        )
+    );
+    gameEngine.addEntity(
+        new Rush(
+            gameEngine,
+            68,
+            -36,
+            5,
+            'Now You Remember Everything You need! Go Find Sigma And Take Back Your Title! Good Luck Zero! I Hope To See You Soon.'
+        )
+    );
+    gameEngine.addEntity(
+        new Rush(
+            gameEngine,
+            104,
+            -35,
+            5,
+            "Looks Like Sigma Didnt Take Any Chances. He Left One Of His Goons To Make Sure You Stayed. He Does Look A Little Like Me... Doesn't He..."
+        )
+    );
     // gameEngine.addEntity(new GroundHorse(gameEngine, 36, 0));
     gameEngine.addEntity(new Water(gameEngine));
     gameEngine.addEntity(new SceneManager(gameEngine));

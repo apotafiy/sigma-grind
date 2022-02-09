@@ -19,7 +19,7 @@ class SceneManager {
         this.shakeY = 0;
         this.background_songs = {};
         this.background_songs.intro = new Audio("../sounds/background_song_1.mp3");
-        // this.background_songs.intro.play();
+        this.playSong();
         // Dat GUI stuff
         this.gui = new dat.GUI();
         this.cameraFolder = this.gui.addFolder("Camera values");
@@ -80,6 +80,9 @@ class SceneManager {
     shake(x,y) {
         this.shakeX += x;
         this.shakeY += y;
+    }
+    playSong(){
+        this.background_songs.intro.play();
     }
     update() {
         params.debug = document.getElementById("debug").checked;
