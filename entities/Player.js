@@ -58,7 +58,7 @@ class Player {
         this.soundEffects.grunt3 = new Audio("../sounds/player/grunt_3.wav");
         this.soundEffects.grunt4 = new Audio("../sounds/player/grunt_4.wav");
         this.soundEffects.land = new Audio("../sounds/player/land.wav");
-
+ 
         // Size and bounding box
         this.currentSize = { width: 40, height: 50 };
         this.spriteOffset = { xOffset: 0, yOffset: 0 };
@@ -801,6 +801,7 @@ class Player {
                             // falling then hit jump, bounce from wall
                             //play wall jump soundEffect
                             this.getRandomGrunt().play();
+                            // this.soundEffects.jump_voice.play();
                             if (this.facing === 1) {
                                 this.velocity.x = 100;
                             } else {
