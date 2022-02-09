@@ -1,16 +1,5 @@
 ﻿<!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <title>Sigma Grind</title>
-        <style>
-            body {
-                font-family: Helvetica, sans-serif;
-                font-size: 24px;
-                padding: 20px;
-                background: no-repeat  center url("./sprites//website_background.png");
-            }
-        </style>
 
 <head>
   <meta charset="utf-8" />
@@ -20,44 +9,59 @@
       font-family: Helvetica, sans-serif;
       font-size: 24px;
       padding: 20px;
+      background: no-repeat center url("./sprites//website_background.png");
     }
-  </style>    
-  <link rel="stylesheet" href="./index.css">
-  <script type="text/javascript" src="./levels/levelone.js"></script>
-  <script type="text/javascript" src="./assetmanager.js"></script>
-  <script type="text/javascript" src="./timer.js"></script>
-  <script type="text/javascript" src="./gameengine.js"></script>
-  <script type="text/javascript" src="./util.js"></script>
-  <script type="text/javascript" src="./entities/enemies/PopUpEnemy.js"></script>
-  <script type="text/javascript" src="./entities/enemies/Spike.js"></script>
-  <script type="text/javascript" src="./entities/util/SceneManager.js"></script>
-  <script type="text/javascript" src="./entities/util/BoundingBox.js"></script>
-  <script type="text/javascript" src="./entities/tiles/Ground.js"></script>
-  <script type="text/javascript" src="./entities/backgrounds/Water.js"></script>
-  <script type="text/javascript" src="./entities/enemies/GroundHorse.js"></script>
-  <script type="text/javascript" src="./entities/bosses/DogBoss.js"></script>
-  <script type="text/javascript" src="./entities/bosses/GroundProjectile.js"></script>
-  <script type="text/javascript" src="./entities/enemies/Drill.js"></script>
-  <script type="text/javascript" src="./entities/enemies/Mettaur.js"></script>
-  <script type="text/javascript" src="./entities/Player.js"></script>
-  <script type="text/javascript" src="./animator.js"></script>
-  <script type="text/javascript" src="./main.js"></script>
-  <script type="text/javascript" src="./dat.gui.min.js"></script>
-  <script type="text/javascript" src="./stats.min.js"></script>
-</head>
+  </style>
+
+  <head>
+    <meta charset="utf-8" />
+    <title>Sigma Grind</title>
+    <style>
+      body {
+        font-family: Helvetica, sans-serif;
+        font-size: 24px;
+        padding: 20px;
+      }
+    </style>
+    <link rel="stylesheet" href="./index.css">
+    <script type="text/javascript" src="./levels/levelone.js"></script>
+    <script type="text/javascript" src="./assetmanager.js"></script>
+    <script type="text/javascript" src="./timer.js"></script>
+    <script type="text/javascript" src="./gameengine.js"></script>
+    <script type="text/javascript" src="./util.js"></script>
+    <script type="text/javascript" src="./entities/enemies/PopUpEnemy.js"></script>
+    <script type="text/javascript" src="./entities/enemies/Spike.js"></script>
+    <script type="text/javascript" src="./entities/util/SceneManager.js"></script>
+    <script type="text/javascript" src="./entities/util/BoundingBox.js"></script>
+    <script type="text/javascript" src="./entities/tiles/Ground.js"></script>
+    <script type="text/javascript" src="./entities/backgrounds/Water.js"></script>
+    <script type="text/javascript" src="./entities/enemies/GroundHorse.js"></script>
+    <script type="text/javascript" src="./entities/bosses/DogBoss.js"></script>
+    <script type="text/javascript" src="./entities/bosses/GroundProjectile.js"></script>
+    <script type="text/javascript" src="./entities/enemies/Drill.js"></script>
+    <script type="text/javascript" src="./entities/enemies/Mettaur.js"></script>
+    <script type="text/javascript" src="./entities/Player.js"></script>
+    <script type="text/javascript" src="./animator.js"></script>
+    <script type="text/javascript" src="./main.js"></script>
+    <script type="text/javascript" src="./dat.gui.min.js"></script>
+    <script type="text/javascript" src="./stats.min.js"></script>
+  </head>
 
 <body style="margin: 0; height: 100%">
-  <div class ="center">
-    <img class = "center" src="./sprites/titlecard.png" alt="Italian Trulli" style="width:50%; height:50%">
+  <div class="center">
+    <img class="center" src="./sprites/titlecard.png" alt="Italian Trulli" style="width:50%; height:50%">
     <br />
   </div>
-  <canvas id="gameWorld" width="1024" height="768" class="center" style="background: rgb(255, 255, 255); border: 4px solid rgb(29, 0, 158); padding:0px"
-    tabindex="0" autofocus></canvas>
+  <canvas id="gameWorld" width="1024" height="768" class="center"
+    style="background: rgb(255, 255, 255); border: 4px solid rgb(29, 0, 158); padding:0px" tabindex="0"
+    autofocus></canvas>
   <div>
     <br />
     <input type="checkbox" id="debug" /> Debug
   </div>
   <p id="state"></p>
+  <p id="stateP"></p>
+  <p id="velo"></p>
   <p id="attacking"></p>
 </body>
 

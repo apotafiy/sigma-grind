@@ -62,18 +62,22 @@ class Player {
             attack3: 8,
         };
         this.dead = false;
-        
+
         //player sound imports
         this.soundEffects = {};
-        this.soundEffects.attack = new Audio("../sounds/player/sword_attack_short.wav");
-        this.soundEffects.jump_voice = new Audio("../sounds/player/jump_voice.wav");
-        this.soundEffects.run = new Audio("../sounds/player/player_walk.wav");
-        this.soundEffects.dash = new Audio("../sounds/player/player_dash.wav");
-        this.soundEffects.grunt1 = new Audio("../sounds/player/grunt_1.wav");
-        this.soundEffects.grunt2 = new Audio("../sounds/player/grunt_2.wav");
-        this.soundEffects.grunt3 = new Audio("../sounds/player/grunt_3.wav");
-        this.soundEffects.grunt4 = new Audio("../sounds/player/grunt_4.wav");
-        this.soundEffects.land = new Audio("../sounds/player/land.wav");
+        this.soundEffects.attack = new Audio(
+            '../sounds/player/sword_attack_short.wav'
+        );
+        this.soundEffects.jump_voice = new Audio(
+            '../sounds/player/jump_voice.wav'
+        );
+        this.soundEffects.run = new Audio('../sounds/player/player_walk.wav');
+        this.soundEffects.dash = new Audio('../sounds/player/player_dash.wav');
+        this.soundEffects.grunt1 = new Audio('../sounds/player/grunt_1.wav');
+        this.soundEffects.grunt2 = new Audio('../sounds/player/grunt_2.wav');
+        this.soundEffects.grunt3 = new Audio('../sounds/player/grunt_3.wav');
+        this.soundEffects.grunt4 = new Audio('../sounds/player/grunt_4.wav');
+        this.soundEffects.land = new Audio('../sounds/player/land.wav');
 
         // Size and bounding box
         this.currentSize = { width: 40, height: 50 };
@@ -548,12 +552,10 @@ class Player {
                 this.spriteOffset.yOffset = -20;
                 break;
             case this.states.attack1:
-                this.spriteOffset.xOffset = -10;
-                this.spriteOffset.yOffset = 0;
-                break;
             case this.states.attack2:
-                this.spriteOffset.xOffset = this.facing === 0 ? -10 : -3;
-                this.spriteOffset.yOffset = -10;
+            case this.states.attack3:
+                this.spriteOffset.xOffset = this.facing === 0 ? -10 : -80;
+                this.spriteOffset.yOffset = this.facing === 0 ? -30 : -30;
                 break;
         }
 
@@ -619,7 +621,7 @@ class Player {
 
         //adjust the attack cooldown
         this.attackCooldown--;
-        //play walk sound 
+        //play walk sound
         // if(this.state == 1){
         //     this.soundEffects.run.play()
         // }
@@ -734,7 +736,6 @@ class Player {
                 }
             }
             // END PHYSICS
-            //TODO remove this is debug!
 
             // ACTIONS GOES BELOW HERE
 
@@ -865,8 +866,8 @@ class Player {
                 if (entity && entity instanceof DogBoss) {
                     // console.log('kILL dRILL');
                     //if it has die method it should die
-                    if(entity.iframes <= 0){
-                        entity.health -=5;
+                    if (entity.iframes <= 0) {
+                        entity.health -= 5;
                         entity.iframes = 20;
                     }
                 }
@@ -883,20 +884,20 @@ class Player {
                         this.velocity.y = 0;
                         if (
                             this.state === this.states.jump ||
-                            this.state === this.states.fall
+                            this.state === this.states.fall ||
+                            this.state === this.states.wallHang
                         )
                             this.state = this.states.idle; // set state to idle
-                            
+
                         ///if we were falling play the soundEffect
-                        if(this.isInAir) this.soundEffects.land.play();
+                        if (this.isInAir) this.soundEffects.land.play();
                         this.isInAir = false;
                         this.airDashed = false;
 
-                        // Reset number of air dashes to 0 when touch the ground
                         this.updateBB();
                     }
                 }
-                if (this.velocity.y <= 0) {
+                if (this.velocity.y < 0) {
                     // jumping
                     // hit ceiling...
                     if (
@@ -908,98 +909,74 @@ class Player {
                         this.velocity.y = 0;
                     }
                 }
+
                 // Side collisions
                 if (
                     entity instanceof Ground &&
                     entity.type &&
-                    this.BB.collide(entity.BB)
+                    this.BB.collide(entity.leftBB)
                 ) {
-                    if (this.BB.collide(entity.leftBB)) {
-                        // Right side collision
-                        this.x = entity.BB.left - this.BB.width;
-                        this.facing = 0;
-                        if (this.velocity.x > 0) this.velocity.x = 0;
-                    }
-                    if (this.BB.collide(entity.rightBB)) {
-                        // Left side collision
-                        this.x = entity.BB.right;
-                        this.facing = 1;
-                        if (this.velocity.x < 0) this.velocity.x = 0;
-                    }
+                    // Right side collision
+                    this.x = entity.BB.left - this.BB.width;
+                    this.facing = 0;
+                    if (this.velocity.x > 0) this.velocity.x = 0;
+                } else if (
+                    entity instanceof Ground &&
+                    entity.type &&
+                    this.BB.collide(entity.rightBB)
+                ) {
+                    // Left side collision
+                    this.x = entity.BB.right;
+                    this.facing = 1;
+                    if (this.velocity.x < 0) this.velocity.x = 0;
+                }
+                // END Side collisions
+
+                // Wall hang collision
+                if (
+                    entity instanceof Ground &&
+                    entity.type &&
+                    !this.BB.collide(entity.topBB) &&
+                    !this.BB.collide(entity.bottomBB)
+                ) {
                     // wall hanging
-                    if (
-                        !this.BB.collide(entity.bottomBB) &&
-                        !this.BB.collide(entity.topBB)
-                    ) {
-                        if (this.velocity.y > 0 && !this.game.keys.Space) {
-                            // falling and not holding jump
-                            // Set state to wall hang
-                            this.state = this.states.wallHang;
-                            this.velocity.y = 1;
-                            this.isInAir = false;
-                            this.airDashed = false;
-                            // Reset number of air dashes to 0 when wall hang
-                        } else if (
-                            this.velocity.y > 0 &&
-                            this.game.keys.Space
-                        ) {
-                            // falling then hit jump, bounce from wall
-                            //play wall jump soundEffect
-                            this.getRandomGrunt().play();
-                            if (this.facing === 1) {
-                                this.velocity.x = WALL_JUMP;
-                            } else {
-                                this.velocity.x = -WALL_JUMP;
-                            }
-                            this.velocity.y = STOP_JUMP;
-                            this.fallAcc = STOP_FALL;
-                            this.isInAir = true;
-                            // Reset jump animation to the beginning
-                            this.state = this.states.jump;
-                            this.animations[3][0].elapsedTime = 0;
-                            this.animations[3][1].elapsedTime = 0;
-                        } else if (this.velocity.y === 0) {
-                            if (this.game.keys.KeyK) {
-                                // Prevent player idle at wall when dashing into wall
-                                // this.state = this.states.wallHang;
-                                this.handleDashEnding(RUN_FALL, ACC_RUN, TICK);
-                            }
-                            this.state = this.states.idle;
-                        }
-                    } else {
-                        if (
-                            this.BB.collide(entity.topBB) ||
-                            this.BB.collide(entity.bottomBB)
-                        ) {
-                            if (this.game.keys.Space && this.game.keys.KeyK) {
-                                this.state = this.states.idle;
-                                this.handleDashEnding(RUN_FALL, ACC_RUN, TICK);
-                            } else if (this.game.keys.Space) {
-                                // Do nothing lol
-                                // this will prevent player stuck at jump loop
-                            } else if (this.game.keys.KeyK) {
-                                this.state = this.states.idle;
-                                this.handleDashEnding(RUN_FALL, ACC_RUN, TICK);
-                            } else if (
-                                this.game.keys.KeyA ||
-                                this.game.keys.KeyD
-                            ) {
-                                this.velocity.y +=
-                                    this.velocity.x === 0
-                                        ? 0
-                                        : this.fallAcc * TICK;
-                            } else {
-                                this.velocity.x = 0;
-                                this.velocity.y += this.fallAcc * TICK;
-                                // this.state = this.states.idle;
-                                this.game.keys.KeyK = false;
-                            }
-                        } else {
+                    if (this.velocity.y > 0 && !this.game.keys.Space) {
+                        // falling and not holding jump
+                        // Set state to wall hang
+                        this.state = this.states.wallHang;
+                        this.velocity.y = 1;
+                        this.isInAir = false;
+                        this.airDashed = false;
+                    } else if (this.velocity.y > 0 && this.game.keys.Space) {
+                        // falling then hit jump, bounce from wall
+                        //play wall jump soundEffect
+                        this.getRandomGrunt().play();
+                        this.velocity.x =
+                            this.facing === 1 ? WALL_JUMP : -WALL_JUMP;
+                        this.velocity.y = STOP_JUMP;
+                        this.fallAcc = STOP_FALL;
+                        this.isInAir = true;
+                        this.state = this.states.jump;
+                        // Reset jump animation to the beginning
+                        this.animations[3][0].elapsedTime = 0;
+                        this.animations[3][1].elapsedTime = 0;
+                    } else if (this.velocity.y === 0) {
+                        if (this.game.keys.KeyK) {
+                            // Prevent player idle at wall when dashing into wall
                             this.state = this.states.wallHang;
                             this.handleDashEnding(RUN_FALL, ACC_RUN, TICK);
                         }
                     }
-                    this.updateBB();
+                } else if (
+                    entity instanceof Ground &&
+                    entity.type &&
+                    (this.BB.collide(entity.topBB) ||
+                        this.BB.collide(entity.bottomBB))
+                ) {
+                    if (this.game.keys.KeyK) {
+                        this.velocity.y += this.fallAcc * TICK;
+                        this.game.keys.KeyK = false;
+                    }
                 }
             }
         });
@@ -1017,10 +994,8 @@ class Player {
                 Math.abs(this.velocity.x) === MAX_DASH
             ) {
                 this.state = this.states.dash;
-                this.updateBB();
             } else if (Math.abs(this.velocity.x) >= MIN_RUN) {
                 this.state = this.states.run;
-                this.updateBB();
             } else if (!this.attacking) {
                 this.state = this.states.idle;
             }
@@ -1047,48 +1022,35 @@ class Player {
         if (this.state == this.states.wallHang) {
         }
 
-      
+        this.updateBB();
+
+        // Display values for Debug mode
+        if (params.debug) {
+            document.getElementById('stateP').innerHTML =
+                'State Player: ' + this.state;
+            document.getElementById('velo').innerHTML =
+                'x-velo ' +
+                this.velocity.x +
+                ' ' +
+                'y-velo: ' +
+                this.velocity.y;
+        }
     }
 
     draw(ctx) {
-        //actual animation code
-        // this.animations[this.state][this.facing].drawFrame(
-        //     this.game.clockTick,
-        //     ctx,
-        //     this.x - this.game.camera.x + this.spriteOffset.xOffset, // camera sidescrolling
-        //     this.y - this.game.camera.y + this.spriteOffset.yOffset,
-        //     2
-        // );
+        this.animations[this.state][this.facing].drawFrame(
+            this.game.clockTick,
+            ctx,
+            this.x - this.game.camera.x + this.spriteOffset.xOffset, // camera sidescrolling
+            this.y - this.game.camera.y + this.spriteOffset.yOffset,
+            2
+        );
 
         if (
             this.state === this.states.attack1 ||
             this.state === this.states.attack2 ||
             this.state === this.states.attack3
         ) {
-            let tempXOffset = 0;
-            let tempYOffset = 0;
-            if (this.facing == 0) {
-                tempXOffset = -10;
-                tempYOffset = -30;
-            } else {
-                tempXOffset = -80;
-                tempYOffset = -30;
-            }
-            //attacking update to this.facing
-            this.animations[this.state][this.facing].drawFrame(
-                this.game.clockTick,
-                ctx,
-                this.x -
-                    this.game.camera.x +
-                    this.spriteOffset.xOffset +
-                    tempXOffset, // camera sidescrolling
-                this.y -
-                    this.game.camera.y +
-                    this.spriteOffset.yOffset +
-                    tempYOffset,
-                2
-            );
-            //update to this.facing
             if (this.animations[this.state][this.facing].isDone()) {
                 // console.log('finished');
                 this.attacking = false;
@@ -1098,14 +1060,6 @@ class Player {
             }
             // console.log("attackl anim");
         } else {
-            //all other animations
-            this.animations[this.state][this.facing].drawFrame(
-                this.game.clockTick,
-                ctx,
-                this.x - this.game.camera.x + this.spriteOffset.xOffset, // camera sidescrolling
-                this.y - this.game.camera.y + this.spriteOffset.yOffset,
-                2
-            );
             //obviously not attacking
             this.attacking = false;
             // console.log("normal anim");
@@ -1136,9 +1090,9 @@ class Player {
             );
         }
     }
-    getRandomGrunt(){
-        let theGrunt = this.getRandomInt(1,5);
-        switch(theGrunt) {
+    getRandomGrunt() {
+        let theGrunt = this.getRandomInt(1, 5);
+        switch (theGrunt) {
             case 1:
                 return this.soundEffects.grunt1;
             case 2:
@@ -1156,5 +1110,5 @@ class Player {
         min = Math.ceil(min);
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min) + min);
-      }
+    }
 }
