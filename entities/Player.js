@@ -36,6 +36,7 @@ class Player {
         this.attackCooldown = 0;
         this.attacking = false;
         this.attackBB = new BoundingBox(0, 0, 0, 0);
+        this.isPogo = false;
 
         /* States:
         0 - idle
@@ -47,6 +48,9 @@ class Player {
         6 - Attack part 1
         7 - attack part 2
         8 - attack part 3
+        9 - pogo start
+        10 - pogo/downward attack
+        11 - pogo end
         ...
         */
         this.state = 0;
@@ -60,6 +64,9 @@ class Player {
             attack1: 6,
             attack2: 7,
             attack3: 8,
+            pogoStart: 9,
+            pogo: 10,
+            pogoEnd: 11,
         };
         this.dead = false;
 
@@ -109,6 +116,10 @@ class Player {
         );
         this.attackRightThree = ASSET_MANAGER.getAsset(
             './sprites/player/zero_attack_right_three_114x64-Sheet.png'
+        );
+
+        this.pogoSprite = ASSET_MANAGER.getAsset(
+            './sprites/player/player-pogo-65x102.png'
         );
 
         this.loadAnimations();
@@ -272,8 +283,7 @@ class Player {
     }
 
     loadAnimations() {
-        for (var i = 0; i < 9; i++) {
-            // six states
+        for (var i = 0; i < 12; i++) {
             this.animations.push([]);
             for (var k = 0; k < 2; k++) {
                 // two directions
@@ -516,6 +526,93 @@ class Player {
             this.attackSpeed,
             2,
             false,
+            false
+        );
+
+        // Pogo start - state 9
+        // Face right - 0
+        this.animations[9][0] = new Animator(
+            this.pogoSprite,
+            0,
+            0,
+            65,
+            102,
+            2,
+            this.attackSpeed,
+            0,
+            false,
+            false
+        );
+        // Face left - 1
+        // Face right - 0
+        this.animations[9][1] = new Animator(
+            this.pogoSprite,
+            1170,
+            0,
+            65,
+            102,
+            2,
+            this.attackSpeed,
+            0,
+            true,
+            false
+        );
+
+        // Pogo - state 10
+        // Face right - 0
+        this.animations[10][0] = new Animator(
+            this.pogoSprite,
+            130,
+            0,
+            65,
+            102,
+            2,
+            this.attackSpeed,
+            0,
+            false,
+            true
+        );
+        // Face left - 1
+        // Face right - 0
+        this.animations[10][1] = new Animator(
+            this.pogoSprite,
+            910,
+            0,
+            65,
+            102,
+            2,
+            this.attackSpeed,
+            0,
+            true,
+            true
+        );
+
+        // Pogo end - state 11
+        // Face right - 0
+        this.animations[11][0] = new Animator(
+            this.pogoSprite,
+            260,
+            0,
+            65,
+            102,
+            5,
+            this.attackSpeed,
+            0,
+            false,
+            false
+        );
+        // Face left - 1
+        // Face right - 0
+        this.animations[11][1] = new Animator(
+            this.pogoSprite,
+            585,
+            0,
+            65,
+            102,
+            5,
+            this.attackSpeed,
+            0,
+            true,
             false
         );
     }
@@ -772,13 +869,24 @@ class Player {
             }
             // End Dashing
 
+            // Pogo
+            if (this.game.keys.KeyS && this.game.keys.KeyJ && this.isInAir) {
+                this.state = this.states.pogo;
+                this.attacking = true;
+                this.isPogo = true;
+                // if (this.animations[9][this.facing].isDone())
+                //     this.state = this.states.pogo;
+            }
+            // End Pogo
+
             //handle attacking
             if (this.game.keys.KeyJ && this.game.keys.KeyK) {
                 // Do nothing
             } else if (
                 this.game.keys.KeyJ &&
                 this.state !== this.states.wallHang &&
-                this.attackCooldown <= 0
+                this.attackCooldown <= 0 &&
+                !this.game.keys.KeyS
             ) {
                 // debugger;
                 //play the attack sound
@@ -893,6 +1001,7 @@ class Player {
                         if (this.isInAir) this.soundEffects.land.play();
                         this.isInAir = false;
                         this.airDashed = false;
+                        this.isPogo = false;
 
                         this.updateBB();
                     }
@@ -987,7 +1096,8 @@ class Player {
             !this.attacking &&
             this.state !== this.states.jump &&
             this.state !== this.states.fall &&
-            this.state !== this.states.wallHang
+            this.state !== this.states.wallHang &&
+            !this.isPogo
         ) {
             if (
                 Math.abs(this.velocity.x) > MAX_RUN ||
@@ -1007,7 +1117,9 @@ class Player {
         ) {
             // Set state to either Air Attack, Jump, or Fall
             this.state = this.attacking
-                ? this.states.attack2
+                ? this.isPogo
+                    ? this.states.pogo
+                    : this.states.attack2
                 : this.velocity.y > 0
                 ? this.states.fall
                 : this.states.jump;
