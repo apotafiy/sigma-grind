@@ -567,7 +567,7 @@ class Player {
             65,
             102,
             2,
-            this.attackSpeed,
+            this.attackSpeed + 0.06,
             0,
             false,
             true
@@ -581,7 +581,7 @@ class Player {
             65,
             102,
             2,
-            this.attackSpeed,
+            this.attackSpeed + 0.06,
             0,
             true,
             true

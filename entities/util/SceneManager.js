@@ -17,155 +17,196 @@ class SceneManager {
         this.player_width = 45 / 2;
         this.shakeX = 0;
         this.shakeY = 0;
+        this.interpolation = 0.06;
         this.background_songs = {};
-        this.background_songs.intro = new Audio("../sounds/background_song_1.mp3");
+        this.background_songs.intro = new Audio(
+            '../sounds/background_song_1.mp3'
+        );
         this.playSong();
         // Dat GUI stuff
         this.gui = new dat.GUI();
-        this.cameraFolder = this.gui.addFolder("Camera values");
+        this.cameraFolder = this.gui.addFolder('Camera values');
         this.testValues = {
             accel: this.acceleration,
             frixn: this.friction,
             frixnMult: this.FRICTON_MULT,
             frictionx: this.FRICTON_X,
             frictiony: this.FRICTON_Y,
+            interpolation: this.interpolation,
         };
         this.cameraFolder
-            .add(this.testValues, "accel")
+            .add(this.testValues, 'accel')
             .min(0)
             .max(2000)
             .step(1)
-            .onChange(val => {
+            .onChange((val) => {
                 this.acceleration = val;
             })
-            .name("Acceleration");
+            .name('Acceleration');
         this.cameraFolder
-            .add(this.testValues, "frixn")
+            .add(this.testValues, 'frixn')
             .min(0.0000001)
             .max(2)
             .step(0.00000001)
-            .onChange(val => {
+            .onChange((val) => {
                 this.friction = val;
             })
-            .name("Friction");
+            .name('Friction');
         this.cameraFolder
-            .add(this.testValues, "frixnMult")
+            .add(this.testValues, 'frixnMult')
             .min(0)
             .max(10)
             .step(1)
-            .onChange(val => {
+            .onChange((val) => {
                 this.FRICTON_MULT = val;
             })
-            .name("FrictionMultiplier");
+            .name('FrictionMultiplier');
         this.cameraFolder
-            .add(this.testValues, "frictionx")
+            .add(this.testValues, 'frictionx')
             .min(0.000000001)
             .max(2)
             .step(0.000000001)
-            .onChange(val => {
+            .onChange((val) => {
                 this.FRICTON_X = val;
             })
-            .name("Friction X");
+            .name('Friction X');
         this.cameraFolder
-            .add(this.testValues, "frictiony")
+            .add(this.testValues, 'frictiony')
             .min(0.000000001)
             .max(2)
             .step(0.000000001)
-            .onChange(val => {
+            .onChange((val) => {
                 this.FRICTON_y = val;
             })
-            .name("Friction Y");
-
+            .name('Friction Y');
+        this.cameraFolder
+            .add(this.testValues, 'interpolation')
+            .min(0)
+            .max(1)
+            .step(0.001)
+            .onChange((val) => {
+                this.interpolation = val;
+            })
+            .name('Interpolation');
     }
-    shake(x,y) {
+    shake(x, y) {
         this.shakeX += x;
         this.shakeY += y;
     }
-    playSong(){
+    playSong() {
         this.background_songs.intro.play();
     }
     update() {
-        params.debug = document.getElementById("debug").checked;
+        params.debug = document.getElementById('debug').checked;
         //set up midpoints for calculatoin
         let midpoint = 1024 / 2 - 44;
         let vertmidpoint = 768 / 2 - 44;
-        let dist = getDistance(this, this.game.player);
 
-        //make the camera move faster if it is too far from the player
-        if (dist > 850 || dist < 450) {
-            if (this.FRICTON_MULT > 1) {
-                this.FRICTON_MULT -= 0.1;
-            }
-        } else {
-            if (this.FRICTON_MULT < 5) {
-                this.FRICTON_MULT += 0.1;
-            }
-        }
-        //find the unit vector components of the distance
-        let xdif =(this.game.player.x - this.x - midpoint + this.player_width) / dist;
-        let ydif = (this.game.player.y - this.y - vertmidpoint) / dist;
-        
-        //increase the velocity of the camera based on the ditance
-        this.xVelocity += (this.shakeX  + xdif * this.acceleration ) / (dist * this.DISTANCE_MULT);
-        this.yVelocity += (this.shakeY + ydif * this.acceleration * 2) / (dist * this.DISTANCE_MULT);
-        
-        //removed a percentage of the velocity for friction
-        this.xVelocity -=
-            (this.FRICTON_MULT - this.FRICTON_X) *
-            this.game.clockTick *
-            (this.xVelocity * 1);
-        this.yVelocity -=
-            (this.FRICTON_MULT - this.FRICTON_Y) *
-            this.game.clockTick *
-            this.yVelocity *
-            1.75;
-        //remove some of the shake for friction
-        this.shakeX -=
-         (this.FRICTON_MULT - this.FRICTON_X) *
-        this.game.clockTick *
-        (this.shakeX * 1);
+        // let dist = getDistance(this, this.game.player);
 
-        this.shakeY -=
-        (this.FRICTON_MULT - this.FRICTON_Y) *
-        this.game.clockTick *
-        this.shakeY *
-        1.75;
-        //move the camera over by the veoloity
-        this.x += this.xVelocity;
-        this.y += this.yVelocity;
+        // //make the camera move faster if it is too far from the player
+        // if (dist > 850 || dist < 450) {
+        //     if (this.FRICTON_MULT > 1) {
+        //         this.FRICTON_MULT -= 0.1;
+        //     }
+        // } else {
+        //     if (this.FRICTON_MULT < 5) {
+        //         this.FRICTON_MULT += 0.1;
+        //     }
+        // }
+        // //find the unit vector components of the distance
+        // let xdif =(this.game.player.x - this.x - midpoint + this.player_width) / dist;
+        // let ydif = (this.game.player.y - this.y - vertmidpoint) / dist;
+
+        // //increase the velocity of the camera based on the ditance
+        // this.xVelocity += (this.shakeX  + xdif * this.acceleration ) / (dist * this.DISTANCE_MULT);
+        // this.yVelocity += (this.shakeY + ydif * this.acceleration * 2) / (dist * this.DISTANCE_MULT);
+
+        // //removed a percentage of the velocity for friction
+        // this.xVelocity -=
+        //     (this.FRICTON_MULT - this.FRICTON_X) *
+        //     this.game.clockTick *
+        //     (this.xVelocity * 1);
+        // this.yVelocity -=
+        //     (this.FRICTON_MULT - this.FRICTON_Y) *
+        //     this.game.clockTick *
+        //     this.yVelocity *
+        //     1.75;
+        // //remove some of the shake for friction
+        // this.shakeX -=
+        //  (this.FRICTON_MULT - this.FRICTON_X) *
+        // this.game.clockTick *
+        // (this.shakeX * 1);
+
+        // this.shakeY -=
+        // (this.FRICTON_MULT - this.FRICTON_Y) *
+        // this.game.clockTick *
+        // this.shakeY *
+        // 1.75;
+        // //move the camera over by the veoloity
+        // this.x += this.xVelocity;
+        // this.y += this.yVelocity;
 
         //doodoo camera system
         // this.x = this.game.player.x - midpoint;
         // this.y = this.game.player.y - vertmidpoint;
 
+        // Using Lerp
+        // Higher interpolation amount = less smoothing effect
+        this.x = lerp(
+            this.x + this.shakeX / 12, // Divide by 12 to lessen the amount of shake
+            this.game.player.x - midpoint,
+            this.interpolation
+        );
+        this.y = lerp(
+            this.y + this.shakeY / 12,
+            this.game.player.y - vertmidpoint,
+            this.interpolation
+        );
+        //remove some of the shake for friction
+        this.shakeX -=
+            (this.FRICTON_MULT - this.FRICTON_X) *
+            this.game.clockTick *
+            (this.shakeX * 1);
+
+        this.shakeY -=
+            (this.FRICTON_MULT - this.FRICTON_Y) *
+            this.game.clockTick *
+            this.shakeY *
+            1.75;
     }
 
     draw(ctx) {
-        if(params.debug) {
-            //draw the grid of text 
+        if (params.debug) {
+            //draw the grid of text
             // for(let i = -100; i < 0; i++){
             //     for(let j = 0;j < 100; j++){
             //         ctx.font = "5px Arial";
-            //         ctx.strokeText("X: " + i + "\nY: " + j, i * 64, j * 64); 
+            //         ctx.strokeText("X: " + i + "\nY: " + j, i * 64, j * 64);
             //     }
             // }
-          let that = this;
-        ctx.strokeStyle = "Blue";
-        ctx.strokelin;
-        ctx.strokeRect(1024 / 2 - that.player_width - 5, 768 / 2 - 5, 10, 10);
+            let that = this;
+            ctx.strokeStyle = 'Blue';
+            ctx.strokelin;
+            ctx.strokeRect(
+                1024 / 2 - that.player_width - 5,
+                768 / 2 - 5,
+                10,
+                10
+            );
 
-        //draw line Between ctx.beginPath();
-        // ctx.moveTo(1024/2 - that.player_width, 768/2);
-        // ctx.lineTo(that.game.player.x - that.x, that.game.player.y - that.y);
-        ctx.strokeRect(
-            1024 / 2 - that.player_width,
-            768 / 2,
-            that.game.player.x - that.x - 1024 / 2 + 25 + 44,
-            that.game.player.y - that.y - 768 / 2 + 44
-        );
-        ctx.stroke();
-    }
+            //draw line Between ctx.beginPath();
+            // ctx.moveTo(1024/2 - that.player_width, 768/2);
+            // ctx.lineTo(that.game.player.x - that.x, that.game.player.y - that.y);
+            ctx.strokeRect(
+                1024 / 2 - that.player_width,
+                768 / 2,
+                that.game.player.x - that.x - 1024 / 2 + 25 + 44,
+                that.game.player.y - that.y - 768 / 2 + 44
+            );
+            ctx.stroke();
         }
+    }
 
     //find distance between two points
     /**
