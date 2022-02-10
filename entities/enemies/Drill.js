@@ -184,18 +184,14 @@ class Drill {
                 this.isActive = true;
             }
             this.angle = Math.floor(
-                // TODO: just use this.player -- might be related to above comment
-                Math.atan(
-                    (this.y - this.game.getPlayer().y) /
-                        (this.x - this.game.getPlayer().x)
-                ) *
+                Math.atan((this.y - this.player.y) / (this.x - this.player.x)) *
                     (180 / Math.PI)
             );
 
             if (this.angle < 0) {
                 this.angle += 360;
             }
-            if (this.x < this.game.getPlayer().x) {
+            if (this.x < this.player.x) {
                 this.angle += 180;
             }
             if (this.angle > 359) {
