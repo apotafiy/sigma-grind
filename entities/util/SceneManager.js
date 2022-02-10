@@ -20,10 +20,10 @@ class SceneManager {
         this.shakeX = 0;
         this.shakeY = 0;
         this.background_songs = {};
-        this.background_songs.intro = SOUND_MANAGER.getSound("background_1")
+        this.background_songs.intro = SOUND_MANAGER.getSound("background_1");
+        SOUND_MANAGER.autoRepeat("background_1");
         this.playSong(this.background_songs.intro);
         this.backgroundMusicVolume.oninput = function() {
-            console.log("triggered")
             SOUND_MANAGER.setVolume("background_1", this.value /100);
         }
         // Dat GUI stuff

@@ -79,10 +79,10 @@ class Player {
         this.soundEffects.jump_voice = SOUND_MANAGER.getSound("player_jump");
         this.soundEffects.run = SOUND_MANAGER.getSound("player_walk");
         this.soundEffects.dash =SOUND_MANAGER.getSound("player_dash");
-        this.soundEffects.grunt1 = SOUND_MANAGER.getSound("player_grunt1");
-        this.soundEffects.grunt2 = SOUND_MANAGER.getSound("player_grunt2");
-        this.soundEffects.grunt3 =SOUND_MANAGER.getSound("player_grunt2");
-        this.soundEffects.grunt4 = SOUND_MANAGER.getSound("player_grunt4");
+        this.soundEffects.grunt1 = SOUND_MANAGER.getSound("player_grunt_1");
+        this.soundEffects.grunt2 = SOUND_MANAGER.getSound("player_grunt_2");
+        this.soundEffects.grunt3 =SOUND_MANAGER.getSound("player_grunt_2");
+        this.soundEffects.grunt4 = SOUND_MANAGER.getSound("player_grunt_4");
         this.soundEffects.land  =SOUND_MANAGER.getSound("player_land");
 
         // Size and bounding box

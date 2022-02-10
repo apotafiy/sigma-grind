@@ -200,7 +200,7 @@ class DogBoss {
     //if we are just walking around
     // console.log(this.walkdelay);
     if (this.currentState == 0) {
-      if(this.walkdelay <= 0){
+      if(this.walkdelay <= 0 && getDistance(this,this.game.player) < 600){
         this.soundEffects.walk.play();
         this.walkdelay = 50;
       } else {

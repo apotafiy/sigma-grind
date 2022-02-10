@@ -66,7 +66,8 @@ SOUND_MANAGER.queueDownload("player_attack","./sounds/player/sword_attack_short.
 SOUND_MANAGER.queueDownload("dogboss_roar", "./sounds/dogboss/roar.wav");
 SOUND_MANAGER.queueDownload("dogboss_walk", "./sounds/dogboss/walk.wav");
 SOUND_MANAGER.queueDownload("dogboss_launch_projectile", "./sounds/dogboss/launch_attack.wav")
-
+//rush soundEffects
+SOUND_MANAGER.queueDownload("rush_teleport", "./sounds/rush/teleport.mp3");
 //background Music
 SOUND_MANAGER.queueDownload("background_1", " ./sounds/background_song_1.mp3");
 //load in all sounds
