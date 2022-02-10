@@ -988,7 +988,6 @@ class Player {
         // Fall off map = dead
         // Assuming block width is 64
         if (this.y > 64 * 16 || this.currentHitpoints <= 0) this.die();
-
         // collision
         let that = this;
 
@@ -1260,7 +1259,7 @@ class Player {
             ctx.textAlign = 'center';
             ctx.fillStyle = 'black';
             ctx.fillText(
-                Math.floor(this.x / 64) + ', ' + Math.floor(this.y / 64),
+                Math.floor(this.x / 64) + ', ' + Math.floor(this.y / 64) + ", " + this.currentHitpoints ,
                 this.x - this.game.camera.x + this.spriteOffset.xOffset + 40, // camera sidescrolling
                 this.y - this.game.camera.y + this.spriteOffset.yOffset - 20
             );

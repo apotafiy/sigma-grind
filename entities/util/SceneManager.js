@@ -19,6 +19,7 @@ class SceneManager {
         this.player_width = 45 / 2;
         this.shakeX = 0;
         this.shakeY = 0;
+        this.interpolation = 0.06
         this.background_songs = {};
         this.background_songs.intro = SOUND_MANAGER.getSound("background_1");
         SOUND_MANAGER.autoRepeat("background_1");
@@ -101,49 +102,71 @@ class SceneManager {
         let vertmidpoint = 768 / 2 - 44;
         let dist = getDistance(this, this.game.player);
 
-        //make the camera move faster if it is too far from the player
-        if (dist > 850 || dist < 450) {
-            if (this.FRICTON_MULT > 1) {
-                this.FRICTON_MULT -= 0.1;
-            }
-        } else {
-            if (this.FRICTON_MULT < 5) {
-                this.FRICTON_MULT += 0.1;
-            }
-        }
-        //find the unit vector components of the distance
-        let xdif =(this.game.player.x - this.x - midpoint + this.player_width) / dist;
-        let ydif = (this.game.player.y - this.y - vertmidpoint) / dist;
+        // //make the camera move faster if it is too far from the player
+        // if (dist > 850 || dist < 450) {
+        //     if (this.FRICTON_MULT > 1) {
+        //         this.FRICTON_MULT -= 0.1;
+        //     }
+        // } else {
+        //     if (this.FRICTON_MULT < 5) {
+        //         this.FRICTON_MULT += 0.1;
+        //     }
+        // }
+        // //find the unit vector components of the distance
+        // let xdif =(this.game.player.x - this.x - midpoint + this.player_width) / dist;
+        // let ydif = (this.game.player.y - this.y - vertmidpoint) / dist;
         
-        //increase the velocity of the camera based on the ditance
-        this.xVelocity += (this.shakeX  + xdif * this.acceleration ) / (dist * this.DISTANCE_MULT);
-        this.yVelocity += (this.shakeY + ydif * this.acceleration * 2) / (dist * this.DISTANCE_MULT);
+        // //increase the velocity of the camera based on the ditance
+        // this.xVelocity += (this.shakeX  + xdif * this.acceleration ) / (dist * this.DISTANCE_MULT);
+        // this.yVelocity += (this.shakeY + ydif * this.acceleration * 2) / (dist * this.DISTANCE_MULT);
         
-        //removed a percentage of the velocity for friction
-        this.xVelocity -=
-            (this.FRICTON_MULT - this.FRICTON_X) *
-            this.game.clockTick *
-            (this.xVelocity * 1);
-        this.yVelocity -=
-            (this.FRICTON_MULT - this.FRICTON_Y) *
-            this.game.clockTick *
-            this.yVelocity *
-            1.75;
+        // //removed a percentage of the velocity for friction
+        // this.xVelocity -=
+        //     (this.FRICTON_MULT - this.FRICTON_X) *
+        //     this.game.clockTick *
+        //     (this.xVelocity * 1);
+        // this.yVelocity -=
+        //     (this.FRICTON_MULT - this.FRICTON_Y) *
+        //     this.game.clockTick *
+        //     this.yVelocity *
+        //     1.75;
+        // //remove some of the shake for friction
+        // this.shakeX -=
+        //  (this.FRICTON_MULT - this.FRICTON_X) *
+        // this.game.clockTick *
+        // (this.shakeX * 1);
+
+        // this.shakeY -=
+        // (this.FRICTON_MULT - this.FRICTON_Y) *
+        // this.game.clockTick *
+        // this.shakeY *
+        // 1.75;
+        // //move the camera over by the veoloity
+        // this.x += this.xVelocity;
+        // this.y += this.yVelocity;
+
+                // Using Lerp
+        // Higher interpolation amount = less smoothing effect
+        this.x = lerp(
+            this.x + this.shakeX / 12, // Divide by 12 to lessen the amount of shake
+            this.game.player.x - midpoint,
+            this.interpolation
+        );
+        this.y = lerp(
+            this.y + this.shakeY / 12,
+            this.game.player.y - vertmidpoint,
+            this.interpolation
+        );
         //remove some of the shake for friction
         this.shakeX -=
-         (this.FRICTON_MULT - this.FRICTON_X) *
-        this.game.clockTick *
-        (this.shakeX * 1);
-
+            (this.FRICTON_MULT - this.FRICTON_X) *
+            this.game.clockTick *
+            (this.shakeX * 1);
         this.shakeY -=
-        (this.FRICTON_MULT - this.FRICTON_Y) *
-        this.game.clockTick *
-        this.shakeY *
-        1.75;
-        //move the camera over by the veoloity
-        this.x += this.xVelocity;
-        this.y += this.yVelocity;
-
+            (this.FRICTON_MULT - this.FRICTON_Y) *
+            this.game.clockTick *
+            this.shakeY *
+            1;
         //doodoo camera system
         // this.x = this.game.player.x - midpoint;
         // this.y = this.game.player.y - vertmidpoint;
