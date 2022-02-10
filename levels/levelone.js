@@ -1,7 +1,7 @@
 function loadLevelOne(gameEngine) {
     let gravity = 0.2;
-    gameEngine.addEntity(new Player(gameEngine, 108, -35, gravity));
-    // gameEngine.addEntity(new Player(gameEngine, 3, 0, gravity));
+    // gameEngine.addEntity(new Player(gameEngine, 108, -35, gravity));
+    gameEngine.addEntity(new Player(gameEngine, 3, 0, gravity));
 
     gameEngine.addEntity(new Ground(gameEngine, 1, -5, -6, 6, 20, 1, 0, 1));
     //start ground
