@@ -1022,7 +1022,6 @@ class Player {
                 // Side collisions
                 if (
                     (entity instanceof Ground || entity instanceof Spike) &&
-                    entity.type &&
                     this.BB.collide(entity.leftBB)
                 ) {
                     // Right side collision
@@ -1031,7 +1030,6 @@ class Player {
                     if (this.velocity.x > 0) this.velocity.x = 0;
                 } else if (
                     (entity instanceof Ground || entity instanceof Spike) &&
-                    entity.type &&
                     this.BB.collide(entity.rightBB)
                 ) {
                     // Left side collision
