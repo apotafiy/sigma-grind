@@ -76,8 +76,18 @@ class GroundProjectile {
             //Collision
         this.game.entities.forEach(function (entity) {
             if (entity.BB && that.BB.collide(entity.BB)) {
-                //if falling check below
-                if (that.yVelocity > 0) {
+                //if  check below
+               if(that.yVelocity < 0){
+                if (
+                    entity instanceof Ground &&
+                    that.lastBB.top >= entity.BB.bottom
+                ) {
+                    // ws above last tick
+                    that.y = entity.BB.bottom - that.BB.height; //set to top of bounding box of ground
+                    that.yVelocity = 0;
+                    that.updateBB();
+                }
+               } if (that.yVelocity > 0) {
                     if (
                         entity instanceof Ground &&
                         that.lastBB.bottom <= entity.BB.top

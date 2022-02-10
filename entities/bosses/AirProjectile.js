@@ -5,6 +5,7 @@ class AirProjectile {
 
   constructor(game, x, y, xVel, yVel, direction, gravity) {
     this.scale = 2;
+    this.glow = 0;
     this.time = 10000; //this.getRandomInt(100,200);
     this.attacking = 0;
     this.game = game;
@@ -68,6 +69,7 @@ class AirProjectile {
     );
   }
   update() {
+    this.glow = (this.glow + 1) % 360
     let that = this;
     //vanish after 200 seconds
     this.time -= 1;
@@ -115,6 +117,7 @@ class AirProjectile {
 
   draw(ctx) {
     let that = this;
+    ctx.filter = `hue-rotate(${this.glow}deg)`;
     // console.log(that.currentState, that.yVelocity)
     that.animations[0][0].drawFrame(
       that.game.clockTick,
@@ -123,7 +126,7 @@ class AirProjectile {
       that.y - that.game.camera.y, // + that.BB.height / 4,
       that.scale
     );
-
+    ctx.filter = `none`;
     if (params.debug) {
       ctx.strokeStyle = "Purple";
       ctx.strokeRect(
