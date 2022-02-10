@@ -90,7 +90,7 @@ class Ground {
             this.game.entities.forEach(function (entity) {
                 //if it is a ground entity that is no more than 32 pixels above it  or it is within a block
                 if (
-                   ( entity instanceof Ground || entity instanceof Spike) &&
+                    (entity instanceof Ground || entity instanceof Spike) &&
                     entity.BB.bottom <= that.BB.top &&
                     (Math.abs(entity.BB.bottom - that.BB.top) <= 32 ||
                         (that.BB.top <= entity.BB.bottom &&
@@ -251,12 +251,16 @@ class Ground {
                 that.BB.height
             );
             // Draw left and right boxes
+            ctx.strokeStyle = 'Yellow';
+
             ctx.strokeRect(
                 that.leftBB.x - that.game.camera.x,
                 that.leftBB.y - that.game.camera.y,
                 that.leftBB.width,
                 that.leftBB.height
             );
+            ctx.strokeStyle = 'Blue';
+
             ctx.strokeRect(
                 that.rightBB.x - that.game.camera.x,
                 that.rightBB.y - that.game.camera.y,
@@ -264,6 +268,8 @@ class Ground {
                 that.rightBB.height
             );
             // Draw bottom box
+            ctx.strokeStyle = 'Green';
+
             ctx.strokeRect(
                 that.bottomBB.x - that.game.camera.x,
                 that.bottomBB.y - that.game.camera.y,
@@ -271,7 +277,7 @@ class Ground {
                 that.bottomBB.height
             );
             // Draw top box
-            ctx.strokeStyle = 'Yellow';
+            ctx.strokeStyle = 'Pink';
             ctx.strokeRect(
                 that.topBB.x - that.game.camera.x,
                 that.topBB.y - that.game.camera.y,
