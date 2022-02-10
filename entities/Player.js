@@ -1019,7 +1019,7 @@ class Player {
                 if (entity && entity instanceof DogBoss) {
                     // console.log('kILL dRILL');
                     //if it has die method it should die
-                    if (entity.iframes <= 0) {
+                    if (entity.iframes <= 0 && entity.currentState != 4) {
                         entity.health -= 5;
                         entity.iframes = 20;
                     }

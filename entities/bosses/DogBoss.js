@@ -29,7 +29,7 @@ class DogBoss {
       this.dirIndex = 0;
     }
     this.flashframes = 0;
-    this.maxHealth = 300;
+    this.maxHealth = 320;
     this.health = this.maxHealth;
     this.walkdelay = 0;
     //player sound imports
@@ -169,6 +169,35 @@ class DogBoss {
       0,
       1
     );
+    //use same animation for the 8 directoin attack animation
+    this.animations[0][4] = new Animator(
+      ASSET_MANAGER.getAsset(
+        "./sprites/dogboss/dogboss_front_facing_128x96.png"
+      ),
+      0,
+      0,
+      128,
+      96,
+      9,
+      0.12,
+      0,
+      0,
+      1
+    );
+    this.animations[1][4] = new Animator(
+      ASSET_MANAGER.getAsset(
+        "./sprites/dogboss/dogboss_front_facing_128x96.png"
+      ),
+      0,
+      0,
+      128,
+      96,
+      9,
+      0.12,
+      0,
+      0,
+      1
+    );
   }
   die() {
     if (!this.isDead) {
@@ -219,7 +248,7 @@ class DogBoss {
         }
       }
       that.x += that.xVelocity * that.direction;
-      that.y += that.yVelocity;
+      that.y += that.yVelocity
       //update out bounding box every frame
       that.updateBB();
       //check if we need to attack
@@ -232,7 +261,7 @@ class DogBoss {
         //play the attack sound
         this.soundEffects.attack.play();
         //choose random attacks to do
-        this.currentState = this.getRandomInt(1, 4);
+        this.currentState = this.getRandomInt(1, 5);
       }
     } else if (this.currentState == 1) {
       //stand and attack with side lasers
@@ -347,6 +376,28 @@ class DogBoss {
             this.game.entities[this.entityArrayPos - 1].dieOnCollide = true;
         }
       }
+    } else if(this.currentState == 4){
+      if(this.attacking == 190) this.yVelocity -= 10
+      if (this.attacking <= 100 && this.attacking % 50 == 0) {
+        this.soundEffects.launch_attack.play();
+        //we only want it to attack a few times with the wall
+        for (let i = 0; i < 27; i+=2) {
+          this.game.addEntityAtIndex(
+            new AirProjectile(
+              this.game,
+              107 + i ,
+              -46,
+              0,
+              1,
+              0,
+              this.gravity
+            ),
+            this.entityArrayPos - 1
+          );
+            //die on hitting a wall to avoid weird stuff
+            this.game.entities[this.entityArrayPos - 1].dieOnCollide = true;
+        }
+      }
     }
     //decrement attacking state
     if (this.attacking > 0) {
@@ -359,13 +410,20 @@ class DogBoss {
       if (entity.BB && that.BB.collide(entity.BB)) {
         //if falling check below
         if (that.yVelocity > 0) {
-          if (entity instanceof Ground && that.lastBB.bottom <= entity.BB.top) {
+          if (entity instanceof Ground && !entity.dontCollide && that.lastBB.bottom <= entity.BB.top) {
             // ws above last tick
             that.y = entity.BB.top - that.BB.height; //set to top of bounding box of ground
             that.yVelocity = 0;
             that.updateBB();
           }
-        } else if (that.direction == 1) {
+        } else if(that.yVelocity < 0){
+          if (entity instanceof Ground && !entity.dontCollide && that.lastBB.top <= entity.BB.bottom) {
+            // ws above last tick
+            that.y = entity.BB.top - that.BB.height; //set to top of bounding box of ground
+            that.yVelocity = 0;
+            that.updateBB();
+          }
+        }else if (that.direction == 1) {
           if (entity instanceof Ground && that.lastBB.left < entity.BB.right) {
             that.x = entity.BB.right;
             that.direction = -1;
@@ -389,6 +447,8 @@ class DogBoss {
       document.getElementById('attacking').innerHTML =
       "Wall dir " + this.wallAttackDir; 
   document.getElementById('state').innerHTML = 'Entity Count: ' + this.game.entities.length;
+    // //always apply gravity
+    // that.y += that.yVelocity * that.game.clockTick;
   }
 
   draw(ctx) {
@@ -397,6 +457,9 @@ class DogBoss {
     if(this.iframes >= 0){
       ctx.filter = ` brightness(${this.flashframes})`;
     }
+    if(this.currentState == 4){
+      ctx.filter = ` brightness(0) opacity(0.2)`;
+    }
     that.animations[that.dirIndex][this.currentState].drawFrame(
       that.game.clockTick,
       ctx,
@@ -404,7 +467,7 @@ class DogBoss {
       that.y - that.game.camera.y, // + that.BB.height / 4,
       that.scale
     );
-    if(this.iframes >= 0){
+    if(this.iframes >= 0 || this.currentState == 4){
       ctx.filter = "none";
     }
     //draw health bar bove him

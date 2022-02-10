@@ -20,13 +20,17 @@ class Ground {
         vertical,
         includeTop,
         leftEdge,
-        rightEdge
+        rightEdge,
+        dontCollide
     ) {
         this.game = game;
         this.animations = [];
         this.dontDrawGrass = [];
         for (let i = 0; i < horizontal; i++) {
             this.dontDrawGrass.push(false);
+        }
+        if(dontCollide){
+            this.dontCollide = ture;
         }
         this.type = type;
         this.xstart = xstart * 64;

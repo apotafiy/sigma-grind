@@ -124,10 +124,15 @@ function loadLevelOne(gameEngine) {
     //boss arena
     gameEngine.addEntity(new Ground(gameEngine, 1, 107, -31, 30, 5, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 1, 107, -32, 3, 1, 1, 0, 0));
-    gameEngine.addEntity(new DogBoss(gameEngine, 115, -40, gravity));
+    gameEngine.addEntity(new Ground(gameEngine, 1, 107, -50, 30, 3, 1, 0, 0));
+    gameEngine.addEntity(new Ground(gameEngine, 1, 137, -50, 5, 40, 1, 0, 0));
+    //platforms for the  player to hide under
+    gameEngine.addEntity(new Ground(gameEngine, 1, 115, -38, 3, 1, 1, 1, 1));
+    gameEngine.addEntity(new Ground(gameEngine, 1, 125, -38, 3, 1, 1, 1, 1));
+    gameEngine.addEntity(new DogBoss(gameEngine, 115, -36, gravity));
     // gameEngine.addEntity(new GroundProjectile(gameEngine,7360,-2560,2,-2, gravity))
     gameEngine.addEntity(new Ground(gameEngine, 1, 135, -32, 2, 1, 1, 0, 0));
-
+// gameEngine.addEntity(new AirProjectile(gameEngine, 106, -40, 0,0,1,0.2));
     //Grass Check
     gameEngine.entities.forEach(function (entity) {
         if (entity instanceof Ground) entity.checkForGrass();
