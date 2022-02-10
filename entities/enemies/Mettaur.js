@@ -176,8 +176,8 @@ class Mettaur {
             0
         );
     }
-    die(){
-        if(!this.isDead){
+    die() {
+        if (!this.isDead) {
             this.isDead = true;
             this.deathTimer = 20;
             this.xVelocity = 0;

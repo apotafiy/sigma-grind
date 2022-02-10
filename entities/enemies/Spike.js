@@ -22,6 +22,39 @@ class Spike {
             64 * this.horizontal,
             64 * this.vertical
         );
+
+        this.leftBB = new BoundingBox(
+            this.xstart,
+            this.ystart + 5,
+            (64 * horizontal) / 2,
+            64 * vertical - 15
+        );
+        this.rightBB = new BoundingBox(
+            this.xstart + (64 * horizontal) / 2,
+            this.ystart + 5,
+            (64 * horizontal) / 2,
+            64 * vertical - 15
+        );
+
+        // Need bottom bounding box to prevent
+        // player teleportation when head hit top platform
+        this.bottomBB = new BoundingBox(
+            this.xstart + 10,
+            this.ystart + 64 * vertical,
+            64 * horizontal - 20,
+            (64 * vertical) / 12 // Making it thinner
+        );
+
+        // Need this to fix player wall hanging
+        // too high with his hand in the air
+        // like he just dont care
+        this.topBB = new BoundingBox(
+            this.xstart,
+            this.ystart - (64 * vertical) / 50 + 5, // Making it goes above the ground a bit
+            64 * horizontal,
+            (64 * vertical) / 50 // Making it thinner
+        );
+
         this.animation = new Animator(
             ASSET_MANAGER.getAsset('./sprites/spike1.png'),
             0,
