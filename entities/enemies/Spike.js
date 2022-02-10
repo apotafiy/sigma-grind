@@ -22,6 +22,39 @@ class Spike {
             64 * this.horizontal,
             64 * this.vertical
         );
+
+        this.leftBB = new BoundingBox(
+            this.x,
+            this.y + 5,
+            (64 * horizontal) / 2,
+            64 * vertical - 15
+        );
+        this.rightBB = new BoundingBox(
+            this.x + (64 * horizontal) / 2,
+            this.y + 5,
+            (64 * horizontal) / 2,
+            64 * vertical - 15
+        );
+
+        // Need bottom bounding box to prevent
+        // player teleportation when head hit top platform
+        this.bottomBB = new BoundingBox(
+            this.x + 10,
+            this.y + 64 * vertical,
+            64 * horizontal - 20,
+            (64 * vertical) / 12 // Making it thinner
+        );
+
+        // Need this to fix player wall hanging
+        // too high with his hand in the air
+        // like he just dont care
+        this.topBB = new BoundingBox(
+            this.x,
+            this.y - (64 * vertical) / 50 + 5, // Making it goes above the ground a bit
+            64 * horizontal,
+            (64 * vertical) / 50 // Making it thinner
+        );
+
         this.animation = new Animator(
             ASSET_MANAGER.getAsset('./sprites/spike1.png'),
             0,
@@ -59,6 +92,45 @@ class Spike {
                     this.BB.y - this.game.camera.y,
                     this.BB.width,
                     this.BB.height
+                );
+            }
+            ctx.strokeStyle = 'Yellow';
+
+            if (this.leftBB) {
+                ctx.strokeRect(
+                    this.leftBB.x - this.game.camera.x,
+                    this.leftBB.y - this.game.camera.y,
+                    this.leftBB.width,
+                    this.leftBB.height
+                );
+            }
+
+            ctx.strokeStyle = 'Blue';
+            if (this.rightBB) {
+                ctx.strokeRect(
+                    this.rightBB.x - this.game.camera.x,
+                    this.rightBB.y - this.game.camera.y,
+                    this.rightBB.width,
+                    this.rightBB.height
+                );
+            }
+            ctx.strokeStyle = 'Green';
+            if (this.bottomBB) {
+                ctx.strokeRect(
+                    this.bottomBB.x - this.game.camera.x,
+                    this.bottomBB.y - this.game.camera.y,
+                    this.bottomBB.width,
+                    this.bottomBB.height
+                );
+            }
+
+            ctx.strokeStyle = 'Pink';
+            if (this.topBB) {
+                ctx.strokeRect(
+                    this.topBB.x - this.game.camera.x,
+                    this.topBB.y - this.game.camera.y,
+                    this.topBB.width,
+                    this.topBB.height
                 );
             }
         }

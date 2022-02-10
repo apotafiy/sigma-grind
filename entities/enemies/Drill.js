@@ -9,8 +9,8 @@ class Drill {
         this.cache = [];
         this.xVelocity = 0;
         this.yVelocity = 0;
-        this.acceleration = 15;
-        this.DISTANCE_MULT = 0.9;
+        this.acceleration = 3000;
+        this.DISTANCE_MULT = 1;
         this.frames = 0;
         this.scale = 2.5;
         this.angle = 0;
@@ -159,8 +159,10 @@ class Drill {
     }
 
     update() {
+        const TICK = this.game.clockTick;
         let dist = getDistance(this, this.player);
         const that = this;
+        // TODO: when not active then there is player is undefined
 
         if (this.state === 3) {
             // death animation
@@ -183,17 +185,14 @@ class Drill {
                 this.isActive = true;
             }
             this.angle = Math.floor(
-                Math.atan(
-                    (this.y - this.game.getPlayer().y) /
-                        (this.x - this.game.getPlayer().x)
-                ) *
+                Math.atan((this.y - this.player.y) / (this.x - this.player.x)) *
                     (180 / Math.PI)
             );
 
             if (this.angle < 0) {
                 this.angle += 360;
             }
-            if (this.x < this.game.getPlayer().x) {
+            if (this.x < this.player.x) {
                 this.angle += 180;
             }
             if (this.angle > 359) {
@@ -203,17 +202,22 @@ class Drill {
             let xdif = (this.player.x - this.x) / dist;
             let ydif = (this.game.player.y - this.y) / dist;
 
-            this.xVelocity -= this.game.clockTick * (this.xVelocity * 0.5);
-            this.yVelocity -= this.game.clockTick * this.yVelocity * 0.5;
+            // slows velocity by half each second. idk why tho
+            this.xVelocity -= TICK * (this.xVelocity * 0.5);
+            this.yVelocity -= TICK * this.yVelocity * 0.5;
+
+            // idk
             this.xVelocity +=
-                (xdif * this.acceleration) / (dist * this.DISTANCE_MULT);
+                (TICK * xdif * this.acceleration) / (dist * this.DISTANCE_MULT);
             this.yVelocity +=
-                (ydif * this.acceleration * 2) / (dist * this.DISTANCE_MULT);
+                (TICK * ydif * this.acceleration * 2) /
+                (dist * this.DISTANCE_MULT);
+
             this.x += this.xVelocity;
             this.y += this.yVelocity;
             this.BB.x = this.x + this.offSetBB;
             this.BB.y = this.y + this.offSetBB;
-
+            // calculate the angle based on velocity
             this.angle = Math.floor(
                 Math.atan(this.yVelocity / this.xVelocity) * (180 / Math.PI)
             );
