@@ -183,7 +183,7 @@ class SceneManager {
             (this.FRICTON_MULT - this.FRICTON_Y) *
             this.game.clockTick *
             this.shakeY *
-            1.75;
+            1;
     }
 
     draw(ctx) {

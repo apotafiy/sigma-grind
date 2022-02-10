@@ -72,18 +72,18 @@ class Player {
 
         //player sound imports
         this.soundEffects = {};
-        this.soundEffects.attack = SOUND_MANAGER.getSound("player_attack")
+        this.soundEffects.attack = SOUND_MANAGER.getSound('player_attack');
         // this.soundEffects.jump_voice = new Audio(
         //     '../sounds/player/jump_voice.wav'
         // );
-        this.soundEffects.jump_voice = SOUND_MANAGER.getSound("player_jump");
-        this.soundEffects.run = SOUND_MANAGER.getSound("player_walk");
-        this.soundEffects.dash =SOUND_MANAGER.getSound("player_dash");
-        this.soundEffects.grunt1 = SOUND_MANAGER.getSound("player_grunt_1");
-        this.soundEffects.grunt2 = SOUND_MANAGER.getSound("player_grunt_2");
-        this.soundEffects.grunt3 =SOUND_MANAGER.getSound("player_grunt_2");
-        this.soundEffects.grunt4 = SOUND_MANAGER.getSound("player_grunt_4");
-        this.soundEffects.land  =SOUND_MANAGER.getSound("player_land");
+        this.soundEffects.jump_voice = SOUND_MANAGER.getSound('player_jump');
+        this.soundEffects.run = SOUND_MANAGER.getSound('player_walk');
+        this.soundEffects.dash = SOUND_MANAGER.getSound('player_dash');
+        this.soundEffects.grunt1 = SOUND_MANAGER.getSound('player_grunt_1');
+        this.soundEffects.grunt2 = SOUND_MANAGER.getSound('player_grunt_2');
+        this.soundEffects.grunt3 = SOUND_MANAGER.getSound('player_grunt_2');
+        this.soundEffects.grunt4 = SOUND_MANAGER.getSound('player_grunt_4');
+        this.soundEffects.land = SOUND_MANAGER.getSound('player_land');
 
         // Size and bounding box
         this.currentSize = { width: 40, height: 50 };
@@ -1021,7 +1021,6 @@ class Player {
                 // Side collisions
                 if (
                     (entity instanceof Ground || entity instanceof Spike) &&
-                    entity.type &&
                     this.BB.collide(entity.leftBB)
                 ) {
                     // Right side collision
@@ -1030,7 +1029,6 @@ class Player {
                     if (this.velocity.x > 0) this.velocity.x = 0;
                 } else if (
                     (entity instanceof Ground || entity instanceof Spike) &&
-                    entity.type &&
                     this.BB.collide(entity.rightBB)
                 ) {
                     // Left side collision
@@ -1064,6 +1062,7 @@ class Player {
                         this.velocity.y = STOP_JUMP;
                         this.fallAcc = STOP_FALL;
                         this.isInAir = true;
+                        this.airDashed = false;
                         this.state = this.states.jump;
                         // Reset jump animation to the beginning
                         this.animations[3][0].elapsedTime = 0;
