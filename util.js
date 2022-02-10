@@ -72,14 +72,3 @@ const getDistance = (p1, p2) => {
 const lerp = (start, end, amount) => {
     return start + (end - start) * amount;
 };
-
-/**
- * Simple linear interpolation
- * @param {Number} start position of original
- * @param {Number} end position of target
- * @param {Number} amount amount of interpolation between 0.00 and 1.00
- * @returns the lerped or percentage in between the start and end values
- */
- const lerp = (start, end, amount) => {
-  return start + (end - start) * amount;
-};
