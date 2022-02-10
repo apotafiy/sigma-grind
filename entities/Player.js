@@ -17,7 +17,8 @@ let WALL_JUMP = 100;
 class Player {
     constructor(game, x, y) {
         Object.assign(this, { game, x, y });
-
+        this.flashframes = 0;
+        
         this.x = x * 64;
         this.y = y * 64;
         this.game.player = this;
@@ -737,6 +738,14 @@ class Player {
     }
 
     update() {
+        /**
+         * flash while invincible
+         */
+         if(this.currentIFrameTimer > 0){
+            this.flashframes = (this.flashframes + 1) % 20;
+          } else {
+            this.flashframes = 0;
+          }
         const TICK = this.game.clockTick;
 
         //testing
@@ -968,7 +977,7 @@ class Player {
 
         // UPDATE POSITION
         if (this.game.keys.ArrowUp) {
-            console.log('pressed');
+            // console.log('pressed');
             this.velocity.y -= 80;
         }
         // scale = 3
@@ -990,7 +999,7 @@ class Player {
 
         // console.log(that.currentIFrameTimer);
 
-        this.game.entities.forEach(function (entity) {
+        this.game.entities.forEach((entity) =>  {
             //check for the enemy colliding with sword
             // || entity instanceof Drill
             if (entity.BB && this.attackBB.collide(entity.BB)) {
@@ -1019,6 +1028,17 @@ class Player {
             }
             // Collision with player's box
             if (entity.BB && this.BB.collide(entity.BB)) {
+                //Damage the player
+                if (
+                    entity &&
+                    entity.isHostile &&
+                    that.currentIFrameTimer === 0
+                ) {
+                    that.currentHitpoints -= entity.collisionDamage;
+                    that.currentIFrameTimer = that.maxIFrameTimer;
+                    console.log('Took ' + entity.collisionDamage + ' damage');
+                    console.log('Current HP: ' + that.currentHitpoints);
+                }
                 if (this.velocity.y > 0) {
                     // falling
                     if (
@@ -1187,6 +1207,10 @@ class Player {
     }
 
     draw(ctx) {
+        //damage blink
+    if(this.currentIFrameTimer > 0){
+        ctx.filter = ` brightness(${this.flashframes})`;
+      }
         this.animations[this.state][this.facing].drawFrame(
             this.game.clockTick,
             ctx,
@@ -1213,7 +1237,9 @@ class Player {
             this.attacking = false;
             // console.log("normal anim");
         }
-
+        if(this.currentIFrameTimer >= 0){
+            ctx.filter = "none";
+          }
         if (params.debug) {
             ctx.strokeStyle = 'Blue';
             ctx.strokeRect(

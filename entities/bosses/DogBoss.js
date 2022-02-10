@@ -29,7 +29,7 @@ class DogBoss {
       this.dirIndex = 0;
     }
     this.flashframes = 0;
-    this.maxHealth = 200;
+    this.maxHealth = 300;
     this.health = this.maxHealth;
     this.walkdelay = 0;
     //player sound imports

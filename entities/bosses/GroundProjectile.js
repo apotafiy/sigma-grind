@@ -19,6 +19,8 @@ class GroundProjectile {
         this.direction = direction;
         this.dieOnCollide = false;
 
+        this.isHostile = true;
+        this.collisionDamage = 10;
 
         this.loadAnimation();
         //bounding box
