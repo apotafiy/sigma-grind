@@ -166,7 +166,7 @@ class Rush {
             ctx,
             that.x - that.game.camera.x + that.xOffset,
             that.y - that.game.camera.y + that.yOffSet,
-            2
+            this.scale
         );
       }
 
@@ -189,7 +189,6 @@ class Rush {
           }
           if(temp.length  > 0) lines.push(temp);
           if(temp.length > maxlen) maxlen = temp.length;
-          console.log(lines);
           //rownum is the number of rows after we split the string
           //figure out the size of the box needed for the text
           let boxlen = (this.fontSize * maxlen) /1.5;

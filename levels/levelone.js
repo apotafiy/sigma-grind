@@ -144,6 +144,9 @@ function loadLevelOne(gameEngine) {
         )
     );
 
+        gameEngine.addEntity(new Sign(gameEngine,15,6,0));
+        gameEngine.addEntity(new Sign(gameEngine,40,0,0));
+
     gameEngine.addEntity(
         new Rush(gameEngine, 25, 2, 5, "Use 'K' To Dash Accross The Gaps!")
     );
@@ -156,6 +159,7 @@ function loadLevelOne(gameEngine) {
             'Run At The Wall And Press Space To Climb It!'
         )
     );
+        gameEngine.addEntity(new Sign(gameEngine,59,-2,3));
     gameEngine.addEntity(
         new Rush(
             gameEngine,
@@ -194,6 +198,7 @@ function loadLevelOne(gameEngine) {
             "Hold The Direction Away From The Wall And Press 'K' To Do A Wall Dash!"
         )
     );
+        gameEngine.addEntity(new Sign(gameEngine,9,-14,4));
     gameEngine.addEntity(
         new Rush(
             gameEngine,
