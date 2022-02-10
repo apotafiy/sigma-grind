@@ -985,7 +985,7 @@ class Player {
                 if (this.velocity.y > 0) {
                     // falling
                     if (
-                        entity instanceof Ground && // landing
+                        (entity instanceof Ground || entity instanceof Spike) && // landing
                         this.lastBB.bottom <= entity.BB.top
                     ) {
                         this.y = entity.BB.top - this.BB.height; //set to top of bounding box of ground
@@ -1012,7 +1012,7 @@ class Player {
                     if (
                         // entity instanceof Ground &&
                         // this.lastBB.top >= entity.BB.bottom
-                        entity instanceof Ground &&
+                        (entity instanceof Ground || entity instanceof Spike) &&
                         this.BB.collide(entity.bottomBB)
                     ) {
                         this.velocity.y = 0;
@@ -1021,8 +1021,7 @@ class Player {
 
                 // Side collisions
                 if (
-                    entity instanceof Ground &&
-                    entity.type &&
+                    (entity instanceof Ground || entity instanceof Spike) &&
                     this.BB.collide(entity.leftBB)
                 ) {
                     // Right side collision
@@ -1030,8 +1029,7 @@ class Player {
                     this.facing = 0;
                     if (this.velocity.x > 0) this.velocity.x = 0;
                 } else if (
-                    entity instanceof Ground &&
-                    entity.type &&
+                    (entity instanceof Ground || entity instanceof Spike) &&
                     this.BB.collide(entity.rightBB)
                 ) {
                     // Left side collision
@@ -1077,7 +1075,7 @@ class Player {
                         }
                     }
                 } else if (
-                    entity instanceof Ground &&
+                    (entity instanceof Ground || entity instanceof Spike) &&
                     entity.type &&
                     (this.BB.collide(entity.topBB) ||
                         this.BB.collide(entity.bottomBB))
