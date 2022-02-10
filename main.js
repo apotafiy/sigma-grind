@@ -61,6 +61,14 @@ SOUND_MANAGER.queueDownload("player_grunt_3",'./sounds/player/grunt_3.wav');
 SOUND_MANAGER.queueDownload("player_grunt_4",'./sounds/player/grunt_4.wav');
 SOUND_MANAGER.queueDownload("player_land",'./sounds/player/land.wav');
 SOUND_MANAGER.queueDownload("player_attack","./sounds/player/sword_attack_short.wav");
+
+//Load in Dob Boss sounds
+SOUND_MANAGER.queueDownload("dogboss_roar", "./sounds/dogboss/roar.wav");
+SOUND_MANAGER.queueDownload("dogboss_walk", "./sounds/dogboss/walk.wav");
+SOUND_MANAGER.queueDownload("dogboss_launch_projectile", "./sounds/dogboss/launch_attack.wav")
+
+//background Music
+SOUND_MANAGER.queueDownload("background_1", " ./sounds/background_song_1.mp3");
 //load in all sounds
 SOUND_MANAGER.downloadAll();
 ASSET_MANAGER.downloadAll(() => {

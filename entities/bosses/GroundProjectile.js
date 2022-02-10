@@ -28,7 +28,6 @@ class GroundProjectile {
         //death handler
         this.isDead = false;
         this.deathtimer = 0;
-        console.log("Spawned!")
     }
     loadAnimation() {
         //Direction, animation

@@ -31,4 +31,13 @@ class SoundManager {
     getSound(path) {
         return this.soundEffects.get(path);
     }
+
+    autoRepeat(path){
+        this.soundEffects.get(path).addEventListener("ended", function() {
+            this.soundEffects.get(path).play();
+        })
+    }
+    setVolume(path, volume) {
+        this.soundEffects.get(path).volume = volume;
+    }
 }
