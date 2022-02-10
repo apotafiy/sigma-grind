@@ -38,6 +38,7 @@ class Player {
         this.attacking = false;
         this.attackBB = new BoundingBox(0, 0, 0, 0);
         this.isPogo = false;
+        this.pogoTimer = 0;
 
         // Gives the player a health bar
         this.currentHitpoints = 100;
@@ -58,9 +59,7 @@ class Player {
         6 - Attack part 1
         7 - attack part 2
         8 - attack part 3
-        9 - pogo start
-        10 - pogo/downward attack
-        11 - pogo end
+        9 - pogo 
         ...
         */
         this.state = 0;
@@ -74,9 +73,7 @@ class Player {
             attack1: 6,
             attack2: 7,
             attack3: 8,
-            pogoStart: 9,
-            pogo: 10,
-            pogoEnd: 11,
+            pogo: 9,
         };
         this.dead = false;
 
@@ -295,7 +292,7 @@ class Player {
     }
 
     loadAnimations() {
-        for (var i = 0; i < 12; i++) {
+        for (var i = 0; i < 10; i++) {
             this.animations.push([]);
             for (var k = 0; k < 2; k++) {
                 // two directions
@@ -541,47 +538,9 @@ class Player {
             false
         );
 
-        // Pogo start - state 9
+        // Pogo - state 9
         // Face right - 0
         this.animations[9][0] = new Animator(
-            this.pogoSprite,
-            0,
-            0,
-            65,
-            102,
-            2,
-            this.attackSpeed
-        );
-        // this.animations[9][0] = new Animator(
-        //     this.death,
-        //     0,
-        //     0,
-        //     60,
-        //     62,
-        //     10,
-        //     0.1,
-        //     0,
-        //     false,
-        //     false
-        // );
-        // Face left - 1
-        // Face right - 0
-        this.animations[9][1] = new Animator(
-            this.pogoSprite,
-            1170,
-            0,
-            65,
-            102,
-            2,
-            this.attackSpeed,
-            0,
-            true,
-            false
-        );
-
-        // Pogo - state 10
-        // Face right - 0
-        this.animations[10][0] = new Animator(
             this.pogoSprite,
             130,
             0,
@@ -595,7 +554,7 @@ class Player {
         );
         // Face left - 1
         // Face right - 0
-        this.animations[10][1] = new Animator(
+        this.animations[9][1] = new Animator(
             this.pogoSprite,
             910,
             0,
@@ -606,35 +565,6 @@ class Player {
             0,
             true,
             true
-        );
-
-        // Pogo end - state 11
-        // Face right - 0
-        this.animations[11][0] = new Animator(
-            this.pogoSprite,
-            260,
-            0,
-            65,
-            102,
-            5,
-            this.attackSpeed,
-            0,
-            false,
-            false
-        );
-        // Face left - 1
-        // Face right - 0
-        this.animations[11][1] = new Animator(
-            this.pogoSprite,
-            585,
-            0,
-            65,
-            102,
-            5,
-            this.attackSpeed,
-            0,
-            true,
-            false
         );
     }
 
@@ -675,6 +605,11 @@ class Player {
                 this.spriteOffset.xOffset = this.facing === 0 ? -10 : -80;
                 this.spriteOffset.yOffset = this.facing === 0 ? -30 : -30;
                 break;
+
+            case this.states.pogo:
+                this.spriteOffset.xOffset = this.facing === 0 ? -30 : -20;
+                this.spriteOffset.yOffset = -45;
+                break;
         }
 
         let widthOffset = 0;
@@ -704,16 +639,11 @@ class Player {
 
     updateAttackBB() {
         //adjust the BB into the correct direction
-        let facing = 0;
-        let xoffset = 0;
-        if (this.facing == 0) {
-            facing = 1;
-            xoffset = 80;
-        } else {
-            facing = -1;
-            xoffset = -80;
-        }
-        if (this.attacking) {
+        let xoffset = this.facing === 0 ? 80 : -80;
+        if (this.attacking && this.isPogo) {
+            // xoffset = this.facing === 0 ? 30 : 0;
+            this.attackBB = new BoundingBox(this.x, this.y + 52, 80, 99);
+        } else if (this.attacking) {
             this.attackBB = new BoundingBox(
                 this.x + xoffset,
                 this.y - 20,
@@ -746,7 +676,12 @@ class Player {
         } else {
             this.flashframes = 0;
         }
+
         const TICK = this.game.clockTick;
+
+        if (this.pogoTimer > 0) {
+            this.pogoTimer -= TICK;
+        }
 
         //testing
         if (this.game.keys.KeyJ) this.animationTick = 0;
@@ -874,7 +809,7 @@ class Player {
             // ACTIONS GOES BELOW HERE
 
             // Dashing
-            if (this.game.keys.KeyK && !this.attacking) {
+            if (this.game.keys.KeyK && !this.attacking && !this.isPogo) {
                 if (this.isInAir) this.airDashed = true;
                 if (this.state !== this.states.wallHang) {
                     //play dash sound effect
@@ -907,12 +842,17 @@ class Player {
             // End Dashing
 
             // Pogo
-            if (this.game.keys.KeyS && this.game.keys.KeyJ && this.isInAir) {
+            if (
+                this.game.keys.KeyS &&
+                this.game.keys.KeyJ &&
+                this.isInAir &&
+                !this.game.keys.KeyK &&
+                this.pogoTimer <= 0
+            ) {
                 this.state = this.states.pogo;
                 this.attacking = true;
                 this.isPogo = true;
-                // if (this.animations[9][this.facing].isDone())
-                //     this.state = this.states.pogo;
+                this.updateAttackBB();
             }
             // End Pogo
 
@@ -989,14 +929,12 @@ class Player {
         // Assuming block width is 64
         if (this.y > 64 * 16 || this.currentHitpoints <= 0) this.die();
         // collision
-        let that = this;
-
-        if (that.currentIFrameTimer > 0) {
-            that.currentIFrameTimer -= 1;
-            console.log(that.currentIFrameTimer);
+        if (this.currentIFrameTimer > 0) {
+            this.currentIFrameTimer -= 1;
+            // console.log(this.currentIFrameTimer);
         }
 
-        // console.log(that.currentIFrameTimer);
+        // console.log(this.currentIFrameTimer);
 
         this.game.entities.forEach((entity) => {
             //check for the enemy colliding with sword
@@ -1024,6 +962,17 @@ class Player {
                         entity.iframes = 20;
                     }
                 }
+                if (entity.isHostile && this.isPogo) {
+                    this.animations[3][0].elapsedTime = 0;
+                    this.animations[3][1].elapsedTime = 0;
+                    this.velocity.y = STOP_JUMP;
+                    if (this.state !== this.states.jump)
+                        this.state = this.states.jump;
+                    this.isPogo = false;
+                    this.attacking = false;
+                    this.airDashed = false;
+                    this.pogoTimer = 0.6;
+                }
             }
             // Collision with player's box
             if (entity.BB && this.BB.collide(entity.BB)) {
@@ -1031,12 +980,12 @@ class Player {
                 if (
                     entity &&
                     entity.isHostile &&
-                    that.currentIFrameTimer === 0
+                    this.currentIFrameTimer === 0
                 ) {
-                    that.currentHitpoints -= entity.collisionDamage;
-                    that.currentIFrameTimer = that.maxIFrameTimer;
-                    console.log('Took ' + entity.collisionDamage + ' damage');
-                    console.log('Current HP: ' + that.currentHitpoints);
+                    this.currentHitpoints -= entity.collisionDamage;
+                    this.currentIFrameTimer = this.maxIFrameTimer;
+                    // console.log('Took ' + entity.collisionDamage + ' damage');
+                    // console.log('Current HP: ' + this.currentHitpoints);
                 }
                 if (this.velocity.y > 0) {
                     // falling
