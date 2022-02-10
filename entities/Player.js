@@ -72,19 +72,18 @@ class Player {
 
         //player sound imports
         this.soundEffects = {};
-        this.soundEffects.attack = new Audio(
-            '../sounds/player/sword_attack_short.wav'
-        );
-        this.soundEffects.jump_voice = new Audio(
-            '../sounds/player/jump_voice.wav'
-        );
-        this.soundEffects.run = new Audio('../sounds/player/player_walk.wav');
-        this.soundEffects.dash = new Audio('../sounds/player/player_dash.wav');
-        this.soundEffects.grunt1 = new Audio('../sounds/player/grunt_1.wav');
-        this.soundEffects.grunt2 = new Audio('../sounds/player/grunt_2.wav');
-        this.soundEffects.grunt3 = new Audio('../sounds/player/grunt_3.wav');
-        this.soundEffects.grunt4 = new Audio('../sounds/player/grunt_4.wav');
-        this.soundEffects.land = new Audio('../sounds/player/land.wav');
+        this.soundEffects.attack = SOUND_MANAGER.getSound("player_attack")
+        // this.soundEffects.jump_voice = new Audio(
+        //     '../sounds/player/jump_voice.wav'
+        // );
+        this.soundEffects.jump_voice = SOUND_MANAGER.getSound("player_jump");
+        this.soundEffects.run = SOUND_MANAGER.getSound("player_walk");
+        this.soundEffects.dash =SOUND_MANAGER.getSound("player_dash");
+        this.soundEffects.grunt1 = SOUND_MANAGER.getSound("player_grunt1");
+        this.soundEffects.grunt2 = SOUND_MANAGER.getSound("player_grunt2");
+        this.soundEffects.grunt3 =SOUND_MANAGER.getSound("player_grunt2");
+        this.soundEffects.grunt4 = SOUND_MANAGER.getSound("player_grunt4");
+        this.soundEffects.land  =SOUND_MANAGER.getSound("player_land");
 
         // Size and bounding box
         this.currentSize = { width: 40, height: 50 };

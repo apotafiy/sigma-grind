@@ -1,14 +1,15 @@
-class AssetManager {
+class SoundManager {
     constructor() {
         this.successCount = 0;
         this.errorCount = 0;
         this.cache = [];
-        this.downloadQueue = [];
+        this.downloadQueue = new Map();
+        this.soundEffects = new Map();
     }
 
-    queueDownload(path) {
+    queueDownload(name, path) {
         console.log("Queueing " + path);
-        this.downloadQueue.push(path);
+        this.downloadQueue.set(name, path);
     }
     
     isDone() {
@@ -17,32 +18,17 @@ class AssetManager {
         );
     }
 
-    downloadAll(callback) {
-        if (this.downloadQueue.length === 0) setTimeout(callback, 10);
-        for (let i = 0; i < this.downloadQueue.length; i++) {
-            const img = new Image();
-
-            const path = this.downloadQueue[i];
-            console.log(path);
-
-            img.addEventListener("load", () => {
-                console.log("Loaded " + img.src);
-                this.successCount++;
-                if (this.isDone()) callback();
-            });
-
-            img.addEventListener("error", () => {
-                console.log("Error loading " + img.src);
-                this.errorCount++;
-                if (this.isDone()) callback();
-            });
-
-            img.src = path;
-            this.cache[path] = img;
-        }
+    downloadAll() {
+        //itterate through everythign in the map and add it in
+        let that = this;
+        for(let [key, value] of that.downloadQueue.entries()){
+            that.soundEffects.set(key, new Audio(value));
+            that.soundEffects.get(key).play();
+        }  
+        return true;
     }
 
-    getAsset(path) {
-        return this.cache[path];
+    getSound(path) {
+        return this.soundEffects.get(path);
     }
 }
