@@ -17,7 +17,8 @@ let WALL_JUMP = 100;
 class Player {
     constructor(game, x, y) {
         Object.assign(this, { game, x, y });
-
+        this.flashframes = 0;
+        
         this.x = x * 64;
         this.y = y * 64;
         this.game.player = this;
@@ -37,6 +38,15 @@ class Player {
         this.attacking = false;
         this.attackBB = new BoundingBox(0, 0, 0, 0);
         this.isPogo = false;
+
+        // Gives the player a health bar
+        this.currentHitpoints = 100;
+        this.maxHitpoints = 100;
+        this.percentHealth = this.currentHitpoints / this.maxHitpoints;
+        this.healthBar = new HealthBar(this);
+
+        this.currentIFrameTimer = 0;
+        this.maxIFrameTimer = 60; // 60 ticks * 1 second/60 ticks = 1 second
 
         /* States:
         0 - idle
@@ -120,6 +130,9 @@ class Player {
         this.pogoSprite = ASSET_MANAGER.getAsset(
             './sprites/player/player-pogo-65x102.png'
         );
+        this.death = ASSET_MANAGER.getAsset(
+            './sprites/player/player-death-60x62.png'
+        );
 
         this.loadAnimations();
 
@@ -148,7 +161,7 @@ class Player {
             .min(0.005)
             .max(0.5)
             .step(0.005)
-            .onChange((val) => {
+            .onChange(val => {
                 this.attackSpeed = val;
                 this.loadAnimations();
             })
@@ -538,10 +551,19 @@ class Player {
             102,
             2,
             this.attackSpeed,
-            0,
-            false,
-            false
-        );
+        )
+        // this.animations[9][0] = new Animator(
+        //     this.death,
+        //     0,
+        //     0,
+        //     60,
+        //     62,
+        //     10,
+        //     0.1,
+        //     0,
+        //     false,
+        //     false
+        // );
         // Face left - 1
         // Face right - 0
         this.animations[9][1] = new Animator(
@@ -669,6 +691,14 @@ class Player {
 
     // TODO
     die() {
+        // debugger;
+        this.removeFromWorld = true;
+
+        // this.velocity.x = 0;
+        // this.velocity.y = 0;
+        // this.fallAcc = 0;
+        // this.state = this.states.death;
+
         this.dead = true;
     }
 
@@ -708,6 +738,14 @@ class Player {
     }
 
     update() {
+        /**
+         * flash while invincible
+         */
+         if(this.currentIFrameTimer > 0){
+            this.flashframes = (this.flashframes + 1) % 20;
+          } else {
+            this.flashframes = 0;
+          }
         const TICK = this.game.clockTick;
 
         //testing
@@ -939,7 +977,7 @@ class Player {
 
         // UPDATE POSITION
         if (this.game.keys.ArrowUp) {
-            console.log('pressed');
+            // console.log('pressed');
             this.velocity.y -= 80;
         }
         // scale = 3
@@ -949,10 +987,18 @@ class Player {
 
         // Fall off map = dead
         // Assuming block width is 64
-        if (this.y > 64 * 16) this.die();
+        if (this.y > 64 * 16 || this.currentHitpoints <= 0) this.die();
+        // collision
+        let that = this;
 
-        // COLLISION
-        this.game.entities.forEach((entity) => {
+        if (that.currentIFrameTimer > 0) {
+            that.currentIFrameTimer -= 1;
+            console.log(that.currentIFrameTimer);
+        }
+
+        // console.log(that.currentIFrameTimer);
+
+        this.game.entities.forEach((entity) =>  {
             //check for the enemy colliding with sword
             // || entity instanceof Drill
             if (entity.BB && this.attackBB.collide(entity.BB)) {
@@ -981,6 +1027,17 @@ class Player {
             }
             // Collision with player's box
             if (entity.BB && this.BB.collide(entity.BB)) {
+                //Damage the player
+                if (
+                    entity &&
+                    entity.isHostile &&
+                    that.currentIFrameTimer === 0
+                ) {
+                    that.currentHitpoints -= entity.collisionDamage;
+                    that.currentIFrameTimer = that.maxIFrameTimer;
+                    console.log('Took ' + entity.collisionDamage + ' damage');
+                    console.log('Current HP: ' + that.currentHitpoints);
+                }
                 if (this.velocity.y > 0) {
                     // falling
                     if (
@@ -1148,6 +1205,10 @@ class Player {
     }
 
     draw(ctx) {
+        //damage blink
+    if(this.currentIFrameTimer > 0){
+        ctx.filter = ` brightness(${this.flashframes})`;
+      }
         this.animations[this.state][this.facing].drawFrame(
             this.game.clockTick,
             ctx,
@@ -1174,6 +1235,9 @@ class Player {
             this.attacking = false;
             // console.log("normal anim");
         }
+        if(this.currentIFrameTimer >= 0){
+            ctx.filter = "none";
+          }
         if (params.debug) {
             ctx.strokeStyle = 'Blue';
             ctx.strokeRect(
@@ -1194,11 +1258,13 @@ class Player {
             ctx.textAlign = 'center';
             ctx.fillStyle = 'black';
             ctx.fillText(
-                Math.floor(this.x / 64) + ', ' + Math.floor(this.y / 64),
+                Math.floor(this.x / 64) + ', ' + Math.floor(this.y / 64) + ", " + this.currentHitpoints ,
                 this.x - this.game.camera.x + this.spriteOffset.xOffset + 40, // camera sidescrolling
                 this.y - this.game.camera.y + this.spriteOffset.yOffset - 20
             );
         }
+        // Draws the health bar
+        this.healthBar.drawHealthBarFollow(ctx);
     }
     getRandomGrunt() {
         let theGrunt = this.getRandomInt(1, 5);

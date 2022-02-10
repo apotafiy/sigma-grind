@@ -41,6 +41,7 @@ ASSET_MANAGER.queueDownload('./sprites/player/zerox4sheet.png');
 ASSET_MANAGER.queueDownload('./sprites/rush/rush_stand_sit_38x35.png');
 ASSET_MANAGER.queueDownload('./sprites/rush/rush_spawn_37x48.png')
 
+ASSET_MANAGER.queueDownload('./sprites/player/player-death-60x62.png');
 //Sign
 ASSET_MANAGER.queueDownload('./sprites/misc/sign_64x64.png')
 //player attack Animations
@@ -72,6 +73,7 @@ SOUND_MANAGER.queueDownload("rush_teleport", "./sounds/rush/teleport.mp3");
 SOUND_MANAGER.queueDownload("background_1", " ./sounds/background_song_1.mp3");
 //load in all sounds
 SOUND_MANAGER.downloadAll();
+
 ASSET_MANAGER.downloadAll(() => {
     const canvas = document.getElementById('gameWorld');
     const ctx = canvas.getContext('2d');
