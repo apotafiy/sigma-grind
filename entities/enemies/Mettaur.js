@@ -33,6 +33,9 @@ class Mettaur {
         this.BB = new BoundingBox(this.x, this.y, 32, 36);
         this.lastBB = this.BB;
 
+        this.isHostile = true;
+        this.collisionDamage = 10;
+
         //death handler
         this.isDead = false;
         this.deathtimer = 0;
@@ -176,8 +179,8 @@ class Mettaur {
             0
         );
     }
-    die(){
-        if(!this.isDead){
+    die() {
+        if (!this.isDead) {
             this.isDead = true;
             this.deathTimer = 20;
             this.xVelocity = 0;
@@ -185,7 +188,7 @@ class Mettaur {
     }
     updateBB() {
         this.lastBB = this.BB;
-        const yOffSet = 6; // Make sprite goes below the ground slightly not the bounding box itself
+        const yOffSet = 10; // Make sprite goes below the ground slightly not the bounding box itself
         this.BB = new BoundingBox(this.x, this.y, 64, 72 - yOffSet);
     }
     update() {
@@ -293,7 +296,7 @@ class Mettaur {
                 that.game.clockTick,
                 ctx,
                 that.x - that.game.camera.x,
-                that.y - that.game.camera.y,
+                that.y - that.game.camera.y - 10,
                 2
             );
         } else {

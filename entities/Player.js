@@ -38,6 +38,15 @@ class Player {
         this.attackBB = new BoundingBox(0, 0, 0, 0);
         this.isPogo = false;
 
+        // Gives the player a health bar
+        this.currentHitpoints = 100;
+        this.maxHitpoints = 100;
+        this.percentHealth = this.currentHitpoints / this.maxHitpoints;
+        this.healthBar = new HealthBar(this);
+
+        this.currentIFrameTimer = 0;
+        this.maxIFrameTimer = 60; // 60 ticks * 1 second/60 ticks = 1 second
+
         /* States:
         0 - idle
         1 - run
@@ -120,6 +129,9 @@ class Player {
         this.pogoSprite = ASSET_MANAGER.getAsset(
             './sprites/player/player-pogo-65x102.png'
         );
+        this.death = ASSET_MANAGER.getAsset(
+            './sprites/player/player-death-60x62.png'
+        );
 
         this.loadAnimations();
 
@@ -148,7 +160,7 @@ class Player {
             .min(0.005)
             .max(0.5)
             .step(0.005)
-            .onChange((val) => {
+            .onChange(val => {
                 this.attackSpeed = val;
                 this.loadAnimations();
             })
@@ -538,10 +550,19 @@ class Player {
             102,
             2,
             this.attackSpeed,
-            0,
-            false,
-            false
-        );
+        )
+        // this.animations[9][0] = new Animator(
+        //     this.death,
+        //     0,
+        //     0,
+        //     60,
+        //     62,
+        //     10,
+        //     0.1,
+        //     0,
+        //     false,
+        //     false
+        // );
         // Face left - 1
         // Face right - 0
         this.animations[9][1] = new Animator(
@@ -669,6 +690,14 @@ class Player {
 
     // TODO
     die() {
+        // debugger;
+        this.removeFromWorld = true;
+
+        // this.velocity.x = 0;
+        // this.velocity.y = 0;
+        // this.fallAcc = 0;
+        // this.state = this.states.death;
+
         this.dead = true;
     }
 
@@ -949,10 +978,19 @@ class Player {
 
         // Fall off map = dead
         // Assuming block width is 64
-        if (this.y > 64 * 16) this.die();
+        if (this.y > 64 * 16 || this.currentHitpoints <= 0) this.die();
 
-        // COLLISION
-        this.game.entities.forEach((entity) => {
+        // collision
+        let that = this;
+
+        if (that.currentIFrameTimer > 0) {
+            that.currentIFrameTimer -= 1;
+            console.log(that.currentIFrameTimer);
+        }
+
+        // console.log(that.currentIFrameTimer);
+
+        this.game.entities.forEach(function (entity) {
             //check for the enemy colliding with sword
             // || entity instanceof Drill
             if (entity.BB && this.attackBB.collide(entity.BB)) {
@@ -1175,6 +1213,7 @@ class Player {
             this.attacking = false;
             // console.log("normal anim");
         }
+
         if (params.debug) {
             ctx.strokeStyle = 'Blue';
             ctx.strokeRect(
@@ -1200,6 +1239,8 @@ class Player {
                 this.y - this.game.camera.y + this.spriteOffset.yOffset - 20
             );
         }
+        // Draws the health bar
+        this.healthBar.drawHealthBarFollow(ctx);
     }
     getRandomGrunt() {
         let theGrunt = this.getRandomInt(1, 5);
