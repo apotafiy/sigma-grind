@@ -34,6 +34,9 @@ ASSET_MANAGER.queueDownload('./sprites/player/zero_attack_right_two.png');
 ASSET_MANAGER.queueDownload(
     './sprites/player/zero_attack_right_three_114x64-Sheet.png'
 );
+
+ASSET_MANAGER.queueDownload('./sprites/player/player-death-60x62.png');
+
 ASSET_MANAGER.downloadAll(() => {
     const canvas = document.getElementById('gameWorld');
     const ctx = canvas.getContext('2d');

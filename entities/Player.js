@@ -19,6 +19,15 @@ class Player {
         this.attacking = false;
         this.attackBB = new BoundingBox(0, 0, 0, 0);
 
+        // Gives the player a health bar
+        this.currentHitpoints = 100;
+        this.maxHitpoints = 100;
+        this.percentHealth = this.currentHitpoints / this.maxHitpoints;
+        this.healthBar = new HealthBar(this);
+
+        this.currentIFrameTimer = 0;
+        this.maxIFrameTimer = 60; // 60 ticks * 1 second/60 ticks = 1 second
+
         /* States:
         0 - idle
         1 - run
@@ -29,6 +38,7 @@ class Player {
         6 - Attack part 1
         7 - attack part 2
         8 - attack part 3
+        9 - death
         ...
         */
         this.state = 0;
@@ -42,6 +52,7 @@ class Player {
             attack1: 6,
             attack2: 7,
             attack3: 8,
+            death: 9,
         };
         this.dead = false;
 
@@ -77,6 +88,10 @@ class Player {
             './sprites/player/zero_attack_right_three_114x64-Sheet.png'
         );
 
+        this.death = ASSET_MANAGER.getAsset(
+            './sprites/player/player-death-60x62.png'
+        );
+
         this.loadAnimations();
 
         // Dat GUI stuff
@@ -90,7 +105,7 @@ class Player {
             .min(0.005)
             .max(0.5)
             .step(0.005)
-            .onChange((val) => {
+            .onChange(val => {
                 this.attackSpeed = val;
                 this.loadAnimations();
             })
@@ -98,7 +113,7 @@ class Player {
     }
 
     loadAnimations() {
-        for (var i = 0; i < 9; i++) {
+        for (var i = 0; i < 10; i++) {
             // six states
             this.animations.push([]);
             for (var k = 0; k < 2; k++) {
@@ -330,6 +345,19 @@ class Player {
             false,
             false
         );
+
+        this.animations[9][0] = new Animator(
+            this.death,
+            0,
+            0,
+            60,
+            62,
+            10,
+            0.1,
+            0,
+            false,
+            false
+        );
     }
 
     updateBB() {
@@ -383,6 +411,14 @@ class Player {
 
     // TODO
     die() {
+        // debugger;
+        this.removeFromWorld = true;
+
+        // this.velocity.x = 0;
+        // this.velocity.y = 0;
+        // this.fallAcc = 0;
+        // this.state = this.states.death;
+
         this.dead = true;
     }
 
@@ -560,6 +596,7 @@ class Player {
                 // air physics
                 // vertical physics
                 if (this.velocity.y <= 0 && this.game.keys.Space) {
+                    this.isInAir = true;
                     // holding space while jumping jumps higher
                     if (this.fallAcc === STOP_FALL)
                         this.velocity.y -= (STOP_FALL - STOP_FALL_A) * TICK;
@@ -572,7 +609,7 @@ class Player {
                 ) {
                     this.state = this.states.fall;
                 }
-                this.isInAir = true;
+                // this.isInAir = true;
 
                 // horizontal physics
                 if (this.game.keys.KeyD && !this.game.keys.KeyA) {
@@ -644,10 +681,18 @@ class Player {
 
         // Fall off map = dead
         // Assuming block width is 64
-        if (this.y > 64 * 16) this.die();
+        if (this.y > 64 * 16 || this.currentHitpoints <= 0) this.die();
 
         // collision
         let that = this;
+
+        if (that.currentIFrameTimer > 0) {
+            that.currentIFrameTimer -= 1;
+            console.log(that.currentIFrameTimer);
+        }
+
+        // console.log(that.currentIFrameTimer);
+
         this.game.entities.forEach(function (entity) {
             //check for the enemy colliding with sword
             // || entity instanceof Drill
@@ -670,6 +715,16 @@ class Player {
 
             // Collision with player's box
             if (entity.BB && that.BB.collide(entity.BB)) {
+                if (
+                    entity &&
+                    entity.isHostile &&
+                    that.currentIFrameTimer === 0
+                ) {
+                    that.currentHitpoints -= entity.collisionDamage;
+                    that.currentIFrameTimer = that.maxIFrameTimer;
+                    console.log('Took ' + entity.collisionDamage + ' damage');
+                    console.log('Current HP: ' + that.currentHitpoints);
+                }
                 if (that.velocity.y > 0) {
                     // falling
                     if (
@@ -826,6 +881,75 @@ class Player {
     }
 
     draw(ctx) {
+        // -------------------------- Health Bar --------------------------
+        // Health bar settings
+        // let healthBarWidth = this.BB.width;
+        // let healthBarHeight = 10;
+        // let healthBarOffset = 20;
+        // ctx.lineWidth = 2;
+        // let healthBarCorrection = ctx.lineWidth - 1;
+
+        // // Health bar outline
+        // ctx.strokeStyle = 'Black';
+        // ctx.strokeRect(
+        //     this.BB.x - this.game.camera.x - healthBarCorrection,
+        //     this.BB.y -
+        //         this.game.camera.y -
+        //         healthBarOffset -
+        //         healthBarCorrection,
+        //     healthBarWidth + ctx.lineWidth,
+        //     healthBarHeight + ctx.lineWidth
+        // );
+
+        // // Health bar fill
+        // ctx.fillStyle =
+        //     this.percentHealth < 0.33
+        //         ? 'Red'
+        //         : this.percentHealth < 0.66
+        //         ? 'Yellow'
+        //         : 'Green';
+        // ctx.fillRect(
+        //     this.BB.x - this.game.camera.x,
+        //     this.BB.y - this.game.camera.y - healthBarOffset,
+        //     healthBarWidth * this.percentHealth,
+        //     healthBarHeight
+        // );
+
+        // Draws a health bar that follows the entity
+
+        // let healthBarWidth = this.BB.width;
+        // let healthBarHeight = 10;
+        // let healthBarOffset = 20;
+        // ctx.lineWidth = 2;
+        // let healthBarCorrection = ctx.lineWidth - 1;
+
+        // // Health bar colors and conditional hp bar colors
+        // ctx.strokeStyle = 'Black';
+        // ctx.fillStyle =
+        //     this.percentHealth < 0.33
+        //         ? 'Red'
+        //         : this.percentHealth < 0.66
+        //         ? 'Yellow'
+        //         : 'Green';
+
+        // // Conditional if you want the hp bar to only appear when <100% hp
+        // // if (this.entity.hitpoints < this.entity.maxhitpoints) {
+        // ctx.strokeRect(
+        //     this.entity.BB.x - this.entity.game.camera.x - healthBarCorrection,
+        //     this.entity.BB.y -
+        //         this.entity.game.camera.y -
+        //         healthBarOffset -
+        //         healthBarCorrection,
+        //     healthBarWidth + ctx.lineWidth,
+        //     healthBarHeight + ctx.lineWidth
+        // );
+        // ctx.fillRect(
+        //     this.entity.BB.x - this.entity.game.camera.x,
+        //     this.entity.BB.y - this.entity.game.camera.y - healthBarOffset,
+        //     healthBarWidth * this.percentHealth,
+        //     healthBarHeight
+        // );
+
         //actual animation code
         // this.animations[this.state][this.facing].drawFrame(
         //     this.game.clockTick,
@@ -885,6 +1009,50 @@ class Player {
             this.attacking = false;
             // console.log("normal anim");
         }
+
+        // Death animation
+        // this.animations[9][0].drawFrame(
+        //     this.game.clockTick,
+        //     ctx,
+        //     this.x - this.game.camera.x + this.spriteOffset.xOffset,
+        //     this.y - this.game.camera.y + this.spriteOffset.yOffset,
+        //     2
+        // );
+
+        // ------------------------ Health Bar ---------------------------------------
+
+        // Draws a health bar that follows the entity
+
+        // let healthBarWidth = this.BB.width;
+        // let healthBarHeight = 10;
+        // let healthBarOffset = 20;
+        // ctx.lineWidth = 2;
+        // let healthBarCorrection = ctx.lineWidth - 1;
+
+        // // Health bar colors and conditional hp bar colors
+        // ctx.strokeStyle = 'Black';
+        // ctx.fillStyle =
+        //     this.percentHealth < 0.33
+        //         ? 'Red'
+        //         : this.percentHealth < 0.66
+        //         ? 'Yellow'
+        //         : 'Green';
+
+        // // Conditional if you want the hp bar to only appear when <100% hp
+        // // if (this.entity.hitpoints < this.entity.maxhitpoints) {
+        // ctx.strokeRect(
+        //     this.x - this.game.camera.x - healthBarCorrection,
+        //     this.y - this.game.camera.y - healthBarOffset - healthBarCorrection,
+        //     healthBarWidth + ctx.lineWidth,
+        //     healthBarHeight + ctx.lineWidth
+        // );
+        // ctx.fillRect(
+        //     this.x - this.game.camera.x,
+        //     this.y - this.game.camera.y - healthBarOffset,
+        //     healthBarWidth * this.percentHealth,
+        //     healthBarHeight
+        // );
+
         if (params.debug) {
             ctx.strokeStyle = 'Blue';
             ctx.strokeRect(
@@ -901,5 +1069,7 @@ class Player {
                 this.attackBB.height
             );
         }
+        // Draws the health bar
+        this.healthBar.drawHealthBarFollow(ctx);
     }
 }

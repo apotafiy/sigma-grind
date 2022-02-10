@@ -8,6 +8,10 @@ class GroundHorse {
         this.game = game;
         this.visionDistance = 200;
         this.state = 0;
+
+        this.isHostile = true;
+        this.collisionDamage = 15;
+
         this.animations = [];
         this.loadAnimations();
     }
