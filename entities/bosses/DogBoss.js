@@ -28,12 +28,16 @@ class DogBoss {
       this.direction = -1;
       this.dirIndex = 0;
     }
+    this.flashframes = 0;
     this.maxHealth = 200;
     this.health = this.maxHealth;
-
+    this.walkdelay = 0;
     //player sound imports
     this.soundEffects = {};
-    this.soundEffects.attack = new Audio("../sounds/dogboss/roar.wav");
+    this.soundEffects.attack = SOUND_MANAGER.getSound("dogboss_roar");
+    this.soundEffects.launch_attack = SOUND_MANAGER.getSound("dogboss_launch_projectile");
+    this.soundEffects.walk = SOUND_MANAGER.getSound("dogboss_walk");
+
 
     this.loadAnimation();
     //bounding box
@@ -184,12 +188,24 @@ class DogBoss {
     );
   }
   update() {
+    if(this.iframes >= 0){
+      this.flashframes = (this.flashframes + 1) % 20;
+    } else {
+      this.flashframes = 0;
+    }
     if (this.health <= 0) this.removeFromWorld = true;
     let that = this;
     this.attackCooldown--;
-    this.iframes--;
+    this.iframes--; 
     //if we are just walking around
+    // console.log(this.walkdelay);
     if (this.currentState == 0) {
+      if(this.walkdelay <= 0 && getDistance(this,this.game.player) < 600){
+        this.soundEffects.walk.play();
+        this.walkdelay = 50;
+      } else {
+        this.walkdelay -=1;
+      }
       //apply gravity to the enemy
       that.yVelocity += that.gravity;
       //move in the direction of the player
@@ -221,6 +237,7 @@ class DogBoss {
     } else if (this.currentState == 1) {
       //stand and attack with side lasers
       if (this.attacking > 60 && this.attacking % 8 == 0) {
+        this.soundEffects.launch_attack.play();
         //spwan the little things!
         this.game.addEntityAtIndex(
           new GroundProjectile(
@@ -261,6 +278,7 @@ class DogBoss {
     } else if (this.currentState == 2) {
       //up facing rain down attack
       if (this.attacking > 60 && this.attacking % 40 == 0) {
+        this.soundEffects.launch_attack.play();
         for (let i = 0; i <= 6; i += 2) {
           this.game.addEntityAtIndex(
             new GroundProjectile(
@@ -310,7 +328,8 @@ class DogBoss {
         }
       }
       if (this.attacking <= 100 && this.attacking % 30 == 0) {
-        //we only want it to attack once with the wall
+        this.soundEffects.launch_attack.play();
+        //we only want it to attack a few times with the wall
         for (let i = 0; i < 10; i++) {
           this.game.addEntityAtIndex(
             new GroundProjectile(
@@ -374,7 +393,10 @@ class DogBoss {
 
   draw(ctx) {
     let that = this;
-    // console.log(that.currentState, that.yVelocity)
+    //damage blink
+    if(this.iframes >= 0){
+      ctx.filter = ` brightness(${this.flashframes})`;
+    }
     that.animations[that.dirIndex][this.currentState].drawFrame(
       that.game.clockTick,
       ctx,
@@ -382,6 +404,9 @@ class DogBoss {
       that.y - that.game.camera.y, // + that.BB.height / 4,
       that.scale
     );
+    if(this.iframes >= 0){
+      ctx.filter = "none";
+    }
     //draw health bar bove him
 
     ctx.lineWidth = 2;

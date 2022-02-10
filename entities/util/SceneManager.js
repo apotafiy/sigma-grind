@@ -1,5 +1,8 @@
 class SceneManager {
     constructor(game) {
+        this.hasInteracted = false;
+        this.backgroundMusicVolume =
+            document.getElementById('background-music');
         this.game = game;
         this.game.camera = this;
         this.x = game.player.x - 1024 / 2;
@@ -19,10 +22,12 @@ class SceneManager {
         this.shakeY = 0;
         this.interpolation = 0.06;
         this.background_songs = {};
-        this.background_songs.intro = new Audio(
-            '../sounds/background_song_1.mp3'
-        );
-        this.playSong();
+        this.background_songs.intro = SOUND_MANAGER.getSound('background_1');
+        SOUND_MANAGER.autoRepeat('background_1');
+        this.playSong(this.background_songs.intro);
+        this.backgroundMusicVolume.oninput = function () {
+            SOUND_MANAGER.setVolume('background_1', this.value / 100);
+        };
         // Dat GUI stuff
         this.gui = new dat.GUI();
         this.cameraFolder = this.gui.addFolder('Camera values');
@@ -93,8 +98,13 @@ class SceneManager {
         this.shakeX += x;
         this.shakeY += y;
     }
-    playSong() {
-        this.background_songs.intro.play();
+    playSong(songid) {
+        const autoPlayID = setInterval(() => {
+            songid
+                .play()
+                .then(() => clearInterval(autoPlayID))
+                .catch(console.error);
+        }, 500);
     }
     update() {
         params.debug = document.getElementById('debug').checked;

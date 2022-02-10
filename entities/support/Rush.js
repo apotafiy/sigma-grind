@@ -31,6 +31,8 @@ class Rush {
         this.warpInTimer = -1;
         this.text = text;
         this.showText = false;
+        this.soundEffects = {};
+        this.soundEffects.teleport = SOUND_MANAGER.getSound("rush_teleport");
 
     }
     /**
@@ -111,6 +113,9 @@ class Rush {
         if(this.getXDistance(this.x,this.game.player.x) >= 400 && this.currentState == 2){
             //start timer to spawn out timer then set to -1
             this.currentState = 1;
+            if(getDistance(this,this.game.player) <= 700){
+                this.soundEffects.teleport.play();
+            }
 
         }
         if(this.currentState == 1){
@@ -131,6 +136,9 @@ class Rush {
         if(this.getXDistance(this.x,this.game.player.x) <300 && this.currentState == -1){
             //start timer to spawn out timer then set to -1
             this.currentState = 0;
+            if(getDistance(this, this.game.player) <= 400){
+                this.soundEffects.teleport.play();
+            }
 
         }
         if(this.currentState == 0){
