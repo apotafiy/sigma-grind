@@ -14,10 +14,10 @@ class Mettaur {
         this.game = game;
         this.currentState = 0;
         this.animations = [[], []];
-        this.xVelocity = this.getRandomInt(-2, 3);
+        this.xVelocity = 0;
         this.yVelocity = 0;
-        this.x = x;
-        this.y = y;
+        this.x = x * 64;
+        this.y = y * 64;
         this.gravity = gravity;
         this.direction = 1;
         this.dirIndex = 1;
