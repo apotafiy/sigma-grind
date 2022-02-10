@@ -18,7 +18,7 @@ class Player {
     constructor(game, x, y) {
         Object.assign(this, { game, x, y });
         this.flashframes = 0;
-        
+
         this.x = x * 64;
         this.y = y * 64;
         this.game.player = this;
@@ -161,7 +161,7 @@ class Player {
             .min(0.005)
             .max(0.5)
             .step(0.005)
-            .onChange(val => {
+            .onChange((val) => {
                 this.attackSpeed = val;
                 this.loadAnimations();
             })
@@ -550,8 +550,8 @@ class Player {
             65,
             102,
             2,
-            this.attackSpeed,
-        )
+            this.attackSpeed
+        );
         // this.animations[9][0] = new Animator(
         //     this.death,
         //     0,
@@ -741,11 +741,11 @@ class Player {
         /**
          * flash while invincible
          */
-         if(this.currentIFrameTimer > 0){
+        if (this.currentIFrameTimer > 0) {
             this.flashframes = (this.flashframes + 1) % 20;
-          } else {
+        } else {
             this.flashframes = 0;
-          }
+        }
         const TICK = this.game.clockTick;
 
         //testing
@@ -998,7 +998,7 @@ class Player {
 
         // console.log(that.currentIFrameTimer);
 
-        this.game.entities.forEach((entity) =>  {
+        this.game.entities.forEach((entity) => {
             //check for the enemy colliding with sword
             // || entity instanceof Drill
             if (entity.BB && this.attackBB.collide(entity.BB)) {
@@ -1098,7 +1098,6 @@ class Player {
                 // Wall hang collision
                 if (
                     entity instanceof Ground &&
-                    entity.type &&
                     !this.BB.collide(entity.topBB) &&
                     !this.BB.collide(entity.bottomBB)
                 ) {
@@ -1132,8 +1131,7 @@ class Player {
                         }
                     }
                 } else if (
-                    (entity instanceof Ground || entity instanceof Spike) &&
-                    entity.type &&
+                    entity instanceof Ground &&
                     (this.BB.collide(entity.topBB) ||
                         this.BB.collide(entity.bottomBB))
                 ) {
@@ -1141,6 +1139,10 @@ class Player {
                         this.velocity.y += this.fallAcc * TICK;
                         this.game.keys.KeyK = false;
                     }
+                } else if (entity instanceof Spike && this.game.keys.KeyK) {
+                    // Prevent player from wall hang at spikes
+                    this.velocity.y += this.fallAcc * TICK;
+                    this.game.keys.KeyK = false;
                 }
             }
         });
@@ -1206,9 +1208,9 @@ class Player {
 
     draw(ctx) {
         //damage blink
-    if(this.currentIFrameTimer > 0){
-        ctx.filter = ` brightness(${this.flashframes})`;
-      }
+        if (this.currentIFrameTimer > 0) {
+            ctx.filter = ` brightness(${this.flashframes})`;
+        }
         this.animations[this.state][this.facing].drawFrame(
             this.game.clockTick,
             ctx,
@@ -1235,9 +1237,9 @@ class Player {
             this.attacking = false;
             // console.log("normal anim");
         }
-        if(this.currentIFrameTimer >= 0){
-            ctx.filter = "none";
-          }
+        if (this.currentIFrameTimer >= 0) {
+            ctx.filter = 'none';
+        }
         if (params.debug) {
             ctx.strokeStyle = 'Blue';
             ctx.strokeRect(
@@ -1258,7 +1260,11 @@ class Player {
             ctx.textAlign = 'center';
             ctx.fillStyle = 'black';
             ctx.fillText(
-                Math.floor(this.x / 64) + ', ' + Math.floor(this.y / 64) + ", " + this.currentHitpoints ,
+                Math.floor(this.x / 64) +
+                    ', ' +
+                    Math.floor(this.y / 64) +
+                    ', ' +
+                    this.currentHitpoints,
                 this.x - this.game.camera.x + this.spriteOffset.xOffset + 40, // camera sidescrolling
                 this.y - this.game.camera.y + this.spriteOffset.yOffset - 20
             );
