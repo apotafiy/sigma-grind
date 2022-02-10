@@ -28,6 +28,7 @@ class DogBoss {
       this.direction = -1;
       this.dirIndex = 0;
     }
+    this.flashframes = 0;
     this.maxHealth = 200;
     this.health = this.maxHealth;
 
@@ -184,6 +185,11 @@ class DogBoss {
     );
   }
   update() {
+    if(this.iframes >= 0){
+      this.flashframes = (this.flashframes + 1) % 20;
+    } else {
+      this.flashframes = 0;
+    }
     if (this.health <= 0) this.removeFromWorld = true;
     let that = this;
     this.attackCooldown--;
@@ -374,7 +380,10 @@ class DogBoss {
 
   draw(ctx) {
     let that = this;
-    // console.log(that.currentState, that.yVelocity)
+    //damage blink
+    if(this.iframes >= 0){
+      ctx.filter = `brightness(${this.flashframes})  opacity(${this.flashframes})`;
+    }
     that.animations[that.dirIndex][this.currentState].drawFrame(
       that.game.clockTick,
       ctx,
@@ -382,6 +391,9 @@ class DogBoss {
       that.y - that.game.camera.y, // + that.BB.height / 4,
       that.scale
     );
+    if(this.iframes >= 0){
+      ctx.filter = "none";
+    }
     //draw health bar bove him
 
     ctx.lineWidth = 2;
