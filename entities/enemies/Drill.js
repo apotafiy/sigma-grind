@@ -161,6 +161,7 @@ class Drill {
     update() {
         let dist = getDistance(this, this.player);
         const that = this;
+        // TODO: when not active then there is player is undefined
 
         if (this.state === 3) {
             // death animation
@@ -183,6 +184,7 @@ class Drill {
                 this.isActive = true;
             }
             this.angle = Math.floor(
+                // TODO: just use this.player -- might be related to above comment
                 Math.atan(
                     (this.y - this.game.getPlayer().y) /
                         (this.x - this.game.getPlayer().x)
