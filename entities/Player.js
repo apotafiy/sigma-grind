@@ -973,12 +973,9 @@ class Player {
                     this.velocity.y = POGO_JUMP;
                     if (this.state !== this.states.jump)
                         this.state = this.states.jump;
-                    // this.isPogo = false;
                     this.attacking = false;
                     this.airDashed = false;
                     this.pogoTimer = 0.6;
-                    //TODO REMOVE VLAD ADDED THIS!
-                    // this.velocity.y -= 100;
                 }
             }
             // Collision with player's box
