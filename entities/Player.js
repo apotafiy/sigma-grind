@@ -14,6 +14,7 @@ let MAX_FALL = 270;
 let STOP_JUMP = -240;
 let RUN_JUMP = -300;
 let WALL_JUMP = 100;
+let POGO_JUMP = -200;
 class Player {
     constructor(game, x, y) {
         Object.assign(this, { game, x, y });
@@ -641,7 +642,6 @@ class Player {
         //adjust the BB into the correct direction
         let xoffset = this.facing === 0 ? 80 : -80;
         if (this.attacking && this.isPogo) {
-            // xoffset = this.facing === 0 ? 30 : 0;
             this.attackBB = new BoundingBox(this.x, this.y + 52, 80, 99);
         } else if (this.attacking) {
             this.attackBB = new BoundingBox(
@@ -681,6 +681,8 @@ class Player {
 
         if (this.pogoTimer > 0) {
             this.pogoTimer -= TICK;
+        } else {
+            this.isPogo = false;
         }
 
         //testing
@@ -778,7 +780,10 @@ class Player {
             } else {
                 // air physics
                 // vertical physics
-                if (this.velocity.y < 0 && this.game.keys.Space) {
+                if (
+                    this.velocity.y < 0 &&
+                    (this.game.keys.Space || this.isPogo)
+                ) {
                     // holding space while jumping jumps higher
                     if (this.fallAcc === STOP_FALL)
                         this.velocity.y -= (STOP_FALL - STOP_FALL_A) * TICK;
@@ -965,15 +970,15 @@ class Player {
                 if (entity.isPog && this.isPogo) {
                     this.animations[3][0].elapsedTime = 0;
                     this.animations[3][1].elapsedTime = 0;
-                    this.velocity.y = STOP_JUMP;
+                    this.velocity.y = POGO_JUMP;
                     if (this.state !== this.states.jump)
                         this.state = this.states.jump;
-                    this.isPogo = false;
+                    // this.isPogo = false;
                     this.attacking = false;
                     this.airDashed = false;
                     this.pogoTimer = 0.6;
                     //TODO REMOVE VLAD ADDED THIS!
-                    this.velocity.y -= 100;
+                    // this.velocity.y -= 100;
                 }
             }
             // Collision with player's box
