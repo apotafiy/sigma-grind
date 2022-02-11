@@ -32,7 +32,7 @@ class Mettaur {
         //bounding box
         this.BB = new BoundingBox(this.x, this.y, 32, 36);
         this.lastBB = this.BB;
-
+        this.isPog = true;
         this.isHostile = true;
         this.collisionDamage = 10;
 

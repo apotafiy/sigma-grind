@@ -33,7 +33,7 @@ class Rush {
         this.showText = false;
         this.soundEffects = {};
         this.soundEffects.teleport = SOUND_MANAGER.getSound("rush_teleport");
-
+        this.isPog = true;
     }
     /**
      * 0 is spawn in

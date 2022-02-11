@@ -6,9 +6,9 @@ class AirProjectile {
   constructor(game, x, y, xVel, yVel, direction, gravity) {
     this.scale = 2;
     this.glow = 0;
-    this.time = 10000; //this.getRandomInt(100,200);
     this.attacking = 0;
     this.game = game;
+    this.time = 3;//this.getRandomInt(100,200);
     this.currentState = 0;
     this.attackCooldown = 0;
     this.animations = [[], []];
@@ -50,10 +50,10 @@ class AirProjectile {
     );
   }
   die() {
-    if(this.time > 50){
-        this.time = 50;
+    if(this.time > 0.05*this.clockTick){
+        this.time = 0.05 * this.clockTick;
     } else if (this.time >= 0) {
-        this.time --; 
+        this.time -=1*this.game.clockTick; 
     } else {
         this.removeFromWorld = true;
     }
@@ -72,12 +72,12 @@ class AirProjectile {
     this.glow = (this.glow + 1) % 360
     let that = this;
     //vanish after 200 seconds
-    this.time -= 1;
+    this.time -= 1 *this.game.clockTick;
     if (this.time <= 0) this.die();
     //apply gravity to the enemy
     that.yVelocity += that.gravity;
-    that.x += that.xVelocity * that.direction;
-    that.y += that.yVelocity;
+    that.x += that.xVelocity * that.direction * this.game.clockTick;
+    that.y += that.yVelocity * this.game.clockTick;
     //update out bounding box every frame
     that.updateBB();
     //Collision
