@@ -962,7 +962,7 @@ class Player {
                         entity.iframes = 20;
                     }
                 }
-                if (entity.isHostile && this.isPogo) {
+                if (entity.isPog && this.isPogo) {
                     this.animations[3][0].elapsedTime = 0;
                     this.animations[3][1].elapsedTime = 0;
                     this.velocity.y = STOP_JUMP;
@@ -972,6 +972,8 @@ class Player {
                     this.attacking = false;
                     this.airDashed = false;
                     this.pogoTimer = 0.6;
+                    //TODO REMOVE VLAD ADDED THIS!
+                    this.velocity.y -= 100;
                 }
             }
             // Collision with player's box

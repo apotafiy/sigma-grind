@@ -18,7 +18,7 @@ class GroundProjectile {
         this.gravity = gravity;
         this.direction = direction;
         this.dieOnCollide = false;
-
+        this.isPog = true;
         this.isHostile = true;
         this.collisionDamage = 10;
 

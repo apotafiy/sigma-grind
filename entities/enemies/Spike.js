@@ -18,6 +18,7 @@ class Spike {
         this.scale = 0.2;
         this.isHostile = true;
         this.collisionDamage = 20;
+        this.isPog = true;
         this.BB = new BoundingBox(
             this.x,
             this.y,
