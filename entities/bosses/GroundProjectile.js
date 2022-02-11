@@ -74,59 +74,52 @@ class GroundProjectile {
                 this.currentState = 1;
             }
             //Collision
-        this.game.entities.forEach(function (entity) {
-            if (entity.BB && that.BB.collide(entity.BB)) {
-                //if  check below
-               if(that.yVelocity < 0){
-                if (
-                    entity instanceof Ground &&
-                    that.lastBB.top >= entity.BB.bottom
-                ) {
-                    // ws above last tick
-                    that.y = entity.BB.bottom - that.BB.height; //set to top of bounding box of ground
-                    that.yVelocity = 0;
-                    that.updateBB();
-                }
-               } if (that.yVelocity > 0) {
-                    if (
-                        entity instanceof Ground &&
-                        that.lastBB.bottom <= entity.BB.top
-                    ) {
-                        // ws above last tick
-                        that.y = entity.BB.top - that.BB.height; //set to top of bounding box of ground
-                        that.yVelocity = 0;
-                        that.updateBB();
-                    }
-                } else if (that.direction == 1) {
-                    if (
-                        entity instanceof Ground &&
-                        that.lastBB.left < entity.BB.right
-                    ) {
-                        if(that.dieOnCollide) that.removeFromWorld = true;
-                        that.x = entity.BB.right;
-                        that.direction = -1;
-                        that.dirIndex = 0;
-                        that.updateBB();
-                    }
-                } else if (that.direction == -1) {
-                    if (
-                        entity instanceof Ground &&
-                        that.lastBB.right > entity.BB.left
-                    ) {
-                        // is in the wall
-                        //subtract because origin is on left
-                        if(that.dieOnCollide) that.removeFromWorld = true;
-                        that.x = entity.BB.left - that.BB.width;
-                        that.direction = 1;
-                        that.dirIndex = 1;
-                        that.updateBB();
-                    }
-                }
+    //collisions
+    this.game.entities.forEach(function (entity) {
+        //start loop
+        if (entity.BB && that.BB.collide(entity.BB)) {
+          //start is colliding
+          if (that.yVelocity < 0) {
+            if (entity instanceof Ground && that.BB.collide(entity.bottomBB)) {
+              // ws above last tick
+              that.yVelocity = 0;
+              that.updateBB();
             }
-        });
+          }
+  
+          if (that.yVelocity > 0) {
+            if (entity instanceof Ground && that.lastBB.bottom <= entity.BB.top) {
+              // ws above last tick
+              that.y = entity.BB.top - that.BB.height; //set to top of bounding box of ground
+              that.yVelocity = 0;
+              that.updateBB();
+            }
+          }
+  
+          if (that.direction == 1) {
+            if (entity instanceof Ground && that.BB.collide(entity.rightBB)) {
+              that.x = entity.BB.right + 2;
+              // that.direction = -1;
+              // that.dirIndex = 0;
+              // that.updateBB();
+            }
+          }if (that.direction == -1) {
+              if (
+                entity instanceof Ground &&
+               that.BB.collide(entity.rightBB)
+              ) {
+                // is in the wall
+                //subtract because origin is on left
+                that.x = entity.BB.left - that.BB.width;
+                // that.direction = 1;
+                // that.dirIndex = 1;
+                // that.updateBB();
+              }
+            }
+          //end loop
+        }
+      });
 
-
-    
     }
 
     draw(ctx) {

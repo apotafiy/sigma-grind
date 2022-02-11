@@ -959,7 +959,7 @@ class Player {
                     //if it has die method it should die
                     if (entity.iframes <= 0 && entity.currentState != 4) {
                         entity.health -= 5;
-                        entity.iframes = 20;
+                        entity.iframes = 0.5;
                     }
                 }
                 if (entity.isPog && this.isPogo) {

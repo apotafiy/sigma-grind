@@ -15,11 +15,11 @@ class DogBoss {
     this.currentState = 0;
     this.attackCooldown = 0;
     this.animations = [[], []];
-    this.xVelocity = -2;
+    this.xVelocity = -175;
     this.yVelocity = 0;
     this.x = x * 64;
     this.y = y * 64;
-    this.gravity = gravity;
+    this.gravity = gravity * 200;
     this.direction = 1;
     this.dirIndex = 1;
     this.iframes = 0;
@@ -32,7 +32,10 @@ class DogBoss {
     this.flashframes = 0;
     this.maxHealth = 320;
     this.health = this.maxHealth;
+    this.chosendir = false;
     this.walkdelay = 0;
+    this.skyDelay = 0;
+    this.skyOffset = 0;
     //player sound imports
     this.soundEffects = {};
     this.soundEffects.attack = SOUND_MANAGER.getSound("dogboss_roar");
@@ -220,23 +223,24 @@ class DogBoss {
     );
   }
   update() {
+    // console.log(this.game.clockTick)
     if (this.iframes >= 0) {
-      this.flashframes = (this.flashframes + 1) % 20;
+      this.flashframes = (this.flashframes + 60 * this.game.clockTick) % 10;
     } else {
       this.flashframes = 0;
     }
     if (this.health <= 0) this.removeFromWorld = true;
     let that = this;
-    this.attackCooldown--;
-    this.iframes--;
+    this.attackCooldown -= 1* this.game.clockTick;
+    this.iframes-= 1* this.game.clockTick;
     //if we are just walking around
     // console.log(this.walkdelay);
     if (this.currentState == 0) {
       if (this.walkdelay <= 0 && getDistance(this, this.game.player) < 600) {
         this.soundEffects.walk.play();
-        this.walkdelay = 50;
+        this.walkdelay = 0.5;
       } else {
-        this.walkdelay -= 1;
+        this.walkdelay -= (1 * this.game.clockTick);
       }
       //apply gravity to the enemy
       that.yVelocity += that.gravity;
@@ -250,8 +254,8 @@ class DogBoss {
           that.dirIndex = 1;
         }
       }
-      that.x += that.xVelocity * that.direction;
-      that.y += that.yVelocity;
+      that.x += (that.xVelocity * this.game.clockTick) * that.direction;
+      that.y += that.yVelocity * this.game.clockTick;
       //update out bounding box every frame
       that.updateBB();
       //check if we need to attack
@@ -259,16 +263,17 @@ class DogBoss {
         this.attackCooldown <= 0 &&
         Math.abs(this.x - this.game.player.x) < 200
       ) {
-        this.attackCooldown = 500;
-        this.attacking = 200;
+        this.attackCooldown = 5;
+        this.attacking = 3;
         //play the attack sound
         this.soundEffects.attack.play();
         //choose random attacks to do
-        this.currentState = 4; //;this.getRandomInt(1, 5);
+        this.currentState = this.getRandomInt(1, 5);
       }
     } else if (this.currentState == 1) {
       //stand and attack with side lasers
-      if (this.attacking > 60 && this.attacking % 8 == 0) {
+
+      if (this.attacking > 0.25 && this.attacking < 2.5  && (this.attacking .toFixed(3) % 0.15).toFixed(1) == 0) {
         this.soundEffects.launch_attack.play();
         //spwan the little things!
         this.game.addEntityAtIndex(
@@ -279,7 +284,7 @@ class DogBoss {
             this.getRandomInt(4, 5),
             -5,
             -1,
-            this.gravity
+            this.gravity/200
           ),
           this.entityArrayPos - 1
         );
@@ -291,15 +296,9 @@ class DogBoss {
             this.getRandomInt(4, 5),
             -5,
             1,
-            this.gravity
+            this.gravity/200
           ),
           this.entityArrayPos - 1
-        );
-        let shakex = this.getRandomInt(80, 120);
-        let shakey = this.getRandomInt(80, 120);
-        this.game.camera.shake(
-          this.getRandomInt(-1, 1) * shakex,
-          this.getRandomInt(-1, 1) * shakey
         );
       }
       // if (this.attacking > 0) {
@@ -309,9 +308,11 @@ class DogBoss {
       // }
     } else if (this.currentState == 2) {
       //up facing rain down attack
-      if (this.attacking > 60 && this.attacking % 40 == 0) {
+      document.getElementById("state").innerHTML =
+      "Attacking Val: " +  this.attacking .toFixed(2)
+      if (this.attacking < 2.5 &&  (this.attacking.toFixed(2) % 0.2).toFixed(1) == 0) {
         this.soundEffects.launch_attack.play();
-        for (let i = 0; i <= 6; i += 2) {
+        for (let i = 2; i <= 6; i += 2) {
           this.game.addEntityAtIndex(
             new GroundProjectile(
               this.game,
@@ -320,7 +321,7 @@ class DogBoss {
               i,
               -8,
               1,
-              this.gravity / 1.8
+              this.gravity / 360
             ),
             this.entityArrayPos - 1
           );
@@ -334,38 +335,39 @@ class DogBoss {
               i,
               -8,
               -1,
-              this.gravity / 1.8
+              this.gravity /360
             ),
             this.entityArrayPos - 1
           );
           //make them live longer
           this.game.entities[this.entityArrayPos - 1].time = 200;
         }
-        let shakex = this.getRandomInt(80, 120);
-        let shakey = this.getRandomInt(80, 120);
-        this.game.camera.shake(
-          this.getRandomInt(-1, 1) * shakex,
-          this.getRandomInt(-1, 1) * shakey
-        );
+        // let shakex = this.getRandomInt(80, 120);
+        // let shakey = this.getRandomInt(80, 120);
+        // this.game.camera.shake(
+        //   this.getRandomInt(-1, 1) * shakex,
+        //   this.getRandomInt(-1, 1) * shakey
+        // );
       }
     } else if (this.currentState == 3) {
       //LEFT AND RIGHT WALL
       //choose the direction of the wall right at the start of phase
-      if (this.attacking == 198) {
+      if (!this.chosendir && this.attacking > 2.5 &&  (this.attacking.toFixed(2) ) > 2.85) {
         if (this.getRandomInt(0, 2) == 1) {
           this.wallAttackDir = 1;
         } else {
           this.wallAttackDir = -1;
         }
+        this.chosendir = true;
       }
-      if (this.attacking <= 100 && this.attacking % 30 == 0) {
+      if (this.attacking < 2.3 &&  (this.attacking.toFixed(2) % 0.3).toFixed(1) == 0) {
         this.soundEffects.launch_attack.play();
         //we only want it to attack a few times with the wall
         for (let i = 0; i < 10; i++) {
           this.game.addEntityAtIndex(
             new GroundProjectile(
               this.game,
-              that.x + 100,
+              that.x + 150,
               that.y + 150 - i * 64,
               4,
               0,
@@ -379,25 +381,30 @@ class DogBoss {
         }
       }
     } else if (this.currentState == 4) {
-      if (this.attacking == 190) this.yVelocity -= 10;
-      if (this.attacking <= 100 && this.attacking % 50 == 0) {
+      this.skyDelay-=1;
+      if (this.attacking == 2.3) this.yVelocity -= 10;
+      if ((this.skyDelay <= 0 && this.attacking < 2.3 &&  (this.attacking.toFixed(2) % 0.2).toFixed(1) == 0)) {
         this.soundEffects.launch_attack.play();
         //we only want it to attack a few times with the wall
+        this.skyDelay = 20;
         for (let i = 0; i < 27; i += 2) {
           this.game.addEntityAtIndex(
-            new AirProjectile(this.game, 107 + i, -46, 0, 1, 0, this.gravity),
+            new AirProjectile(this.game, 107 + i + (this.skyOffset/1.5), -46, 0, 1, 0, this.gravity),
             this.entityArrayPos - 1
           );
           //die on hitting a wall to avoid weird stuff
           this.game.entities[this.entityArrayPos - 1].dieOnCollide = true;
-        }
+      }
+      this.skyOffset++
       }
     }
     //decrement attacking state
     if (this.attacking > 0) {
-      this.attacking--;
+      this.attacking -= 1 * this.game.clockTick;
     } else {
       this.currentState = 0;
+      this.chosendir = false
+      this.skyOffset = 0;
     }
 
     //collisions
@@ -447,10 +454,10 @@ class DogBoss {
     });
 
     // Display values for debugging
-    document.getElementById("attacking").innerHTML = Math.floor(this.x/64 )+ " " + Math.floor(this.y/64);
+    document.getElementById("attacking").innerHTML = this.currentState
     document.getElementById("state").innerHTML =
       "Entity Count: " + this.game.entities.length;
-    // //always apply gravity
+    // // //always apply gravity
     // that.y += that.yVelocity * that.game.clockTick;
   }
 
@@ -498,7 +505,7 @@ class DogBoss {
     if (this.currentState === 3) {
       //signal the attack
       ctx.font = "300px serif";
-      if (this.attacking < 198 && this.attacking > 50) {
+      if (this.attacking < 198 && this.attacking > 2.5) {
         //draw ! to that side
         // ctx.lineWidth = 2;
         ctx.strokeStyle = "#000000";
@@ -506,7 +513,7 @@ class DogBoss {
         //TODO fix x alignment
         ctx.fillText(
           "!",
-          this.x - this.game.camera.x + 60 + 200 * this.wallAttackDir,
+          this.x - this.game.camera.x + 110 + 200 * this.wallAttackDir,
           this.y - this.game.camera.y + 80
         );
       }

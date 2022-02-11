@@ -23,7 +23,7 @@ class SceneManager {
         this.interpolation = 0.06;
         this.background_songs = {};
         this.background_songs.intro = SOUND_MANAGER.getSound('background_1');
-        SOUND_MANAGER.autoRepeat('background_1');
+        // SOUND_MANAGER.autoRepeat('background_1');
         this.playSong(this.background_songs.intro);
         this.backgroundMusicVolume.oninput = function () {
             SOUND_MANAGER.setVolume('background_1', this.value / 100);
