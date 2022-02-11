@@ -17,6 +17,7 @@ let WALL_JUMP = 100;
 class Player {
     constructor(game, x, y) {
         Object.assign(this, { game, x, y });
+        this.flashframes = 0;
 
         this.x = x * 64;
         this.y = y * 64;
@@ -37,6 +38,16 @@ class Player {
         this.attacking = false;
         this.attackBB = new BoundingBox(0, 0, 0, 0);
         this.isPogo = false;
+        this.pogoTimer = 0;
+
+        // Gives the player a health bar
+        this.currentHitpoints = 200;
+        this.maxHitpoints = 200;
+        this.percentHealth = this.currentHitpoints / this.maxHitpoints;
+        this.healthBar = new HealthBar(this);
+
+        this.currentIFrameTimer = 0;
+        this.maxIFrameTimer = 60; // 60 ticks * 1 second/60 ticks = 1 second
 
         /* States:
         0 - idle
@@ -48,9 +59,7 @@ class Player {
         6 - Attack part 1
         7 - attack part 2
         8 - attack part 3
-        9 - pogo start
-        10 - pogo/downward attack
-        11 - pogo end
+        9 - pogo 
         ...
         */
         this.state = 0;
@@ -64,27 +73,24 @@ class Player {
             attack1: 6,
             attack2: 7,
             attack3: 8,
-            pogoStart: 9,
-            pogo: 10,
-            pogoEnd: 11,
+            pogo: 9,
         };
         this.dead = false;
 
         //player sound imports
         this.soundEffects = {};
-        this.soundEffects.attack = new Audio(
-            '../sounds/player/sword_attack_short.wav'
-        );
-        this.soundEffects.jump_voice = new Audio(
-            '../sounds/player/jump_voice.wav'
-        );
-        this.soundEffects.run = new Audio('../sounds/player/player_walk.wav');
-        this.soundEffects.dash = new Audio('../sounds/player/player_dash.wav');
-        this.soundEffects.grunt1 = new Audio('../sounds/player/grunt_1.wav');
-        this.soundEffects.grunt2 = new Audio('../sounds/player/grunt_2.wav');
-        this.soundEffects.grunt3 = new Audio('../sounds/player/grunt_3.wav');
-        this.soundEffects.grunt4 = new Audio('../sounds/player/grunt_4.wav');
-        this.soundEffects.land = new Audio('../sounds/player/land.wav');
+        this.soundEffects.attack = SOUND_MANAGER.getSound('player_attack');
+        // this.soundEffects.jump_voice = new Audio(
+        //     '../sounds/player/jump_voice.wav'
+        // );
+        this.soundEffects.jump_voice = SOUND_MANAGER.getSound('player_jump');
+        this.soundEffects.run = SOUND_MANAGER.getSound('player_walk');
+        this.soundEffects.dash = SOUND_MANAGER.getSound('player_dash');
+        this.soundEffects.grunt1 = SOUND_MANAGER.getSound('player_grunt_1');
+        this.soundEffects.grunt2 = SOUND_MANAGER.getSound('player_grunt_2');
+        this.soundEffects.grunt3 = SOUND_MANAGER.getSound('player_grunt_2');
+        this.soundEffects.grunt4 = SOUND_MANAGER.getSound('player_grunt_4');
+        this.soundEffects.land = SOUND_MANAGER.getSound('player_land');
 
         // Size and bounding box
         this.currentSize = { width: 40, height: 50 };
@@ -120,6 +126,9 @@ class Player {
 
         this.pogoSprite = ASSET_MANAGER.getAsset(
             './sprites/player/player-pogo-65x102.png'
+        );
+        this.death = ASSET_MANAGER.getAsset(
+            './sprites/player/player-death-60x62.png'
         );
 
         this.loadAnimations();
@@ -283,7 +292,7 @@ class Player {
     }
 
     loadAnimations() {
-        for (var i = 0; i < 12; i++) {
+        for (var i = 0; i < 10; i++) {
             this.animations.push([]);
             for (var k = 0; k < 2; k++) {
                 // two directions
@@ -529,91 +538,33 @@ class Player {
             false
         );
 
-        // Pogo start - state 9
+        // Pogo - state 9
         // Face right - 0
         this.animations[9][0] = new Animator(
-            this.pogoSprite,
-            0,
-            0,
-            65,
-            102,
-            2,
-            this.attackSpeed,
-            0,
-            false,
-            false
-        );
-        // Face left - 1
-        // Face right - 0
-        this.animations[9][1] = new Animator(
-            this.pogoSprite,
-            1170,
-            0,
-            65,
-            102,
-            2,
-            this.attackSpeed,
-            0,
-            true,
-            false
-        );
-
-        // Pogo - state 10
-        // Face right - 0
-        this.animations[10][0] = new Animator(
             this.pogoSprite,
             130,
             0,
             65,
             102,
             2,
-            this.attackSpeed,
+            this.attackSpeed + 0.06,
             0,
             false,
             true
         );
         // Face left - 1
         // Face right - 0
-        this.animations[10][1] = new Animator(
+        this.animations[9][1] = new Animator(
             this.pogoSprite,
             910,
             0,
             65,
             102,
             2,
-            this.attackSpeed,
+            this.attackSpeed + 0.06,
             0,
             true,
             true
-        );
-
-        // Pogo end - state 11
-        // Face right - 0
-        this.animations[11][0] = new Animator(
-            this.pogoSprite,
-            260,
-            0,
-            65,
-            102,
-            5,
-            this.attackSpeed,
-            0,
-            false,
-            false
-        );
-        // Face left - 1
-        // Face right - 0
-        this.animations[11][1] = new Animator(
-            this.pogoSprite,
-            585,
-            0,
-            65,
-            102,
-            5,
-            this.attackSpeed,
-            0,
-            true,
-            false
         );
     }
 
@@ -654,6 +605,11 @@ class Player {
                 this.spriteOffset.xOffset = this.facing === 0 ? -10 : -80;
                 this.spriteOffset.yOffset = this.facing === 0 ? -30 : -30;
                 break;
+
+            case this.states.pogo:
+                this.spriteOffset.xOffset = this.facing === 0 ? -30 : -20;
+                this.spriteOffset.yOffset = -45;
+                break;
         }
 
         let widthOffset = 0;
@@ -670,21 +626,24 @@ class Player {
 
     // TODO
     die() {
+        // debugger;
+        this.removeFromWorld = true;
+
+        // this.velocity.x = 0;
+        // this.velocity.y = 0;
+        // this.fallAcc = 0;
+        // this.state = this.states.death;
+
         this.dead = true;
     }
 
     updateAttackBB() {
         //adjust the BB into the correct direction
-        let facing = 0;
-        let xoffset = 0;
-        if (this.facing == 0) {
-            facing = 1;
-            xoffset = 80;
-        } else {
-            facing = -1;
-            xoffset = -80;
-        }
-        if (this.attacking) {
+        let xoffset = this.facing === 0 ? 80 : -80;
+        if (this.attacking && this.isPogo) {
+            // xoffset = this.facing === 0 ? 30 : 0;
+            this.attackBB = new BoundingBox(this.x, this.y + 52, 80, 99);
+        } else if (this.attacking) {
             this.attackBB = new BoundingBox(
                 this.x + xoffset,
                 this.y - 20,
@@ -709,7 +668,20 @@ class Player {
     }
 
     update() {
+        /**
+         * flash while invincible
+         */
+        if (this.currentIFrameTimer > 0) {
+            this.flashframes = (this.flashframes + 1) % 20;
+        } else {
+            this.flashframes = 0;
+        }
+
         const TICK = this.game.clockTick;
+
+        if (this.pogoTimer > 0) {
+            this.pogoTimer -= TICK;
+        }
 
         //testing
         if (this.game.keys.KeyJ) this.animationTick = 0;
@@ -837,7 +809,7 @@ class Player {
             // ACTIONS GOES BELOW HERE
 
             // Dashing
-            if (this.game.keys.KeyK && !this.attacking) {
+            if (this.game.keys.KeyK && !this.attacking && !this.isPogo) {
                 if (this.isInAir) this.airDashed = true;
                 if (this.state !== this.states.wallHang) {
                     //play dash sound effect
@@ -870,12 +842,17 @@ class Player {
             // End Dashing
 
             // Pogo
-            if (this.game.keys.KeyS && this.game.keys.KeyJ && this.isInAir) {
+            if (
+                this.game.keys.KeyS &&
+                this.game.keys.KeyJ &&
+                this.isInAir &&
+                !this.game.keys.KeyK &&
+                this.pogoTimer <= 0
+            ) {
                 this.state = this.states.pogo;
                 this.attacking = true;
                 this.isPogo = true;
-                // if (this.animations[9][this.facing].isDone())
-                //     this.state = this.states.pogo;
+                this.updateAttackBB();
             }
             // End Pogo
 
@@ -940,7 +917,7 @@ class Player {
 
         // UPDATE POSITION
         if (this.game.keys.ArrowUp) {
-            console.log('pressed');
+            // console.log('pressed');
             this.velocity.y -= 80;
         }
         // scale = 3
@@ -950,9 +927,15 @@ class Player {
 
         // Fall off map = dead
         // Assuming block width is 64
-        if (this.y > 64 * 16) this.die();
+        if (this.y > 64 * 16 || this.currentHitpoints <= 0) this.die();
+        // collision
+        if (this.currentIFrameTimer > 0) {
+            this.currentIFrameTimer -= 1;
+            // console.log(this.currentIFrameTimer);
+        }
 
-        // COLLISION
+        // console.log(this.currentIFrameTimer);
+
         this.game.entities.forEach((entity) => {
             //check for the enemy colliding with sword
             // || entity instanceof Drill
@@ -974,14 +957,36 @@ class Player {
                 if (entity && entity instanceof DogBoss) {
                     // console.log('kILL dRILL');
                     //if it has die method it should die
-                    if (entity.iframes <= 0) {
+                    if (entity.iframes <= 0 && entity.currentState != 4) {
                         entity.health -= 5;
                         entity.iframes = 20;
                     }
                 }
+                if (entity.isHostile && this.isPogo) {
+                    this.animations[3][0].elapsedTime = 0;
+                    this.animations[3][1].elapsedTime = 0;
+                    this.velocity.y = STOP_JUMP;
+                    if (this.state !== this.states.jump)
+                        this.state = this.states.jump;
+                    this.isPogo = false;
+                    this.attacking = false;
+                    this.airDashed = false;
+                    this.pogoTimer = 0.6;
+                }
             }
             // Collision with player's box
             if (entity.BB && this.BB.collide(entity.BB)) {
+                //Damage the player
+                if (
+                    entity &&
+                    entity.isHostile &&
+                    this.currentIFrameTimer === 0
+                ) {
+                    this.currentHitpoints -= entity.collisionDamage;
+                    this.currentIFrameTimer = this.maxIFrameTimer;
+                    // console.log('Took ' + entity.collisionDamage + ' damage');
+                    // console.log('Current HP: ' + this.currentHitpoints);
+                }
                 if (this.velocity.y > 0) {
                     // falling
                     if (
@@ -1042,7 +1047,6 @@ class Player {
                 // Wall hang collision
                 if (
                     entity instanceof Ground &&
-                    entity.type &&
                     !this.BB.collide(entity.topBB) &&
                     !this.BB.collide(entity.bottomBB)
                 ) {
@@ -1063,6 +1067,7 @@ class Player {
                         this.velocity.y = STOP_JUMP;
                         this.fallAcc = STOP_FALL;
                         this.isInAir = true;
+                        this.airDashed = false;
                         this.state = this.states.jump;
                         // Reset jump animation to the beginning
                         this.animations[3][0].elapsedTime = 0;
@@ -1075,8 +1080,7 @@ class Player {
                         }
                     }
                 } else if (
-                    (entity instanceof Ground || entity instanceof Spike) &&
-                    entity.type &&
+                    entity instanceof Ground &&
                     (this.BB.collide(entity.topBB) ||
                         this.BB.collide(entity.bottomBB))
                 ) {
@@ -1084,6 +1088,10 @@ class Player {
                         this.velocity.y += this.fallAcc * TICK;
                         this.game.keys.KeyK = false;
                     }
+                } else if (entity instanceof Spike && this.game.keys.KeyK) {
+                    // Prevent player from wall hang at spikes
+                    this.velocity.y += this.fallAcc * TICK;
+                    this.game.keys.KeyK = false;
                 }
             }
         });
@@ -1148,6 +1156,10 @@ class Player {
     }
 
     draw(ctx) {
+        //damage blink
+        if (this.currentIFrameTimer > 0) {
+            ctx.filter = ` brightness(${this.flashframes})`;
+        }
         this.animations[this.state][this.facing].drawFrame(
             this.game.clockTick,
             ctx,
@@ -1174,6 +1186,9 @@ class Player {
             this.attacking = false;
             // console.log("normal anim");
         }
+        if (this.currentIFrameTimer >= 0) {
+            ctx.filter = 'none';
+        }
         if (params.debug) {
             ctx.strokeStyle = 'Blue';
             ctx.strokeRect(
@@ -1194,11 +1209,17 @@ class Player {
             ctx.textAlign = 'center';
             ctx.fillStyle = 'black';
             ctx.fillText(
-                Math.floor(this.x / 64) + ', ' + Math.floor(this.y / 64),
+                Math.floor(this.x / 64) +
+                    ', ' +
+                    Math.floor(this.y / 64) +
+                    ', ' +
+                    this.currentHitpoints,
                 this.x - this.game.camera.x + this.spriteOffset.xOffset + 40, // camera sidescrolling
                 this.y - this.game.camera.y + this.spriteOffset.yOffset - 20
             );
         }
+        // Draws the health bar
+        this.healthBar.drawHealthBarFollow(ctx);
     }
     getRandomGrunt() {
         let theGrunt = this.getRandomInt(1, 5);

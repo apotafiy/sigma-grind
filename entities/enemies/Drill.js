@@ -22,6 +22,10 @@ class Drill {
             (51 / 2) * this.scale
         );
         this.state = 0;
+
+        this.isHostile = true;
+        this.collisionDamage = 5;
+
         this.animations = [];
         this.loadAnimations();
     }

@@ -10,7 +10,7 @@ class AssetManager {
         console.log("Queueing " + path);
         this.downloadQueue.push(path);
     }
-
+    
     isDone() {
         return (
             this.downloadQueue.length === this.successCount + this.errorCount
