@@ -55,6 +55,7 @@ ASSET_MANAGER.queueDownload(
 );
 //items
 ASSET_MANAGER.queueDownload('./sprites/items/health_pack_full_22x31.png')
+ASSET_MANAGER.queueDownload('./sprites/items/health_pack_small_25x16.png')
 //load in player sounds
 SOUND_MANAGER.queueDownload("player_jump", "./sounds/player/jump_voice.wav");
 SOUND_MANAGER.queueDownload("player_walk",'./sounds/player/player_walk.wav');
