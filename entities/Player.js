@@ -13,7 +13,7 @@ let RUN_FALL_A = 500;
 let MAX_FALL = 270;
 let STOP_JUMP = -240;
 let RUN_JUMP = -300;
-let WALL_JUMP = 100;
+let WALL_JUMP = 600;
 let POGO_JUMP = -200;
 class Player {
     constructor(game, x, y) {
@@ -1066,9 +1066,8 @@ class Player {
                         // falling then hit jump, bounce from wall
                         //play wall jump soundEffect
                         this.getRandomGrunt().play();
-                        this.velocity.x =
-                            this.facing === 1 ? WALL_JUMP : -WALL_JUMP;
-                        this.velocity.y = STOP_JUMP;
+                        this.velocity.x = this.facing === 1 ? 100 : -100;
+                        this.velocity.y = -WALL_JUMP;
                         this.fallAcc = STOP_FALL;
                         this.isInAir = true;
                         this.airDashed = false;
