@@ -33,9 +33,11 @@ class SoundManager {
     }
 
     autoRepeat(path){
-        this.soundEffects.get(path).addEventListener("ended", function() {
-            this.soundEffects.get(path).play();
-        })
+        // this.soundEffects.get(path).addEventListener("ended", function() {
+        //     this.currentTime = 0;
+        //    this.play();
+        // })
+        this.soundEffects.get(path).loop = true;
     }
     setVolume(path, volume) {
         this.soundEffects.get(path).volume = volume;
