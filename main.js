@@ -53,6 +53,9 @@ ASSET_MANAGER.queueDownload('./sprites/player/zero_attack_right_two.png');
 ASSET_MANAGER.queueDownload(
     './sprites/player/zero_attack_right_three_114x64-Sheet.png'
 );
+//items
+ASSET_MANAGER.queueDownload('./sprites/items/health_pack_full_22x31.png')
+ASSET_MANAGER.queueDownload('./sprites/items/health_pack_small_25x16.png')
 //load in player sounds
 SOUND_MANAGER.queueDownload("player_jump", "./sounds/player/jump_voice.wav");
 SOUND_MANAGER.queueDownload("player_walk",'./sounds/player/player_walk.wav');
@@ -72,6 +75,9 @@ SOUND_MANAGER.queueDownload("dogboss_launch_projectile", "./sounds/dogboss/launc
 SOUND_MANAGER.queueDownload("rush_teleport", "./sounds/rush/teleport.mp3");
 //background Music
 SOUND_MANAGER.queueDownload("background_1", " ./sounds/background_song_1.mp3");
+//background Music
+SOUND_MANAGER.queueDownload("heal_1", " ./sounds/items/heal.wav");
+//item soundEffects
 //load in all sounds
 SOUND_MANAGER.downloadAll();
 

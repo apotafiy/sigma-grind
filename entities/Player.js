@@ -921,10 +921,10 @@ class Player {
         }
 
         // UPDATE POSITION
-        if (this.game.keys.ArrowUp) {
-            // console.log('pressed');
-            this.velocity.y -= 80;
-        }
+        // if (this.game.keys.ArrowUp) {
+        //     // console.log('pressed');
+        //     this.velocity.y -= 80;
+        // }
         // scale = 3
         this.x += this.velocity.x * TICK * 3;
         this.y += this.velocity.y * TICK * 3;

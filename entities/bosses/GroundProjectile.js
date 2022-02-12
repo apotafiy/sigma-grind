@@ -3,7 +3,7 @@ class GroundProjectile {
      * time per frame
      */
     
-    constructor(game, x, y, xVel, yVel,direction, gravity) {
+    constructor(game, x, y, xVel, yVel,direction, gravity, allowPogo) {
         this.scale = 2.5;
         this.time =  200;//this.getRandomInt(100,200);
         this.attacking = 0;
@@ -15,10 +15,10 @@ class GroundProjectile {
         this.yVelocity = yVel;
         this.x = x ;
         this.y = y ;
+        if(allowPogo) this.isPog = true;
         this.gravity = gravity;
         this.direction = direction;
         this.dieOnCollide = false;
-        this.isPog = true;
         this.isHostile = true;
         this.collisionDamage = 10;
 
@@ -46,6 +46,19 @@ class GroundProjectile {
             0,
             1
         );
+
+        this.animations[0][1] = new Animator(
+          ASSET_MANAGER.getAsset('./sprites/dogboss/dogboss_projectile_37x32.png'),
+          0,
+          32,
+          37,
+          32,
+          12,
+          0.08,
+          0,
+          0,
+          1
+      );
 
     }
     die(){
@@ -124,6 +137,15 @@ class GroundProjectile {
 
     draw(ctx) {
         let that = this;
+        if(!this.isPog){
+          that.animations[0][1].drawFrame(
+            that.game.clockTick,
+            ctx,
+            that.x - that.game.camera.x,
+            that.y - that.game.camera.y,// + that.BB.height / 4,
+            that.scale
+        );
+        } else {
         // console.log(that.currentState, that.yVelocity)
             that.animations[0][0].drawFrame(
                 that.game.clockTick,
@@ -132,7 +154,7 @@ class GroundProjectile {
                 that.y - that.game.camera.y,// + that.BB.height / 4,
                 that.scale
             );
-
+        }
         if (params.debug) {
             ctx.strokeStyle = 'Purple';
             ctx.strokeRect(

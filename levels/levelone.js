@@ -1,5 +1,6 @@
 function loadLevelOne(gameEngine) {
     let gravity = 0.2;
+
     gameEngine.addEntity(new Player(gameEngine, 108, -35));
     // gameEngine.addEntity(new Player(gameEngine, 3, 0));
     // gameEngine.addEntity(new Player(gameEngine, 67, -37));
@@ -57,7 +58,7 @@ function loadLevelOne(gameEngine) {
     gameEngine.addEntity(new Ground(gameEngine, 1, 13, -25, 2, 1, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 1, 9, -21, 2, 1, 1, 0, 0));
     //top of wall dash tutorial tunnel
-    gameEngine.addEntity(new Ground(gameEngine, 1, 9, -45, 10, 9, 1, 0, 0));
+    gameEngine.addEntity(new Ground(gameEngine, 1, 9, -45, 14, 9, 1, 0, 0));
     //close gap this is just so i can get in lol^ ( or make this a secret because it is hard to access lol)
     gameEngine.addEntity(new Ground(gameEngine, 1, 23, -45, 12, 9, 1, 0, 0));
 
@@ -154,7 +155,7 @@ function loadLevelOne(gameEngine) {
     gameEngine.addEntity(new Sign(gameEngine, 40, 0, 0));
 
     gameEngine.addEntity(
-        new Rush(gameEngine, 25, 2, 5, "Use 'K' To Dash Accross The Gaps!")
+        new Rush(gameEngine, 25, 2, 5, "Use 'K' To Dash Across The Gaps!")
     );
     gameEngine.addEntity(
         new Rush(
@@ -229,9 +230,11 @@ function loadLevelOne(gameEngine) {
             104,
             -35,
             5,
-            "Looks Like Sigma Didnt Take Any Chances. He Left One Of His Goons To Make Sure You Stayed. He Does Look A Little Like Me... Doesn't He..."
+            "Looks Like Sigma Didnt Take Any Chances. He Left One Of His Goons To Make Sure You Stayed. Grab The Energy Pod Before You Go!"
         )
     );
+    gameEngine.addEntity(new FullHealthPack(gameEngine, 105,-35))
+    // gameEngine.addEntity(new SmallHealthPack(gameEngine, 103,-35))
     // gameEngine.addEntity(new GroundHorse(gameEngine, 36, 0));
     gameEngine.addEntity(new Water(gameEngine));
     gameEngine.addEntity(new SceneManager(gameEngine));
