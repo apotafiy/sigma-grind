@@ -1,6 +1,6 @@
 /** Global Parameters Object */
 const params = {
-  debug: true,
+    debug: false,
 };
 
 /**
@@ -36,21 +36,21 @@ const hsl = (h, s, l) => `hsl(${h}, ${s}%, ${l}%)`;
 
 /** Creates an alias for requestAnimationFrame for backwards compatibility */
 window.requestAnimFrame = (() => {
-  return (
-    window.requestAnimationFrame ||
-    window.webkitRequestAnimationFrame ||
-    window.mozRequestAnimationFrame ||
-    window.oRequestAnimationFrame ||
-    window.msRequestAnimationFrame ||
-    /**
-     * Compatibility for requesting animation frames in older browsers
-     * @param {Function} callback Function
-     * @param {DOM} element DOM ELEMENT
-     */
-    ((callback, element) => {
-      window.setTimeout(callback, 1000 / 60);
-    })
-  );
+    return (
+        window.requestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        window.oRequestAnimationFrame ||
+        window.msRequestAnimationFrame ||
+        /**
+         * Compatibility for requesting animation frames in older browsers
+         * @param {Function} callback Function
+         * @param {DOM} element DOM ELEMENT
+         */
+        ((callback, element) => {
+            window.setTimeout(callback, 1000 / 60);
+        })
+    );
 })();
 
 /**
@@ -59,5 +59,16 @@ window.requestAnimFrame = (() => {
  * @returns Distance between the two points
  */
 const getDistance = (p1, p2) => {
-  return sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+    return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+};
+
+/**
+ * Simple linear interpolation
+ * @param {Number} start position of original
+ * @param {Number} end position of target
+ * @param {Number} amount amount of interpolation between 0.00 and 1.00
+ * @returns the lerped or percentage in between the start and end values
+ */
+const lerp = (start, end, amount) => {
+    return start + (end - start) * amount;
 };
