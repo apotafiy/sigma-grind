@@ -284,7 +284,8 @@ class DogBoss {
             this.getRandomInt(4, 5),
             -5,
             -1,
-            this.gravity/200
+            this.gravity/200,
+            true
           ),
           this.entityArrayPos - 1
         );
@@ -296,7 +297,8 @@ class DogBoss {
             this.getRandomInt(4, 5),
             -5,
             1,
-            this.gravity/200
+            this.gravity/200,
+            true
           ),
           this.entityArrayPos - 1
         );
@@ -321,7 +323,8 @@ class DogBoss {
               i,
               -8,
               1,
-              this.gravity / 360
+              this.gravity / 360,
+              // true
             ),
             this.entityArrayPos - 1
           );
@@ -335,7 +338,8 @@ class DogBoss {
               i,
               -8,
               -1,
-              this.gravity /360
+              this.gravity /360,
+              // true
             ),
             this.entityArrayPos - 1
           );
