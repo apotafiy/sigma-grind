@@ -236,7 +236,7 @@ class DogBoss {
     //if we are just walking around
     // console.log(this.walkdelay);
     if (this.currentState == 0) {
-      if (this.walkdelay <= 0 && getDistance(this, this.game.player) < 600) {
+      if (this.walkdelay <= 0 && getDistance(this, this.game.player) < 800) {
         this.soundEffects.walk.play();
         this.walkdelay = 0.5;
       } else {
@@ -302,7 +302,32 @@ class DogBoss {
           ),
           this.entityArrayPos - 1
         );
+        if((this.attacking .toFixed(3) % 0.3).toFixed(1) == 0){
+          this.game.addEntityAtIndex(
+            new GroundProjectile(
+              this.game,
+              that.x + 140,
+              that.y + 120,
+             0,
+              0,
+              1,
+              this.gravity/200,
+              true
+            ),
+            this.entityArrayPos - 1
+          );
+        }
+        
+
+        let shakex = this.getRandomInt(40, 100);
+        let shakey = this.getRandomInt(40, 80);
+        this.game.camera.shake(
+          this.getRandomInt(-1, 2) * shakex,
+          this.getRandomInt(-1, 2) * shakey
+        );
       }
+
+      
       // if (this.attacking > 0) {
       //   this.attacking--;
       // } else {
@@ -314,7 +339,7 @@ class DogBoss {
       "Attacking Val: " +  this.attacking .toFixed(2)
       if (this.attacking < 2.5 &&  (this.attacking.toFixed(2) % 0.2).toFixed(1) == 0) {
         this.soundEffects.launch_attack.play();
-        for (let i = 2; i <= 6; i += 2) {
+        for (let i =0; i <= 6; i += 2) {
           this.game.addEntityAtIndex(
             new GroundProjectile(
               this.game,
@@ -346,12 +371,12 @@ class DogBoss {
           //make them live longer
           this.game.entities[this.entityArrayPos - 1].time = 200;
         }
-        // let shakex = this.getRandomInt(80, 120);
-        // let shakey = this.getRandomInt(80, 120);
-        // this.game.camera.shake(
-        //   this.getRandomInt(-1, 1) * shakex,
-        //   this.getRandomInt(-1, 1) * shakey
-        // );
+        let shakex = this.getRandomInt(60, 100);
+        let shakey = this.getRandomInt(60, 80);
+        this.game.camera.shake(
+          this.getRandomInt(-1, 2) * shakex,
+          this.getRandomInt(-1, 2) * shakey
+        );
       }
     } else if (this.currentState == 3) {
       //LEFT AND RIGHT WALL

@@ -42,8 +42,8 @@ class Player {
         this.pogoTimer = 0;
 
         // Gives the player a health bar
-        this.currentHitpoints = 200;
-        this.maxHitpoints = 200;
+        this.currentHitpoints = 150;
+        this.maxHitpoints = 150;
         this.percentHealth = this.currentHitpoints / this.maxHitpoints;
         this.healthBar = new HealthBar(this);
 
@@ -628,14 +628,19 @@ class Player {
     // TODO
     die() {
         // debugger;
-        this.removeFromWorld = true;
-
+        // this.removeFromWorld = true;
+        // move back to start for now
+        this.velocity.x = 0;
+        this.velocity.y = 0;
+        this.x = 3 * 64;
+        this.y = -2*64;
+        this.currentHitpoints = this.maxHitpoints;
         // this.velocity.x = 0;
         // this.velocity.y = 0;
         // this.fallAcc = 0;
         // this.state = this.states.death;
 
-        this.dead = true;
+        this.dead = false;
     }
 
     updateAttackBB() {

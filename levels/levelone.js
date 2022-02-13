@@ -41,6 +41,7 @@ function loadLevelOne(gameEngine) {
     gameEngine.addEntity(new Ground(gameEngine, 1, 40, -35, 5, 20, 1, 0, 0));
     //spikes (for now ground horse lol)
     gameEngine.addEntity(new Spike(gameEngine, 40, -12, 5, 1, 0));
+    gameEngine.addEntity(new Spike(gameEngine, 38, -17, 2, 1, 2));
     //TUNNEL BOTTOM
     gameEngine.addEntity(new Ground(gameEngine, 1, 40, -11, 5, 4, 1, 0, 0));
     //expand into tunnel going left
@@ -82,7 +83,7 @@ function loadLevelOne(gameEngine) {
     gameEngine.addEntity(new Ground(gameEngine, 1, 77, -50, 6, 44, 1, 0, 0));
     //near wall spikes!
     gameEngine.addEntity(new Spike(gameEngine, 70, -34, 1, 5, 1));
-
+    gameEngine.addEntity(new Spike(gameEngine, 75, -41,2, 1, 2));
     //alternate wall spike force dash
     gameEngine.addEntity(new Spike(gameEngine, 76, -26, 1, 5, 3));
 
@@ -121,6 +122,8 @@ function loadLevelOne(gameEngine) {
     gameEngine.addEntity(new Ground(gameEngine, 1, 92, -20, 2, 1, 1, 1, 1));
     //even higher! platform  to dash too
     gameEngine.addEntity(new Ground(gameEngine, 1, 92, -30, 2, 1, 1, 1, 1));
+    //spikes to force pogo
+    gameEngine.addEntity(new Spike(gameEngine, 92, -31, 2, 1,0));
     //do all the grass checkForGrass
 
     //boss arena
@@ -133,7 +136,7 @@ function loadLevelOne(gameEngine) {
     gameEngine.addEntity(new Ground(gameEngine, 1, 125, -38, 3, 1, 1, 1, 1));
     gameEngine.addEntity(new DogBoss(gameEngine, 112, -36, gravity));
     // gameEngine.addEntity(new GroundProjectile(gameEngine,7360,-2560,2,-2, gravity))
-    gameEngine.addEntity(new Ground(gameEngine, 1, 135, -32, 2, 1, 1, 0, 0));
+    // gameEngine.addEntity(new Ground(gameEngine, 1, 135, -32, 2, 1, 1, 0, 0));
     // gameEngine.addEntity(new AirProjectile(gameEngine, 106, -40, 0,0,1,0.2));
     //Grass Check
     gameEngine.entities.forEach(function (entity) {
