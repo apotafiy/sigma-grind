@@ -50,6 +50,7 @@ function loadLevelOne(gameEngine) {
     //spikes in between them
     gameEngine.addEntity(new Spike(gameEngine, 15, -11, 13, 1, 0));
     gameEngine.addEntity(new Spike(gameEngine, 15, -17, 13, 1, 2));
+    gameEngine.addEntity(new Spike(gameEngine, 63, -29,2, 1, 2));
     //top of tunnel
     gameEngine.addEntity(new Ground(gameEngine, 1, 18, -30, 22, 13, 1, 0, 0));
 
