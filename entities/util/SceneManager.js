@@ -235,6 +235,7 @@ class SceneManager {
             //move to second stage of the menu
             this.currentState = 1;
             this.menuIndex = 0;
+            this.menuCooldown = 0.5;
         }
     }
     //handle the game mode selection
@@ -247,6 +248,14 @@ class SceneManager {
             this.menuIndex -=1;
             if(this.menuIndex < 0) this.menuIndex = 1;
             this.menuCooldown = 0.5
+        } else if(this.game.keys.Enter && this.menuCooldown <= 0){
+            //we want to start the level
+            this.currentState = 2;
+            this.isLevel = true;
+            if(this.menuIndex == 1){
+                params.hardcore = true;
+            }
+            loadLevelOne(this.game);
         }
     }
   }
@@ -266,7 +275,7 @@ class SceneManager {
       );
       ctx.stroke();
     }
-    if(this.currentState == 0){
+    if(!this.isLevel && this.currentState == 0){
         that.animations[0].drawFrame(
             that.game.clockTick,
             ctx,
@@ -294,7 +303,7 @@ class SceneManager {
     }
 
     //difficulty selectors
-     if(this.currentState == 1){
+     if(!this.isLevel && this.currentState == 1){
         that.animations[0].drawFrame(
             that.game.clockTick,
             ctx,

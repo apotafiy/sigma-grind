@@ -241,6 +241,9 @@ function loadLevelOne(gameEngine) {
     // gameEngine.addEntity(new SmallHealthPack(gameEngine, 103,-35))
     // gameEngine.addEntity(new GroundHorse(gameEngine, 36, 0));
     gameEngine.addEntity(new Water(gameEngine));
-    gameEngine.addEntity(new SceneManager(gameEngine,1));
+    // console.log(gameEngine.entities);
+    //remove old game engine and add new one 
+    gameEngine.entities.shift();
+    gameEngine.addEntity(new SceneManager(gameEngine,2));
     // gameEngine.addEntity(new Water(gameEngine));
 }

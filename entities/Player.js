@@ -42,8 +42,8 @@ class Player {
         this.pogoTimer = 0;
 
         // Gives the player a health bar
-        this.currentHitpoints = 150;
-        this.maxHitpoints = 150;
+        this.currentHitpoints = params.hardcore ? 1 : 150;
+        this.maxHitpoints =  params.hardcore ? 1 : 150;
         this.percentHealth = this.currentHitpoints / this.maxHitpoints;
         this.healthBar = new HealthBar(this);
 
