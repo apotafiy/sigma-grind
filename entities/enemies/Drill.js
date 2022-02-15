@@ -162,6 +162,15 @@ class Drill {
         );
     }
 
+    updateBB() {
+        this.BB = new BoundingBox(
+            this.x + this.offSetBB,
+            this.y + this.offSetBB,
+            (51 / 2) * this.scale,
+            (51 / 2) * this.scale
+        );
+    }
+
     update() {
         const TICK = this.game.clockTick;
         let dist = getDistance(this, this.player);
@@ -207,7 +216,7 @@ class Drill {
             let ydif = (this.game.player.y - this.y) / dist;
 
             // slows velocity by half each second. idk why tho
-            this.xVelocity -= TICK * (this.xVelocity * 0.5);
+            this.xVelocity -= TICK * this.xVelocity * 0.5;
             this.yVelocity -= TICK * this.yVelocity * 0.5;
 
             // idk
@@ -219,8 +228,6 @@ class Drill {
 
             this.x += this.xVelocity;
             this.y += this.yVelocity;
-            this.BB.x = this.x + this.offSetBB;
-            this.BB.y = this.y + this.offSetBB;
             // calculate the angle based on velocity
             this.angle = Math.floor(
                 Math.atan(this.yVelocity / this.xVelocity) * (180 / Math.PI)
@@ -236,6 +243,7 @@ class Drill {
                 this.angle -= 360;
             }
         }
+        this.updateBB();
     }
 
     draw(ctx) {

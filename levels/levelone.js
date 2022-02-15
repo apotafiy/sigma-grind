@@ -50,7 +50,7 @@ function loadLevelOne(gameEngine) {
     //spikes in between them
     gameEngine.addEntity(new Spike(gameEngine, 15, -11, 13, 1, 0));
     gameEngine.addEntity(new Spike(gameEngine, 15, -17, 13, 1, 2));
-    gameEngine.addEntity(new Spike(gameEngine, 63, -29,2, 1, 2));
+    gameEngine.addEntity(new Spike(gameEngine, 63, -29, 2, 1, 2));
     //top of tunnel
     gameEngine.addEntity(new Ground(gameEngine, 1, 18, -30, 22, 13, 1, 0, 0));
 
@@ -84,7 +84,7 @@ function loadLevelOne(gameEngine) {
     gameEngine.addEntity(new Ground(gameEngine, 1, 77, -50, 6, 44, 1, 0, 0));
     //near wall spikes!
     gameEngine.addEntity(new Spike(gameEngine, 70, -34, 1, 5, 1));
-    gameEngine.addEntity(new Spike(gameEngine, 75, -41,2, 1, 2));
+    gameEngine.addEntity(new Spike(gameEngine, 75, -41, 2, 1, 2));
     //alternate wall spike force dash
     gameEngine.addEntity(new Spike(gameEngine, 76, -26, 1, 5, 3));
 
@@ -124,7 +124,7 @@ function loadLevelOne(gameEngine) {
     //even higher! platform  to dash too
     gameEngine.addEntity(new Ground(gameEngine, 1, 92, -30, 2, 1, 1, 1, 1));
     //spikes to force pogo
-    gameEngine.addEntity(new Spike(gameEngine, 92, -31, 2, 1,0));
+    gameEngine.addEntity(new Spike(gameEngine, 92, -31, 2, 1, 0));
     //do all the grass checkForGrass
 
     //boss arena
@@ -234,10 +234,10 @@ function loadLevelOne(gameEngine) {
             104,
             -35,
             5,
-            "Looks Like Sigma Didnt Take Any Chances. He Left One Of His Goons To Make Sure You Stayed. Grab The Energy Pod Before You Go!"
+            'Looks Like Sigma Didnt Take Any Chances. He Left One Of His Goons To Make Sure You Stayed. Grab The Energy Pod Before You Go!'
         )
     );
-    gameEngine.addEntity(new FullHealthPack(gameEngine, 105,-35))
+    gameEngine.addEntity(new FullHealthPack(gameEngine, 105, -35));
     // gameEngine.addEntity(new SmallHealthPack(gameEngine, 103,-35))
     // gameEngine.addEntity(new GroundHorse(gameEngine, 36, 0));
     gameEngine.addEntity(new Water(gameEngine));
