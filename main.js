@@ -2,6 +2,13 @@ const gameEngine = new GameEngine();
 
 const ASSET_MANAGER = new AssetManager();
 const SOUND_MANAGER = new SoundManager();
+//Title Screen 
+ASSET_MANAGER.queueDownload("./sprites/title_screen/background.png");
+ASSET_MANAGER.queueDownload("./sprites/title_screen/press_enter.png");
+ASSET_MANAGER.queueDownload("./sprites/title_screen/title_card.png");
+ASSET_MANAGER.queueDownload("./sprites/title_screen/normal.png");
+ASSET_MANAGER.queueDownload("./sprites/title_screen/hardcore.png");
+
 //Backgrounds
 ASSET_MANAGER.queueDownload('./sprites/backgrounds/water.png');
 //Ground tiles
@@ -87,7 +94,9 @@ ASSET_MANAGER.downloadAll(() => {
     ctx.imageSmoothingEnabled = false;
     let gravity = 0.2;
     //scene manager for scrolling
-    loadLevelOne(gameEngine);
+    gameEngine.addEntity(new SceneManager(gameEngine,0));
+    // loadLevelOne(gameEngine);
+
     // gameEngine.addEntity(new GroundHorse(gameEngine));
 
     gameEngine.init(ctx);
