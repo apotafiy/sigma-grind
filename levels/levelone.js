@@ -3,13 +3,16 @@ function loadLevelOne(gameEngine) {
 
     // gameEngine.addEntity(new Player(gameEngine, 108, -35));
     gameEngine.addEntity(new Player(gameEngine, 3, 0));
-    // gameEngine.addEntity(new Player(gameEngine, 67, -37));
+    //gameEngine.addEntity(new Player(gameEngine, 67, -37));
     // gameEngine.addEntity(new Drill(gameEngine, 10, -1, 60));
     // gameEngine.addEntity(new Drill(gameEngine, 12, -1, 60));
     // gameEngine.addEntity(new Drill(gameEngine, 14, -1, 60));
     // gameEngine.addEntity(new Drill(gameEngine, 16, -1, 60));
     // gameEngine.addEntity(new Drill(gameEngine, 18, -1, 60));
-    // gameEngine.addEntity(new Drill(gameEngine, 10, -1, 60));
+    // gameEngine.addEntity(new Drill(gameEngine, 20, -1, 60));
+    // gameEngine.addEntity(new Drill(gameEngine, 22, -1, 60));
+    // gameEngine.addEntity(new Drill(gameEngine, 24, -1, 60));
+    // gameEngine.addEntity(new Drill(gameEngine, 26, -1, 60));
 
     gameEngine.addEntity(new Ground(gameEngine, 1, -5, -6, 6, 20, 1, 0, 1));
     //start ground

@@ -234,9 +234,12 @@ class Drill {
             this.x += this.xVelocity;
             this.y += this.yVelocity;
             // calculate the angle based on velocity
-            this.angle = Math.floor(
-                Math.atan(this.yVelocity / this.xVelocity) * (180 / Math.PI)
-            );
+            this.angle =
+                Math.floor(
+                    (Math.atan(this.yVelocity / this.xVelocity) *
+                        (180 / Math.PI)) /
+                        2
+                ) * 2;
 
             if (this.angle < 0) {
                 this.angle += 360;
