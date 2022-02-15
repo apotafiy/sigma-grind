@@ -9,9 +9,11 @@ class Drill {
         this.cache = [];
         this.xVelocity = 0;
         this.yVelocity = 0;
+        this.health = 25;
         this.acceleration = 3000;
         this.DISTANCE_MULT = 1;
         this.frames = 0;
+        this.isPog = true;
         this.scale = 2.5;
         this.angle = 0;
         this.offSetBB = 32;
@@ -175,7 +177,9 @@ class Drill {
         const TICK = this.game.clockTick;
         let dist = getDistance(this, this.player);
         const that = this;
-        // TODO: when not active then there is player is undefined
+        if (this.health <= 0) {
+            this.state = 3;
+        }
         if (this.state === 3) {
             // death animation
             if (this.animations[this.state].isDone()) {
@@ -215,8 +219,10 @@ class Drill {
             let ydif = (this.game.player.y - this.y) / dist;
 
             // slows velocity by half each second. idk why tho
-            this.xVelocity -= TICK * this.xVelocity * 0.5;
-            this.yVelocity -= TICK * this.yVelocity * 0.5;
+            // it seems to be resposible for the drill not flying away too far
+            // and sticking close to the player
+            this.xVelocity -= TICK * this.xVelocity * 0.4;
+            this.yVelocity -= TICK * this.yVelocity * 0.4;
 
             // idk
             this.xVelocity +=
