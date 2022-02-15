@@ -176,7 +176,6 @@ class Drill {
         let dist = getDistance(this, this.player);
         const that = this;
         // TODO: when not active then there is player is undefined
-
         if (this.state === 3) {
             // death animation
             if (this.animations[this.state].isDone()) {
