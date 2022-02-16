@@ -21,7 +21,7 @@ class GameEngine {
             KeyD: false,
             //give height!
             ArrowUp: false,
-            
+
             //Enter for selector
             Enter: false,
 
@@ -57,17 +57,26 @@ class GameEngine {
         this.player = this.getPlayer();
     }
 
-    start() {
+    start(fps) {
+        let fpsInterval = 1000 / fps;
+        let then = Date.now();
+
         this.running = true;
         const gameLoop = () => {
-            if (params.debug) {
-                this.stats.begin();
-                this.loop();
-                this.stats.end();
-            } else {
-                this.loop();
-            }
             requestAnimFrame(gameLoop, this.ctx.canvas);
+
+            let now = Date.now();
+            let elapsed = now - then;
+            if (elapsed > fpsInterval) {
+                then = now - (elapsed % fpsInterval);
+                if (params.debug) {
+                    this.stats.begin();
+                    this.loop();
+                    this.stats.end();
+                } else {
+                    this.loop();
+                }
+            }
         };
         gameLoop();
     }
@@ -118,18 +127,18 @@ class GameEngine {
             } else {
                 this.keys[event.code] = true;
             }
-                //debug for level building
-                //TODO REMOVE!
+            //debug for level building
+            //TODO REMOVE!
             if (event.code === 'ArrowUp') {
-                this.keys["ArrowsUp"] = true;
+                this.keys['ArrowsUp'] = true;
             } else {
-                this.keys["ArrowUp"] = false;
+                this.keys['ArrowUp'] = false;
             }
 
             if (event.code === 'Enter') {
-                this.keys["Enter"] = true;
+                this.keys['Enter'] = true;
             } else {
-                this.keys["Enter"] = false;
+                this.keys['Enter'] = false;
             }
 
             // Prevent scrolling while using the canvas
@@ -154,7 +163,7 @@ class GameEngine {
         this.entities.push(entity);
     }
 
-    addEntityAtIndex(entity,index) {
+    addEntityAtIndex(entity, index) {
         this.entities.splice(index, 0, entity);
     }
 
