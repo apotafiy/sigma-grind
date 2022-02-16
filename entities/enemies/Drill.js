@@ -9,9 +9,11 @@ class Drill {
         this.cache = [];
         this.xVelocity = 0;
         this.yVelocity = 0;
+        this.health = 25;
         this.acceleration = 3000;
         this.DISTANCE_MULT = 1;
         this.frames = 0;
+        this.isPog = true;
         this.scale = 2.5;
         this.angle = 0;
         this.offSetBB = 32;
@@ -162,12 +164,22 @@ class Drill {
         );
     }
 
+    updateBB() {
+        this.BB = new BoundingBox(
+            this.x + this.offSetBB,
+            this.y + this.offSetBB,
+            (51 / 2) * this.scale,
+            (51 / 2) * this.scale
+        );
+    }
+
     update() {
         const TICK = this.game.clockTick;
         let dist = getDistance(this, this.player);
         const that = this;
-        // TODO: when not active then there is player is undefined
-
+        if (this.health <= 0) {
+            this.state = 3;
+        }
         if (this.state === 3) {
             // death animation
             if (this.animations[this.state].isDone()) {
@@ -207,8 +219,10 @@ class Drill {
             let ydif = (this.game.player.y - this.y) / dist;
 
             // slows velocity by half each second. idk why tho
-            this.xVelocity -= TICK * (this.xVelocity * 0.5);
-            this.yVelocity -= TICK * this.yVelocity * 0.5;
+            // it seems to be resposible for the drill not flying away too far
+            // and sticking close to the player
+            this.xVelocity -= TICK * this.xVelocity * 0.4;
+            this.yVelocity -= TICK * this.yVelocity * 0.4;
 
             // idk
             this.xVelocity +=
@@ -219,12 +233,13 @@ class Drill {
 
             this.x += this.xVelocity;
             this.y += this.yVelocity;
-            this.BB.x = this.x + this.offSetBB;
-            this.BB.y = this.y + this.offSetBB;
             // calculate the angle based on velocity
-            this.angle = Math.floor(
-                Math.atan(this.yVelocity / this.xVelocity) * (180 / Math.PI)
-            );
+            this.angle =
+                Math.floor(
+                    (Math.atan(this.yVelocity / this.xVelocity) *
+                        (180 / Math.PI)) /
+                        2
+                ) * 2;
 
             if (this.angle < 0) {
                 this.angle += 360;
@@ -236,6 +251,7 @@ class Drill {
                 this.angle -= 360;
             }
         }
+        this.updateBB();
     }
 
     draw(ctx) {

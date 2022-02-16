@@ -963,7 +963,7 @@ class Player {
                 if (entity && entity instanceof Drill) {
                     // console.log('kILL dRILL');
                     //if it has die method it should die
-                    entity.die();
+                    entity.health -= 5;
                 }
                 if (entity && entity instanceof DogBoss) {
                     // console.log('kILL dRILL');
