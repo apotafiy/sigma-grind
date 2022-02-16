@@ -249,8 +249,8 @@ function loadLevelOne(gameEngine) {
         )
     );
     //drills to dodge
-    gameEngine.addEntity(new Drill(gameEngine,85,-18,5))
-    gameEngine.addEntity(new Drill(gameEngine,95,-18,5))
+    gameEngine.addEntity(new Drill(gameEngine,85,-18,8))
+    gameEngine.addEntity(new Drill(gameEngine,95,-18,8))
 
     gameEngine.addEntity(new FullHealthPack(gameEngine, 105,-35))
     // gameEngine.addEntity(new SmallHealthPack(gameEngine, 103,-35))
@@ -258,7 +258,7 @@ function loadLevelOne(gameEngine) {
     gameEngine.addEntity(new Water(gameEngine));
     // console.log(gameEngine.entities);
     //remove old game engine and add new one 
-    gameEngine.entities.shift();
-    gameEngine.addEntity(new SceneManager(gameEngine,2));
+    // gameEngine.entities.shift();
+    // gameEngine.addEntity(new SceneManager(gameEngine,2));
     // gameEngine.addEntity(new Water(gameEngine));
 }

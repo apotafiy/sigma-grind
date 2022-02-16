@@ -484,8 +484,6 @@ class DogBoss {
 
     // Display values for debugging
     document.getElementById("attacking").innerHTML = this.currentState
-    document.getElementById("state").innerHTML =
-      "Entity Count: " + this.game.entities.length;
     // // //always apply gravity
     // that.y += that.yVelocity * that.game.clockTick;
   }

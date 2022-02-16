@@ -630,17 +630,22 @@ class Player {
         // debugger;
         // this.removeFromWorld = true;
         // move back to start for now
-        this.velocity.x = 0;
-        this.velocity.y = 0;
-        this.x = 3 * 64;
-        this.y = -2*64;
-        this.currentHitpoints = this.maxHitpoints;
+        // this.velocity.x = 0;
+        // this.velocity.y = 0;
+        // this.x = 3 * 64;
+        // this.y = -2*64;
+        // this.currentHitpoints = this.maxHitpoints;
         // this.velocity.x = 0;
         // this.velocity.y = 0;
         // this.fallAcc = 0;
         // this.state = this.states.death;
 
-        this.dead = false;
+        // this.dead = false;
+        this.game.camera.isLevel = false;
+        this.game.camera.currentState = 2;
+        this.game.camera.setMenuMode(this.game);
+        this.removeFromWorld = true;
+
     }
 
     updateAttackBB() {

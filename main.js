@@ -8,6 +8,8 @@ ASSET_MANAGER.queueDownload("./sprites/title_screen/press_enter.png");
 ASSET_MANAGER.queueDownload("./sprites/title_screen/title_card.png");
 ASSET_MANAGER.queueDownload("./sprites/title_screen/normal.png");
 ASSET_MANAGER.queueDownload("./sprites/title_screen/hardcore.png");
+ASSET_MANAGER.queueDownload("./sprites/title_screen/game_over.png")
+
 
 //Backgrounds
 ASSET_MANAGER.queueDownload('./sprites/backgrounds/water.png');
