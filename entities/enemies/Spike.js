@@ -20,10 +20,10 @@ class Spike {
         this.collisionDamage = 20;
         this.isPog = true;
         this.BB = new BoundingBox(
-            this.x,
-            this.y,
-            64 * this.horizontal,
-            64 * this.vertical
+            this.x + 5,
+            this.y + 5,
+            64 * this.horizontal - 5,
+            64 * this.vertical - 5
         );
 
         this.leftBB = new BoundingBox(

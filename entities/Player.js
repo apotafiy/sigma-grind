@@ -630,11 +630,13 @@ class Player {
         // debugger;
         // this.removeFromWorld = true;
         // move back to start for now
+
         // this.velocity.x = 0;
         // this.velocity.y = 0;
         // this.x = 3 * 64;
         // this.y = -2*64;
         // this.currentHitpoints = this.maxHitpoints;
+      
         // this.velocity.x = 0;
         // this.velocity.y = 0;
         // this.fallAcc = 0;
@@ -824,8 +826,9 @@ class Player {
             // ACTIONS GOES BELOW HERE
 
             // Dashing
-            if (this.game.keys.KeyK && !this.attacking && !this.isPogo) {
-                if (this.isInAir) this.airDashed = true;
+            if (this.game.keys.KeyK && !this.attacking) {
+                if (this.isPogo) this.isPogo = false;
+                else if (this.isInAir) this.airDashed = true;
                 if (this.state !== this.states.wallHang) {
                     //play dash sound effect
                     this.soundEffects.dash.play();
@@ -964,7 +967,7 @@ class Player {
                 if (entity && entity instanceof Drill) {
                     // console.log('kILL dRILL');
                     //if it has die method it should die
-                    entity.die();
+                    entity.health -= 5;
                 }
                 if (entity && entity instanceof DogBoss) {
                     // console.log('kILL dRILL');
@@ -1026,12 +1029,17 @@ class Player {
                     // jumping
                     // hit ceiling...
                     if (
-                        // entity instanceof Ground &&
-                        // this.lastBB.top >= entity.BB.bottom
                         (entity instanceof Ground || entity instanceof Spike) &&
-                        this.BB.collide(entity.bottomBB)
+                        (this.lastBB.top >= entity.BB.bottom ||
+                            this.BB.collide(entity.bottomBB))
+                        // this.BB.collide(entity.bottomBB)
                     ) {
                         this.velocity.y = 0;
+
+                        // This one goes out to all the corner spammers
+                        this.game.keys.Space = false;
+                        this.game.keys.KeyJ = false;
+                        this.game.keys.KeyK = false;
                     }
                 }
 
