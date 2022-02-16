@@ -128,17 +128,43 @@ class SceneManager {
           "background_1",
           this.backgroundMusicVolume.value / 100
         );
-        this.startTime = Math.floor(Date.now() / 1000);
+        this.fullStartTime = Date.now();
+        this.startTime = Math.floor(this.fullStartTime / 1000);
     }
   }
   getFormattedTime(){
-    let now = Math.floor(Date.now() / 1000); // get the time now
-    let diff = now - this.startTime; // diff in seconds between now and start
-    let m = Math.floor(diff / 60); // get minutes value (quotient of diff)
-    let s = Math.floor(diff % 60); // get seconds value (remainder of diff)
-    m = this.checkTime(m); // add a leading zero if it's single digit
-    s = this.checkTime(s); // add a leading zero if it's single digit
-    return `Time: ${m}:${s}`;
+      //if we just need min and seconds this is going to be
+    // let now = Math.floor(Date.now() / 1000); // get the time now
+    // let diff = now - this.startTime; // diff in seconds between now and start
+    // let m = Math.floor(diff / 60); // get minutes value (quotient of diff)
+    // let s = Math.floor(diff % 60); // get seconds value (remainder of diff)
+    // m = this.checkTime(m); // add a leading zero if it's single digit
+    // s = this.checkTime(s); // add a leading zero if it's single digit
+    // //check the remaining miliseconds 
+    // let ms = Math.floor(Date.now() - this.fullStartTime - (m*60000) - (s*1000));
+    // ms = this.checkTime(ms); // add a leading zero if 
+    // console.log(`Time: ${m}:${s}:${ms}`)
+    let now = Date.now();
+    let timeDifference = now - this.fullStartTime;
+    let m = 0;
+    let s = 0;
+    let ms = 0;
+    //count min
+    while(timeDifference >= 60000){
+        m++;
+        timeDifference -= 60000;
+    }
+    //count second
+    while(timeDifference >= 1000){
+        s++;
+        timeDifference -= 1000;
+    }
+    //rest goes into MS
+    ms = Math.floor(timeDifference/10);
+    m = this.checkTime(m);
+    s = this.checkTime(s);
+    ms = this.checkTime(ms);
+    return `Time: ${m}:${s}:${ms}`;
   }
    checkTime(i) {
     if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
@@ -349,18 +375,19 @@ class SceneManager {
     if(this.isLevel){
         console.log(this.x,this.y);
         //draw in timer
-        ctx.font = '25px "Press Start 2P"';
+        ctx.font = '25px "Zen Dots"';
         ctx.textAlign = 'left';
         ctx.fillStyle = 'White';
         ctx.strokeStyle = 'Light blue';
-        ctx.fillText(
-            this.getFormattedTime(),
-            30,
-            50
-        );
+        ctx.lineWidth = 10;
         ctx.strokeText(
             this.getFormattedTime(),
             30, // offset on purpose
+            50
+        );
+        ctx.fillText(
+            this.getFormattedTime(),
+            30,
             50
         );
     }
