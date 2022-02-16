@@ -206,11 +206,23 @@ class DogBoss {
     );
   }
   die() {
+    //TODO add actual good death logic
+    console.log(this.deathTimer);
     if (!this.isDead) {
       this.isDead = true;
-      this.deathTimer = 20;
+      this.deathTimer = 2;
       this.xVelocity = 0;
+    } else {
+      this.deathTimer -= 1* this.game.clockTick;
+      if(this.deathTimer <= 0){
+        this.game.camera.finalTime = this.game.camera.getFormattedTime();
+        this.game.camera.isLevel = false;
+        this.game.camera.currentState = 3;
+        this.game.camera.setMenuMode(this.game);
+        this.removeFromWorld = true;
+      }
     }
+ 
   }
   updateBB() {
     this.lastBB = this.BB;
@@ -229,7 +241,7 @@ class DogBoss {
     } else {
       this.flashframes = 0;
     }
-    if (this.health <= 0) this.removeFromWorld = true;
+    if (this.health <= 0)this.die();
     let that = this;
     this.attackCooldown -= 1* this.game.clockTick;
     this.iframes-= 1* this.game.clockTick;
@@ -484,8 +496,6 @@ class DogBoss {
 
     // Display values for debugging
     document.getElementById("attacking").innerHTML = this.currentState
-    document.getElementById("state").innerHTML =
-      "Entity Count: " + this.game.entities.length;
     // // //always apply gravity
     // that.y += that.yVelocity * that.game.clockTick;
   }
@@ -499,6 +509,10 @@ class DogBoss {
     if (this.currentState == 4) {
       ctx.filter = ` brightness(0) opacity(0.2)`;
     }
+    if(this.health <= 0) {
+      ctx.filter = `brightness(100) hue-rotation(100deg)`;
+      this.scale = this.deathTimer;
+    }
     that.animations[that.dirIndex][this.currentState].drawFrame(
       that.game.clockTick,
       ctx,
@@ -506,6 +520,7 @@ class DogBoss {
       that.y - that.game.camera.y, // + that.BB.height / 4,
       that.scale
     );
+    if(this.health <= 0) ctx.filter = `none`;
     if (this.iframes >= 0 || this.currentState == 4) {
       ctx.filter = "none";
     }

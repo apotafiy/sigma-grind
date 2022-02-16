@@ -168,7 +168,9 @@ class Rush {
 
     draw(ctx) {
         let that = this;
+
       if(this.currentState != -1){
+        //   ctx.filter = "hue-rotate(30deg)"
         that.animations[1][that.currentState].drawFrame(
             that.game.clockTick,
             ctx,
@@ -176,6 +178,7 @@ class Rush {
             that.y - that.game.camera.y + that.yOffSet,
             this.scale
         );
+        // ctx.filter = "none"
       }
 
       if(this.showText){
