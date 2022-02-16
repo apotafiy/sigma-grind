@@ -3,7 +3,16 @@ function loadLevelOne(gameEngine) {
 
     // gameEngine.addEntity(new Player(gameEngine, 108, -35));
     gameEngine.addEntity(new Player(gameEngine, 3, 0));
-    // gameEngine.addEntity(new Player(gameEngine, 67, -37));
+    //gameEngine.addEntity(new Player(gameEngine, 67, -37));
+    // gameEngine.addEntity(new Drill(gameEngine, 10, -1, 60));
+    // gameEngine.addEntity(new Drill(gameEngine, 12, -1, 60));
+    // gameEngine.addEntity(new Drill(gameEngine, 14, -1, 60));
+    // gameEngine.addEntity(new Drill(gameEngine, 16, -1, 60));
+    // gameEngine.addEntity(new Drill(gameEngine, 18, -1, 60));
+    // gameEngine.addEntity(new Drill(gameEngine, 20, -1, 60));
+    // gameEngine.addEntity(new Drill(gameEngine, 22, -1, 60));
+    // gameEngine.addEntity(new Drill(gameEngine, 24, -1, 60));
+    // gameEngine.addEntity(new Drill(gameEngine, 26, -1, 60));
 
     gameEngine.addEntity(new Ground(gameEngine, 1, -5, -6, 6, 20, 1, 0, 1));
     //start ground
@@ -50,7 +59,7 @@ function loadLevelOne(gameEngine) {
     //spikes in between them
     gameEngine.addEntity(new Spike(gameEngine, 15, -11, 13, 1, 0));
     gameEngine.addEntity(new Spike(gameEngine, 15, -17, 13, 1, 2));
-    gameEngine.addEntity(new Spike(gameEngine, 63, -29,2, 1, 2));
+    gameEngine.addEntity(new Spike(gameEngine, 63, -29, 2, 1, 2));
     //top of tunnel
     gameEngine.addEntity(new Ground(gameEngine, 1, 18, -30, 22, 13, 1, 0, 0));
 
@@ -80,11 +89,13 @@ function loadLevelOne(gameEngine) {
     gameEngine.addEntity(new Ground(gameEngine, 1, 45, -35, 20, 6, 1, 0, 0));
 
     //Start of second part (actual level!)
+    gameEngine.addEntity(new Spike(gameEngine, 43, -36, 24, 1, 0));
+    // gameEngine.addEntity(new Spike(gameEngine,43,-41,32,1,2))
     //slide down spiked walls with dashing NEEDED
     gameEngine.addEntity(new Ground(gameEngine, 1, 77, -50, 6, 44, 1, 0, 0));
     //near wall spikes!
     gameEngine.addEntity(new Spike(gameEngine, 70, -34, 1, 5, 1));
-    gameEngine.addEntity(new Spike(gameEngine, 75, -41,2, 1, 2));
+    gameEngine.addEntity(new Spike(gameEngine, 75, -41, 2, 1, 2));
     //alternate wall spike force dash
     gameEngine.addEntity(new Spike(gameEngine, 76, -26, 1, 5, 3));
 
@@ -124,7 +135,7 @@ function loadLevelOne(gameEngine) {
     //even higher! platform  to dash too
     gameEngine.addEntity(new Ground(gameEngine, 1, 92, -30, 2, 1, 1, 1, 1));
     //spikes to force pogo
-    gameEngine.addEntity(new Spike(gameEngine, 92, -31, 2, 1,0));
+    gameEngine.addEntity(new Spike(gameEngine, 92, -31, 2, 1, 0));
     //do all the grass checkForGrass
 
     //boss arena
@@ -234,13 +245,29 @@ function loadLevelOne(gameEngine) {
             104,
             -35,
             5,
-            "Looks Like Sigma Didnt Take Any Chances. He Left One Of His Goons To Make Sure You Stayed. Grab The Energy Pod Before You Go!"
+            'Looks Like Sigma Didnt Take Any Chances. He Left One Of His Goons To Make Sure You Stayed. Grab The Energy Pod Before You Go!'
         )
     );
-    gameEngine.addEntity(new FullHealthPack(gameEngine, 105,-35))
+    gameEngine.addEntity(
+        new Rush(
+            gameEngine,
+            82,
+            -51,
+            5,
+            'You Really Should Not Be Here. Get Back Down There You Little Rascal!'
+        )
+    );
+    //drills to dodge
+    gameEngine.addEntity(new Drill(gameEngine, 85, -18, 8));
+    gameEngine.addEntity(new Drill(gameEngine, 95, -18, 8));
+
+    gameEngine.addEntity(new FullHealthPack(gameEngine, 105, -35));
     // gameEngine.addEntity(new SmallHealthPack(gameEngine, 103,-35))
     // gameEngine.addEntity(new GroundHorse(gameEngine, 36, 0));
     gameEngine.addEntity(new Water(gameEngine));
-    gameEngine.addEntity(new SceneManager(gameEngine));
+    // console.log(gameEngine.entities);
+    //remove old game engine and add new one
+    // gameEngine.entities.shift();
+    // gameEngine.addEntity(new SceneManager(gameEngine,2));
     // gameEngine.addEntity(new Water(gameEngine));
 }

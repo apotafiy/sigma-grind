@@ -20,7 +20,10 @@ class GameEngine {
             KeyS: false,
             KeyD: false,
             //give height!
-            ArrowUp:false,
+            ArrowUp: false,
+
+            //Enter for selector
+            Enter: false,
 
             // Jump
             Space: false,
@@ -54,17 +57,26 @@ class GameEngine {
         this.player = this.getPlayer();
     }
 
-    start() {
+    start(fps) {
+        let fpsInterval = 1000 / fps;
+        let then = Date.now();
+
         this.running = true;
         const gameLoop = () => {
-            if (params.debug) {
-                this.stats.begin();
-                this.loop();
-                this.stats.end();
-            } else {
-                this.loop();
-            }
             requestAnimFrame(gameLoop, this.ctx.canvas);
+
+            let now = Date.now();
+            let elapsed = now - then;
+            if (elapsed > fpsInterval) {
+                then = now - (elapsed % fpsInterval);
+                if (params.debug) {
+                    this.stats.begin();
+                    this.loop();
+                    this.stats.end();
+                } else {
+                    this.loop();
+                }
+            }
         };
         gameLoop();
     }
@@ -110,17 +122,27 @@ class GameEngine {
             if (event.code === 'KeyK' && event.repeat) return;
 
             // Can only press dash once while in air
-            if (event.code === 'KeyK' && this.player.airDashed) {
+            if (
+                this.camera.isLevel &&
+                event.code === 'KeyK' &&
+                this.player.airDashed
+            ) {
                 this.keys[event.code] = false;
             } else {
                 this.keys[event.code] = true;
             }
-                //debug for level building
-                //TODO REMOVE!
+            //debug for level building
+            //TODO REMOVE!
             if (event.code === 'ArrowUp') {
-                this.keys["ArrowsUp"] = true;
+                this.keys['ArrowsUp'] = true;
             } else {
-                this.keys["ArrowUp"] = false;
+                this.keys['ArrowUp'] = false;
+            }
+
+            if (event.code === 'Enter') {
+                this.keys['Enter'] = true;
+            } else {
+                this.keys['Enter'] = false;
             }
 
             // Prevent scrolling while using the canvas
@@ -145,10 +167,21 @@ class GameEngine {
         this.entities.push(entity);
     }
 
-    addEntityAtIndex(entity,index) {
+    addEntityAtIndex(entity, index) {
         this.entities.splice(index, 0, entity);
     }
-
+    /**
+     * Remove everything besides the scene manager from the list
+     */
+    clear() {
+        let newEntities = [];
+        for (const entity of this.entities) {
+            if (entity instanceof SceneManager) {
+                newEntities.push(entity);
+            }
+        }
+        this.entities = newEntities;
+    }
     draw() {
         // Clear the whole canvas with transparent color (rgba(0, 0, 0, 0))
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
@@ -160,6 +193,11 @@ class GameEngine {
     }
 
     update() {
+        if (this.clear_level && this.clear_level == true) {
+            //we know it is safe to clear everything Here
+            this.clear();
+            this.clear_level = false;
+        }
         let entitiesCount = this.entities.length;
 
         for (let i = 0; i < entitiesCount; i++) {

@@ -33,15 +33,12 @@ class PopUpEnemy {
         this.y = y * 64 + yOffSet;
         this.visionDistance = 200;
         this.state = 0;
-<<<<<<< HEAD:entities/enemies/PopUpEnemy.js
-=======
 
         this.isHostile = true;
         this.collisionDamage = 15;
 
         this.animations = [];
         this.loadAnimations();
->>>>>>> develop-daniel:entities/enemies/GroundHorse.js
     }
 
     loadAnimationsV0() {

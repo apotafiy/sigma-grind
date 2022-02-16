@@ -1,6 +1,7 @@
 /** Global Parameters Object */
 const params = {
     debug: false,
+    hardcore:false
 };
 
 /**
