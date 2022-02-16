@@ -102,44 +102,11 @@ class Player {
         this.updateBB();
 
         this.animations = [];
-        this.idleSprite = ASSET_MANAGER.getAsset(
-            './sprites/player/player-idle-43x48.png'
-        );
-        this.runSprite = ASSET_MANAGER.getAsset(
-            './sprites/player/player-run-51x49.png'
-        );
-        this.jumpSprite = ASSET_MANAGER.getAsset(
-            './sprites/player/player-jump-47x80.png'
-        );
-        this.wallhangSprite = ASSET_MANAGER.getAsset(
-            './sprites/player/player-wallhang-36x65.png'
-        );
-        this.dashSprite = ASSET_MANAGER.getAsset(
-            './sprites/player/player-dash-97x52.png'
-        );
-
-        this.attackRight = ASSET_MANAGER.getAsset(
-            './sprites/player/zero_attack_right_one_92_64_2.png'
-        );
-        this.attackRightTwo = ASSET_MANAGER.getAsset(
-            './sprites/player/player-fall-attack-102x80.png'
-        );
-        this.attackRightThree = ASSET_MANAGER.getAsset(
-            './sprites/player/zero_attack_right_three_114x64-Sheet.png'
-        );
-
-        this.pogoSprite = ASSET_MANAGER.getAsset(
-            './sprites/player/player-pogo-65x102.png'
-        );
-        this.death = ASSET_MANAGER.getAsset(
-            './sprites/player/player-death-60x62.png'
-        );
-        this.immobilized = ASSET_MANAGER.getAsset(
-            './sprites/player/taken_damage_48x56.png'
-        );
-
         this.loadAnimations();
+        // this.initGUI();
+    }
 
+    initGUI() {
         // Dat GUI stuff
         this.gui = new dat.GUI();
         this.playerFolder = this.gui.addFolder('Player values');
@@ -310,7 +277,7 @@ class Player {
         // Idle - State 0
         // Face right = 0
         this.animations[0][0] = new Animator(
-            this.idleSprite,
+            ASSET_MANAGER.getAsset('./sprites/player/player-idle-43x48.png'),
             0,
             0,
             43,
@@ -323,7 +290,7 @@ class Player {
         );
         // Face left = 1
         this.animations[0][1] = new Animator(
-            this.idleSprite,
+            ASSET_MANAGER.getAsset('./sprites/player/player-idle-43x48.png'),
             215,
             0,
             43,
@@ -338,7 +305,7 @@ class Player {
         // Run - State 1
         // Face right = 0
         this.animations[1][0] = new Animator(
-            this.runSprite,
+            ASSET_MANAGER.getAsset('./sprites/player/player-run-51x49.png'),
             95,
             0,
             51,
@@ -351,7 +318,7 @@ class Player {
         );
         // Face left = 1
         this.animations[1][1] = new Animator(
-            this.runSprite,
+            ASSET_MANAGER.getAsset('./sprites/player/player-run-51x49.png'),
             823,
             0,
             51,
@@ -366,7 +333,7 @@ class Player {
         // Dash - State 2
         // Face right = 0
         this.animations[2][0] = new Animator(
-            this.dashSprite,
+            ASSET_MANAGER.getAsset('./sprites/player/player-dash-97x52.png'),
             0,
             0,
             97,
@@ -379,7 +346,7 @@ class Player {
         );
         // Face left = 1
         this.animations[2][1] = new Animator(
-            this.dashSprite,
+            ASSET_MANAGER.getAsset('./sprites/player/player-dash-97x52.png'),
             1067,
             0,
             97,
@@ -394,7 +361,7 @@ class Player {
         // Jump - State 3
         // Face right = 0
         this.animations[3][0] = new Animator(
-            this.jumpSprite,
+            ASSET_MANAGER.getAsset('./sprites/player/player-jump-47x80.png'),
             47,
             0,
             47,
@@ -407,7 +374,7 @@ class Player {
         );
         // Face left = 1
         this.animations[3][1] = new Animator(
-            this.jumpSprite,
+            ASSET_MANAGER.getAsset('./sprites/player/player-jump-47x80.png'),
             752,
             0,
             47,
@@ -422,7 +389,7 @@ class Player {
         // Fall - State 4 - frames 10,11,12
         // Face right = 0
         this.animations[4][0] = new Animator(
-            this.jumpSprite,
+            ASSET_MANAGER.getAsset('./sprites/player/player-jump-47x80.png'),
             423,
             0,
             47,
@@ -435,7 +402,7 @@ class Player {
         );
         // Face left = 1
         this.animations[4][1] = new Animator(
-            this.jumpSprite,
+            ASSET_MANAGER.getAsset('./sprites/player/player-jump-47x80.png'),
             940,
             0,
             47,
@@ -450,7 +417,9 @@ class Player {
         // Wall hang - State 5
         // Face right = 0
         this.animations[5][0] = new Animator(
-            this.wallhangSprite,
+            ASSET_MANAGER.getAsset(
+                './sprites/player/player-wallhang-36x65.png'
+            ),
             0,
             0,
             45,
@@ -463,7 +432,9 @@ class Player {
         );
         // Face left = 1
         this.animations[5][1] = new Animator(
-            this.wallhangSprite,
+            ASSET_MANAGER.getAsset(
+                './sprites/player/player-wallhang-36x65.png'
+            ),
             90,
             0,
             45,
@@ -478,7 +449,9 @@ class Player {
         // Attack1
         // Face right = slash 1
         this.animations[6][0] = new Animator(
-            this.attackRight,
+            ASSET_MANAGER.getAsset(
+                './sprites/player/zero_attack_right_one_92_64_2.png'
+            ),
             0,
             0,
             92,
@@ -491,7 +464,9 @@ class Player {
         );
         // Face left = slash 1
         this.animations[6][1] = new Animator(
-            this.attackRight,
+            ASSET_MANAGER.getAsset(
+                './sprites/player/zero_attack_right_one_92_64_2.png'
+            ),
             1090,
             0,
             92,
@@ -505,7 +480,9 @@ class Player {
 
         // Face right air attack two
         this.animations[7][0] = new Animator(
-            this.attackRightTwo,
+            ASSET_MANAGER.getAsset(
+                './sprites/player/player-fall-attack-102x80.png'
+            ),
             0,
             0,
             102,
@@ -519,7 +496,9 @@ class Player {
 
         // Face left air attack two
         this.animations[7][1] = new Animator(
-            this.attackRightTwo,
+            ASSET_MANAGER.getAsset(
+                './sprites/player/player-fall-attack-102x80.png'
+            ),
             918,
             0,
             102,
@@ -533,7 +512,9 @@ class Player {
 
         // Face right slash 3
         this.animations[8][0] = new Animator(
-            this.attackRightThree,
+            ASSET_MANAGER.getAsset(
+                './sprites/player/zero_attack_right_three_114x64-Sheet.png'
+            ),
             0,
             0,
             112,
@@ -548,7 +529,7 @@ class Player {
         // Pogo - state 9
         // Face right - 0
         this.animations[9][0] = new Animator(
-            this.pogoSprite,
+            ASSET_MANAGER.getAsset('./sprites/player/player-pogo-65x102.png'),
             130,
             0,
             65,
@@ -561,7 +542,7 @@ class Player {
         );
         // Face left - 1
         this.animations[9][1] = new Animator(
-            this.pogoSprite,
+            ASSET_MANAGER.getAsset('./sprites/player/player-pogo-65x102.png'),
             910,
             0,
             65,
@@ -576,7 +557,7 @@ class Player {
         // Immobilized - state 10
         // Face right - 0
         this.animations[10][0] = new Animator(
-            this.immobilized,
+            ASSET_MANAGER.getAsset('./sprites/player/taken_damage_48x56.png'),
             0,
             0,
             48,
@@ -589,7 +570,7 @@ class Player {
         );
         // Face left - 1
         this.animations[10][1] = new Animator(
-            this.immobilized,
+            ASSET_MANAGER.getAsset('./sprites/player/taken_damage_48x56.png'),
             192,
             0,
             48,
@@ -604,7 +585,7 @@ class Player {
         // Death - state 11
         // Face right - 0
         this.animations[11][0] = new Animator(
-            this.death,
+            ASSET_MANAGER.getAsset('./sprites/player/player-death-60x62.png'),
             0,
             0,
             60,
@@ -617,7 +598,7 @@ class Player {
         );
         // Face left - 1
         this.animations[11][1] = new Animator(
-            this.death,
+            ASSET_MANAGER.getAsset('./sprites/player/player-death-60x62.png'),
             600,
             0,
             60,

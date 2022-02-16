@@ -53,6 +53,8 @@ class GameEngine {
         this.stats.showPanel(0);
         this.stats.dom.id = 'fpsCounter';
         this.stats.dom.style.marginLeft = '7em';
+
+        this.player = this.getPlayer();
     }
 
     start(fps) {
@@ -75,21 +77,6 @@ class GameEngine {
                     this.loop();
                 }
             }
-        };
-        gameLoop();
-    }
-
-    start() {
-        this.running = true;
-        const gameLoop = () => {
-            if (params.debug) {
-                this.stats.begin();
-                this.loop();
-                this.stats.end();
-            } else {
-                this.loop();
-            }
-            requestAnimFrame(gameLoop, this.ctx.canvas);
         };
         gameLoop();
     }

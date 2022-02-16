@@ -114,5 +114,6 @@ ASSET_MANAGER.downloadAll(() => {
 
     gameEngine.init(ctx);
 
+    // start game with 60 fps cap
     gameEngine.start(60);
 });
