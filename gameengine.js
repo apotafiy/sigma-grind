@@ -20,7 +20,10 @@ class GameEngine {
             KeyS: false,
             KeyD: false,
             //give height!
-            ArrowUp:false,
+            ArrowUp: false,
+            
+            //Enter for selector
+            Enter: false,
 
             // Jump
             Space: false,
@@ -121,6 +124,12 @@ class GameEngine {
                 this.keys["ArrowsUp"] = true;
             } else {
                 this.keys["ArrowUp"] = false;
+            }
+
+            if (event.code === 'Enter') {
+                this.keys["Enter"] = true;
+            } else {
+                this.keys["Enter"] = false;
             }
 
             // Prevent scrolling while using the canvas
