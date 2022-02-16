@@ -239,6 +239,19 @@ function loadLevelOne(gameEngine) {
             "Looks Like Sigma Didnt Take Any Chances. He Left One Of His Goons To Make Sure You Stayed. Grab The Energy Pod Before You Go!"
         )
     );
+    gameEngine.addEntity(
+        new Rush(
+            gameEngine,
+            82,
+            -51,
+            5,
+            "You Really Should Not Be Here. Get Back Down There You Little Rascal!"
+        )
+    );
+    //drills to dodge
+    gameEngine.addEntity(new Drill(gameEngine,85,-18,5))
+    gameEngine.addEntity(new Drill(gameEngine,95,-18,5))
+
     gameEngine.addEntity(new FullHealthPack(gameEngine, 105,-35))
     // gameEngine.addEntity(new SmallHealthPack(gameEngine, 103,-35))
     // gameEngine.addEntity(new GroundHorse(gameEngine, 36, 0));
