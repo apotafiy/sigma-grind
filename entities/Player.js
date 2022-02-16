@@ -79,6 +79,7 @@ class Player {
             dead: 11,
         };
         this.dead = false;
+        this.immobilized = false;
 
         //player sound imports
         this.soundEffects = {};
@@ -581,7 +582,7 @@ class Player {
             48,
             56,
             4,
-            0.06,
+            0.09,
             0,
             false,
             false
@@ -594,7 +595,7 @@ class Player {
             48,
             56,
             4,
-            0.06,
+            0.09,
             0,
             true,
             false
@@ -671,6 +672,9 @@ class Player {
                 this.spriteOffset.xOffset = this.facing === 0 ? -30 : -20;
                 this.spriteOffset.yOffset = -45;
                 break;
+            case this.states.immobilized:
+                this.spriteOffset.xOffset = this.facing === 0 ? 2 : 6;
+                this.spriteOffset.yOffset = -3;
         }
 
         let widthOffset = 0;
@@ -770,6 +774,14 @@ class Player {
             this.state = this.states.dead;
             if (this.animations[this.state][this.facing].isDone()) {
                 this.die();
+            }
+        } else if (this.immobilized) {
+            this.state = this.states.immobilized;
+            this.updateBB();
+            if (this.animations[this.state][this.facing].isDone()) {
+                this.immobilized = false;
+                this.animations[this.states.immobilized][0].elapsedTime = 0;
+                this.animations[this.states.immobilized][1].elapsedTime = 0;
             }
         } else {
             // PHYSICS
@@ -1064,6 +1076,7 @@ class Player {
                             0
                         );
                         this.currentIFrameTimer = this.maxIFrameTimer;
+                        this.immobilized = true;
                         // console.log('Took ' + entity.collisionDamage + ' damage');
                         // console.log('Current HP: ' + this.currentHitpoints);
                     }
