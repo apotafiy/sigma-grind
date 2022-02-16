@@ -14,6 +14,22 @@ class SceneManager {
     this.menuIndex = 0;
     this.menuCooldown = 0;
     this.loadAnimation();
+    this.soundEffects = {};
+    this.soundEffects.select = SOUND_MANAGER.getSound("menu_select");
+    this.soundEffects.cycle = SOUND_MANAGER.getSound("menu_cycle");
+    this.soundEffects.menu_music = SOUND_MANAGER.getSound("menu_music");
+    //only when on the menu
+    if(this.currentState == 0){
+        SOUND_MANAGER.autoRepeat("menu_music");
+        this.playSong(this.soundEffects.menu_music);
+        this.backgroundMusicVolume.oninput = function () {
+          SOUND_MANAGER.setVolume("menu_music", this.value / 100);
+        };
+        SOUND_MANAGER.setVolume(
+          "menu_music",
+          this.backgroundMusicVolume.value / 100
+        );
+    }
     //These are only needed when we are in the level
     if(this.currentState != 0 && this.currentState != 1){
         this.x = game.player.x - 1024 / 2;
@@ -236,25 +252,31 @@ class SceneManager {
             this.currentState = 1;
             this.menuIndex = 0;
             this.menuCooldown = 0.5;
+            this.soundEffects.select.play();
         }
     }
     //handle the game mode selection
     if(this.currentState === 1 ){
         if(this.game.keys.KeyW && this.menuCooldown <= 0){
             //move up selection
+            this.soundEffects.cycle.play();
             this.menuIndex = (this.menuIndex + 1) % 2
             this.menuCooldown = 0.5;
         } else if(this.game.keys.KeyS && this.menuCooldown <= 0){
             this.menuIndex -=1;
+            this.soundEffects.cycle.play();
             if(this.menuIndex < 0) this.menuIndex = 1;
             this.menuCooldown = 0.5
         } else if(this.game.keys.Enter && this.menuCooldown <= 0){
             //we want to start the level
+            this.soundEffects.select.play();
             this.currentState = 2;
             this.isLevel = true;
             if(this.menuIndex == 1){
                 params.hardcore = true;
             }
+            //stop current background music and load the level
+            this.soundEffects.menu_music.pause();
             loadLevelOne(this.game);
         }
     }

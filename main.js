@@ -82,9 +82,13 @@ SOUND_MANAGER.queueDownload("dogboss_launch_projectile", "./sounds/dogboss/launc
 SOUND_MANAGER.queueDownload("rush_teleport", "./sounds/rush/teleport.mp3");
 //background Music
 SOUND_MANAGER.queueDownload("background_1", " ./sounds/background_song_1.mp3");
-//background Music
-SOUND_MANAGER.queueDownload("heal_1", " ./sounds/items/heal.wav");
+// menu sound soundEffects
+SOUND_MANAGER.queueDownload("menu_select", " ./sounds/menu/enter.wav");
+SOUND_MANAGER.queueDownload("menu_cycle", " ./sounds/menu/option_switch.wav");
+SOUND_MANAGER.queueDownload("menu_music", " ./sounds/menu/menu_music.mp3");
+
 //item soundEffects
+SOUND_MANAGER.queueDownload("heal_1", " ./sounds/items/heal.wav");
 //load in all sounds
 SOUND_MANAGER.downloadAll();
 
