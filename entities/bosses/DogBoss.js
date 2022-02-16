@@ -30,7 +30,7 @@ class DogBoss {
     }
     this.isPog = true;
     this.flashframes = 0;
-    this.maxHealth = 50//320;
+    this.maxHealth = 320;
     this.health = this.maxHealth;
     this.chosendir = false;
     this.walkdelay = 0;
