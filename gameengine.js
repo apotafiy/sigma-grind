@@ -53,8 +53,6 @@ class GameEngine {
         this.stats.showPanel(0);
         this.stats.dom.id = 'fpsCounter';
         this.stats.dom.style.marginLeft = '7em';
-
-        this.player = this.getPlayer();
     }
 
     start(fps) {
@@ -77,6 +75,21 @@ class GameEngine {
                     this.loop();
                 }
             }
+        };
+        gameLoop();
+    }
+
+    start() {
+        this.running = true;
+        const gameLoop = () => {
+            if (params.debug) {
+                this.stats.begin();
+                this.loop();
+                this.stats.end();
+            } else {
+                this.loop();
+            }
+            requestAnimFrame(gameLoop, this.ctx.canvas);
         };
         gameLoop();
     }
@@ -122,7 +135,11 @@ class GameEngine {
             if (event.code === 'KeyK' && event.repeat) return;
 
             // Can only press dash once while in air
-            if (event.code === 'KeyK' && this.player.airDashed) {
+            if (
+                this.camera.isLevel &&
+                event.code === 'KeyK' &&
+                this.player.airDashed
+            ) {
                 this.keys[event.code] = false;
             } else {
                 this.keys[event.code] = true;
@@ -166,7 +183,18 @@ class GameEngine {
     addEntityAtIndex(entity, index) {
         this.entities.splice(index, 0, entity);
     }
-
+    /**
+     * Remove everything besides the scene manager from the list
+     */
+    clear() {
+        let newEntities = [];
+        for (const entity of this.entities) {
+            if (entity instanceof SceneManager) {
+                newEntities.push(entity);
+            }
+        }
+        this.entities = newEntities;
+    }
     draw() {
         // Clear the whole canvas with transparent color (rgba(0, 0, 0, 0))
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
@@ -178,6 +206,11 @@ class GameEngine {
     }
 
     update() {
+        if (this.clear_level && this.clear_level == true) {
+            //we know it is safe to clear everything Here
+            this.clear();
+            this.clear_level = false;
+        }
         let entitiesCount = this.entities.length;
 
         for (let i = 0; i < entitiesCount; i++) {
