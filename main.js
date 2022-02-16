@@ -44,12 +44,13 @@ ASSET_MANAGER.queueDownload('./sprites/player/player-wallhang-36x65.png');
 ASSET_MANAGER.queueDownload('./sprites/player/player-dash-97x52.png');
 ASSET_MANAGER.queueDownload('./sprites/player/player-fall-attack-102x80.png');
 ASSET_MANAGER.queueDownload('./sprites/player/player-pogo-65x102.png');
+ASSET_MANAGER.queueDownload('./sprites/player/player-death-60x62.png');
+ASSET_MANAGER.queueDownload('./sprites/player/taken_damage_48x56.png');
 ASSET_MANAGER.queueDownload('./sprites/player/zerox4sheet.png');
 //rush support dog sprite animations
 ASSET_MANAGER.queueDownload('./sprites/rush/rush_stand_sit_38x35.png');
 ASSET_MANAGER.queueDownload('./sprites/rush/rush_spawn_37x48.png');
 
-ASSET_MANAGER.queueDownload('./sprites/player/player-death-60x62.png');
 //Sign
 ASSET_MANAGER.queueDownload('./sprites/misc/sign_64x64.png');
 //player attack Animations

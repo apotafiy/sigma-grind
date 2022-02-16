@@ -75,6 +75,8 @@ class Player {
             attack2: 7,
             attack3: 8,
             pogo: 9,
+            immobilized: 10,
+            dead: 11,
         };
         this.dead = false;
 
@@ -130,6 +132,9 @@ class Player {
         );
         this.death = ASSET_MANAGER.getAsset(
             './sprites/player/player-death-60x62.png'
+        );
+        this.immobilized = ASSET_MANAGER.getAsset(
+            './sprites/player/taken_damage_48x56.png'
         );
 
         this.loadAnimations();
@@ -293,7 +298,7 @@ class Player {
     }
 
     loadAnimations() {
-        for (var i = 0; i < 10; i++) {
+        for (var i = 0; i < 12; i++) {
             this.animations.push([]);
             for (var k = 0; k < 2; k++) {
                 // two directions
@@ -554,7 +559,6 @@ class Player {
             true
         );
         // Face left - 1
-        // Face right - 0
         this.animations[9][1] = new Animator(
             this.pogoSprite,
             910,
@@ -566,6 +570,62 @@ class Player {
             0,
             true,
             true
+        );
+
+        // Immobilized - state 10
+        // Face right - 0
+        this.animations[10][0] = new Animator(
+            this.immobilized,
+            0,
+            0,
+            48,
+            56,
+            4,
+            0.06,
+            0,
+            false,
+            false
+        );
+        // Face left - 1
+        this.animations[10][1] = new Animator(
+            this.immobilized,
+            192,
+            0,
+            48,
+            56,
+            4,
+            0.06,
+            0,
+            true,
+            false
+        );
+
+        // Death - state 11
+        // Face right - 0
+        this.animations[11][0] = new Animator(
+            this.death,
+            0,
+            0,
+            60,
+            62,
+            10,
+            0.09,
+            0,
+            false,
+            false
+        );
+        // Face left - 1
+        this.animations[11][1] = new Animator(
+            this.death,
+            600,
+            0,
+            60,
+            62,
+            10,
+            0.09,
+            0,
+            true,
+            false
         );
     }
 
@@ -641,6 +701,9 @@ class Player {
         // this.state = this.states.death;
 
         this.dead = false;
+        // reset death animation to beginning
+        this.animations[11][0].elapsedTime = 0;
+        this.animations[11][1].elapsedTime = 0;
     }
 
     updateAttackBB() {
@@ -704,6 +767,10 @@ class Player {
         // debugger
         if (this.dead) {
             // Do death stuff
+            this.state = this.states.dead;
+            if (this.animations[this.state][this.facing].isDone()) {
+                this.die();
+            }
         } else {
             // PHYSICS
             if (
@@ -936,15 +1003,16 @@ class Player {
 
             // Fall off map = dead
             // Assuming block width is 64
-            if (this.y > 64 * 16 || this.currentHitpoints <= 0) this.die();
-            // collision
+            if (this.y > 64 * 16 || this.currentHitpoints <= 0)
+                this.dead = true;
+
             if (this.currentIFrameTimer > 0) {
                 this.currentIFrameTimer -= 1;
                 // console.log(this.currentIFrameTimer);
             }
-
             // console.log(this.currentIFrameTimer);
 
+            // collision
             this.game.entities.forEach((entity) => {
                 //check for the enemy colliding with sword
                 // || entity instanceof Drill
@@ -991,6 +1059,10 @@ class Player {
                         this.currentIFrameTimer === 0
                     ) {
                         this.currentHitpoints -= entity.collisionDamage;
+                        this.currentHitpoints = Math.max(
+                            this.currentHitpoints,
+                            0
+                        );
                         this.currentIFrameTimer = this.maxIFrameTimer;
                         // console.log('Took ' + entity.collisionDamage + ' damage');
                         // console.log('Current HP: ' + this.currentHitpoints);
