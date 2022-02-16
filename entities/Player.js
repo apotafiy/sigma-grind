@@ -42,8 +42,8 @@ class Player {
         this.pogoTimer = 0;
 
         // Gives the player a health bar
-        this.currentHitpoints = params.hardcore ? 1 : 150;
-        this.maxHitpoints =  params.hardcore ? 1 : 150;
+        this.currentHitpoints = params.hardcore ? 50 : 150;
+        this.maxHitpoints =  params.hardcore ? 50 : 150;
         this.percentHealth = this.currentHitpoints / this.maxHitpoints;
         this.healthBar = new HealthBar(this);
 
@@ -935,9 +935,6 @@ class Player {
         this.y += this.velocity.y * TICK * 3;
         this.updateBB();
 
-        // Fall off map = dead
-        // Assuming block width is 64
-        if (this.y > 64 * 16 || this.currentHitpoints <= 0) this.die();
         // collision
         if (this.currentIFrameTimer > 0) {
             this.currentIFrameTimer -= 1;
@@ -1161,6 +1158,10 @@ class Player {
                 'y-velo: ' +
                 this.velocity.y;
         }
+
+          // Fall off map = dead
+        // Assuming block width is 64
+        if (this.y > 64 * 16 || this.currentHitpoints <= 0) this.die();
     }
 
     draw(ctx) {

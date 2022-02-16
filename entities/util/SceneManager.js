@@ -1,7 +1,7 @@
 class SceneManager {
   constructor(game, state) {
     this.currentState = state;
-    this.isLevel = (state != 0); //trigger when we are in a level
+    this.isLevel = (state != 0 && this.state != 1); //trigger when we are in a level
     this.hasInteracted = false;
     this.backgroundMusicVolume = document.getElementById("background-music");
     this.game = game;
@@ -251,7 +251,7 @@ class SceneManager {
             //move to second stage of the menu
             this.currentState = 1;
             this.menuIndex = 0;
-            this.menuCooldown = 0.5;
+            this.menuCooldown = 0.2;
             this.soundEffects.select.play();
         }
     }
@@ -261,12 +261,12 @@ class SceneManager {
             //move up selection
             this.soundEffects.cycle.play();
             this.menuIndex = (this.menuIndex + 1) % 2
-            this.menuCooldown = 0.5;
+            this.menuCooldown = 0.2;
         } else if(this.game.keys.KeyS && this.menuCooldown <= 0){
             this.menuIndex -=1;
             this.soundEffects.cycle.play();
             if(this.menuIndex < 0) this.menuIndex = 1;
-            this.menuCooldown = 0.5
+            this.menuCooldown = 0.2;
         } else if(this.game.keys.Enter && this.menuCooldown <= 0){
             //we want to start the level
             this.soundEffects.select.play();
@@ -278,13 +278,14 @@ class SceneManager {
             //stop current background music and load the level
             this.soundEffects.menu_music.pause();
             loadLevelOne(this.game);
+            this.currentState = 2
         }
     }
   }
 
   draw(ctx) {
     let that = this;
-    if (params.debug && !this.currentState == 0) {
+    if (params.debug && !this.currentState == 0 && !this.currentState == 1) {
       ctx.strokeStyle = "Blue";
       ctx.strokelin;
       ctx.strokeRect(1024 / 2 - that.player_width - 5, 768 / 2 - 5, 10, 10);

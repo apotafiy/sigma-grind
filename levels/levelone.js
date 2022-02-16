@@ -80,6 +80,8 @@ function loadLevelOne(gameEngine) {
     gameEngine.addEntity(new Ground(gameEngine, 1, 45, -35, 20, 6, 1, 0, 0));
 
     //Start of second part (actual level!)
+    gameEngine.addEntity(new Spike(gameEngine,43,-36,24,1,0))
+    // gameEngine.addEntity(new Spike(gameEngine,43,-41,32,1,2))
     //slide down spiked walls with dashing NEEDED
     gameEngine.addEntity(new Ground(gameEngine, 1, 77, -50, 6, 44, 1, 0, 0));
     //near wall spikes!
