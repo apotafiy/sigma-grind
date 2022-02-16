@@ -43,7 +43,7 @@ class Player {
 
         // Gives the player a health bar
         this.currentHitpoints = params.hardcore ? 1 : 150;
-        this.maxHitpoints =  params.hardcore ? 1 : 150;
+        this.maxHitpoints = params.hardcore ? 1 : 150;
         this.percentHealth = this.currentHitpoints / this.maxHitpoints;
         this.healthBar = new HealthBar(this);
 
@@ -902,259 +902,263 @@ class Player {
             //stop when attacking
 
             // END ACTIONS
-        }
+            this.velocity.y += this.fallAcc * TICK;
 
-        this.velocity.y += this.fallAcc * TICK;
+            // UPDATE VELOCITY
+            if (this.velocity.y >= MAX_FALL) this.velocity.y = MAX_FALL;
+            if (this.velocity.y <= -MAX_FALL) this.velocity.y = -MAX_FALL;
 
-        // UPDATE VELOCITY
-        if (this.velocity.y >= MAX_FALL) this.velocity.y = MAX_FALL;
-        if (this.velocity.y <= -MAX_FALL) this.velocity.y = -MAX_FALL;
-
-        if (this.velocity.x >= MAX_DASH) this.velocity.x = MAX_DASH;
-        if (this.velocity.x <= -MAX_DASH) this.velocity.x = -MAX_DASH;
-        if (this.velocity.x >= MAX_RUN && !this.game.keys.KeyK)
-            this.velocity.x = MAX_RUN;
-        if (this.velocity.x <= -MAX_RUN && !this.game.keys.KeyK)
-            this.velocity.x = -MAX_RUN;
-        if (
-            this.attacking &&
-            ((this.state == this.states.attack1 &&
-                this.velocity.y < this.fallAcc &&
-                this.velocity.y >= 0) ||
-                this.state == this.states.dash)
-        ) {
-            this.velocity.x = 0;
-        }
-
-        // UPDATE POSITION
-        // if (this.game.keys.ArrowUp) {
-        //     // console.log('pressed');
-        //     this.velocity.y -= 80;
-        // }
-        // scale = 3
-        this.x += this.velocity.x * TICK * 3;
-        this.y += this.velocity.y * TICK * 3;
-        this.updateBB();
-
-        // Fall off map = dead
-        // Assuming block width is 64
-        if (this.y > 64 * 16 || this.currentHitpoints <= 0) this.die();
-        // collision
-        if (this.currentIFrameTimer > 0) {
-            this.currentIFrameTimer -= 1;
-            // console.log(this.currentIFrameTimer);
-        }
-
-        // console.log(this.currentIFrameTimer);
-
-        this.game.entities.forEach((entity) => {
-            //check for the enemy colliding with sword
-            // || entity instanceof Drill
-            if (entity.BB && this.attackBB.collide(entity.BB)) {
-                if (
-                    entity &&
-                    entity instanceof Mettaur &&
-                    entity.duckTimer <= 0
-                ) {
-                    // console.log('Kill Mettaur');
-                    //if it has die method it should die
-                    entity.die();
-                }
-                if (entity && entity instanceof Drill) {
-                    // console.log('kILL dRILL');
-                    //if it has die method it should die
-                    entity.health -= 5;
-                }
-                if (entity && entity instanceof DogBoss) {
-                    // console.log('kILL dRILL');
-                    //if it has die method it should die
-                    if (entity.iframes <= 0 && entity.currentState != 4) {
-                        entity.health -= 5;
-                        entity.iframes = 0.5;
-                    }
-                }
-                if (entity.isPog && this.isPogo) {
-                    this.animations[3][0].elapsedTime = 0;
-                    this.animations[3][1].elapsedTime = 0;
-                    this.velocity.y = POGO_JUMP;
-                    if (this.state !== this.states.jump)
-                        this.state = this.states.jump;
-                    this.attacking = false;
-                    this.airDashed = false;
-                    this.pogoTimer = 0.6;
-                }
+            if (this.velocity.x >= MAX_DASH) this.velocity.x = MAX_DASH;
+            if (this.velocity.x <= -MAX_DASH) this.velocity.x = -MAX_DASH;
+            if (this.velocity.x >= MAX_RUN && !this.game.keys.KeyK)
+                this.velocity.x = MAX_RUN;
+            if (this.velocity.x <= -MAX_RUN && !this.game.keys.KeyK)
+                this.velocity.x = -MAX_RUN;
+            if (
+                this.attacking &&
+                ((this.state == this.states.attack1 &&
+                    this.velocity.y < this.fallAcc &&
+                    this.velocity.y >= 0) ||
+                    this.state == this.states.dash)
+            ) {
+                this.velocity.x = 0;
             }
-            // Collision with player's box
-            if (entity.BB && this.BB.collide(entity.BB)) {
-                //Damage the player
-                if (
-                    entity &&
-                    entity.isHostile &&
-                    this.currentIFrameTimer === 0
-                ) {
-                    this.currentHitpoints -= entity.collisionDamage;
-                    this.currentIFrameTimer = this.maxIFrameTimer;
-                    // console.log('Took ' + entity.collisionDamage + ' damage');
-                    // console.log('Current HP: ' + this.currentHitpoints);
-                }
-                if (this.velocity.y > 0) {
-                    // falling
+
+            // UPDATE POSITION
+            // if (this.game.keys.ArrowUp) {
+            //     // console.log('pressed');
+            //     this.velocity.y -= 80;
+            // }
+            // scale = 3
+            this.x += this.velocity.x * TICK * 3;
+            this.y += this.velocity.y * TICK * 3;
+            this.updateBB();
+
+            // Fall off map = dead
+            // Assuming block width is 64
+            if (this.y > 64 * 16 || this.currentHitpoints <= 0) this.die();
+            // collision
+            if (this.currentIFrameTimer > 0) {
+                this.currentIFrameTimer -= 1;
+                // console.log(this.currentIFrameTimer);
+            }
+
+            // console.log(this.currentIFrameTimer);
+
+            this.game.entities.forEach((entity) => {
+                //check for the enemy colliding with sword
+                // || entity instanceof Drill
+                if (entity.BB && this.attackBB.collide(entity.BB)) {
                     if (
-                        (entity instanceof Ground || entity instanceof Spike) && // landing
-                        this.lastBB.bottom <= entity.BB.top
+                        entity &&
+                        entity instanceof Mettaur &&
+                        entity.duckTimer <= 0
                     ) {
-                        this.y = entity.BB.top - this.BB.height; //set to top of bounding box of ground
-                        this.velocity.y = 0;
-                        if (
-                            this.state === this.states.jump ||
-                            this.state === this.states.fall ||
-                            this.state === this.states.wallHang
-                        )
-                            this.state = this.states.idle; // set state to idle
-
-                        ///if we were falling play the soundEffect
-                        if (this.isInAir) this.soundEffects.land.play();
-                        this.isInAir = false;
-                        this.airDashed = false;
-                        this.isPogo = false;
-
-                        this.updateBB();
+                        // console.log('Kill Mettaur');
+                        //if it has die method it should die
+                        entity.die();
                     }
-                }
-                if (this.velocity.y < 0) {
-                    // jumping
-                    // hit ceiling...
-                    if (
-                        (entity instanceof Ground || entity instanceof Spike) &&
-                        (this.lastBB.top >= entity.BB.bottom ||
-                            this.BB.collide(entity.bottomBB))
-                        // this.BB.collide(entity.bottomBB)
-                    ) {
-                        this.velocity.y = 0;
-
-                        // This one goes out to all the corner spammers
-                        this.game.keys.Space = false;
-                        this.game.keys.KeyJ = false;
-                        this.game.keys.KeyK = false;
+                    if (entity && entity instanceof Drill) {
+                        // console.log('kILL dRILL');
+                        //if it has die method it should die
+                        entity.health -= 5;
                     }
-                }
-
-                // Side collisions
-                if (
-                    (entity instanceof Ground || entity instanceof Spike) &&
-                    this.BB.collide(entity.leftBB)
-                ) {
-                    // Right side collision
-                    this.x = entity.BB.left - this.BB.width;
-                    this.facing = 0;
-                    if (this.velocity.x > 0) this.velocity.x = 0;
-                } else if (
-                    (entity instanceof Ground || entity instanceof Spike) &&
-                    this.BB.collide(entity.rightBB)
-                ) {
-                    // Left side collision
-                    this.x = entity.BB.right;
-                    this.facing = 1;
-                    if (this.velocity.x < 0) this.velocity.x = 0;
-                }
-                // END Side collisions
-
-                // Wall hang collision
-                if (
-                    entity instanceof Ground &&
-                    !this.BB.collide(entity.topBB) &&
-                    !this.BB.collide(entity.bottomBB)
-                ) {
-                    // wall hanging
-                    if (this.velocity.y > 0 && !this.game.keys.Space) {
-                        // falling and not holding jump
-                        // Set state to wall hang
-                        this.state = this.states.wallHang;
-                        this.velocity.y = 1;
-                        this.isInAir = false;
-                        this.airDashed = false;
-                    } else if (this.velocity.y > 0 && this.game.keys.Space) {
-                        // falling then hit jump, bounce from wall
-                        //play wall jump soundEffect
-                        this.getRandomGrunt().play();
-                        this.velocity.x = this.facing === 1 ? 100 : -100;
-                        this.velocity.y = -WALL_JUMP;
-                        this.fallAcc = STOP_FALL;
-                        this.isInAir = true;
-                        this.airDashed = false;
-                        this.state = this.states.jump;
-                        // Reset jump animation to the beginning
-                        this.animations[3][0].elapsedTime = 0;
-                        this.animations[3][1].elapsedTime = 0;
-                    } else if (this.velocity.y === 0) {
-                        if (this.game.keys.KeyK) {
-                            // Prevent player idle at wall when dashing into wall
-                            this.state = this.states.wallHang;
-                            this.handleDashEnding(RUN_FALL, ACC_RUN, TICK);
+                    if (entity && entity instanceof DogBoss) {
+                        // console.log('kILL dRILL');
+                        //if it has die method it should die
+                        if (entity.iframes <= 0 && entity.currentState != 4) {
+                            entity.health -= 5;
+                            entity.iframes = 0.5;
                         }
                     }
-                } else if (
-                    entity instanceof Ground &&
-                    (this.BB.collide(entity.topBB) ||
-                        this.BB.collide(entity.bottomBB))
-                ) {
-                    if (this.game.keys.KeyK) {
+                    if (entity.isPog && this.isPogo) {
+                        this.animations[3][0].elapsedTime = 0;
+                        this.animations[3][1].elapsedTime = 0;
+                        this.velocity.y = POGO_JUMP;
+                        if (this.state !== this.states.jump)
+                            this.state = this.states.jump;
+                        this.attacking = false;
+                        this.airDashed = false;
+                        this.pogoTimer = 0.6;
+                    }
+                }
+                // Collision with player's box
+                if (entity.BB && this.BB.collide(entity.BB)) {
+                    //Damage the player
+                    if (
+                        entity &&
+                        entity.isHostile &&
+                        this.currentIFrameTimer === 0
+                    ) {
+                        this.currentHitpoints -= entity.collisionDamage;
+                        this.currentIFrameTimer = this.maxIFrameTimer;
+                        // console.log('Took ' + entity.collisionDamage + ' damage');
+                        // console.log('Current HP: ' + this.currentHitpoints);
+                    }
+                    if (this.velocity.y > 0) {
+                        // falling
+                        if (
+                            (entity instanceof Ground ||
+                                entity instanceof Spike) && // landing
+                            this.lastBB.bottom <= entity.BB.top
+                        ) {
+                            this.y = entity.BB.top - this.BB.height; //set to top of bounding box of ground
+                            this.velocity.y = 0;
+                            if (
+                                this.state === this.states.jump ||
+                                this.state === this.states.fall ||
+                                this.state === this.states.wallHang
+                            )
+                                this.state = this.states.idle; // set state to idle
+
+                            ///if we were falling play the soundEffect
+                            if (this.isInAir) this.soundEffects.land.play();
+                            this.isInAir = false;
+                            this.airDashed = false;
+                            this.isPogo = false;
+
+                            this.updateBB();
+                        }
+                    }
+                    if (this.velocity.y < 0) {
+                        // jumping
+                        // hit ceiling...
+                        if (
+                            (entity instanceof Ground ||
+                                entity instanceof Spike) &&
+                            (this.lastBB.top >= entity.BB.bottom ||
+                                this.BB.collide(entity.bottomBB))
+                            // this.BB.collide(entity.bottomBB)
+                        ) {
+                            this.velocity.y = 0;
+
+                            // This one goes out to all the corner spammers
+                            this.game.keys.Space = false;
+                            this.game.keys.KeyJ = false;
+                            this.game.keys.KeyK = false;
+                        }
+                    }
+
+                    // Side collisions
+                    if (
+                        (entity instanceof Ground || entity instanceof Spike) &&
+                        this.BB.collide(entity.leftBB)
+                    ) {
+                        // Right side collision
+                        this.x = entity.BB.left - this.BB.width;
+                        this.facing = 0;
+                        if (this.velocity.x > 0) this.velocity.x = 0;
+                    } else if (
+                        (entity instanceof Ground || entity instanceof Spike) &&
+                        this.BB.collide(entity.rightBB)
+                    ) {
+                        // Left side collision
+                        this.x = entity.BB.right;
+                        this.facing = 1;
+                        if (this.velocity.x < 0) this.velocity.x = 0;
+                    }
+                    // END Side collisions
+
+                    // Wall hang collision
+                    if (
+                        entity instanceof Ground &&
+                        !this.BB.collide(entity.topBB) &&
+                        !this.BB.collide(entity.bottomBB)
+                    ) {
+                        // wall hanging
+                        if (this.velocity.y > 0 && !this.game.keys.Space) {
+                            // falling and not holding jump
+                            // Set state to wall hang
+                            this.state = this.states.wallHang;
+                            this.velocity.y = 1;
+                            this.isInAir = false;
+                            this.airDashed = false;
+                        } else if (
+                            this.velocity.y > 0 &&
+                            this.game.keys.Space
+                        ) {
+                            // falling then hit jump, bounce from wall
+                            //play wall jump soundEffect
+                            this.getRandomGrunt().play();
+                            this.velocity.x = this.facing === 1 ? 100 : -100;
+                            this.velocity.y = -WALL_JUMP;
+                            this.fallAcc = STOP_FALL;
+                            this.isInAir = true;
+                            this.airDashed = false;
+                            this.state = this.states.jump;
+                            // Reset jump animation to the beginning
+                            this.animations[3][0].elapsedTime = 0;
+                            this.animations[3][1].elapsedTime = 0;
+                        } else if (this.velocity.y === 0) {
+                            if (this.game.keys.KeyK) {
+                                // Prevent player idle at wall when dashing into wall
+                                this.state = this.states.wallHang;
+                                this.handleDashEnding(RUN_FALL, ACC_RUN, TICK);
+                            }
+                        }
+                    } else if (
+                        entity instanceof Ground &&
+                        (this.BB.collide(entity.topBB) ||
+                            this.BB.collide(entity.bottomBB))
+                    ) {
+                        if (this.game.keys.KeyK) {
+                            this.velocity.y += this.fallAcc * TICK;
+                            this.game.keys.KeyK = false;
+                        }
+                    } else if (entity instanceof Spike && this.game.keys.KeyK) {
+                        // Prevent player from wall hang at spikes
                         this.velocity.y += this.fallAcc * TICK;
                         this.game.keys.KeyK = false;
                     }
-                } else if (entity instanceof Spike && this.game.keys.KeyK) {
-                    // Prevent player from wall hang at spikes
-                    this.velocity.y += this.fallAcc * TICK;
-                    this.game.keys.KeyK = false;
+                }
+            });
+            // END COLLISION
+
+            // update state
+            if (
+                !this.attacking &&
+                this.state !== this.states.jump &&
+                this.state !== this.states.fall &&
+                this.state !== this.states.wallHang &&
+                !this.isPogo
+            ) {
+                if (
+                    Math.abs(this.velocity.x) > MAX_RUN ||
+                    Math.abs(this.velocity.x) === MAX_DASH
+                ) {
+                    this.state = this.states.dash;
+                } else if (Math.abs(this.velocity.x) >= MIN_RUN) {
+                    this.state = this.states.run;
+                } else if (!this.attacking) {
+                    this.state = this.states.idle;
                 }
             }
-        });
-        // END COLLISION
-
-        // update state
-        if (
-            !this.attacking &&
-            this.state !== this.states.jump &&
-            this.state !== this.states.fall &&
-            this.state !== this.states.wallHang &&
-            !this.isPogo
-        ) {
-            if (
-                Math.abs(this.velocity.x) > MAX_RUN ||
-                Math.abs(this.velocity.x) === MAX_DASH
+            // Falling or jumping
+            else if (
+                (this.velocity.y > 0 || this.velocity.y < 0) &&
+                this.state !== this.states.wallHang
             ) {
-                this.state = this.states.dash;
-            } else if (Math.abs(this.velocity.x) >= MIN_RUN) {
-                this.state = this.states.run;
-            } else if (!this.attacking) {
-                this.state = this.states.idle;
+                // Set state to either Air Attack, Jump, or Fall
+                this.state = this.attacking
+                    ? this.isPogo
+                        ? this.states.pogo
+                        : this.states.attack2
+                    : this.velocity.y > 0
+                    ? this.states.fall
+                    : this.states.jump;
+                this.isInAir = true;
+            } else {
+                // do nothing
             }
-        }
-        // Falling or jumping
-        else if (
-            (this.velocity.y > 0 || this.velocity.y < 0) &&
-            this.state !== this.states.wallHang
-        ) {
-            // Set state to either Air Attack, Jump, or Fall
-            this.state = this.attacking
-                ? this.isPogo
-                    ? this.states.pogo
-                    : this.states.attack2
-                : this.velocity.y > 0
-                ? this.states.fall
-                : this.states.jump;
-            this.isInAir = true;
-        } else {
-            // do nothing
-        }
 
-        // update direction
-        if (this.velocity.x < 0) this.facing = 1;
-        if (this.velocity.x > 0) this.facing = 0;
-        if (this.state == this.states.wallHang) {
-        }
+            // update direction
+            if (this.velocity.x < 0) this.facing = 1;
+            if (this.velocity.x > 0) this.facing = 0;
+            if (this.state == this.states.wallHang) {
+            }
 
-        this.updateBB();
+            this.updateBB();
+        }
 
         // Display values for Debug mode
         if (params.debug) {
