@@ -30,7 +30,7 @@ class DogBoss {
     }
     this.isPog = true;
     this.flashframes = 0;
-    this.maxHealth = 320;
+    this.maxHealth = 10//320;
     this.health = this.maxHealth;
     this.chosendir = false;
     this.walkdelay = 0;
@@ -206,11 +206,17 @@ class DogBoss {
     );
   }
   die() {
-    if (!this.isDead) {
-      this.isDead = true;
-      this.deathTimer = 20;
-      this.xVelocity = 0;
-    }
+    //TODO add actual good death logic
+    // if (!this.isDead) {
+    //   this.isDead = true;
+    //   this.deathTimer = 20;
+    //   this.xVelocity = 0;
+    // }
+    this.game.camera.finalTime = this.game.camera.getFormattedTime();
+    this.game.camera.isLevel = false;
+    this.game.camera.currentState = 3;
+    this.game.camera.setMenuMode(this.game);
+    this.removeFromWorld = true;
   }
   updateBB() {
     this.lastBB = this.BB;
@@ -229,7 +235,7 @@ class DogBoss {
     } else {
       this.flashframes = 0;
     }
-    if (this.health <= 0) this.removeFromWorld = true;
+    if (this.health <= 0)this.die();
     let that = this;
     this.attackCooldown -= 1* this.game.clockTick;
     this.iframes-= 1* this.game.clockTick;

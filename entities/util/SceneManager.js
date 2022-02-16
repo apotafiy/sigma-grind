@@ -133,17 +133,6 @@ class SceneManager {
     }
   }
   getFormattedTime(){
-      //if we just need min and seconds this is going to be
-    // let now = Math.floor(Date.now() / 1000); // get the time now
-    // let diff = now - this.startTime; // diff in seconds between now and start
-    // let m = Math.floor(diff / 60); // get minutes value (quotient of diff)
-    // let s = Math.floor(diff % 60); // get seconds value (remainder of diff)
-    // m = this.checkTime(m); // add a leading zero if it's single digit
-    // s = this.checkTime(s); // add a leading zero if it's single digit
-    // //check the remaining miliseconds 
-    // let ms = Math.floor(Date.now() - this.fullStartTime - (m*60000) - (s*1000));
-    // ms = this.checkTime(ms); // add a leading zero if 
-    // console.log(`Time: ${m}:${s}:${ms}`)
     let now = Date.now();
     let timeDifference = now - this.fullStartTime;
     let m = 0;
@@ -251,6 +240,18 @@ class SceneManager {
         0,
         1
     );
+    this.animations[6] = new Animator(
+        ASSET_MANAGER.getAsset("./sprites/title_screen/mission_complete.png"),
+        0,
+        0,
+        503,
+        321,
+        1,
+        11,
+        0,
+        0,
+        1
+    );
     
 
   }
@@ -346,6 +347,16 @@ class SceneManager {
     }
     //handle game over
     if(this.currentState == 2){
+        if(this.game.keys.Enter && this.menuCooldown <= 0){
+            this.soundEffects.select.play();
+            this.isLevel = false;
+            this.currentState = 0;
+            this.menuCooldown = 0.2;
+        }
+    }
+
+     //handle win over
+     if(this.currentState == 3){
         if(this.game.keys.Enter && this.menuCooldown <= 0){
             this.soundEffects.select.play();
             this.isLevel = false;
@@ -472,6 +483,51 @@ class SceneManager {
             Math.abs(this.currentTitleCardScale)
             
         ); 
+        ctx.filter = `brightness(${this.enterBrightness})`;
+        that.animations[1].drawFrame(
+            that.game.clockTick,
+            ctx,
+            this.canvasWidth/2 - 486/2,
+            (this.canvasHeight/3) * 2,
+            1
+        ); 
+        ctx.filter = "none";
+    }
+
+    //win screen
+    if(!this.isLevel && this.currentState == 3){
+        that.animations[0].drawFrame(
+            that.game.clockTick,
+            ctx,
+            0,
+            0,
+            1
+        ); 
+        that.animations[6].drawFrame(
+            that.game.clockTick,
+            ctx,
+            30,
+            30,
+            Math.abs(this.currentTitleCardScale)
+            
+        ); 
+        //show player time
+         //draw in timer
+         ctx.font = '50px "Zen Dots"';
+         ctx.textAlign = 'left';
+         ctx.fillStyle = 'White';
+         ctx.strokeStyle = 'Light blue';
+         ctx.lineWidth = 10;
+         ctx.strokeText(
+             this.finalTime,
+             500, // offset on purpose
+             100
+         );
+         ctx.fillText(
+             this.finalTime,
+             500,
+             100
+         );
         ctx.filter = `brightness(${this.enterBrightness})`;
         that.animations[1].drawFrame(
             that.game.clockTick,
