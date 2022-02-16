@@ -278,7 +278,6 @@ class SceneManager {
     }
     params.debug = document.getElementById("debug").checked;
     if (this.isLevel) {
-        console.log(this.getFormattedTime());
       //set up midpoints for calculatoin
       let midpoint = 1024 / 2 - 44;
       let vertmidpoint = 768 / 2 - 44;
@@ -384,7 +383,6 @@ class SceneManager {
       ctx.stroke();
     }
     if(this.isLevel){
-        console.log(this.x,this.y);
         //draw in timer
         ctx.font = '25px "Zen Dots"';
         ctx.textAlign = 'left';
@@ -401,6 +399,7 @@ class SceneManager {
             30,
             50
         );
+        ctx.lineWidth = 1;
     }
     if(!this.isLevel && this.currentState == 0){
         that.animations[0].drawFrame(
@@ -528,6 +527,7 @@ class SceneManager {
              500,
              100
          );
+         ctx.lineWidth = 1;
         ctx.filter = `brightness(${this.enterBrightness})`;
         that.animations[1].drawFrame(
             that.game.clockTick,
