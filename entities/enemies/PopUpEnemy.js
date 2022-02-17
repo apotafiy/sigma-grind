@@ -158,13 +158,19 @@ class PopUpEnemy {
                 }
             }
         }
-
+        let animationOffSet = 0;
+        if (this.state == 1) {
+            animationOffSet =
+                50 - this.animations[this.state].currentFrame() * 5;
+        } else if (this.state == 3) {
+            animationOffSet = this.animations[this.state].currentFrame() * 30;
+        }
         if (this.state == 0) {
             this.BB = undefined;
         } else {
             this.BB = new BoundingBox(
                 this.x,
-                this.y,
+                this.y + animationOffSet,
                 this.width * this.scale,
                 this.height * this.scale
             );
