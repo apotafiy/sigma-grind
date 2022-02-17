@@ -33,7 +33,7 @@ class PopUpEnemy {
         this.x = x * 64 + xOffSet;
         this.y = y * 64 + yOffSet;
         this.visionDistance = 200;
-
+        this.isPog = true;
         this.isHostile = true;
         this.collisionDamage = 15;
     }
@@ -158,12 +158,16 @@ class PopUpEnemy {
                 }
             }
         }
+        // this offset makes the BB move dynamically
         let animationOffSet = 0;
+        const factor = this.height / this.animations[this.state].frameCount;
         if (this.state == 1) {
             animationOffSet =
-                50 - this.animations[this.state].currentFrame() * 5;
+                this.height -
+                this.animations[this.state].currentFrame() * factor;
         } else if (this.state == 3) {
-            animationOffSet = this.animations[this.state].currentFrame() * 30;
+            animationOffSet =
+                this.animations[this.state].currentFrame() * factor * 4;
         }
         if (this.state == 0) {
             this.BB = undefined;
