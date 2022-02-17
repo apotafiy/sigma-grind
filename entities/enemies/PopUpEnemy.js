@@ -12,6 +12,7 @@ class PopUpEnemy {
         let xOffSet;
         this.game = game;
         this.animations = [];
+        this.state = 0;
 
         if (spriteVersion == 0) {
             this.width = 28;
@@ -32,13 +33,9 @@ class PopUpEnemy {
         this.x = x * 64 + xOffSet;
         this.y = y * 64 + yOffSet;
         this.visionDistance = 200;
-        this.state = 0;
 
         this.isHostile = true;
         this.collisionDamage = 15;
-
-        this.animations = [];
-        this.loadAnimations();
     }
 
     loadAnimationsV0() {
