@@ -225,6 +225,7 @@ class GameEngine {
             this.gui.show();
         } else if (!params.debug && document.getElementById('fpsCounter')) {
             document.getElementById('fpsCounter').remove();
+        } else {
             this.gui.hide();
         }
     }
