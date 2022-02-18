@@ -63,6 +63,10 @@ ASSET_MANAGER.queueDownload('./sprites/player/zero_attack_right_two.png');
 ASSET_MANAGER.queueDownload(
     './sprites/player/zero_attack_right_three_114x64-Sheet.png'
 );
+
+// Player health bar, lives, and boss health bar
+ASSET_MANAGER.queueDownload('./sprites/player/health-bars.png');
+
 //items
 ASSET_MANAGER.queueDownload('./sprites/items/health_pack_full_22x31.png');
 ASSET_MANAGER.queueDownload('./sprites/items/health_pack_small_25x16.png');

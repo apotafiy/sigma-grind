@@ -42,9 +42,8 @@ class Player {
         this.pogoTimer = 0;
 
         // Gives the player a health bar
-        this.currentHitpoints = params.hardcore ? 50 : 150;
-        this.maxHitpoints = params.hardcore ? 50 : 150;
-        this.percentHealth = this.currentHitpoints / this.maxHitpoints;
+        this.health = params.hardcore ? 50 : 150;
+        this.maxHealth = params.hardcore ? 50 : 150;
         this.healthBar = new HealthBar(this);
 
         this.currentIFrameTimer = 0;
@@ -131,7 +130,7 @@ class Player {
             .min(0.005)
             .max(0.5)
             .step(0.005)
-            .onChange((val) => {
+            .onChange(val => {
                 this.attackSpeed = val;
                 this.loadAnimations();
             })
@@ -141,7 +140,7 @@ class Player {
             .min(0)
             .max(50)
             .step(1)
-            .onChange((val) => {
+            .onChange(val => {
                 MIN_RUN = val;
             })
             .name('MIN_RUN');
@@ -150,7 +149,7 @@ class Player {
             .min(0)
             .max(300)
             .step(1)
-            .onChange((val) => {
+            .onChange(val => {
                 MAX_RUN = val;
             })
             .name('MAX_RUN');
@@ -159,7 +158,7 @@ class Player {
             .min(0)
             .max(1000)
             .step(1)
-            .onChange((val) => {
+            .onChange(val => {
                 MAX_DASH = val;
             })
             .name('MAX_DASH');
@@ -168,7 +167,7 @@ class Player {
             .min(0)
             .max(1000)
             .step(1)
-            .onChange((val) => {
+            .onChange(val => {
                 ACC_RUN = val;
             })
             .name('ACC_RUN');
@@ -177,7 +176,7 @@ class Player {
             .min(0)
             .max(1000)
             .step(1)
-            .onChange((val) => {
+            .onChange(val => {
                 DEC_REL = val;
             })
             .name('DEC_REL');
@@ -186,7 +185,7 @@ class Player {
             .min(0)
             .max(1000)
             .step(1)
-            .onChange((val) => {
+            .onChange(val => {
                 DEC_SKID = val;
             })
             .name('DEC_SKID');
@@ -195,7 +194,7 @@ class Player {
             .min(0)
             .max(3000)
             .step(1)
-            .onChange((val) => {
+            .onChange(val => {
                 STOP_FALL = val;
             })
             .name('STOP_FALL');
@@ -204,7 +203,7 @@ class Player {
             .min(0)
             .max(1000)
             .step(1)
-            .onChange((val) => {
+            .onChange(val => {
                 STOP_FALL_A = val;
             })
             .name('STOP_FALL_A');
@@ -213,7 +212,7 @@ class Player {
             .min(0)
             .max(4000)
             .step(1)
-            .onChange((val) => {
+            .onChange(val => {
                 RUN_FALL = val;
             })
             .name('RUN_FALL');
@@ -222,7 +221,7 @@ class Player {
             .min(0)
             .max(1000)
             .step(1)
-            .onChange((val) => {
+            .onChange(val => {
                 RUN_FALL_A = val;
             })
             .name('RUN_FALL_A');
@@ -231,7 +230,7 @@ class Player {
             .min(0)
             .max(1000)
             .step(1)
-            .onChange((val) => {
+            .onChange(val => {
                 MAX_FALL = val;
             })
             .name('MAX_FALL');
@@ -240,7 +239,7 @@ class Player {
             .min(-1000)
             .max(0)
             .step(1)
-            .onChange((val) => {
+            .onChange(val => {
                 STOP_JUMP = val;
             })
             .name('STOP_JUMP');
@@ -249,7 +248,7 @@ class Player {
             .min(-1000)
             .max(0)
             .step(1)
-            .onChange((val) => {
+            .onChange(val => {
                 RUN_JUMP = val;
             })
             .name('RUN_JUMP');
@@ -258,7 +257,7 @@ class Player {
             .min(0)
             .max(600)
             .step(1)
-            .onChange((val) => {
+            .onChange(val => {
                 WALL_JUMP = val;
             })
             .name('WALL_JUMP');
@@ -678,7 +677,7 @@ class Player {
         // this.velocity.y = 0;
         // this.x = 3 * 64;
         // this.y = -2*64;
-        // this.currentHitpoints = this.maxHitpoints;
+        // this.health = this.maxHealth;
         // this.velocity.x = 0;
         // this.velocity.y = 0;
         // this.fallAcc = 0;
@@ -1000,8 +999,7 @@ class Player {
 
             // Fall off map = dead
             // Assuming block width is 64
-            if (this.y > 64 * 16 || this.currentHitpoints <= 0)
-                this.dead = true;
+            if (this.y > 64 * 16 || this.health <= 0) this.dead = true;
 
             if (this.currentIFrameTimer > 0) {
                 this.currentIFrameTimer -= 1;
@@ -1010,7 +1008,7 @@ class Player {
             // console.log(this.currentIFrameTimer);
 
             // collision
-            this.game.entities.forEach((entity) => {
+            this.game.entities.forEach(entity => {
                 //check for the enemy colliding with sword
                 // || entity instanceof Drill
                 if (entity.BB && this.attackBB.collide(entity.BB)) {
@@ -1055,15 +1053,12 @@ class Player {
                         entity.isHostile &&
                         this.currentIFrameTimer === 0
                     ) {
-                        this.currentHitpoints -= entity.collisionDamage;
-                        this.currentHitpoints = Math.max(
-                            this.currentHitpoints,
-                            0
-                        );
+                        this.health -= entity.collisionDamage;
+                        this.health = Math.max(this.health, 0);
                         this.currentIFrameTimer = this.maxIFrameTimer;
                         this.immobilized = true;
                         // console.log('Took ' + entity.collisionDamage + ' damage');
-                        // console.log('Current HP: ' + this.currentHitpoints);
+                        // console.log('Current HP: ' + this.health);
                     }
                     if (this.velocity.y > 0) {
                         // falling
@@ -1244,7 +1239,7 @@ class Player {
 
         // Fall off map = dead
         // Assuming block width is 64
-        if (this.y > 64 * 16 || this.currentHitpoints <= 0) this.die();
+        if (this.y > 64 * 16 || this.health <= 0) this.die();
     }
 
     draw(ctx) {
@@ -1305,13 +1300,16 @@ class Player {
                     ', ' +
                     Math.floor(this.y / 64) +
                     ', ' +
-                    this.currentHitpoints,
+                    this.health,
                 this.x - this.game.camera.x + this.spriteOffset.xOffset + 40, // camera sidescrolling
                 this.y - this.game.camera.y + this.spriteOffset.yOffset - 20
             );
         }
-        // Draws the health bar
-        this.healthBar.drawHealthBarFollow(ctx);
+        // Draws the health bar that follows the player
+        // this.healthBar.drawHealthBarFollow(ctx);
+
+        // Draws the health bar that is static at the top-left
+        this.healthBar.drawPlayerHealthBar(ctx);
     }
     getRandomGrunt() {
         let theGrunt = this.getRandomInt(1, 5);
