@@ -12,6 +12,7 @@ class PopUpEnemy {
         let xOffSet;
         this.game = game;
         this.animations = [];
+        this.state = 0;
 
         if (spriteVersion == 0) {
             this.width = 28;
@@ -32,13 +33,9 @@ class PopUpEnemy {
         this.x = x * 64 + xOffSet;
         this.y = y * 64 + yOffSet;
         this.visionDistance = 200;
-        this.state = 0;
-
+        this.isPog = true;
         this.isHostile = true;
         this.collisionDamage = 15;
-
-        this.animations = [];
-        this.loadAnimations();
     }
 
     loadAnimationsV0() {
@@ -161,13 +158,23 @@ class PopUpEnemy {
                 }
             }
         }
-
+        // this offset makes the BB move dynamically
+        let animationOffSet = 0;
+        const factor = this.height / this.animations[this.state].frameCount;
+        if (this.state == 1) {
+            animationOffSet =
+                this.height -
+                this.animations[this.state].currentFrame() * factor;
+        } else if (this.state == 3) {
+            animationOffSet =
+                this.animations[this.state].currentFrame() * factor * 4;
+        }
         if (this.state == 0) {
             this.BB = undefined;
         } else {
             this.BB = new BoundingBox(
                 this.x,
-                this.y,
+                this.y + animationOffSet,
                 this.width * this.scale,
                 this.height * this.scale
             );
