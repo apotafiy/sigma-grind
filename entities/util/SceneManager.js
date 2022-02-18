@@ -54,8 +54,7 @@ class SceneManager {
 
     initGUI() {
         // Dat GUI stuff
-        this.gui = new dat.GUI();
-        this.cameraFolder = this.gui.addFolder('Camera values');
+        this.cameraFolder = this.game.gui.addFolder('Camera values');
         this.testValues = {
             accel: this.acceleration,
             frixn: this.friction,
@@ -119,7 +118,7 @@ class SceneManager {
             })
             .name('Interpolation');
 
-        dat.GUI.toggleHide();
+        // dat.GUI.toggleHide();
     }
 
     setGameMode(game) {

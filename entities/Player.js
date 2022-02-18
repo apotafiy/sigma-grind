@@ -103,13 +103,12 @@ class Player {
 
         this.animations = [];
         this.loadAnimations();
-        // this.initGUI();
+        this.initGUI();
     }
 
     initGUI() {
         // Dat GUI stuff
-        this.gui = new dat.GUI();
-        this.playerFolder = this.gui.addFolder('Player values');
+        this.playerFolder = this.game.gui.addFolder('Player values');
         this.testValues = {
             attackSpeed: this.attackSpeed,
             MIN_RUN: MIN_RUN,

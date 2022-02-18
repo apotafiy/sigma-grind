@@ -107,12 +107,12 @@ ASSET_MANAGER.downloadAll(() => {
     ctx.imageSmoothingEnabled = false;
     let gravity = 0.2;
     //scene manager for scrolling
+    gameEngine.init(ctx);
+
     gameEngine.addEntity(new SceneManager(gameEngine, 0));
     // loadLevelOne(gameEngine);
 
     // gameEngine.addEntity(new GroundHorse(gameEngine));
-
-    gameEngine.init(ctx);
 
     // start game with 60 fps cap
     gameEngine.start(60);
