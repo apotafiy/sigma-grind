@@ -93,13 +93,9 @@ class HealthBar {
             healthBarWidth * percentHealth,
             healthBarHeight
         );
-
-        // Conditional if you want the hp bar to only appear when <100% hp
-        // if (this.entity.hitpoints < this.entity.maxHealth) {
-
-        // }
     }
 
+    // Draws the static player health bar
     drawPlayerHealthBar(ctx) {
         // Draws the HP bar at the top left
         this.playerHealthBar.drawFrame(
@@ -130,8 +126,9 @@ class HealthBar {
         ctx.strokeStyle = 'Black';
     }
 
+    // Draws the static boss health bar
     drawBossHealthBar(ctx) {
-        // Draws the HP bar at the top left
+        // Draws the HP bar at the top right
         this.bossHealthBar.drawFrame(
             1,
             ctx,
@@ -160,5 +157,3 @@ class HealthBar {
         ctx.strokeStyle = 'Black';
     }
 }
-
-class Score {}
