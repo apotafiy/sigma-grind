@@ -3,6 +3,9 @@ function loadLevelOne(gameEngine) {
 
     // gameEngine.addEntity(new Player(gameEngine, 108, -35));
     gameEngine.addEntity(new Player(gameEngine, 3, 0));
+    gameEngine.addEntity(new BeamBarrier(gameEngine, 5, 3, 0, 1));
+    gameEngine.addEntity(new BeamBarrier(gameEngine, 6, 3, 0, 0.2));
+
     //gameEngine.addEntity(new Player(gameEngine, 67, -37));
     // gameEngine.addEntity(new Drill(gameEngine, 10, -1, 60));
     // gameEngine.addEntity(new Drill(gameEngine, 12, -1, 60));

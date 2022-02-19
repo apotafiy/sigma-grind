@@ -10,6 +10,8 @@ ASSET_MANAGER.queueDownload('./sprites/title_screen/normal.png');
 ASSET_MANAGER.queueDownload('./sprites/title_screen/hardcore.png');
 ASSET_MANAGER.queueDownload('./sprites/title_screen/game_over.png');
 ASSET_MANAGER.queueDownload('./sprites/title_screen/mission_complete.png');
+// Beams
+ASSET_MANAGER.queueDownload('./sprites/verticalBeam.png');
 
 //Backgrounds
 ASSET_MANAGER.queueDownload('./sprites/backgrounds/water.png');
