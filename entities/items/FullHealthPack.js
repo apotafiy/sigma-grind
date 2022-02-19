@@ -70,8 +70,7 @@ class FullHealthPack {
             if(entity.BB && that.BB.collide(entity.BB)){
                 //if its the player give health
                 if(entity instanceof Player){
-                   
-                    this.game.camera.decrementTime(500);
+                    entity.currentHitpoints = entity.maxHitpoints;// Math.min(entity.maxHitpoints, entity.currentHitpoints + 150);
                     that.die();
                 }
             }
