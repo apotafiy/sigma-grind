@@ -142,7 +142,7 @@ class SceneManager {
     }
     getFormattedTime() {
         let now = Date.now();
-        let timeDifference = now - this.fullStartTime;
+        let timeDifference = now - this.fullStartTime ;
         let m = 0;
         let s = 0;
         let ms = 0;
@@ -349,7 +349,7 @@ class SceneManager {
                 }
                 //stop current background music and load the level
                 this.soundEffects.menu_music.pause();
-                loadLevelOne(this.game);
+                loadTestLevel(this.game);
                 this.currentState = -1;
                 this.setGameMode(this.game);
             }

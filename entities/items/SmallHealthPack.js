@@ -11,6 +11,7 @@ class SmallHealthPack {
      * 5 = dead
      */
     constructor(game, x, y,) {
+        this.bobTimer = 0;
         this.scale = 2;
         this.game = game;
         this.animations = [[], []];
@@ -25,6 +26,7 @@ class SmallHealthPack {
         this.lastBB = this.BB;
         this.soundEffects = {};
         this.soundEffects.heal = SOUND_MANAGER.getSound("heal_1");
+        this.setOffset();
 ;
 
     }
@@ -35,7 +37,7 @@ class SmallHealthPack {
      */
     setOffset(){
         this.xOffset = 10;
-        this.yOffSet = 15;
+        this.yOffSet = 30;
     }
     loadAnimation() {
         this.animations[0][0] = new Animator(
@@ -59,11 +61,12 @@ class SmallHealthPack {
     }
     updateBB() {
         this.lastBB = this.BB;
-        const yOffSet = 30; // Make sprite goes below the ground slightly not the bounding box itself
-        // this.BB = new BoundingBox(this.x, this.y, 22 * this.scale, 37 * this.scale);
+        this.BB = new BoundingBox(this.x + this.xOffset, this.y + this.yOffSet + Math.sin(this.bobTimer) * 10, 22 * this.scale , 37 * this.scale - 50);
 
     }
     update() {
+        this.bobTimer += 10 * this.game.clockTick;
+        console.log(Math.sin(this.bobTimer));
         // this.updateBB();
         let that = this;
         this.game.entities.forEach(function (entity) {
@@ -76,6 +79,7 @@ class SmallHealthPack {
             }
         }
         );
+        this.updateBB();
     }
 
     draw(ctx) {
@@ -84,7 +88,7 @@ class SmallHealthPack {
             that.game.clockTick,
             ctx,
             that.x - that.game.camera.x + that.xOffset,
-            that.y - that.game.camera.y + that.yOffSet,
+            that.y - that.game.camera.y + that.yOffSet + Math.sin(this.bobTimer) * 10,
             this.scale
         );
         if (params.debug) {
