@@ -31,6 +31,7 @@ class Player {
         this.isInAir = true;
         this.airDashed = false;
         this.fallAcc = 400;
+        this.meetBoss = false;
 
         // Attacks
         this.attackSpeed = 0.025;
@@ -130,7 +131,7 @@ class Player {
             .min(0.005)
             .max(0.5)
             .step(0.005)
-            .onChange(val => {
+            .onChange((val) => {
                 this.attackSpeed = val;
                 this.loadAnimations();
             })
@@ -140,7 +141,7 @@ class Player {
             .min(0)
             .max(50)
             .step(1)
-            .onChange(val => {
+            .onChange((val) => {
                 MIN_RUN = val;
             })
             .name('MIN_RUN');
@@ -149,7 +150,7 @@ class Player {
             .min(0)
             .max(300)
             .step(1)
-            .onChange(val => {
+            .onChange((val) => {
                 MAX_RUN = val;
             })
             .name('MAX_RUN');
@@ -158,7 +159,7 @@ class Player {
             .min(0)
             .max(1000)
             .step(1)
-            .onChange(val => {
+            .onChange((val) => {
                 MAX_DASH = val;
             })
             .name('MAX_DASH');
@@ -167,7 +168,7 @@ class Player {
             .min(0)
             .max(1000)
             .step(1)
-            .onChange(val => {
+            .onChange((val) => {
                 ACC_RUN = val;
             })
             .name('ACC_RUN');
@@ -176,7 +177,7 @@ class Player {
             .min(0)
             .max(1000)
             .step(1)
-            .onChange(val => {
+            .onChange((val) => {
                 DEC_REL = val;
             })
             .name('DEC_REL');
@@ -185,7 +186,7 @@ class Player {
             .min(0)
             .max(1000)
             .step(1)
-            .onChange(val => {
+            .onChange((val) => {
                 DEC_SKID = val;
             })
             .name('DEC_SKID');
@@ -194,7 +195,7 @@ class Player {
             .min(0)
             .max(3000)
             .step(1)
-            .onChange(val => {
+            .onChange((val) => {
                 STOP_FALL = val;
             })
             .name('STOP_FALL');
@@ -203,7 +204,7 @@ class Player {
             .min(0)
             .max(1000)
             .step(1)
-            .onChange(val => {
+            .onChange((val) => {
                 STOP_FALL_A = val;
             })
             .name('STOP_FALL_A');
@@ -212,7 +213,7 @@ class Player {
             .min(0)
             .max(4000)
             .step(1)
-            .onChange(val => {
+            .onChange((val) => {
                 RUN_FALL = val;
             })
             .name('RUN_FALL');
@@ -221,7 +222,7 @@ class Player {
             .min(0)
             .max(1000)
             .step(1)
-            .onChange(val => {
+            .onChange((val) => {
                 RUN_FALL_A = val;
             })
             .name('RUN_FALL_A');
@@ -230,7 +231,7 @@ class Player {
             .min(0)
             .max(1000)
             .step(1)
-            .onChange(val => {
+            .onChange((val) => {
                 MAX_FALL = val;
             })
             .name('MAX_FALL');
@@ -239,7 +240,7 @@ class Player {
             .min(-1000)
             .max(0)
             .step(1)
-            .onChange(val => {
+            .onChange((val) => {
                 STOP_JUMP = val;
             })
             .name('STOP_JUMP');
@@ -248,7 +249,7 @@ class Player {
             .min(-1000)
             .max(0)
             .step(1)
-            .onChange(val => {
+            .onChange((val) => {
                 RUN_JUMP = val;
             })
             .name('RUN_JUMP');
@@ -257,7 +258,7 @@ class Player {
             .min(0)
             .max(600)
             .step(1)
-            .onChange(val => {
+            .onChange((val) => {
                 WALL_JUMP = val;
             })
             .name('WALL_JUMP');
@@ -760,12 +761,18 @@ class Player {
                 this.die();
             }
         } else if (this.immobilized) {
-            this.state = this.states.immobilized;
-            this.updateBB();
-            if (this.animations[this.state][this.facing].isDone()) {
-                this.immobilized = false;
-                this.animations[this.states.immobilized][0].elapsedTime = 0;
-                this.animations[this.states.immobilized][1].elapsedTime = 0;
+            if (this.meetBoss) {
+                this.state = this.states.idle;
+                this.velocity.x = 0;
+                this.velocity.y = 0;
+            } else {
+                this.state = this.states.immobilized;
+                this.updateBB();
+                if (this.animations[this.state][this.facing].isDone()) {
+                    this.immobilized = false;
+                    this.animations[this.states.immobilized][0].elapsedTime = 0;
+                    this.animations[this.states.immobilized][1].elapsedTime = 0;
+                }
             }
         } else {
             // PHYSICS
@@ -1008,7 +1015,7 @@ class Player {
             // console.log(this.currentIFrameTimer);
 
             // collision
-            this.game.entities.forEach(entity => {
+            this.game.entities.forEach((entity) => {
                 //check for the enemy colliding with sword
                 // || entity instanceof Drill
                 if (entity.BB && this.attackBB.collide(entity.BB)) {

@@ -38,6 +38,12 @@ ASSET_MANAGER.queueDownload(
 );
 ASSET_MANAGER.queueDownload('./sprites/dogboss/dogboss_projectile_37x32.png');
 ASSET_MANAGER.queueDownload('./sprites/dogboss/spike_96x96.png');
+//Sigma Animations
+ASSET_MANAGER.queueDownload('./sprites/sigma/sigma-beam-1202x177.png');
+ASSET_MANAGER.queueDownload('./sprites/sigma/sigma-head-158x168.png');
+ASSET_MANAGER.queueDownload('./sprites/sigma/sigma-headAttack-158x168.png');
+ASSET_MANAGER.queueDownload('./sprites/sigma/sigma-spawnIn-180x117.png');
+ASSET_MANAGER.queueDownload('./sprites/sigma/sigma-wingsOff-106x102.png');
 //player animations
 ASSET_MANAGER.queueDownload('./sprites/player/player-idle-43x48.png');
 ASSET_MANAGER.queueDownload('./sprites/player/player-run-51x49.png');
