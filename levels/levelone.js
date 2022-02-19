@@ -3,6 +3,7 @@ function loadLevelOne(gameEngine) {
 
     // gameEngine.addEntity(new Player(gameEngine, 108, -35));
     gameEngine.addEntity(new Player(gameEngine, 3, 0));
+    gameEngine.addEntity(new SpikeBall(gameEngine, 4, 4));
     //gameEngine.addEntity(new BeamBarrier(gameEngine, 5, 3, 0, 1));
     //gameEngine.addEntity(new BeamBarrier(gameEngine, 1, 3, 1, 0.5));
 

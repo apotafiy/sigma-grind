@@ -13,6 +13,8 @@ ASSET_MANAGER.queueDownload('./sprites/title_screen/mission_complete.png');
 // Beams
 ASSET_MANAGER.queueDownload('./sprites/verticalBeam.png');
 ASSET_MANAGER.queueDownload('./sprites/horizontalBeam.png');
+// SpikeBall
+ASSET_MANAGER.queueDownload('./sprites/spikeball.png');
 
 //Backgrounds
 ASSET_MANAGER.queueDownload('./sprites/backgrounds/water.png');
