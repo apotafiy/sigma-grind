@@ -1044,6 +1044,9 @@ class Player {
                         this.attacking = false;
                         this.airDashed = false;
                         this.pogoTimer = 0.6;
+                        if (entity instanceof SpikeBall) {
+                            entity.pogo();
+                        }
                     }
                 }
                 // Collision with player's box
