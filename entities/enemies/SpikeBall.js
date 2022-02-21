@@ -15,6 +15,7 @@ class SpikeBall {
             this.width * this.scale,
             this.height * this.scale
         );
+        this.isPog = true;
         this.sinWave = 0;
         this.loadAnimations();
     }
@@ -34,9 +35,22 @@ class SpikeBall {
         );
     }
 
+    pogo() {
+        //basically checking if spike is going up
+        if (this.sinWave < (3 * Math.PI) / 2 && this.sinWave > Math.PI / 2) {
+            // this makes it go back down
+            this.sinWave = Math.PI - this.sinWave;
+        }
+    }
+
     update() {
         this.sinWave += 3 * this.game.clockTick;
-        const multiplier = 10;
+        if (this.sinWave > Math.PI * 2) {
+            // makes it easier to do calculations if its always between 0 and 2PI
+            this.sinWave -= Math.PI * 2;
+        }
+
+        const multiplier = 30;
         this.y = this.anchorY + Math.sin(this.sinWave) * multiplier;
         this.BB = new BoundingBox(
             this.x,
