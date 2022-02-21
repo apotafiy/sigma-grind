@@ -32,6 +32,9 @@ class SceneManager {
                 this.backgroundMusicVolume.value / 100
             );
         }
+
+        this.msOffset = 0;
+
         this.xVelocity = 0;
         this.yVelocity = 0;
         this.acceleration = 2000;
@@ -69,7 +72,7 @@ class SceneManager {
             .min(0)
             .max(2000)
             .step(1)
-            .onChange((val) => {
+            .onChange(val => {
                 this.acceleration = val;
             })
             .name('Acceleration');
@@ -78,7 +81,7 @@ class SceneManager {
             .min(0.0000001)
             .max(2)
             .step(0.00000001)
-            .onChange((val) => {
+            .onChange(val => {
                 this.friction = val;
             })
             .name('Friction');
@@ -87,7 +90,7 @@ class SceneManager {
             .min(0)
             .max(10)
             .step(1)
-            .onChange((val) => {
+            .onChange(val => {
                 this.FRICTON_MULT = val;
             })
             .name('FrictionMultiplier');
@@ -96,7 +99,7 @@ class SceneManager {
             .min(0.000000001)
             .max(2)
             .step(0.000000001)
-            .onChange((val) => {
+            .onChange(val => {
                 this.FRICTON_X = val;
             })
             .name('Friction X');
@@ -105,7 +108,7 @@ class SceneManager {
             .min(0.000000001)
             .max(2)
             .step(0.000000001)
-            .onChange((val) => {
+            .onChange(val => {
                 this.FRICTON_y = val;
             })
             .name('Friction Y');
@@ -114,7 +117,7 @@ class SceneManager {
             .min(0)
             .max(1)
             .step(0.001)
-            .onChange((val) => {
+            .onChange(val => {
                 this.interpolation = val;
             })
             .name('Interpolation');
@@ -141,8 +144,14 @@ class SceneManager {
         }
     }
     getFormattedTime() {
-        let now = Date.now();
+        let now = Date.now() - this.msOffset;
         let timeDifference = now - this.fullStartTime;
+
+        // If current time (in ms) ever goes negative, set it to 0
+        if (timeDifference < 0) {
+            this.fullStartTime = now + this.msOffset;
+            this.msOffset = 0;
+        }
         let m = 0;
         let s = 0;
         let ms = 0;

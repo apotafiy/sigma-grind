@@ -2,7 +2,9 @@ function loadLevelOne(gameEngine) {
     let gravity = 0.2;
 
     // gameEngine.addEntity(new Player(gameEngine, 108, -35));
+    gameEngine.addEntity(new Clock(gameEngine, 14, 6));
     gameEngine.addEntity(new Player(gameEngine, 3, 0));
+    gameEngine.addEntity(new DogBoss(gameEngine, 112, -36, gravity));
     gameEngine.addEntity(new SpikeBall(gameEngine, 4, 4));
     //gameEngine.addEntity(new BeamBarrier(gameEngine, 5, 3, 0, 1));
     //gameEngine.addEntity(new BeamBarrier(gameEngine, 1, 3, 1, 0.5));
@@ -150,7 +152,7 @@ function loadLevelOne(gameEngine) {
     //platforms for the  player to hide under
     gameEngine.addEntity(new Ground(gameEngine, 1, 115, -38, 3, 1, 1, 1, 1));
     gameEngine.addEntity(new Ground(gameEngine, 1, 125, -38, 3, 1, 1, 1, 1));
-    gameEngine.addEntity(new DogBoss(gameEngine, 112, -36, gravity));
+    // gameEngine.addEntity(new DogBoss(gameEngine, 112, -36, gravity));
     // gameEngine.addEntity(new GroundProjectile(gameEngine,7360,-2560,2,-2, gravity))
     // gameEngine.addEntity(new Ground(gameEngine, 1, 135, -32, 2, 1, 1, 0, 0));
     // gameEngine.addEntity(new AirProjectile(gameEngine, 106, -40, 0,0,1,0.2));

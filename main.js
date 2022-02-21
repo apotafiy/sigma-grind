@@ -68,10 +68,16 @@ ASSET_MANAGER.queueDownload('./sprites/player/zero_attack_right_two.png');
 ASSET_MANAGER.queueDownload(
     './sprites/player/zero_attack_right_three_114x64-Sheet.png'
 );
-//items
+
+// Player health bar, lives, and boss health bar
+ASSET_MANAGER.queueDownload('./sprites/player/health-bars.png');
+
+// Items
 ASSET_MANAGER.queueDownload('./sprites/items/health_pack_full_22x31.png');
 ASSET_MANAGER.queueDownload('./sprites/items/health_pack_small_25x16.png');
-//load in player sounds
+ASSET_MANAGER.queueDownload('./sprites/items/clock-16x20.png');
+
+// Player sound effects
 SOUND_MANAGER.queueDownload('player_jump', './sounds/player/jump_voice.wav');
 SOUND_MANAGER.queueDownload('player_walk', './sounds/player/player_walk.wav');
 SOUND_MANAGER.queueDownload('player_dash', './sounds/player/player_dash.wav');
