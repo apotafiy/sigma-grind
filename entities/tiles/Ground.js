@@ -180,7 +180,7 @@ class Ground {
     // }
     draw(ctx) {
         let that = this;
-        // console.log(that.vertical);
+
         for (let i = 0; i < that.vertical; i++) {
             for (let j = 0; j < that.horizontal; j++) {
                 if (i === 0 && that.includeTop && !that.dontDrawGrass[j]) {
