@@ -119,9 +119,14 @@ class Sigma {
             // Actions
             if (this.isIntro) {
                 // console.log(getDistance(this, this.game.player));
-                if (getDistance(this, this.game.player) <= 660) {
+                if (getDistance(this, this.game.player) <= 600) {
                     this.game.player.immobilized = true;
                     this.game.player.meetBoss = true;
+                    this.game.player.state = this.game.player.states.idle;
+                    this.game.player.velocity.x = 0;
+                    this.game.player.velocity.y = 0;
+                    this.game.player.updateBB();
+
                     this.state = this.states.spawnIn;
                     this.velocity.y += 60 * TICK;
                     this.y += this.velocity.y * TICK * this.scale;
@@ -145,6 +150,8 @@ class Sigma {
                         this.game.player.meetBoss = false;
                     }
                 } else {
+                    this.game.player.immobilized = false;
+                    this.game.player.meetBoss = false;
                     this.animations[this.states.spawnIn][0].elapsedTime = 0;
                 }
             }
@@ -159,6 +166,12 @@ class Sigma {
             }
             // Collision
             this.game.entities.forEach((entity) => {
+                // Collide with player attacks
+                if (entity.attackBB && this.BB.collide(entity.attackBB)) {
+                    console.log('ouch');
+                    this.teleport(14, 0);
+                }
+
                 if (entity.BB && this.BB.collide(entity.BB)) {
                     // Going down - check bottom collision
                     if (this.velocity.y > 0) {
@@ -204,6 +217,13 @@ class Sigma {
         this.setOffset();
     }
 
+    teleport(x, y) {
+        // set state to teleport
+        // play teleport animation, when done set to new position
+        this.x = x * 64;
+        this.y = y * 64;
+    }
+
     draw(ctx) {
         //damage blink
         // if (this.iframes >= 0) {
@@ -216,13 +236,15 @@ class Sigma {
         // }
 
         // console.log(this.state + ' ' + this.facing);
-        this.animations[this.state][this.facing].drawFrame(
-            this.game.clockTick,
-            ctx,
-            this.x - this.game.camera.x + this.spriteOffset.x,
-            this.y - this.game.camera.y + this.spriteOffset.y,
-            this.scale
-        );
+        if (getDistance(this, this.game.player) < 800) {
+            this.animations[this.state][this.facing].drawFrame(
+                this.game.clockTick,
+                ctx,
+                this.x - this.game.camera.x + this.spriteOffset.x,
+                this.y - this.game.camera.y + this.spriteOffset.y,
+                this.scale
+            );
+        }
 
         if (this.health <= 0) ctx.filter = `none`;
         if (this.iframes >= 0) {

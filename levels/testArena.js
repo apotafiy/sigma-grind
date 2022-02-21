@@ -1,5 +1,4 @@
 function testArena(gameEngine) {
-    let gravity = 0.2;
     gameEngine.addEntity(new Player(gameEngine, 1, 3));
 
     // High up
