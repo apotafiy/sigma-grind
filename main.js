@@ -10,6 +10,11 @@ ASSET_MANAGER.queueDownload('./sprites/title_screen/normal.png');
 ASSET_MANAGER.queueDownload('./sprites/title_screen/hardcore.png');
 ASSET_MANAGER.queueDownload('./sprites/title_screen/game_over.png');
 ASSET_MANAGER.queueDownload('./sprites/title_screen/mission_complete.png');
+// Beams
+ASSET_MANAGER.queueDownload('./sprites/verticalBeam.png');
+ASSET_MANAGER.queueDownload('./sprites/horizontalBeam.png');
+// SpikeBall
+ASSET_MANAGER.queueDownload('./sprites/spikeball.png');
 
 //Backgrounds
 ASSET_MANAGER.queueDownload('./sprites/backgrounds/water.png');
@@ -73,10 +78,12 @@ ASSET_MANAGER.queueDownload(
 // Player health bar, lives, and boss health bar
 ASSET_MANAGER.queueDownload('./sprites/player/health-bars.png');
 
-//items
+// Items
 ASSET_MANAGER.queueDownload('./sprites/items/health_pack_full_22x31.png');
 ASSET_MANAGER.queueDownload('./sprites/items/health_pack_small_25x16.png');
-//load in player sounds
+ASSET_MANAGER.queueDownload('./sprites/items/clock-16x20.png');
+
+// Player sound effects
 SOUND_MANAGER.queueDownload('player_jump', './sounds/player/jump_voice.wav');
 SOUND_MANAGER.queueDownload('player_walk', './sounds/player/player_walk.wav');
 SOUND_MANAGER.queueDownload('player_dash', './sounds/player/player_dash.wav');

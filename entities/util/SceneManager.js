@@ -32,6 +32,9 @@ class SceneManager {
                 this.backgroundMusicVolume.value / 100
             );
         }
+
+        this.msOffset = 0;
+
         this.xVelocity = 0;
         this.yVelocity = 0;
         this.acceleration = 2000;
@@ -140,8 +143,14 @@ class SceneManager {
         }
     }
     getFormattedTime() {
-        let now = Date.now();
+        let now = Date.now() - this.msOffset;
         let timeDifference = now - this.fullStartTime;
+
+        // If current time (in ms) ever goes negative, set it to 0
+        if (timeDifference < 0) {
+            this.fullStartTime = now + this.msOffset;
+            this.msOffset = 0;
+        }
         let m = 0;
         let s = 0;
         let ms = 0;

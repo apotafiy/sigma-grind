@@ -2,8 +2,13 @@ function loadLevelOne(gameEngine) {
     let gravity = 0.2;
 
     // gameEngine.addEntity(new Player(gameEngine, 108, -35));
+    gameEngine.addEntity(new Clock(gameEngine, 14, 6));
     gameEngine.addEntity(new Player(gameEngine, 3, 0));
     gameEngine.addEntity(new DogBoss(gameEngine, 112, -36, gravity));
+    gameEngine.addEntity(new SpikeBall(gameEngine, 4, 4));
+    //gameEngine.addEntity(new BeamBarrier(gameEngine, 5, 3, 0, 1));
+    //gameEngine.addEntity(new BeamBarrier(gameEngine, 1, 3, 1, 0.5));
+
     //gameEngine.addEntity(new Player(gameEngine, 67, -37));
     // gameEngine.addEntity(new Drill(gameEngine, 10, -1, 60));
     // gameEngine.addEntity(new Drill(gameEngine, 12, -1, 60));
@@ -14,11 +19,6 @@ function loadLevelOne(gameEngine) {
     // gameEngine.addEntity(new Drill(gameEngine, 22, -1, 60));
     // gameEngine.addEntity(new Drill(gameEngine, 24, -1, 60));
     // gameEngine.addEntity(new Drill(gameEngine, 26, -1, 60));
-    gameEngine.addEntity(new PopUpEnemy(gameEngine, 9, 5, false, 0));
-    gameEngine.addEntity(new PopUpEnemy(gameEngine, 10, 5, false, 1));
-    gameEngine.addEntity(new PopUpEnemy(gameEngine, 11, 5, false, 0));
-    gameEngine.addEntity(new PopUpEnemy(gameEngine, 12, 5, false, 1));
-    gameEngine.addEntity(new PopUpEnemy(gameEngine, 13, 5, false, 0));
 
     gameEngine.addEntity(new Ground(gameEngine, 1, -5, -6, 6, 20, 1, 0, 1));
     //start ground
