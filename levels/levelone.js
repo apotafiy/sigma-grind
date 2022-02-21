@@ -2,6 +2,7 @@ function loadLevelOne(gameEngine) {
     let gravity = 0.2;
 
     // gameEngine.addEntity(new Player(gameEngine, 108, -35));
+    gameEngine.addEntity(new Clock(gameEngine, 14, 6));
     gameEngine.addEntity(new Player(gameEngine, 3, 0));
     gameEngine.addEntity(new DogBoss(gameEngine, 112, -36, gravity));
     //gameEngine.addEntity(new Player(gameEngine, 67, -37));
