@@ -159,6 +159,11 @@ function loadLevelOne(gameEngine) {
     // gameEngine.addEntity(new AirProjectile(gameEngine, 106, -40, 0,0,1,0.2));
     //Grass Check
     gameEngine.addEntity(new Ground(gameEngine, 1, 3, 7, 400, 6, 1, 0, 0));
+    gameEngine.addEntity(new Turret(gameEngine, 7, 4, 0));
+    gameEngine.addEntity(new Turret(gameEngine, 8, 4, 1));
+    gameEngine.addEntity(new Turret(gameEngine, 9, 4, 2));
+    gameEngine.addEntity(new Turret(gameEngine, 10, 4, 3));
+
     for (let i = 0; i < 10; i++) {
         gameEngine.addEntity(
             new Ground(gameEngine, 1, 3 + i * 2, 4 - i, 2, 1, 1, 0, 0)
