@@ -122,8 +122,8 @@ class Ground {
         //shift over by the type of tile we want
         this.animations[0] = new Animator(
             ASSET_MANAGER.getAsset('./sprites/ground/ground_tiles.png'),
-            0 + this.type * 64,
-            0,
+            0 + 1* 64,
+            0 + (this.type - 1)* 64,
             64,
             64,
             0,
@@ -135,8 +135,8 @@ class Ground {
         //general grass tile
         this.animations[1] = new Animator(
             ASSET_MANAGER.getAsset('./sprites/ground/ground_tiles.png'),
-            0 + this.type * 64 * 2,
-            0,
+            0 + 1 * 64 * 2,
+            0 + (this.type - 1)* 64,
             64,
             64,
             0,
@@ -149,8 +149,9 @@ class Ground {
         //shift over by the type of tile we want
         this.animations[2] = new Animator(
             ASSET_MANAGER.getAsset('./sprites/ground/ground_tiles.png'),
-            0 + this.type * 64 * 3,
-            0,
+            0 + 1 * 64 * 3,
+            0 + (this.type - 1)* 64,
+            0 ,
             64,
             64,
             0,
@@ -162,8 +163,8 @@ class Ground {
         //right facing grass edge
         this.animations[3] = new Animator(
             ASSET_MANAGER.getAsset('./sprites/ground/ground_tiles.png'),
-            0 + this.type * 64 * 4,
-            0,
+            0 + 1 * 64 * 4,
+            0 + (this.type - 1)* 64,
             64,
             64,
             0,
