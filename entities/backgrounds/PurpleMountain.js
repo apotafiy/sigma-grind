@@ -1,19 +1,4 @@
 class PurpleMountain {
-    /**
-     *  draw method params
-     * start x position
-     * start y position
-     * sprite width
-     * sprite height
-     * frame count
-     *
-     * time per frame
-     */
-    /**
-     * 0 = walk left
-     * 1 = walk right
-     * 2 = jump
-     */
     constructor(game) {
         this.game = game;
         this.animations = [];
@@ -29,7 +14,7 @@ class PurpleMountain {
             0,
             0,
             600,
-            240,
+            600,
             1,
             1,
             0,
@@ -43,7 +28,7 @@ class PurpleMountain {
             0,
             0,
             600,
-            240,
+            600,
             1,
             1,
             0,
@@ -57,7 +42,7 @@ class PurpleMountain {
             0,
             0,
             600,
-            240,
+            600,
             1,
             1,
             0,
@@ -71,7 +56,7 @@ class PurpleMountain {
             0,
             0,
             600,
-            240,
+            600,
             1,
             1,
             0,
@@ -85,7 +70,7 @@ class PurpleMountain {
             0,
             0,
             600,
-            240,
+            600,
             1,
             1,
             0,
@@ -97,7 +82,6 @@ class PurpleMountain {
         let that = this;
         this.game.entities.forEach(function (entity) {
             if (entity instanceof Player) {
-                //set x offset based on where the player is located
                 that.xoffset = -that.game.camera.x * 0.02;
             }
         });
@@ -108,8 +92,8 @@ class PurpleMountain {
             this.animations[i].drawFrame(
                 this.game.clockTick,
                 ctx,
-                -1 + this.xoffset * (Math.pow(i, 2) + 1) * 0.1,
-                -499 - this.game.camera.y,
+                -1 + this.xoffset * (Math.pow(i, 2) + 1) * 0.2,
+                -1940 - this.game.camera.y,
                 4
             );
         }
