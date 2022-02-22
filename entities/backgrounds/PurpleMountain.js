@@ -98,7 +98,7 @@ class PurpleMountain {
         this.game.entities.forEach(function (entity) {
             if (entity instanceof Player) {
                 //set x offset based on where the player is located
-                that.xoffset = -that.game.camera.x * 0.05;
+                that.xoffset = -that.game.camera.x * 0.09;
             }
         });
     }
@@ -108,9 +108,9 @@ class PurpleMountain {
             this.animations[i].drawFrame(
                 this.game.clockTick,
                 ctx,
-                -200 + this.xoffset * (Math.pow(i, 2) + 1) * 0.1,
-                0,
-                4
+                -1 + this.xoffset * (Math.pow(i, 2) + 1) * 0.1,
+                -205 - this.game.camera.y,
+                4.5
             );
         }
     }
