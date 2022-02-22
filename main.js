@@ -13,11 +13,14 @@ ASSET_MANAGER.queueDownload('./sprites/title_screen/mission_complete.png');
 // Beams
 ASSET_MANAGER.queueDownload('./sprites/verticalBeam.png');
 ASSET_MANAGER.queueDownload('./sprites/horizontalBeam.png');
+
 // SpikeBall
 ASSET_MANAGER.queueDownload('./sprites/spikeball.png');
 
 //Backgrounds
 ASSET_MANAGER.queueDownload('./sprites/backgrounds/water.png');
+ASSET_MANAGER.queueDownload('./sprites/backgrounds/mountains.png');
+ASSET_MANAGER.queueDownload('./sprites/backgrounds/sky.png');
 //Ground tiles
 ASSET_MANAGER.queueDownload('./sprites/ground/ground-tile.png');
 ASSET_MANAGER.queueDownload('./sprites/ground/ground_tiles.png');
