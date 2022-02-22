@@ -160,5 +160,5 @@ function loadLevelOne(gameEngine) {
     gameEngine.entities.forEach(function (entity) {
         if (entity instanceof Ground) entity.checkForGrass();
     });
-    gameEngine.addEntity(new PurpleMountain(gameEngine));
+    gameEngine.addEntity(new Water(gameEngine));
 }

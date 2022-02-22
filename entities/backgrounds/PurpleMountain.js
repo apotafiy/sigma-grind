@@ -28,8 +28,8 @@ class PurpleMountain {
             ),
             0,
             0,
-            272,
-            260,
+            600,
+            240,
             1,
             1,
             0,
@@ -42,8 +42,8 @@ class PurpleMountain {
             ),
             0,
             0,
-            272,
-            260,
+            600,
+            240,
             1,
             1,
             0,
@@ -56,8 +56,8 @@ class PurpleMountain {
             ),
             0,
             0,
-            272,
-            260,
+            600,
+            240,
             1,
             1,
             0,
@@ -70,8 +70,8 @@ class PurpleMountain {
             ),
             0,
             0,
-            272,
-            260,
+            600,
+            240,
             1,
             1,
             0,
@@ -84,8 +84,8 @@ class PurpleMountain {
             ),
             0,
             0,
-            272,
-            260,
+            600,
+            240,
             1,
             1,
             0,
@@ -98,7 +98,7 @@ class PurpleMountain {
         this.game.entities.forEach(function (entity) {
             if (entity instanceof Player) {
                 //set x offset based on where the player is located
-                that.xoffset = -that.game.camera.x * 0.09;
+                that.xoffset = -that.game.camera.x * 0.02;
             }
         });
     }
@@ -109,8 +109,8 @@ class PurpleMountain {
                 this.game.clockTick,
                 ctx,
                 -1 + this.xoffset * (Math.pow(i, 2) + 1) * 0.1,
-                -205 - this.game.camera.y,
-                4.5
+                -499 - this.game.camera.y,
+                4
             );
         }
     }
