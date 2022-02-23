@@ -35,6 +35,8 @@ class Ground {
         this.type = type;
         this.xstart = xstart * 64;
         this.ystart = ystart * 64;
+        this.x = this.xstart;
+        this.y = this.ystart;
         this.horizontal = horizontal;
         this.vertical = vertical;
         this.includeTop = includeTop || false;
