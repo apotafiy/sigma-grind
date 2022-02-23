@@ -11,6 +11,7 @@ class Sigma {
             idle: 2,
             teleportOut: 3,
             teleportIn: 4,
+            dash: 5,
         };
         this.x = x * 64;
         // Place sigma higher up
@@ -23,6 +24,10 @@ class Sigma {
             x: x * 64,
             y: y * 64,
         };
+        this.teleportPoints = [
+            { x: (x + 2) * 64, y: (y - 2.5) * 64, type: 'right' },
+            { x: (x - 12) * 64, y: (y - 2.5) * 64, type: 'left' },
+        ];
 
         this.facing = 1;
         this.velocity = { x: 0, y: 0 };
@@ -59,7 +64,7 @@ class Sigma {
     }
 
     loadAnimation() {
-        for (var i = 0; i < 5; i++) {
+        for (var i = 0; i < 6; i++) {
             this.animations.push([]);
             for (var k = 0; k < 2; k++) {
                 // two directions
@@ -178,6 +183,34 @@ class Sigma {
             true,
             false
         );
+
+        // Dash
+        // face right
+        this.animations[this.states.dash][0] = new Animator(
+            ASSET_MANAGER.getAsset('./sprites/sigma/sigma-dash-97x100.png'),
+            485,
+            0,
+            97,
+            100,
+            5,
+            0.03,
+            0,
+            true,
+            false
+        );
+        // face left
+        this.animations[this.states.dash][1] = new Animator(
+            ASSET_MANAGER.getAsset('./sprites/sigma/sigma-dash-97x100.png'),
+            0,
+            0,
+            97,
+            100,
+            5,
+            0.03,
+            0,
+            false,
+            false
+        );
     }
 
     // TODO
@@ -218,7 +251,7 @@ class Sigma {
         const TICK = this.game.clockTick;
         if (this.isDead) {
         } else {
-            // Actions
+            // ACTIONS
             if (this.isIntro) {
                 if (getDistance(this.introObject, this.game.player) <= 300) {
                     this.game.player.immobilized = true;
@@ -244,7 +277,12 @@ class Sigma {
                     if (this.animations[this.states.wingsOff][1].isDone()) {
                         this.isIntro = false;
                         // after intro is done
-                        this.state = this.states.idle;
+                        // this.state = this.states.idle;
+
+                        // Dash after intro is done
+                        // for testing only, remove when done
+                        this.state = this.states.dash;
+
                         this.game.player.immobilized = false;
                         this.game.player.meetBoss = false;
                     }
@@ -254,22 +292,21 @@ class Sigma {
                     this.animations[this.states.spawnIn][1].elapsedTime = 0;
                 }
             }
+
+            // teleport
             if (
-                this.state == this.states.teleportIn ||
-                this.state == this.states.teleportOut
+                this.state === this.states.teleportIn ||
+                this.state === this.states.teleportOut
             ) {
-                let ranx = 0;
-                let rany = 0;
-                if (
-                    !this.animations[this.states.teleportOut][
-                        this.facing
-                    ].isDone()
-                ) {
-                    ranx = randomInt(10) + 1;
-                    rany = randomInt(-4) + 1;
-                }
-                this.teleport(ranx, rany);
+                this.teleport(this.teleportPoints[randomInt(2)]);
             }
+
+            // dash
+            if (this.state === this.states.dash) {
+                this.dashAttack();
+            }
+
+            // END ACTION
 
             if (!this.isIntro) {
                 // Update velocity
@@ -314,15 +351,22 @@ class Sigma {
                         this.BB.collide(entity.leftBB)
                     ) {
                         this.x = entity.BB.left - this.BB.width;
-                        this.facing = 0;
+                        // this.facing = 0;
                         if (this.velocity.x > 0) this.velocity.x = 0;
+                        if (this.state === this.states.dash) {
+                            this.state = this.states.idle;
+                            this.facing = 1;
+                        }
                     } else if (
                         entity instanceof Ground &&
                         this.BB.collide(entity.rightBB)
                     ) {
                         this.x = entity.BB.right;
-                        this.facing = 1;
+                        // this.facing = 1;
                         if (this.velocity.x < 0) this.velocity.x = 0;
+                        if (this.state === this.states.dash)
+                            this.state = this.states.idle;
+                        this.facing = 0;
                     }
                 }
             });
@@ -336,12 +380,18 @@ class Sigma {
         this.setOffset();
     }
 
-    teleport(x, y) {
+    teleport({ x, y, type }) {
+        // When teleporting, should not:
+        // - deal damage/ take damage
+        // - pogo
+        this.isHostile = false;
+        this.isPog = false;
+
         // set state to teleport out
         // console.log(this.state + ' ' + this.facing);
         if (this.animations[this.states.teleportOut][this.facing].isDone()) {
-            this.x = x * 64;
-            this.y = y * 64;
+            this.x = x;
+            this.y = y;
             // play teleport animation, when done set to new position
             // state is now teleport in
             this.state = this.states.teleportIn;
@@ -354,7 +404,18 @@ class Sigma {
             this.animations[this.states.teleportIn][
                 this.facing
             ].elapsedTime = 0;
+
+            // teleport done, set these back to true
+            this.isHostile = true;
+            this.isPog = true;
+            this.facing = type === 'right' ? 1 : 0;
         }
+    }
+
+    dashAttack() {
+        // Dash until hit a wall
+        this.velocity.x = this.facing === 0 ? 400 : -400;
+        this.x += this.velocity.x * this.game.clockTick * this.scale;
     }
 
     draw(ctx) {
@@ -413,6 +474,15 @@ class Sigma {
                 this.BB.y - this.game.camera.y,
                 this.BB.width,
                 this.BB.height
+            );
+
+            ctx.font = '20px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillStyle = 'black';
+            ctx.fillText(
+                this.x / 64 + ', ' + this.y / 64,
+                this.x - this.game.camera.x + 40, // camera sidescrolling
+                this.y - this.game.camera.y - 20
             );
         }
     }
