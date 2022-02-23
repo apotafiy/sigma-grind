@@ -107,11 +107,11 @@ SOUND_MANAGER.queueDownload(
 //rush soundEffects
 SOUND_MANAGER.queueDownload('rush_teleport', './sounds/rush/teleport.mp3');
 //background Music
-SOUND_MANAGER.queueDownload('background_1', ' ./sounds/background_song_1.mp3');
+SOUND_MANAGER.queueDownload('background_1', ' ./sounds/background_song_1.wav');
 // menu sound soundEffects
 SOUND_MANAGER.queueDownload('menu_select', ' ./sounds/menu/enter.wav');
 SOUND_MANAGER.queueDownload('menu_cycle', ' ./sounds/menu/option_switch.wav');
-SOUND_MANAGER.queueDownload('menu_music', ' ./sounds/menu/menu_music.mp3');
+SOUND_MANAGER.queueDownload('menu_music', ' ./sounds/menu/menu_music.wav');
 
 //item soundEffects
 SOUND_MANAGER.queueDownload('heal_1', ' ./sounds/items/heal.wav');
