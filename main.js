@@ -45,9 +45,19 @@ ASSET_MANAGER.queueDownload('./sprites/dogboss/dogboss_projectile_37x32.png');
 ASSET_MANAGER.queueDownload('./sprites/dogboss/spike_96x96.png');
 //Sigma Animations
 ASSET_MANAGER.queueDownload('./sprites/sigma/sigma-beam-1202x177.png');
+ASSET_MANAGER.queueDownload('./sprites/sigma/beam-aim-30x110.png');
+ASSET_MANAGER.queueDownload('./sprites/sigma/sigma-attack1-81x100.png');
+ASSET_MANAGER.queueDownload('./sprites/sigma/sigma-attack2-117x124.png');
+ASSET_MANAGER.queueDownload('./sprites/sigma/sigma-attack3-70x101.png');
+ASSET_MANAGER.queueDownload('./sprites/sigma/sigma-balls-32x32.png');
+ASSET_MANAGER.queueDownload('./sprites/sigma/sigma-dash-97x100.png');
+ASSET_MANAGER.queueDownload('./sprites/sigma/sigma-death-78x95.png');
 ASSET_MANAGER.queueDownload('./sprites/sigma/sigma-head-158x168.png');
 ASSET_MANAGER.queueDownload('./sprites/sigma/sigma-headAttack-158x168.png');
+ASSET_MANAGER.queueDownload('./sprites/sigma/sigma-headSpawn-156x170.png');
 ASSET_MANAGER.queueDownload('./sprites/sigma/sigma-spawnIn-180x117.png');
+ASSET_MANAGER.queueDownload('./sprites/sigma/sigma-teleport-55x100.png');
+ASSET_MANAGER.queueDownload('./sprites/sigma/sigma-wave-70x146.png');
 ASSET_MANAGER.queueDownload('./sprites/sigma/sigma-wingsOff-106x102.png');
 //player animations
 ASSET_MANAGER.queueDownload('./sprites/player/player-idle-43x48.png');

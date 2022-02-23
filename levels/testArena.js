@@ -1,8 +1,9 @@
 function testArena(gameEngine) {
-    gameEngine.addEntity(new Player(gameEngine, 1, 3));
+    gameEngine.addEntity(new Player(gameEngine, 1, 5));
 
     // High up
-    gameEngine.addEntity(new Sigma(gameEngine, 10, -3));
+    // Make sure to spawn sigma on or near the ground for this coords
+    gameEngine.addEntity(new Sigma(gameEngine, 10, 4));
 
     // Side walls
     gameEngine.addEntity(new Ground(gameEngine, 1, -5, -16, 6, 30, 1, 0, 1));

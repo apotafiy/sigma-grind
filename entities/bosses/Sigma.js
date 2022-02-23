@@ -9,11 +9,22 @@ class Sigma {
             spawnIn: 0,
             wingsOff: 1,
             idle: 2,
+            teleportOut: 3,
+            teleportIn: 4,
         };
         this.x = x * 64;
-        this.y = y * 64;
+        // Place sigma higher up
+        this.y = (y - 7) * 64;
 
-        this.facing = 0;
+        // Original position on the ground
+        // used to check distance with the player for intro
+        this.introObject = {
+            // x = the ground
+            x: x * 64,
+            y: y * 64,
+        };
+
+        this.facing = 1;
         this.velocity = { x: 0, y: 0 };
         this.fallAcc = 400;
 
@@ -38,7 +49,7 @@ class Sigma {
         // );
         // this.soundEffects.walk = SOUND_MANAGER.getSound('dogboss_walk');
 
-        this.animations = [[], []];
+        this.animations = [];
         this.spriteOffset = {
             x: 0,
             y: 0,
@@ -48,8 +59,16 @@ class Sigma {
     }
 
     loadAnimation() {
+        for (var i = 0; i < 5; i++) {
+            this.animations.push([]);
+            for (var k = 0; k < 2; k++) {
+                // two directions
+                this.animations[i].push([]);
+            }
+        }
+
         // Spawning in
-        this.animations[this.states.spawnIn][0] = new Animator(
+        this.animations[this.states.spawnIn][1] = new Animator(
             ASSET_MANAGER.getAsset('./sprites/sigma/sigma-spawnIn-180x117.png'),
             0,
             0,
@@ -63,7 +82,7 @@ class Sigma {
         );
 
         // Wings off
-        this.animations[this.states.wingsOff][0] = new Animator(
+        this.animations[this.states.wingsOff][1] = new Animator(
             ASSET_MANAGER.getAsset(
                 './sprites/sigma/sigma-wingsOff-106x102.png'
             ),
@@ -77,6 +96,88 @@ class Sigma {
             false,
             false
         );
+
+        // Idle
+        this.animations[this.states.idle][0] = new Animator(
+            ASSET_MANAGER.getAsset('./sprites/sigma/sigma-dash-97x100.png'),
+            873,
+            0,
+            97,
+            100,
+            1,
+            0,
+            0,
+            false,
+            false
+        );
+        this.animations[this.states.idle][1] = new Animator(
+            ASSET_MANAGER.getAsset('./sprites/sigma/sigma-dash-97x100.png'),
+            0,
+            0,
+            97,
+            100,
+            1,
+            0,
+            0,
+            false,
+            false
+        );
+
+        // Teleport away
+        // face right
+        this.animations[this.states.teleportOut][0] = new Animator(
+            ASSET_MANAGER.getAsset('./sprites/sigma/sigma-teleport-55x100.png'),
+            385,
+            0,
+            55,
+            100,
+            7,
+            0.09,
+            0,
+            true,
+            false
+        );
+        // face left
+        this.animations[this.states.teleportOut][1] = new Animator(
+            ASSET_MANAGER.getAsset('./sprites/sigma/sigma-teleport-55x100.png'),
+            0,
+            0,
+            55,
+            100,
+            7,
+            0.09,
+            0,
+            false,
+            false
+        );
+
+        // Teleport in
+        // face right
+        this.animations[this.states.teleportIn][0] = new Animator(
+            ASSET_MANAGER.getAsset('./sprites/sigma/sigma-teleport-55x100.png'),
+            385,
+            0,
+            55,
+            100,
+            7,
+            0.09,
+            0,
+            false,
+            false
+        );
+        // face left
+        this.animations[this.states.teleportIn][1] = new Animator(
+            ASSET_MANAGER.getAsset('./sprites/sigma/sigma-teleport-55x100.png'),
+            0,
+            0,
+            55,
+            100,
+            7,
+            0.09,
+            0,
+            true,
+            false
+        );
     }
 
     // TODO
@@ -84,12 +185,11 @@ class Sigma {
 
     updateBB() {
         this.lastBB = this.BB;
-        const yOffSet = 0; // Make sprite goes below the ground slightly not the bounding box itself
         this.BB = new BoundingBox(
             this.x,
             this.y,
             51 * this.scale,
-            93 * this.scale - yOffSet
+            87 * this.scale
         );
     }
 
@@ -104,6 +204,8 @@ class Sigma {
                 this.spriteOffset.y = -3;
                 break;
             case this.states.idle:
+                this.spriteOffset.x = this.facing === 0 ? -84 : -7;
+                this.spriteOffset.y = 1;
                 break;
             default:
                 this.spriteOffset.x = 0;
@@ -118,8 +220,7 @@ class Sigma {
         } else {
             // Actions
             if (this.isIntro) {
-                // console.log(getDistance(this, this.game.player));
-                if (getDistance(this, this.game.player) <= 600) {
+                if (getDistance(this.introObject, this.game.player) <= 300) {
                     this.game.player.immobilized = true;
                     this.game.player.meetBoss = true;
                     this.game.player.state = this.game.player.states.idle;
@@ -133,27 +234,41 @@ class Sigma {
                     if (
                         this.animations[
                             this.states.spawnIn
-                        ][0].currentFrame() === 13
+                        ][1].currentFrame() === 13
                     ) {
                         this.velocity.y = 100;
                     }
-                    if (this.animations[this.states.spawnIn][0].isDone()) {
+                    if (this.animations[this.states.spawnIn][1].isDone()) {
                         this.state = this.states.wingsOff;
                     }
-                    if (this.animations[this.states.wingsOff][0].isDone()) {
+                    if (this.animations[this.states.wingsOff][1].isDone()) {
                         this.isIntro = false;
                         // after intro is done
-                        // set state to wings off for now
-                        this.state = this.states.wingsOff;
-                        this.facing = 0;
+                        this.state = this.states.idle;
                         this.game.player.immobilized = false;
                         this.game.player.meetBoss = false;
                     }
                 } else {
                     this.game.player.immobilized = false;
                     this.game.player.meetBoss = false;
-                    this.animations[this.states.spawnIn][0].elapsedTime = 0;
+                    this.animations[this.states.spawnIn][1].elapsedTime = 0;
                 }
+            }
+            if (
+                this.state == this.states.teleportIn ||
+                this.state == this.states.teleportOut
+            ) {
+                let ranx = 0;
+                let rany = 0;
+                if (
+                    !this.animations[this.states.teleportOut][
+                        this.facing
+                    ].isDone()
+                ) {
+                    ranx = randomInt(10) + 1;
+                    rany = randomInt(-4) + 1;
+                }
+                this.teleport(ranx, rany);
             }
 
             if (!this.isIntro) {
@@ -168,8 +283,8 @@ class Sigma {
             this.game.entities.forEach((entity) => {
                 // Collide with player attacks
                 if (entity.attackBB && this.BB.collide(entity.attackBB)) {
-                    console.log('ouch');
-                    this.teleport(14, 0);
+                    // Trigger teleport for testing
+                    this.state = this.states.teleportOut;
                 }
 
                 if (entity.BB && this.BB.collide(entity.BB)) {
@@ -212,19 +327,38 @@ class Sigma {
                 }
             });
 
+            // Update facing
+            if (this.velocity.x < 0) this.facing = 1;
+            if (this.velocity.x > 0) this.facing = 0;
+
             this.updateBB();
         }
         this.setOffset();
     }
 
     teleport(x, y) {
-        // set state to teleport
-        // play teleport animation, when done set to new position
-        this.x = x * 64;
-        this.y = y * 64;
+        // set state to teleport out
+        // console.log(this.state + ' ' + this.facing);
+        if (this.animations[this.states.teleportOut][this.facing].isDone()) {
+            this.x = x * 64;
+            this.y = y * 64;
+            // play teleport animation, when done set to new position
+            // state is now teleport in
+            this.state = this.states.teleportIn;
+        }
+        if (this.animations[this.states.teleportIn][this.facing].isDone()) {
+            this.state = this.states.idle;
+            this.animations[this.states.teleportOut][
+                this.facing
+            ].elapsedTime = 0;
+            this.animations[this.states.teleportIn][
+                this.facing
+            ].elapsedTime = 0;
+        }
     }
 
     draw(ctx) {
+        console.log(this.state + ' ' + this.facing);
         //damage blink
         // if (this.iframes >= 0) {
         //     ctx.filter = ` brightness(${this.flashframes})`;
