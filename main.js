@@ -26,9 +26,7 @@ ASSET_MANAGER.queueDownload(
 ASSET_MANAGER.queueDownload(
     './sprites/backgrounds/purplemountain/parallax-mountain-foreground-trees.png'
 );
-ASSET_MANAGER.queueDownload(
-    './sprites/backgrounds/purplemountain/parallax-mountain-foreground-trees-fore.png'
-);
+
 ASSET_MANAGER.queueDownload(
     './sprites/backgrounds/purplemountain/parallax-mountain-montain-far.png'
 );
