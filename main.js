@@ -15,9 +15,29 @@ ASSET_MANAGER.queueDownload('./sprites/verticalBeam.png');
 ASSET_MANAGER.queueDownload('./sprites/horizontalBeam.png');
 // SpikeBall
 ASSET_MANAGER.queueDownload('./sprites/spikeball.png');
+// Turret
+ASSET_MANAGER.queueDownload('./sprites/turret/turret.png');
+ASSET_MANAGER.queueDownload('./sprites/turret/turretbullet.png');
 
 //Backgrounds
 ASSET_MANAGER.queueDownload('./sprites/backgrounds/water.png');
+ASSET_MANAGER.queueDownload(
+    './sprites/backgrounds/purplemountain/parallax-mountain-bg.png'
+);
+ASSET_MANAGER.queueDownload(
+    './sprites/backgrounds/purplemountain/parallax-mountain-foreground-trees.png'
+);
+
+ASSET_MANAGER.queueDownload(
+    './sprites/backgrounds/purplemountain/parallax-mountain-montain-far.png'
+);
+ASSET_MANAGER.queueDownload(
+    './sprites/backgrounds/purplemountain/parallax-mountain-mountains.png'
+);
+ASSET_MANAGER.queueDownload(
+    './sprites/backgrounds/purplemountain/parallax-mountain-trees.png'
+);
+
 //Ground tiles
 ASSET_MANAGER.queueDownload('./sprites/ground/ground-tile.png');
 ASSET_MANAGER.queueDownload('./sprites/ground/ground_tiles.png');
