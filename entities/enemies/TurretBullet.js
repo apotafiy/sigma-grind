@@ -20,9 +20,10 @@ class TurretBullet {
         this.animations = [];
         this.loadAnimations();
         this.trigWave = 0;
+        this.lifeExpectancy = 3;
         setTimeout(() => {
             this.die();
-        }, 1000 * 3);
+        }, 1000 * this.lifeExpectancy);
     }
     die() {
         this.removeFromWorld = true;
