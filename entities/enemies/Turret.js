@@ -105,8 +105,23 @@ class Turret {
             true,
             false
         );
+        this.animations[4] = new Animator(
+            ASSET_MANAGER.getAsset('./sprites/mettaur/fire.png'),
+            0,
+            0,
+            32,
+            46,
+            7,
+            0.05,
+            0,
+            false,
+            false
+        );
     }
     update() {
+        if (this.isAlive && this.health <= 0) {
+            this.die();
+        }
         if (this.isAlive) {
             if (getDistance(this, this.player) < this.aggroDistance) {
                 if (this.state == 0) {

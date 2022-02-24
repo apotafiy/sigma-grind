@@ -1030,7 +1030,7 @@ class Player {
                     if (entity && entity instanceof Turret) {
                         // console.log('kILL dRILL');
                         //if it has die method it should die
-                        entity.health -= 5;
+                        entity.health -= 10;
                     }
                     if (entity && entity instanceof DogBoss) {
                         // console.log('kILL dRILL');
