@@ -131,7 +131,7 @@ class Player {
             .min(0.005)
             .max(0.5)
             .step(0.005)
-            .onChange(val => {
+            .onChange((val) => {
                 this.attackSpeed = val;
                 this.loadAnimations();
             })
@@ -141,7 +141,7 @@ class Player {
             .min(0)
             .max(50)
             .step(1)
-            .onChange(val => {
+            .onChange((val) => {
                 MIN_RUN = val;
             })
             .name('MIN_RUN');
@@ -150,7 +150,7 @@ class Player {
             .min(0)
             .max(300)
             .step(1)
-            .onChange(val => {
+            .onChange((val) => {
                 MAX_RUN = val;
             })
             .name('MAX_RUN');
@@ -159,7 +159,7 @@ class Player {
             .min(0)
             .max(1000)
             .step(1)
-            .onChange(val => {
+            .onChange((val) => {
                 MAX_DASH = val;
             })
             .name('MAX_DASH');
@@ -168,7 +168,7 @@ class Player {
             .min(0)
             .max(1000)
             .step(1)
-            .onChange(val => {
+            .onChange((val) => {
                 ACC_RUN = val;
             })
             .name('ACC_RUN');
@@ -177,7 +177,7 @@ class Player {
             .min(0)
             .max(1000)
             .step(1)
-            .onChange(val => {
+            .onChange((val) => {
                 DEC_REL = val;
             })
             .name('DEC_REL');
@@ -186,7 +186,7 @@ class Player {
             .min(0)
             .max(1000)
             .step(1)
-            .onChange(val => {
+            .onChange((val) => {
                 DEC_SKID = val;
             })
             .name('DEC_SKID');
@@ -195,7 +195,7 @@ class Player {
             .min(0)
             .max(3000)
             .step(1)
-            .onChange(val => {
+            .onChange((val) => {
                 STOP_FALL = val;
             })
             .name('STOP_FALL');
@@ -204,7 +204,7 @@ class Player {
             .min(0)
             .max(1000)
             .step(1)
-            .onChange(val => {
+            .onChange((val) => {
                 STOP_FALL_A = val;
             })
             .name('STOP_FALL_A');
@@ -213,7 +213,7 @@ class Player {
             .min(0)
             .max(4000)
             .step(1)
-            .onChange(val => {
+            .onChange((val) => {
                 RUN_FALL = val;
             })
             .name('RUN_FALL');
@@ -222,7 +222,7 @@ class Player {
             .min(0)
             .max(1000)
             .step(1)
-            .onChange(val => {
+            .onChange((val) => {
                 RUN_FALL_A = val;
             })
             .name('RUN_FALL_A');
@@ -231,7 +231,7 @@ class Player {
             .min(0)
             .max(1000)
             .step(1)
-            .onChange(val => {
+            .onChange((val) => {
                 MAX_FALL = val;
             })
             .name('MAX_FALL');
@@ -240,7 +240,7 @@ class Player {
             .min(-1000)
             .max(0)
             .step(1)
-            .onChange(val => {
+            .onChange((val) => {
                 STOP_JUMP = val;
             })
             .name('STOP_JUMP');
@@ -249,7 +249,7 @@ class Player {
             .min(-1000)
             .max(0)
             .step(1)
-            .onChange(val => {
+            .onChange((val) => {
                 RUN_JUMP = val;
             })
             .name('RUN_JUMP');
@@ -258,7 +258,7 @@ class Player {
             .min(0)
             .max(600)
             .step(1)
-            .onChange(val => {
+            .onChange((val) => {
                 WALL_JUMP = val;
             })
             .name('WALL_JUMP');
@@ -1009,7 +1009,7 @@ class Player {
             // console.log(this.currentIFrameTimer);
 
             // collision
-            this.game.entities.forEach(entity => {
+            this.game.entities.forEach((entity) => {
                 //check for the enemy colliding with sword
                 // || entity instanceof Drill
                 if (entity.BB && this.attackBB.collide(entity.BB)) {
@@ -1023,6 +1023,11 @@ class Player {
                         entity.die();
                     }
                     if (entity && entity instanceof Drill) {
+                        // console.log('kILL dRILL');
+                        //if it has die method it should die
+                        entity.health -= 5;
+                    }
+                    if (entity && entity instanceof Turret) {
                         // console.log('kILL dRILL');
                         //if it has die method it should die
                         entity.health -= 5;
@@ -1148,7 +1153,10 @@ class Player {
                         ) {
                             // falling then hit jump, bounce from wall
                             //play wall jump soundEffect
-                            this.getRandomGrunt().play();
+                            const randomTemp = Math.random() * 9;
+                            if (randomTemp < 3) {
+                                this.getRandomGrunt().play();
+                            }
                             this.velocity.x = this.facing === 1 ? 100 : -100;
                             this.velocity.y = -WALL_JUMP;
                             this.fallAcc = STOP_FALL;
