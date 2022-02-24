@@ -358,7 +358,7 @@ class SceneManager {
                 }
                 //stop current background music and load the level
                 this.soundEffects.menu_music.pause();
-                loadPurpleMountain(this.game);
+                loadLevelOne(this.game);
                 this.currentState = -1;
                 this.setGameMode(this.game);
             }
