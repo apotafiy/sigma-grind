@@ -178,6 +178,7 @@ function loadPurpleMountain(gameEngine) {
     gameEngine.addEntity(new Turret(gameEngine, 8, 4, 1));
     gameEngine.addEntity(new Turret(gameEngine, 9, 4, 2));
     gameEngine.addEntity(new Turret(gameEngine, 10, 4, 3));
+    gameEngine.addEntity(new Drill(gameEngine, 15, 4, 5));
 
     gameEngine.addEntity(new Ground(gameEngine, 1, 3, 7, 400, 6, 1, 0, 0));
 
