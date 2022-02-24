@@ -1028,9 +1028,10 @@ class Player {
                         entity.health -= 5;
                     }
                     if (entity && entity instanceof Turret) {
-                        // console.log('kILL dRILL');
-                        //if it has die method it should die
-                        entity.health -= 10;
+                        if (entity.iframes <= 0) {
+                            entity.health -= 5;
+                            entity.iframes = 0.2;
+                        }
                     }
                     if (entity && entity instanceof DogBoss) {
                         // console.log('kILL dRILL');
@@ -1068,6 +1069,9 @@ class Player {
                         this.immobilized = true;
                         // console.log('Took ' + entity.collisionDamage + ' damage');
                         // console.log('Current HP: ' + this.health);
+                        if (entity instanceof TurretBullet) {
+                            entity.die();
+                        }
                     }
                     if (this.velocity.y > 0) {
                         // falling

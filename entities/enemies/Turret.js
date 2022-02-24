@@ -8,12 +8,13 @@ class Turret {
      */
     constructor(game, x, y, orientation) {
         this.game = game;
-        this.health = 50;
+        this.health = 20;
         this.isPog = true;
         this.entityArrayPos = game.entities.length;
         this.isAlive = true;
         this.isFiring = false;
-        this.shotsPerSecond = 1;
+        this.shotsPerSecond = 0.5;
+        this.iframes = 0;
         this.x = x * 64;
         this.y = y * 64;
         this.orientation = orientation;
@@ -49,7 +50,7 @@ class Turret {
             this.fire();
             setTimeout(() => {
                 this.startFiring();
-            }, 1000 * this.shotsPerSecond);
+            }, 1000 / this.shotsPerSecond);
         }
     }
     loadAnimations() {
@@ -87,10 +88,10 @@ class Turret {
             this.width,
             this.height,
             2,
-            0.3,
+            0.5,
             0,
             false,
-            false
+            true
         );
         // closing
         this.animations[3] = new Animator(
@@ -123,6 +124,9 @@ class Turret {
             this.die();
         }
         if (this.isAlive) {
+            if (this.iframes > 0) {
+                this.iframes -= 1 * this.game.clockTick;
+            }
             if (getDistance(this, this.player) < this.aggroDistance) {
                 if (this.state == 0) {
                     this.state = 1;
