@@ -21,6 +21,8 @@ class TurretBullet {
         this.loadAnimations();
         this.trigWave = 0;
         this.lifeExpectancy = 3;
+        this.isHostile = true;
+        this.collisionDamage = 1;
         setTimeout(() => {
             this.die();
         }, 1000 * this.lifeExpectancy);

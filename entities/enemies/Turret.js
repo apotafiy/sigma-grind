@@ -8,6 +8,8 @@ class Turret {
      */
     constructor(game, x, y, orientation) {
         this.game = game;
+        this.health = 50;
+        this.isPog = true;
         this.entityArrayPos = game.entities.length;
         this.isAlive = true;
         this.isFiring = false;
