@@ -27,7 +27,7 @@ class Turret {
     loadAnimations() {
         //idle
         this.animations[0] = new Animator(
-            ASSET_MANAGER.getAsset('./sprites/turret.png'),
+            ASSET_MANAGER.getAsset('./sprites/turret/turret.png'),
             0,
             0 + this.orientation * this.height,
             this.width,
@@ -40,7 +40,7 @@ class Turret {
         );
         //opening
         this.animations[1] = new Animator(
-            ASSET_MANAGER.getAsset('./sprites/turret.png'),
+            ASSET_MANAGER.getAsset('./sprites/turret/turret.png'),
             this.width,
             0 + this.orientation * this.height,
             this.width,
@@ -53,7 +53,7 @@ class Turret {
         );
         // open
         this.animations[2] = new Animator(
-            ASSET_MANAGER.getAsset('./sprites/turret.png'),
+            ASSET_MANAGER.getAsset('./sprites/turret/turret.png'),
             this.width * 3,
             0 + this.orientation * this.height,
             this.width,
@@ -66,7 +66,7 @@ class Turret {
         );
         // close
         this.animations[3] = new Animator(
-            ASSET_MANAGER.getAsset('./sprites/turret.png'),
+            ASSET_MANAGER.getAsset('./sprites/turret/turret.png'),
             this.width,
             0 + this.orientation * this.height,
             this.width,

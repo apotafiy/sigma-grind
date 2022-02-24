@@ -16,7 +16,8 @@ ASSET_MANAGER.queueDownload('./sprites/horizontalBeam.png');
 // SpikeBall
 ASSET_MANAGER.queueDownload('./sprites/spikeball.png');
 // Turret
-ASSET_MANAGER.queueDownload('./sprites/turret.png');
+ASSET_MANAGER.queueDownload('./sprites/turret/turret.png');
+ASSET_MANAGER.queueDownload('./sprites/turret/turretbullet.png');
 
 //Backgrounds
 ASSET_MANAGER.queueDownload('./sprites/backgrounds/water.png');
