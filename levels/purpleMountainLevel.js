@@ -1,4 +1,4 @@
-function loadLevelOne(gameEngine) {
+function loadPurpleMountain(gameEngine) {
     let gravity = 0.2;
     //gameEngine.addEntity(new PurpleMountainFore(gameEngine, 1));
 
@@ -161,18 +161,18 @@ function loadLevelOne(gameEngine) {
     // gameEngine.addEntity(new AirProjectile(gameEngine, 106, -40, 0,0,1,0.2));
     //Grass Check
 
-    gameEngine.addEntity(new TurretBullet(gameEngine, 7, 4));
-    gameEngine.addEntity(new TurretBullet(gameEngine, 8, 4));
-    gameEngine.addEntity(new TurretBullet(gameEngine, 9, 4));
-    gameEngine.addEntity(new TurretBullet(gameEngine, 10, 4));
-    gameEngine.addEntity(new TurretBullet(gameEngine, 11, 4));
-    gameEngine.addEntity(new TurretBullet(gameEngine, 12, 4));
-    gameEngine.addEntity(new TurretBullet(gameEngine, 13, 4));
-    gameEngine.addEntity(new TurretBullet(gameEngine, 14, 4));
-    gameEngine.addEntity(new TurretBullet(gameEngine, 15, 4));
-    gameEngine.addEntity(new TurretBullet(gameEngine, 16, 4));
-    gameEngine.addEntity(new TurretBullet(gameEngine, 17, 4));
-    gameEngine.addEntity(new TurretBullet(gameEngine, 18, 4));
+    // gameEngine.addEntity(new TurretBullet(gameEngine, 7, 4));
+    // gameEngine.addEntity(new TurretBullet(gameEngine, 8, 4));
+    // gameEngine.addEntity(new TurretBullet(gameEngine, 9, 4));
+    // gameEngine.addEntity(new TurretBullet(gameEngine, 10, 4));
+    // gameEngine.addEntity(new TurretBullet(gameEngine, 11, 4));
+    // gameEngine.addEntity(new TurretBullet(gameEngine, 12, 4));
+    // gameEngine.addEntity(new TurretBullet(gameEngine, 13, 4));
+    // gameEngine.addEntity(new TurretBullet(gameEngine, 14, 4));
+    // gameEngine.addEntity(new TurretBullet(gameEngine, 15, 4));
+    // gameEngine.addEntity(new TurretBullet(gameEngine, 16, 4));
+    // gameEngine.addEntity(new TurretBullet(gameEngine, 17, 4));
+    // gameEngine.addEntity(new TurretBullet(gameEngine, 18, 4));
 
     gameEngine.addEntity(new Turret(gameEngine, 7, 4, 0));
     gameEngine.addEntity(new Turret(gameEngine, 8, 4, 1));

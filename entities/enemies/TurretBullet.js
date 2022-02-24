@@ -20,10 +20,14 @@ class TurretBullet {
         this.animations = [];
         this.loadAnimations();
         this.trigWave = 0;
+        setTimeout(() => {
+            this.die();
+        }, 1000 * 3);
     }
     die() {
         this.removeFromWorld = true;
     }
+
     loadAnimations() {
         // active
         this.animations[0] = new Animator(

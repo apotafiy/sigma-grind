@@ -72,7 +72,7 @@ class SceneManager {
             .min(0)
             .max(2000)
             .step(1)
-            .onChange(val => {
+            .onChange((val) => {
                 this.acceleration = val;
             })
             .name('Acceleration');
@@ -81,7 +81,7 @@ class SceneManager {
             .min(0.0000001)
             .max(2)
             .step(0.00000001)
-            .onChange(val => {
+            .onChange((val) => {
                 this.friction = val;
             })
             .name('Friction');
@@ -90,7 +90,7 @@ class SceneManager {
             .min(0)
             .max(10)
             .step(1)
-            .onChange(val => {
+            .onChange((val) => {
                 this.FRICTON_MULT = val;
             })
             .name('FrictionMultiplier');
@@ -99,7 +99,7 @@ class SceneManager {
             .min(0.000000001)
             .max(2)
             .step(0.000000001)
-            .onChange(val => {
+            .onChange((val) => {
                 this.FRICTON_X = val;
             })
             .name('Friction X');
@@ -108,7 +108,7 @@ class SceneManager {
             .min(0.000000001)
             .max(2)
             .step(0.000000001)
-            .onChange(val => {
+            .onChange((val) => {
                 this.FRICTON_y = val;
             })
             .name('Friction Y');
@@ -117,7 +117,7 @@ class SceneManager {
             .min(0)
             .max(1)
             .step(0.001)
-            .onChange(val => {
+            .onChange((val) => {
                 this.interpolation = val;
             })
             .name('Interpolation');
@@ -358,7 +358,7 @@ class SceneManager {
                 }
                 //stop current background music and load the level
                 this.soundEffects.menu_music.pause();
-                loadLevelOne(this.game);
+                loadPurpleMountain(this.game);
                 this.currentState = -1;
                 this.setGameMode(this.game);
             }
