@@ -2,7 +2,8 @@ class Sigma {
     constructor(game, x, y) {
         Object.assign(this, { game, x, y });
         this.scale = 2;
-        // this.game = game;
+        this.game = game;
+        this.entityArrayPos = game.entities.length;
 
         this.state = 0;
         this.states = {
@@ -12,6 +13,9 @@ class Sigma {
             teleportOut: 3,
             teleportIn: 4,
             dash: 5,
+            attack1: 6, // Head kamehameha thing
+            attack2: 7, // Energy wave
+            attack3: 8, // Balls
         };
         this.x = x * 64;
         // Place sigma higher up
@@ -61,10 +65,13 @@ class Sigma {
         };
         this.loadAnimation();
         this.updateBB();
+        this.sigmaHead = new SigmaHead(this.game, null, null);
+
+        this.game.addEntityAtIndex(this.sigmaHead, this.entityArrayPos + 1);
     }
 
     loadAnimation() {
-        for (var i = 0; i < 6; i++) {
+        for (var i = 0; i < 9; i++) {
             this.animations.push([]);
             for (var k = 0; k < 2; k++) {
                 // two directions
@@ -211,6 +218,34 @@ class Sigma {
             false,
             false
         );
+
+        // Kamehameha - attack1
+        // face right
+        this.animations[this.states.attack1][0] = new Animator(
+            ASSET_MANAGER.getAsset('./sprites/sigma/sigma-attack1-81x100.png'),
+            243,
+            0,
+            81,
+            100,
+            2,
+            0.1,
+            0,
+            false,
+            false
+        );
+        // face left
+        this.animations[this.states.attack1][1] = new Animator(
+            ASSET_MANAGER.getAsset('./sprites/sigma/sigma-attack1-81x100.png'),
+            81,
+            0,
+            81,
+            100,
+            2,
+            0.1,
+            0,
+            true,
+            false
+        );
     }
 
     // TODO
@@ -240,6 +275,14 @@ class Sigma {
                 this.spriteOffset.x = this.facing === 0 ? -84 : -7;
                 this.spriteOffset.y = 1;
                 break;
+            case this.states.dash:
+                this.spriteOffset.x = this.facing === 0 ? -90 : 0;
+                this.spriteOffset.y = 1;
+                break;
+            case this.states.attack1:
+                this.spriteOffset.x = this.facing === 0 ? -8 : -51;
+                this.spriteOffset.y = 0;
+                break;
             default:
                 this.spriteOffset.x = 0;
                 this.spriteOffset.y = 0;
@@ -249,6 +292,17 @@ class Sigma {
 
     update() {
         const TICK = this.game.clockTick;
+
+        if (this.iframes >= 0) {
+            this.flashframes = (this.flashframes + 60 * TICK) % 10;
+        } else {
+            this.flashframes = 0;
+        }
+
+        if (this.health <= 0) this.die();
+
+        this.iframes -= 1 * this.game.clockTick;
+
         if (this.isDead) {
         } else {
             // ACTIONS
@@ -279,9 +333,9 @@ class Sigma {
                         // after intro is done
                         // this.state = this.states.idle;
 
-                        // Dash after intro is done
+                        // KAMEHAMEHA after intro is done
                         // for testing only, remove when done
-                        this.state = this.states.dash;
+                        this.state = this.states.attack1;
 
                         this.game.player.immobilized = false;
                         this.game.player.meetBoss = false;
@@ -304,6 +358,11 @@ class Sigma {
             // dash
             if (this.state === this.states.dash) {
                 this.dashAttack();
+            }
+
+            // kamehameha - attack1
+            if (this.state === this.states.attack1) {
+                this.kamehameha();
             }
 
             // END ACTION
@@ -364,9 +423,10 @@ class Sigma {
                         this.x = entity.BB.right;
                         // this.facing = 1;
                         if (this.velocity.x < 0) this.velocity.x = 0;
-                        if (this.state === this.states.dash)
+                        if (this.state === this.states.dash) {
                             this.state = this.states.idle;
-                        this.facing = 0;
+                            this.facing = 0;
+                        }
                     }
                 }
             });
@@ -418,20 +478,31 @@ class Sigma {
         this.x += this.velocity.x * this.game.clockTick * this.scale;
     }
 
-    draw(ctx) {
-        console.log(this.state + ' ' + this.facing);
-        //damage blink
-        // if (this.iframes >= 0) {
-        //     ctx.filter = ` brightness(${this.flashframes})`;
-        // }
+    kamehameha() {
+        this.sigmaHead.spawnIn = true;
+        this.sigmaHead.facing = this.facing;
+        if (this.facing === 1)
+            this.sigmaHead.x = this.x - this.sigmaHead.BB.width;
+        else this.sigmaHead.x = this.x + this.BB.width;
 
-        // if (this.health <= 0) {
-        //     ctx.filter = `brightness(100) hue-rotation(100deg)`;
-        //     this.scale = this.deathTimer;
-        // }
+        this.sigmaHead.y = this.y - this.BB.height;
+    }
+
+    draw(ctx) {
+        // console.log(getDistance(this, this.game.player));
+
+        // damage blink
+        if (this.iframes >= 0) {
+            ctx.filter = ` brightness(${this.flashframes})`;
+        }
+
+        if (this.health <= 0) {
+            // make scale = 0 so he disappear for now
+            this.scale = 0;
+        }
 
         // console.log(this.state + ' ' + this.facing);
-        if (getDistance(this, this.game.player) < 800) {
+        if (getDistance(this, this.game.player) < 1200) {
             this.animations[this.state][this.facing].drawFrame(
                 this.game.clockTick,
                 ctx,
@@ -439,11 +510,10 @@ class Sigma {
                 this.y - this.game.camera.y + this.spriteOffset.y,
                 this.scale
             );
-        }
-
-        if (this.health <= 0) ctx.filter = `none`;
-        if (this.iframes >= 0) {
-            ctx.filter = 'none';
+            if (this.iframes >= 0) {
+                ctx.filter = 'none';
+            }
+            this.healthBar.drawBossHealthBar(ctx);
         }
 
         // ctx.lineWidth = 2;
@@ -464,8 +534,6 @@ class Sigma {
         //     (this.health / this.maxHealth) * 200,
         //     30
         // );
-
-        this.healthBar.drawBossHealthBar(ctx);
 
         if (params.debug) {
             ctx.strokeStyle = 'Orange';

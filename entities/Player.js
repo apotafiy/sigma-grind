@@ -1134,6 +1134,13 @@ class Player {
                         entity.iframes = 0.5;
                     }
                 }
+                if (entity && entity instanceof Sigma) {
+                    if (entity.iframes <= 0) {
+                        entity.health -= 5;
+                        entity.health = Math.max(entity.health, 0);
+                        entity.iframes = 0.5;
+                    }
+                }
                 if (entity.isPog && this.isPogo) {
                     this.animations[3][0].elapsedTime = 0;
                     this.animations[3][1].elapsedTime = 0;
