@@ -65,8 +65,8 @@ class Sigma {
         };
         this.loadAnimation();
         this.updateBB();
-        this.sigmaHead = new SigmaHead(this.game, null, null);
 
+        this.sigmaHead = new SigmaHead(game, null, null);
         this.game.addEntityAtIndex(this.sigmaHead, this.entityArrayPos + 1);
     }
 
@@ -331,11 +331,11 @@ class Sigma {
                     if (this.animations[this.states.wingsOff][1].isDone()) {
                         this.isIntro = false;
                         // after intro is done
-                        // this.state = this.states.idle;
+                        this.state = this.states.idle;
 
                         // KAMEHAMEHA after intro is done
                         // for testing only, remove when done
-                        this.state = this.states.attack1;
+                        // this.state = this.states.attack1;
 
                         this.game.player.immobilized = false;
                         this.game.player.meetBoss = false;
@@ -469,6 +469,9 @@ class Sigma {
             this.isHostile = true;
             this.isPog = true;
             this.facing = type === 'right' ? 1 : 0;
+
+            // Kamehameha after teleport, delete later
+            this.state = this.states.attack1;
         }
     }
 
@@ -485,7 +488,8 @@ class Sigma {
             this.sigmaHead.x = this.x - this.sigmaHead.BB.width;
         else this.sigmaHead.x = this.x + this.BB.width;
 
-        this.sigmaHead.y = this.y - this.BB.height;
+        if (this.sigmaHead.state !== this.sigmaHead.states.attack)
+            this.sigmaHead.y = this.y - this.BB.height;
     }
 
     draw(ctx) {
