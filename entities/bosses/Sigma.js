@@ -66,8 +66,11 @@ class Sigma {
         this.loadAnimation();
         this.updateBB();
 
-        this.sigmaHead = new SigmaHead(game, null, null);
+        this.sigmaHead = new SigmaHead(game, null, null, null);
         this.game.addEntityAtIndex(this.sigmaHead, this.entityArrayPos + 1);
+        this.beam = new Beam(game, null, null, this.sigmaHead);
+        this.game.addEntityAtIndex(this.beam, this.entityArrayPos + 1);
+        this.sigmaHead.beam = this.beam;
     }
 
     loadAnimation() {
@@ -482,14 +485,36 @@ class Sigma {
     }
 
     kamehameha() {
-        this.sigmaHead.spawnIn = true;
-        this.sigmaHead.facing = this.facing;
-        if (this.facing === 1)
-            this.sigmaHead.x = this.x - this.sigmaHead.BB.width;
-        else this.sigmaHead.x = this.x + this.BB.width;
+        // console.log(this.sigmaHead.beamEnd);
+        if (this.sigmaHead.beamEnd > 0) {
+            this.sigmaHead.spawnIn = true;
+            this.sigmaHead.facing = this.facing;
+            if (this.facing === 1)
+                this.sigmaHead.x = this.x - this.sigmaHead.BB.width;
+            else this.sigmaHead.x = this.x + this.BB.width;
 
-        if (this.sigmaHead.state !== this.sigmaHead.states.attack)
-            this.sigmaHead.y = this.y - this.BB.height;
+            if (this.sigmaHead.state !== this.sigmaHead.states.attack)
+                this.sigmaHead.y = this.y - this.BB.height;
+        } else {
+            this.sigmaHead.spawnIn = false;
+            this.sigmaHead.spawnOut = true;
+            // this.entityArrayPos -= 1;
+            this.state = this.states.idle;
+
+            // Reset Kamehameha
+            this.sigmaHead = new SigmaHead(this.game, null, null);
+            this.game.addEntityAtIndex(this.sigmaHead, this.entityArrayPos + 1);
+            this.sigmaHead.beam = new Beam(
+                this.game,
+                null,
+                null,
+                this.sigmaHead
+            );
+            this.game.addEntityAtIndex(
+                this.sigmaHead.beam,
+                this.entityArrayPos + 1
+            );
+        }
     }
 
     draw(ctx) {
