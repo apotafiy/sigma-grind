@@ -220,6 +220,7 @@ class GameEngine {
   }
 
   update() {
+      let updatedThisTic = 0;
     if (this.clear_level && this.clear_level == true) {
       //we know it is safe to clear everything Here
       this.clear();
@@ -232,8 +233,10 @@ class GameEngine {
 
     //   if (!entity.removeFromWorld) {
     //     entity.update();
+    //     updatedThisTic ++;
     //   }
     // }
+
     //Player radius updates only
     for (let i = this.entities.length - 1; i >= 0; i--) {
       if (
@@ -241,18 +244,21 @@ class GameEngine {
         (getDistance(this.entities[i], this.player) < 700 ||
           this.entities[i] instanceof Water ||
           this.entities[i] instanceof Spike ||
-          this.entities[i] instanceof SceneManager)
+          this.entities[i] instanceof SceneManager ||
+          this.entities[i] instanceof Drill)
       ) {
         //if the player exists update things close to the player
         let entity = this.entities[i];
         if (!entity.removeFromWorld) {
           entity.update();
+          updatedThisTic++;
         }
       } else if (!this.player) {
         //if no player update everythign so we dont crash
         let entity = this.entities[i];
         if (!entity.removeFromWorld) {
           entity.update();
+          updatedThisTic++;
         }
       } else if (this.entities[i] instanceof Ground) {
         if (
@@ -266,10 +272,12 @@ class GameEngine {
             let entity = this.entities[i];
             if (!entity.removeFromWorld) {
               entity.update();
+              updatedThisTic++;
             }
         }
       }
     }
+    //END PLAYER RAD UPDATE
     for (let i = this.entities.length - 1; i >= 0; --i) {
       if (this.entities[i].removeFromWorld) {
         this.entities.splice(i, 1);
@@ -281,6 +289,9 @@ class GameEngine {
     } else if (!params.debug && document.getElementById("fpsCounter")) {
       document.getElementById("fpsCounter").remove();
     }
+    //display entities we are updating per tic!
+    document.getElementById('state').innerHTML =
+            'Updating: ' + updatedThisTic;
   }
 
   getPlayer() {

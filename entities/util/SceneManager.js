@@ -373,8 +373,8 @@ class SceneManager {
                 this.menuCooldown = 0.2;
             }
         }
-        document.getElementById('state').innerHTML =
-            'Entity Count: ' + this.game.entities.length;
+        // document.getElementById('state').innerHTML =
+        //     'Entity Count: ' + this.game.entities.length;
     }
 
     draw(ctx) {
