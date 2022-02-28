@@ -1,5 +1,5 @@
 class Clock {
-    constructor(game, x, y) {
+    constructor(game, x, y, time) {
         this.game = game;
         this.x = x * 64;
         this.y = y * 64;
@@ -49,7 +49,7 @@ class Clock {
         );
         this.lastBB = this.BB;
         this.grabbed = false;
-        this.decrementOffset = 5000;
+        this.decrementOffset = time;
 
         // Sound effect(s)
         this.soundEffects = {};
