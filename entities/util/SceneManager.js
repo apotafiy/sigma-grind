@@ -51,7 +51,7 @@ class SceneManager {
         this.interpolation = 0.06;
         this.background_songs = {};
         this.background_songs.intro = SOUND_MANAGER.getSound('background_1');
-
+      
         SceneManagerDatGUI(game, this);
     }
 
@@ -289,9 +289,10 @@ class SceneManager {
                 //stop current background music and load the level
                 this.soundEffects.menu_music.pause();
                 loadLevelOne(this.game);
-
+              
                 // sigmaArena(this.game);
-
+                //loadPurpleMountain(this.game);
+              
                 this.currentState = -1;
                 this.setGameMode(this.game);
             }
