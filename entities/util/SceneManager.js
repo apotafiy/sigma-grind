@@ -57,60 +57,16 @@ class SceneManager {
 
     initGUI() {
         // Dat GUI stuff
+        this.game.gui
+            .add(params, 'fps')
+            .min(1)
+            .max(144)
+            .step(1)
+            .onChange((val) => (params.fps = val));
         this.cameraFolder = this.game.gui.addFolder('Camera values');
         this.testValues = {
-            accel: this.acceleration,
-            frixn: this.friction,
-            frixnMult: this.FRICTON_MULT,
-            frictionx: this.FRICTON_X,
-            frictiony: this.FRICTON_Y,
             interpolation: this.interpolation,
         };
-        this.cameraFolder
-            .add(this.testValues, 'accel')
-            .min(0)
-            .max(2000)
-            .step(1)
-            .onChange((val) => {
-                this.acceleration = val;
-            })
-            .name('Acceleration');
-        this.cameraFolder
-            .add(this.testValues, 'frixn')
-            .min(0.0000001)
-            .max(2)
-            .step(0.00000001)
-            .onChange((val) => {
-                this.friction = val;
-            })
-            .name('Friction');
-        this.cameraFolder
-            .add(this.testValues, 'frixnMult')
-            .min(0)
-            .max(10)
-            .step(1)
-            .onChange((val) => {
-                this.FRICTON_MULT = val;
-            })
-            .name('FrictionMultiplier');
-        this.cameraFolder
-            .add(this.testValues, 'frictionx')
-            .min(0.000000001)
-            .max(2)
-            .step(0.000000001)
-            .onChange((val) => {
-                this.FRICTON_X = val;
-            })
-            .name('Friction X');
-        this.cameraFolder
-            .add(this.testValues, 'frictiony')
-            .min(0.000000001)
-            .max(2)
-            .step(0.000000001)
-            .onChange((val) => {
-                this.FRICTON_y = val;
-            })
-            .name('Friction Y');
         this.cameraFolder
             .add(this.testValues, 'interpolation')
             .min(0)

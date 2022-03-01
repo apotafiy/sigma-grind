@@ -142,5 +142,5 @@ ASSET_MANAGER.downloadAll(() => {
     // gameEngine.addEntity(new GroundHorse(gameEngine));
 
     // start game with 60 fps cap
-    gameEngine.start(60);
+    gameEngine.start();
 });

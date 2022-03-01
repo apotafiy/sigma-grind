@@ -59,14 +59,14 @@ class GameEngine {
         this.player = this.getPlayer();
     }
 
-    start(fps) {
-        let fpsInterval = 1000 / fps;
+    start() {
         let then = Date.now();
 
         this.running = true;
         const gameLoop = () => {
             requestAnimFrame(gameLoop, this.ctx.canvas);
 
+            let fpsInterval = 1000 / params.fps;
             let now = Date.now();
             let elapsed = now - then;
             if (elapsed > fpsInterval) {

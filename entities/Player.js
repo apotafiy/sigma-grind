@@ -143,6 +143,7 @@ class Player {
             STOP_JUMP: STOP_JUMP,
             RUN_JUMP: RUN_JUMP,
             WALL_JUMP: WALL_JUMP,
+            POGO_JUMP: POGO_JUMP,
         };
         this.playerFolder
             .add(this.testValues, 'attackSpeed')
@@ -152,8 +153,7 @@ class Player {
             .onChange((val) => {
                 this.attackSpeed = val;
                 this.loadAnimations();
-            })
-            .name('Attack Speed');
+            });
         this.playerFolder
             .add(this.testValues, 'MIN_RUN')
             .min(0)
@@ -161,8 +161,7 @@ class Player {
             .step(1)
             .onChange((val) => {
                 MIN_RUN = val;
-            })
-            .name('MIN_RUN');
+            });
         this.playerFolder
             .add(this.testValues, 'MAX_RUN')
             .min(0)
@@ -170,8 +169,7 @@ class Player {
             .step(1)
             .onChange((val) => {
                 MAX_RUN = val;
-            })
-            .name('MAX_RUN');
+            });
         this.playerFolder
             .add(this.testValues, 'MAX_DASH')
             .min(0)
@@ -179,8 +177,7 @@ class Player {
             .step(1)
             .onChange((val) => {
                 MAX_DASH = val;
-            })
-            .name('MAX_DASH');
+            });
         this.playerFolder
             .add(this.testValues, 'ACC_RUN')
             .min(0)
@@ -188,8 +185,7 @@ class Player {
             .step(1)
             .onChange((val) => {
                 ACC_RUN = val;
-            })
-            .name('ACC_RUN');
+            });
         this.playerFolder
             .add(this.testValues, 'DEC_REL')
             .min(0)
@@ -197,8 +193,7 @@ class Player {
             .step(1)
             .onChange((val) => {
                 DEC_REL = val;
-            })
-            .name('DEC_REL');
+            });
         this.playerFolder
             .add(this.testValues, 'DEC_SKID')
             .min(0)
@@ -206,8 +201,7 @@ class Player {
             .step(1)
             .onChange((val) => {
                 DEC_SKID = val;
-            })
-            .name('DEC_SKID');
+            });
         this.playerFolder
             .add(this.testValues, 'STOP_FALL')
             .min(0)
@@ -215,8 +209,7 @@ class Player {
             .step(1)
             .onChange((val) => {
                 STOP_FALL = val;
-            })
-            .name('STOP_FALL');
+            });
         this.playerFolder
             .add(this.testValues, 'STOP_FALL_A')
             .min(0)
@@ -224,8 +217,7 @@ class Player {
             .step(1)
             .onChange((val) => {
                 STOP_FALL_A = val;
-            })
-            .name('STOP_FALL_A');
+            });
         this.playerFolder
             .add(this.testValues, 'RUN_FALL')
             .min(0)
@@ -233,8 +225,7 @@ class Player {
             .step(1)
             .onChange((val) => {
                 RUN_FALL = val;
-            })
-            .name('RUN_FALL');
+            });
         this.playerFolder
             .add(this.testValues, 'RUN_FALL_A')
             .min(0)
@@ -242,8 +233,7 @@ class Player {
             .step(1)
             .onChange((val) => {
                 RUN_FALL_A = val;
-            })
-            .name('RUN_FALL_A');
+            });
         this.playerFolder
             .add(this.testValues, 'MAX_FALL')
             .min(0)
@@ -251,8 +241,7 @@ class Player {
             .step(1)
             .onChange((val) => {
                 MAX_FALL = val;
-            })
-            .name('MAX_FALL');
+            });
         this.playerFolder
             .add(this.testValues, 'STOP_JUMP')
             .min(-1000)
@@ -260,8 +249,7 @@ class Player {
             .step(1)
             .onChange((val) => {
                 STOP_JUMP = val;
-            })
-            .name('STOP_JUMP');
+            });
         this.playerFolder
             .add(this.testValues, 'RUN_JUMP')
             .min(-1000)
@@ -269,8 +257,7 @@ class Player {
             .step(1)
             .onChange((val) => {
                 RUN_JUMP = val;
-            })
-            .name('RUN_JUMP');
+            });
         this.playerFolder
             .add(this.testValues, 'WALL_JUMP')
             .min(0)
@@ -278,8 +265,15 @@ class Player {
             .step(1)
             .onChange((val) => {
                 WALL_JUMP = val;
-            })
-            .name('WALL_JUMP');
+            });
+        this.playerFolder
+            .add(this.testValues, 'POGO_JUMP')
+            .min(-1000)
+            .max(0)
+            .step(1)
+            .onChange((val) => {
+                POGO_JUMP = val;
+            });
     }
 
     loadAnimations() {
@@ -1195,8 +1189,8 @@ class Player {
                     // hit ceiling...
                     if (
                         (entity instanceof Ground || entity instanceof Spike) &&
-                        (this.lastBB.top >= entity.BB.bottom ||
-                            this.BB.collide(entity.bottomBB))
+                        this.lastBB.top >= entity.BB.bottom &&
+                        this.BB.collide(entity.bottomBB)
                         // this.BB.collide(entity.bottomBB)
                     ) {
                         this.velocity.y = 0;
@@ -1205,6 +1199,12 @@ class Player {
                         this.game.keys.Space = false;
                         this.game.keys.KeyJ = false;
                         this.game.keys.KeyK = false;
+                        if (
+                            this.state === this.states.jump ||
+                            this.state === this.states.wallHang
+                        ) {
+                            this.y = entity.bottomBB.y + entity.bottomBB.height;
+                        }
                     }
                 }
 
