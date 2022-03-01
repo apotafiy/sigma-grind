@@ -15,13 +15,17 @@ let STOP_JUMP = -240;
 let RUN_JUMP = -300;
 let WALL_JUMP = 600;
 let POGO_JUMP = -200;
+
+// BLOCK DIMENSION FOR THE GAME WORLD
+let BLOCK_DIMENSION = 64;
+
 class Player {
     constructor(game, x, y) {
         Object.assign(this, { game, x, y });
         this.flashframes = 0;
 
-        this.x = x * 64;
-        this.y = y * 64;
+        this.x = x * BLOCK_DIMENSION;
+        this.y = y * BLOCK_DIMENSION;
         this.game.player = this;
         this.animationTick = 0;
 
@@ -42,13 +46,27 @@ class Player {
         this.isPogo = false;
         this.pogoTimer = 0;
 
-        // Gives the player a health bar
-        this.health = params.hardcore ? 50 : 150;
-        this.maxHealth = params.hardcore ? 50 : 150;
+        // PLAYER HEALTH AND IFRAME SYSTEM
+        this.normalModeHP = 150;
+        this.hardcoreModeHP = 50;
+        this.maxHealth = params.hardcore
+            ? this.hardcoreModeHP
+            : this.normalModeHP;
+        this.health = this.maxHealth;
+        this.currentIFrameTimer = 0;
+        // NOTE: 60 TICKS PER SECOND
+        this.maxIFrameTimer = 60;
+
+        // PLAYER HEALTH BAR AND HEALTH DRAWING
         this.healthBar = new HealthBar(this);
 
-        this.currentIFrameTimer = 0;
-        this.maxIFrameTimer = 60; // 60 ticks * 1 second/60 ticks = 1 second
+        // PLAYER LIFE SYSTEM
+        this.maxLivesLeft = 2;
+        this.livesLeft = this.maxLivesLeft;
+
+        // PLAYER CHECKPOINT SYSTEM
+        this.checkpointX = this.x;
+        this.checkpointY = this.y;
 
         /* States:
         0 - idle
@@ -653,7 +671,7 @@ class Player {
                 this.spriteOffset.yOffset = -45;
                 break;
             case this.states.immobilized:
-                this.spriteOffset.xOffset = this.facing === 0 ? 2 : 6;
+                this.spriteOffset.xOffset = this.facing === 0 ? 2 : -18;
                 this.spriteOffset.yOffset = -3;
         }
 
@@ -667,32 +685,6 @@ class Player {
             (this.currentSize.width - widthOffset) * 2,
             (this.currentSize.height - heightOffset) * 2
         );
-    }
-
-    // TODO
-    die() {
-        // debugger;
-        // this.removeFromWorld = true;
-        // move back to start for now
-        // this.velocity.x = 0;
-        // this.velocity.y = 0;
-        // this.x = 3 * 64;
-        // this.y = -2*64;
-        // this.health = this.maxHealth;
-        // this.velocity.x = 0;
-        // this.velocity.y = 0;
-        // this.fallAcc = 0;
-        // this.state = this.states.death;
-
-        // this.dead = false;
-        this.game.camera.isLevel = false;
-        this.game.camera.currentState = 2;
-        this.game.camera.setMenuMode(this.game);
-        this.removeFromWorld = true;
-
-        // reset death animation to beginning
-        this.animations[11][0].elapsedTime = 0;
-        this.animations[11][1].elapsedTime = 0;
     }
 
     updateAttackBB() {
@@ -1071,9 +1063,30 @@ class Player {
                 this.velocity.y;
         }
 
-        // Fall off map = dead
-        // Assuming block width is 64
-        if (this.y > 64 * 16 || this.health <= 0) this.die();
+        // -------------- DEATH AND LOSING CONDITION ----------------
+        if (
+            (this.livesLeft >= 0 && this.health <= 0) ||
+            this.y > BLOCK_DIMENSION * 16
+        ) {
+            this.dead = true;
+        }
+
+        // Player dies
+        if (this.dead) {
+            this.state = this.states.dead; // Plays death animation
+            // Once the death animation is finished
+            if (this.animations[this.state][this.facing].isDone()) {
+                // If he has more live(s) remaining, he will respawn
+                if (this.livesLeft > 0) {
+                    this.respawn();
+                }
+                // Otherwise, the player loses
+                else {
+                    this.lose();
+                }
+            }
+        }
+        // ----------------------------------------------------------
     }
 
     handleVelocity() {
@@ -1343,20 +1356,30 @@ class Player {
             ctx.textAlign = 'center';
             ctx.fillStyle = 'black';
             ctx.fillText(
-                Math.floor(this.x / 64) +
+                Math.floor(this.x / BLOCK_DIMENSION) +
                     ', ' +
-                    Math.floor(this.y / 64) +
+                    Math.floor(this.y / BLOCK_DIMENSION) +
                     ', ' +
                     this.health,
                 this.x - this.game.camera.x + this.spriteOffset.xOffset + 40, // camera sidescrolling
                 this.y - this.game.camera.y + this.spriteOffset.yOffset - 20
             );
         }
+
+        // ----------- PLAYER HEALTH BAR ----------------------
         // Draws the health bar that follows the player
         // this.healthBar.drawHealthBarFollow(ctx);
 
         // Draws the health bar that is static at the top-left
         this.healthBar.drawPlayerHealthBar(ctx);
+
+        // Draws the player lives
+        this.healthBar.drawPlayerLives(
+            ctx,
+            this.game.clockTick,
+            this.livesLeft
+        );
+        // ----------------------------------------------------
     }
     getRandomGrunt() {
         let theGrunt = this.getRandomInt(1, 5);
@@ -1378,5 +1401,27 @@ class Player {
         min = Math.ceil(min);
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min) + min);
+    }
+
+    // PLAYER RESPAWN
+    respawn() {
+        this.dead = false; // Player is alive
+        // Respawns at the checkpoint and if there is no
+        // checkpoint, he respawns at the spawn location
+        this.x = this.checkpointX;
+        this.y = this.checkpointY;
+        this.health = this.maxHealth; // Replenish health
+        this.livesLeft--; // Loses a life
+    }
+
+    // PLAYER LOSES
+    lose() {
+        this.game.camera.isLevel = false;
+        this.game.camera.currentState = 2;
+        this.game.camera.setMenuMode(this.game);
+        this.removeFromWorld = true;
+        // Reset death animation to the beginning
+        this.animations[11][0].elapsedTime = 0;
+        this.animations[11][1].elapsedTime = 0;
     }
 }

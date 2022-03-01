@@ -1,5 +1,5 @@
 class HealthBar {
-    // Entity that has a health bar
+    // HEALTH BAR FOR ANY ENTITY
     constructor(entity) {
         Object.assign(this, { entity });
 
@@ -7,12 +7,12 @@ class HealthBar {
             './sprites/player/health-bars.png'
         );
 
-        // Health colors
+        // HEALTH % COLORS
         this.green = '#18BD1A';
         this.yellow = 'Yellow';
         this.red = 'Red';
 
-        // Player health bar
+        // PLAYER HEALTH BAR
         this.playerHealthBar = new Animator(
             this.healthBarSprite,
             0,
@@ -25,6 +25,8 @@ class HealthBar {
             0,
             0
         );
+
+        // COORDINATES FOR PLAYER STATIC HEALTH BAR
         this.playerHealthBarX = 30;
         this.playerHealthBarY = 150;
         this.playerHPBarScale = 3;
@@ -33,7 +35,12 @@ class HealthBar {
         this.playerHealthWidth = 15;
         this.playerHealthHeight = -102;
 
-        // Boss health bar
+        // COORDINATES FOR PLAYER LIVES
+        this.playerLivesX = 102;
+        this.playerLivesY = 279;
+        this.playerLivesScale = 3;
+
+        // BOSS HEALTH BAR
         this.bossHealthBar = new Animator(
             this.healthBarSprite,
             48,
@@ -46,6 +53,8 @@ class HealthBar {
             0,
             0
         );
+
+        // COORDINATES FOR BOSS STATIC HEALTH BAR
         this.canvasWidth = 1024;
         this.bossHealthBarX = this.canvasWidth - 106;
         this.bossHealthBarY = 90;
@@ -56,9 +65,7 @@ class HealthBar {
         this.bossHealthHeight = -156;
     }
 
-    update() {}
-
-    // Draws a health bar that follows the entity
+    // DRAWS FOLLOWING HEALTH BAR
     drawHealthBarFollow(ctx) {
         // Health bar settings
         let healthBarWidth = this.entity.BB.width;
@@ -95,9 +102,8 @@ class HealthBar {
         );
     }
 
-    // Draws the static player health bar
+    // DRAWS THE STATIC PLAYER HEALTH BAR
     drawPlayerHealthBar(ctx) {
-        // Draws the HP bar at the top left
         this.playerHealthBar.drawFrame(
             1,
             ctx,
@@ -122,13 +128,35 @@ class HealthBar {
             this.playerHealthHeight * percentHP
         );
 
-        // Changes stroke style to black for the timer
+        // Changes stroke style back to black for the timer
         ctx.strokeStyle = 'Black';
     }
 
-    // Draws the static boss health bar
+    // DRAWS THE PLAYER'S LIVE(S)
+    drawPlayerLives(ctx, clockTick, livesLeft) {
+        let playerLives = new Animator(
+            this.healthBarSprite,
+            Math.max(livesLeft * 16, 0),
+            89,
+            16,
+            7,
+            1,
+            1,
+            0,
+            0,
+            0
+        );
+        playerLives.drawFrame(
+            clockTick,
+            ctx,
+            this.playerLivesX,
+            this.playerLivesY,
+            this.playerLivesScale
+        );
+    }
+
+    // DRAWS THE STATIC BOSS HEALTH BAR
     drawBossHealthBar(ctx) {
-        // Draws the HP bar at the top right
         this.bossHealthBar.drawFrame(
             1,
             ctx,
@@ -153,7 +181,7 @@ class HealthBar {
             this.bossHealthHeight * percentHP
         );
 
-        // Changes stroke style to black for the timer
+        // Changes stroke style back to black for the timer
         ctx.strokeStyle = 'Black';
     }
 }
