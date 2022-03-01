@@ -66,11 +66,9 @@ class Sigma {
         this.loadAnimation();
         this.updateBB();
 
-        this.sigmaHead = new SigmaHead(game, null, null, null);
-        this.game.addEntityAtIndex(this.sigmaHead, this.entityArrayPos + 1);
-        this.beam = new Beam(game, null, null, this.sigmaHead);
-        this.game.addEntityAtIndex(this.beam, this.entityArrayPos + 1);
-        this.sigmaHead.beam = this.beam;
+        this.sigmaHead = new SigmaHead(game, null, null, true);
+        this.game.addEntityAtIndex(this.sigmaHead, this.entityArrayPos);
+        this.game.addEntityAtIndex(this.sigmaHead.beam, this.entityArrayPos);
     }
 
     loadAnimation() {
@@ -482,6 +480,7 @@ class Sigma {
     kamehameha() {
         // console.log(this.sigmaHead.beamEnd);
         if (this.sigmaHead.beamEnd > 0) {
+            this.sigmaHead.isHidden = false;
             this.sigmaHead.spawnIn = true;
             this.sigmaHead.facing = this.facing;
             if (this.facing === 1)
@@ -497,18 +496,23 @@ class Sigma {
             this.state = this.states.idle;
 
             // Reset Kamehameha
-            this.sigmaHead = new SigmaHead(this.game, null, null);
-            this.game.addEntityAtIndex(this.sigmaHead, this.entityArrayPos + 1);
-            this.sigmaHead.beam = new Beam(
-                this.game,
-                null,
-                null,
-                this.sigmaHead
-            );
+            this.sigmaHead = new SigmaHead(this.game, null, null, true);
+            this.game.addEntityAtIndex(this.sigmaHead, this.entityArrayPos);
             this.game.addEntityAtIndex(
                 this.sigmaHead.beam,
-                this.entityArrayPos + 1
+                this.entityArrayPos
             );
+
+            // this.sigmaHead.beam = new Beam(
+            //     this.game,
+            //     null,
+            //     null,
+            //     this.sigmaHead
+            // );
+            // this.game.addEntityAtIndex(
+            //     this.sigmaHead.beam,
+            //     this.entityArrayPos + 1
+            // );
         }
     }
 

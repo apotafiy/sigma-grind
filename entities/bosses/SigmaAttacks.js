@@ -1,8 +1,8 @@
 class SigmaHead {
-    constructor(game, x, y, beam) {
+    constructor(game, x, y, isHidden) {
         this.scale = 2;
         this.game = game;
-        this.entityArrayPos = game.entities.length;
+        this.isHidden = isHidden;
 
         this.states = {
             idle: 0,
@@ -26,15 +26,13 @@ class SigmaHead {
 
         this.isPog = true;
         this.isHostile = true;
-        this.collisionDamage = 10;
+        this.collisionDamage = 30;
 
         this.loadAnimation();
         this.updateBB();
 
         this.crosshair = new BeamCrosshair(game, null, null, this);
-        // this.beam = new Beam(game, null, null, this);
-        // this.game.addEntityAtIndex(this.beam, this.entityArrayPos + 1);
-        this.beam = beam;
+        this.beam = new Beam(game, null, null, this);
     }
 
     loadAnimation() {
@@ -131,7 +129,6 @@ class SigmaHead {
     }
 
     die() {
-        // this.entityArrayPos -= 2;
         this.removeFromWorld = true;
     }
 
@@ -146,67 +143,72 @@ class SigmaHead {
     }
 
     update() {
-        const TICK = this.game.clockTick;
+        if (!this.isHidden) {
+            const TICK = this.game.clockTick;
 
-        // During spawn in, no interaction with player
-        if (this.spawnIn) {
-            this.isPog = false;
-            this.isHostile = false;
-            this.collisionDamage = 0;
+            // During spawn in, no interaction with player
+            if (this.spawnIn) {
+                this.isPog = false;
+                this.isHostile = false;
+                this.collisionDamage = 0;
+            } else {
+                this.isPog = true;
+                this.isHostile = true;
+                this.collisionDamage = 10;
+            }
+
+            // wait a bit after spawn to attack
+            if (this.state === this.states.idle) {
+                this.idleTime -= TICK;
+                this.idleTime = Math.max(this.idleTime, 0);
+            }
+
+            // Set states
+            if (this.initDone) {
+                this.state = this.states.idle;
+            }
+            if (this.idleTime === 0) {
+                this.state = this.states.attack;
+            }
+
+            // Set position
+            if (this.state === this.states.attack) {
+                // Count down before firing
+                if (this.beamTime > 0) {
+                    this.beamTime -= TICK;
+                    this.beamTime = Math.max(this.beamTime, 0);
+
+                    this.y = lerp(this.y, this.game.player.y - 200, 0.069);
+
+                    // Position crosshair x to be next to player
+                    let playerX = this.game.player.x;
+                    let playerWidth = this.game.player.BB.width;
+                    if (this.facing === 1)
+                        this.crosshair.x = playerX + playerWidth;
+                    else this.crosshair.x = playerX - this.crosshair.size.width;
+
+                    // Position crosshair y to match sigma mouth;
+                    this.crosshair.y = this.y + 204;
+                }
+
+                // Init beam
+                if (this.beamTime === 0 && this.beamEnd > 0) {
+                    this.beam.init(this.x, this.y, this.facing);
+                    this.crosshair = null;
+                    this.beamEnd -= TICK;
+                    this.beamEnd = Math.max(this.beamEnd, 0);
+                }
+
+                if (this.beamEnd === 0) {
+                    this.beam.die();
+                }
+            }
+            this.updateBB();
         } else {
-            this.isPog = true;
-            this.isHostile = true;
-            this.collisionDamage = 10;
+            this.isHostile = false;
+            this.isPog = false;
+            this.collisionDamage = 0;
         }
-
-        // wait a bit after spawn to attack
-        if (this.state === this.states.idle) {
-            this.idleTime -= TICK;
-            this.idleTime = Math.max(this.idleTime, 0);
-        }
-
-        // Set states
-        if (this.initDone) {
-            this.state = this.states.idle;
-        }
-        if (this.idleTime === 0) {
-            this.state = this.states.attack;
-        }
-
-        // Set position
-        if (this.state === this.states.attack) {
-            // Count down before firing
-            if (this.beamTime > 0) {
-                this.beamTime -= TICK;
-                this.beamTime = Math.max(this.beamTime, 0);
-
-                this.y = lerp(this.y, this.game.player.y - 200, 0.069);
-
-                // Position crosshair x to be next to player
-                let playerX = this.game.player.x;
-                let playerWidth = this.game.player.BB.width;
-                if (this.facing === 1) this.crosshair.x = playerX + playerWidth;
-                else this.crosshair.x = playerX - this.crosshair.size.width;
-
-                // Position crosshair y to match sigma mouth;
-                this.crosshair.y = this.y + 204;
-            }
-
-            // Init beam
-            if (this.beamTime === 0 && this.beamEnd > 0) {
-                this.beam.init(this.x, this.y, this.facing);
-                this.crosshair = null;
-                this.beamEnd -= TICK;
-                this.beamEnd = Math.max(this.beamEnd, 0);
-            }
-
-            if (this.beamEnd === 0) {
-                console.log('beam dead');
-                this.beam.die();
-            }
-        }
-
-        this.updateBB();
     }
 
     spawnFade(ctx) {
@@ -232,21 +234,20 @@ class SigmaHead {
     }
 
     draw(ctx) {
-        this.spawnFade(ctx);
-        this.animations[this.state][this.facing].drawFrame(
-            this.game.clockTick,
-            ctx,
-            this.x - this.game.camera.x,
-            this.y - this.game.camera.y,
-            this.scale
-        );
-
-        if (this.state === this.states.attack && this.beamTime > 0) {
-            this.crosshair.drawCrosshair(ctx);
+        if (!this.isHidden) {
+            this.spawnFade(ctx);
+            this.animations[this.state][this.facing].drawFrame(
+                this.game.clockTick,
+                ctx,
+                this.x - this.game.camera.x,
+                this.y - this.game.camera.y,
+                this.scale
+            );
+            if (this.state === this.states.attack && this.beamTime > 0) {
+                this.crosshair.drawCrosshair(ctx);
+            }
+            ctx.filter = 'none';
         }
-
-        ctx.filter = 'none';
-
         if (params.debug) {
             ctx.strokeStyle = 'Purple';
             ctx.strokeRect(
@@ -359,7 +360,14 @@ class Beam {
     }
 
     update() {
-        this.updateBB();
+        if (!this.sigmaHead.isHidden) {
+            this.isHostile = true;
+            this.collisionDamage = 30;
+            this.updateBB();
+        } else {
+            this.isHostile = false;
+            this.collisionDamage = 0;
+        }
     }
 
     init(x, y, facing) {
@@ -371,14 +379,15 @@ class Beam {
     }
 
     draw(ctx) {
-        // console.log(this.facing);
-        this.animations[this.facing].drawFrame(
-            this.game.clockTick,
-            ctx,
-            this.x - this.game.camera.x,
-            this.y - this.game.camera.y,
-            1
-        );
+        if (!this.sigmaHead.isHidden) {
+            this.animations[this.facing].drawFrame(
+                this.game.clockTick,
+                ctx,
+                this.x - this.game.camera.x,
+                this.y - this.game.camera.y,
+                1
+            );
+        }
 
         if (params.debug) {
             ctx.strokeStyle = 'Purple';
