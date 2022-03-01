@@ -52,32 +52,7 @@ class SceneManager {
         this.background_songs = {};
         this.background_songs.intro = SOUND_MANAGER.getSound('background_1');
 
-        this.initGUI();
-    }
-
-    initGUI() {
-        // Dat GUI stuff
-        this.game.gui
-            .add(params, 'fps')
-            .min(1)
-            .max(144)
-            .step(1)
-            .onChange((val) => (params.fps = val));
-        this.cameraFolder = this.game.gui.addFolder('Camera values');
-        this.testValues = {
-            interpolation: this.interpolation,
-        };
-        this.cameraFolder
-            .add(this.testValues, 'interpolation')
-            .min(0)
-            .max(1)
-            .step(0.001)
-            .onChange((val) => {
-                this.interpolation = val;
-            })
-            .name('Interpolation');
-
-        // dat.GUI.toggleHide();
+        SceneManagerDatGUI(game, this);
     }
 
     setGameMode(game) {

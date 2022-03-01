@@ -1,21 +1,3 @@
-// GLOBAL VALUES FOR PLAYER
-// CHANGE TO CONST ONCE FINALIZED
-let MIN_RUN = 10;
-let MAX_RUN = 120;
-let MAX_DASH = 300;
-let ACC_RUN = 500;
-let DEC_REL = 600;
-let DEC_SKID = 500;
-let STOP_FALL = 1500;
-let STOP_FALL_A = 400;
-let RUN_FALL = 2025;
-let RUN_FALL_A = 500;
-let MAX_FALL = 270;
-let STOP_JUMP = -240;
-let RUN_JUMP = -300;
-let WALL_JUMP = 600;
-let POGO_JUMP = -200;
-
 // BLOCK DIMENSION FOR THE GAME WORLD
 let BLOCK_DIMENSION = 64;
 
@@ -121,159 +103,24 @@ class Player {
 
         this.animations = [];
         this.loadAnimations();
-        this.initGUI();
-    }
-
-    initGUI() {
-        // Dat GUI stuff
-        this.playerFolder = this.game.gui.addFolder('Player values');
-        this.testValues = {
-            attackSpeed: this.attackSpeed,
-            MIN_RUN: MIN_RUN,
-            MAX_RUN: MAX_RUN,
-            MAX_DASH: MAX_DASH,
-            ACC_RUN: ACC_RUN,
-            DEC_REL: DEC_REL,
-            DEC_SKID: DEC_SKID,
-            STOP_FALL: STOP_FALL,
-            STOP_FALL_A: STOP_FALL_A,
-            RUN_FALL: RUN_FALL,
-            RUN_FALL_A: RUN_FALL_A,
-            MAX_FALL: MAX_FALL,
-            STOP_JUMP: STOP_JUMP,
-            RUN_JUMP: RUN_JUMP,
-            WALL_JUMP: WALL_JUMP,
-            POGO_JUMP: POGO_JUMP,
+        this.constants = {
+            MIN_RUN: 10,
+            MAX_RUN: 120,
+            MAX_DASH: 300,
+            ACC_RUN: 500,
+            DEC_REL: 600,
+            DEC_SKID: 500,
+            STOP_FALL: 1500,
+            STOP_FALL_A: 400,
+            RUN_FALL: 2025,
+            RUN_FALL_A: 500,
+            MAX_FALL: 270,
+            STOP_JUMP: -240,
+            RUN_JUMP: -300,
+            WALL_JUMP: 600,
+            POGO_JUMP: -200,
         };
-        this.playerFolder
-            .add(this.testValues, 'attackSpeed')
-            .min(0.005)
-            .max(0.5)
-            .step(0.005)
-            .onChange((val) => {
-                this.attackSpeed = val;
-                this.loadAnimations();
-            });
-        this.playerFolder
-            .add(this.testValues, 'MIN_RUN')
-            .min(0)
-            .max(50)
-            .step(1)
-            .onChange((val) => {
-                MIN_RUN = val;
-            });
-        this.playerFolder
-            .add(this.testValues, 'MAX_RUN')
-            .min(0)
-            .max(300)
-            .step(1)
-            .onChange((val) => {
-                MAX_RUN = val;
-            });
-        this.playerFolder
-            .add(this.testValues, 'MAX_DASH')
-            .min(0)
-            .max(1000)
-            .step(1)
-            .onChange((val) => {
-                MAX_DASH = val;
-            });
-        this.playerFolder
-            .add(this.testValues, 'ACC_RUN')
-            .min(0)
-            .max(1000)
-            .step(1)
-            .onChange((val) => {
-                ACC_RUN = val;
-            });
-        this.playerFolder
-            .add(this.testValues, 'DEC_REL')
-            .min(0)
-            .max(1000)
-            .step(1)
-            .onChange((val) => {
-                DEC_REL = val;
-            });
-        this.playerFolder
-            .add(this.testValues, 'DEC_SKID')
-            .min(0)
-            .max(1000)
-            .step(1)
-            .onChange((val) => {
-                DEC_SKID = val;
-            });
-        this.playerFolder
-            .add(this.testValues, 'STOP_FALL')
-            .min(0)
-            .max(3000)
-            .step(1)
-            .onChange((val) => {
-                STOP_FALL = val;
-            });
-        this.playerFolder
-            .add(this.testValues, 'STOP_FALL_A')
-            .min(0)
-            .max(1000)
-            .step(1)
-            .onChange((val) => {
-                STOP_FALL_A = val;
-            });
-        this.playerFolder
-            .add(this.testValues, 'RUN_FALL')
-            .min(0)
-            .max(4000)
-            .step(1)
-            .onChange((val) => {
-                RUN_FALL = val;
-            });
-        this.playerFolder
-            .add(this.testValues, 'RUN_FALL_A')
-            .min(0)
-            .max(1000)
-            .step(1)
-            .onChange((val) => {
-                RUN_FALL_A = val;
-            });
-        this.playerFolder
-            .add(this.testValues, 'MAX_FALL')
-            .min(0)
-            .max(1000)
-            .step(1)
-            .onChange((val) => {
-                MAX_FALL = val;
-            });
-        this.playerFolder
-            .add(this.testValues, 'STOP_JUMP')
-            .min(-1000)
-            .max(0)
-            .step(1)
-            .onChange((val) => {
-                STOP_JUMP = val;
-            });
-        this.playerFolder
-            .add(this.testValues, 'RUN_JUMP')
-            .min(-1000)
-            .max(0)
-            .step(1)
-            .onChange((val) => {
-                RUN_JUMP = val;
-            });
-        this.playerFolder
-            .add(this.testValues, 'WALL_JUMP')
-            .min(0)
-            .max(600)
-            .step(1)
-            .onChange((val) => {
-                WALL_JUMP = val;
-            });
-        this.playerFolder
-            .add(this.testValues, 'POGO_JUMP')
-            .min(-1000)
-            .max(0)
-            .step(1)
-            .onChange((val) => {
-                POGO_JUMP = val;
-            });
+        PlayerDatGUI(game, this);
     }
 
     loadAnimations() {
@@ -748,7 +595,7 @@ class Player {
             if (this.meetBoss) {
                 this.state = this.states.idle;
                 this.velocity.x = 0;
-                this.velocity.y += RUN_FALL * TICK;
+                this.velocity.y += this.constants.RUN_FALL * TICK;
                 this.handlePosition();
                 this.handleCollision();
             } else {
@@ -771,42 +618,44 @@ class Player {
             ) {
                 // not jumping
                 // ground physics
-                if (Math.abs(this.velocity.x) < MIN_RUN) {
+                if (Math.abs(this.velocity.x) < this.constants.MIN_RUN) {
                     // slower than a walk
                     // starting, stopping or turning around
                     this.velocity.x = 0;
                     this.state = this.states.idle;
                     if (this.game.keys.KeyA) {
-                        this.velocity.x -= MIN_RUN;
+                        this.velocity.x -= this.constants.MIN_RUN;
                     }
                     if (this.game.keys.KeyD) {
-                        this.velocity.x += MIN_RUN;
+                        this.velocity.x += this.constants.MIN_RUN;
                     }
-                } else if (Math.abs(this.velocity.x) >= MIN_RUN) {
+                } else if (
+                    Math.abs(this.velocity.x) >= this.constants.MIN_RUN
+                ) {
                     // faster than a walk
                     // accelerating or decelerating
                     if (this.facing === 0) {
                         if (this.game.keys.KeyD && !this.game.keys.KeyA) {
-                            this.velocity.x += ACC_RUN * TICK;
+                            this.velocity.x += this.constants.ACC_RUN * TICK;
                         } else if (
                             this.game.keys.KeyA &&
                             !this.game.keys.KeyD
                         ) {
-                            this.velocity.x -= DEC_SKID * TICK;
+                            this.velocity.x -= this.constants.DEC_SKID * TICK;
                         } else {
-                            this.velocity.x -= DEC_REL * TICK;
+                            this.velocity.x -= this.constants.DEC_REL * TICK;
                         }
                     }
                     if (this.facing === 1) {
                         if (this.game.keys.KeyA && !this.game.keys.KeyD) {
-                            this.velocity.x -= ACC_RUN * TICK;
+                            this.velocity.x -= this.constants.ACC_RUN * TICK;
                         } else if (
                             this.game.keys.KeyD &&
                             !this.game.keys.KeyA
                         ) {
-                            this.velocity.x += DEC_SKID * TICK;
+                            this.velocity.x += this.constants.DEC_SKID * TICK;
                         } else {
-                            this.velocity.x += DEC_REL * TICK;
+                            this.velocity.x += this.constants.DEC_REL * TICK;
                         }
                     }
                 }
@@ -823,12 +672,12 @@ class Player {
                     this.soundEffects.jump_voice.play();
                     if (Math.abs(this.velocity.x) < 16) {
                         // Jump height while idle
-                        this.velocity.y = STOP_JUMP;
-                        this.fallAcc = STOP_FALL;
+                        this.velocity.y = this.constants.STOP_JUMP;
+                        this.fallAcc = this.constants.STOP_FALL;
                     } else {
                         // Jump height while there's side way momentum
-                        this.velocity.y = RUN_JUMP;
-                        this.fallAcc = RUN_FALL;
+                        this.velocity.y = this.constants.RUN_JUMP;
+                        this.fallAcc = this.constants.RUN_FALL;
                     }
 
                     // Set state to jump if not attack (3)
@@ -846,10 +695,16 @@ class Player {
                     (this.game.keys.Space || this.isPogo)
                 ) {
                     // holding space while jumping jumps higher
-                    if (this.fallAcc === STOP_FALL)
-                        this.velocity.y -= (STOP_FALL - STOP_FALL_A) * TICK;
-                    if (this.fallAcc === RUN_FALL)
-                        this.velocity.y -= (RUN_FALL - RUN_FALL_A) * TICK;
+                    if (this.fallAcc === this.constants.STOP_FALL)
+                        this.velocity.y -=
+                            (this.constants.STOP_FALL -
+                                this.constants.STOP_FALL_A) *
+                            TICK;
+                    if (this.fallAcc === this.constants.RUN_FALL)
+                        this.velocity.y -=
+                            (this.constants.RUN_FALL -
+                                this.constants.RUN_FALL_A) *
+                            TICK;
                     this.isInAir = true; // moved into block
                 } else if (
                     !this.attacking &&
@@ -863,9 +718,9 @@ class Player {
 
                 // horizontal physics
                 if (this.game.keys.KeyD && !this.game.keys.KeyA) {
-                    this.velocity.x += ACC_RUN * TICK;
+                    this.velocity.x += this.constants.ACC_RUN * TICK;
                 } else if (this.game.keys.KeyA && !this.game.keys.KeyD) {
-                    this.velocity.x -= ACC_RUN * TICK;
+                    this.velocity.x -= this.constants.ACC_RUN * TICK;
                 } else {
                     // do nothing
                 }
@@ -883,23 +738,29 @@ class Player {
                     this.soundEffects.dash.play();
                     if (this.game.keys.KeyA && !this.game.keys.KeyD) {
                         this.facing === 1;
-                        this.velocity.x = -MAX_DASH;
+                        this.velocity.x = -this.constants.MAX_DASH;
                     } else if (this.game.keys.KeyD && !this.game.keys.KeyA) {
                         this.facing === 0;
-                        this.velocity.x = MAX_DASH;
+                        this.velocity.x = this.constants.MAX_DASH;
                     } else {
                         this.velocity.x =
-                            this.facing === 0 ? MAX_DASH : -MAX_DASH;
+                            this.facing === 0
+                                ? this.constants.MAX_DASH
+                                : -this.constants.MAX_DASH;
                     }
                     this.velocity.y = 0;
                     this.fallAcc = 0;
                     this.state = this.states.dash;
                     if (this.animations[2][this.facing].elapsedTime >= 0.5)
-                        this.handleDashEnding(RUN_FALL, ACC_RUN, TICK);
+                        this.handleDashEnding(
+                            this.constants.RUN_FALL,
+                            this.constants.ACC_RUN,
+                            TICK
+                        );
                 }
             } else {
                 this.animations[2][this.facing].elapsedTime = 0;
-                this.fallAcc = STOP_FALL;
+                this.fallAcc = this.constants.STOP_FALL;
                 //stop the dash sound if needed
                 // this.soundEffects.dash.pause();
                 // this.soundEffects.dash.load();
@@ -991,11 +852,13 @@ class Player {
                 !this.isPogo
             ) {
                 if (
-                    Math.abs(this.velocity.x) > MAX_RUN ||
-                    Math.abs(this.velocity.x) === MAX_DASH
+                    Math.abs(this.velocity.x) > this.constants.MAX_RUN ||
+                    Math.abs(this.velocity.x) === this.constants.MAX_DASH
                 ) {
                     this.state = this.states.dash;
-                } else if (Math.abs(this.velocity.x) >= MIN_RUN) {
+                } else if (
+                    Math.abs(this.velocity.x) >= this.constants.MIN_RUN
+                ) {
                     this.state = this.states.run;
                 } else if (!this.attacking) {
                     this.state = this.states.idle;
@@ -1068,15 +931,19 @@ class Player {
 
     handleVelocity() {
         // UPDATE VELOCITY
-        if (this.velocity.y >= MAX_FALL) this.velocity.y = MAX_FALL;
-        if (this.velocity.y <= -MAX_FALL) this.velocity.y = -MAX_FALL;
+        if (this.velocity.y >= this.constants.MAX_FALL)
+            this.velocity.y = this.constants.MAX_FALL;
+        if (this.velocity.y <= -this.constants.MAX_FALL)
+            this.velocity.y = -this.constants.MAX_FALL;
 
-        if (this.velocity.x >= MAX_DASH) this.velocity.x = MAX_DASH;
-        if (this.velocity.x <= -MAX_DASH) this.velocity.x = -MAX_DASH;
-        if (this.velocity.x >= MAX_RUN && !this.game.keys.KeyK)
-            this.velocity.x = MAX_RUN;
-        if (this.velocity.x <= -MAX_RUN && !this.game.keys.KeyK)
-            this.velocity.x = -MAX_RUN;
+        if (this.velocity.x >= this.constants.MAX_DASH)
+            this.velocity.x = this.constants.MAX_DASH;
+        if (this.velocity.x <= -this.constants.MAX_DASH)
+            this.velocity.x = -this.constants.MAX_DASH;
+        if (this.velocity.x >= this.constants.MAX_RUN && !this.game.keys.KeyK)
+            this.velocity.x = this.constants.MAX_RUN;
+        if (this.velocity.x <= -this.constants.MAX_RUN && !this.game.keys.KeyK)
+            this.velocity.x = -this.constants.MAX_RUN;
         if (
             this.attacking &&
             ((this.state == this.states.attack1 &&
@@ -1134,7 +1001,7 @@ class Player {
                 if (entity.isPog && this.isPogo) {
                     this.animations[3][0].elapsedTime = 0;
                     this.animations[3][1].elapsedTime = 0;
-                    this.velocity.y = POGO_JUMP;
+                    this.velocity.y = this.constants.POGO_JUMP;
                     if (this.state !== this.states.jump)
                         this.state = this.states.jump;
                     this.attacking = false;
@@ -1247,8 +1114,8 @@ class Player {
                         //play wall jump soundEffect
                         this.getRandomGrunt().play();
                         this.velocity.x = this.facing === 1 ? 100 : -100;
-                        this.velocity.y = -WALL_JUMP;
-                        this.fallAcc = STOP_FALL;
+                        this.velocity.y = -this.constants.WALL_JUMP;
+                        this.fallAcc = this.constants.STOP_FALL;
                         this.isInAir = true;
                         this.airDashed = false;
                         this.state = this.states.jump;
@@ -1260,8 +1127,8 @@ class Player {
                             // Prevent player idle at wall when dashing into wall
                             this.state = this.states.wallHang;
                             this.handleDashEnding(
-                                RUN_FALL,
-                                ACC_RUN,
+                                this.constants.RUN_FALL,
+                                this.constants.ACC_RUN,
                                 this.game.clockTick
                             );
                         }
