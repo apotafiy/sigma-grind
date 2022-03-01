@@ -357,9 +357,9 @@ class SceneManager {
                 }
                 //stop current background music and load the level
                 this.soundEffects.menu_music.pause();
-                // loadLevelOne(this.game);
+                loadLevelOne(this.game);
 
-                sigmaArena(this.game);
+                // sigmaArena(this.game);
 
                 this.currentState = -1;
                 this.setGameMode(this.game);

@@ -689,16 +689,20 @@ class Player {
 
     updateAttackBB() {
         //adjust the BB into the correct direction
-        let xoffset = this.facing === 0 ? 80 : -80;
-        if (this.attacking && this.isPogo) {
-            this.attackBB = new BoundingBox(this.x, this.y + 52, 80, 99);
-        } else if (this.attacking) {
-            this.attackBB = new BoundingBox(
-                this.x + xoffset,
-                this.y - 20,
-                80,
-                120
-            );
+        if (this.state !== this.states.wallHang) {
+            let xoffset = this.facing === 0 ? 80 : -80;
+            if (this.attacking && this.state === this.states.pogo) {
+                this.attackBB = new BoundingBox(this.x, this.y + 52, 80, 99);
+            } else if (this.attacking && this.state !== this.states.pogo) {
+                this.attackBB = new BoundingBox(
+                    this.x + xoffset,
+                    this.y - 20,
+                    80,
+                    120
+                );
+            } else {
+                this.attackBB = new BoundingBox(0, 0, 0, 0);
+            }
         } else {
             this.attackBB = new BoundingBox(0, 0, 0, 0);
         }
@@ -1262,6 +1266,7 @@ class Player {
                             );
                         }
                     }
+                    this.updateAttackBB();
                 } else if (
                     entity instanceof Ground &&
                     (this.BB.collide(entity.topBB) ||
