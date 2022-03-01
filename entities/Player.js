@@ -751,7 +751,6 @@ class Player {
                 this.state = this.states.idle;
                 this.velocity.x = 0;
                 this.velocity.y += RUN_FALL * TICK;
-                this.handleVelocity();
                 this.handlePosition();
                 this.handleCollision();
             } else {

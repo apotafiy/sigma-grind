@@ -313,11 +313,6 @@ class Sigma {
                 if (getDistance(this.introObject, this.game.player) <= 300) {
                     this.game.player.immobilized = true;
                     this.game.player.meetBoss = true;
-                    this.game.player.state = this.game.player.states.idle;
-                    this.game.player.velocity.x = 0;
-                    this.game.player.velocity.y = 0;
-                    this.game.player.updateBB();
-
                     this.state = this.states.spawnIn;
                     this.velocity.y += 60 * TICK;
                     this.y += this.velocity.y * TICK * this.scale;
