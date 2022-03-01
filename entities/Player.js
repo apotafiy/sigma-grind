@@ -746,309 +746,289 @@ class Player {
         //     this.soundEffects.run.play()
         // }
         // debugger
-        if (this.dead) {
-            // Do death stuff
-            this.state = this.states.dead;
-            if (this.animations[this.state][this.facing].isDone()) {
-                this.die();
+        if (this.immobilized) {
+            if (this.meetBoss) {
+                this.state = this.states.idle;
+                this.velocity.x = 0;
+                this.velocity.y += RUN_FALL * TICK;
+                this.handleVelocity();
+                this.handlePosition();
+                this.handleCollision();
+            } else {
+                this.state = this.states.immobilized;
+                this.updateBB();
+                if (this.animations[this.state][this.facing].isDone()) {
+                    this.immobilized = false;
+                    this.animations[this.states.immobilized][0].elapsedTime = 0;
+                    this.animations[this.states.immobilized][1].elapsedTime = 0;
+                }
             }
         } else {
-            if (this.immobilized) {
-                if (this.meetBoss) {
-                    this.state = this.states.idle;
+            // PHYSICS
+            if (
+                !this.attacking &&
+                this.state !== this.states.jump &&
+                this.state !== this.states.fall &&
+                this.state !== this.states.attack2 && //falling attack state
+                this.state !== this.states.wallHang
+            ) {
+                // not jumping
+                // ground physics
+                if (Math.abs(this.velocity.x) < MIN_RUN) {
+                    // slower than a walk
+                    // starting, stopping or turning around
                     this.velocity.x = 0;
-                    this.velocity.y += RUN_FALL * TICK;
-                    this.handleVelocity();
-                    this.handlePosition();
-                    this.handleCollision();
-                } else {
-                    this.state = this.states.immobilized;
-                    this.updateBB();
-                    if (this.animations[this.state][this.facing].isDone()) {
-                        this.immobilized = false;
-                        this.animations[
-                            this.states.immobilized
-                        ][0].elapsedTime = 0;
-                        this.animations[
-                            this.states.immobilized
-                        ][1].elapsedTime = 0;
+                    this.state = this.states.idle;
+                    if (this.game.keys.KeyA) {
+                        this.velocity.x -= MIN_RUN;
                     }
-                }
-            } else {
-                // PHYSICS
-                if (
-                    !this.attacking &&
-                    this.state !== this.states.jump &&
-                    this.state !== this.states.fall &&
-                    this.state !== this.states.attack2 && //falling attack state
-                    this.state !== this.states.wallHang
-                ) {
-                    // not jumping
-                    // ground physics
-                    if (Math.abs(this.velocity.x) < MIN_RUN) {
-                        // slower than a walk
-                        // starting, stopping or turning around
-                        this.velocity.x = 0;
-                        this.state = this.states.idle;
-                        if (this.game.keys.KeyA) {
-                            this.velocity.x -= MIN_RUN;
-                        }
-                        if (this.game.keys.KeyD) {
-                            this.velocity.x += MIN_RUN;
-                        }
-                    } else if (Math.abs(this.velocity.x) >= MIN_RUN) {
-                        // faster than a walk
-                        // accelerating or decelerating
-                        if (this.facing === 0) {
-                            if (this.game.keys.KeyD && !this.game.keys.KeyA) {
-                                this.velocity.x += ACC_RUN * TICK;
-                            } else if (
-                                this.game.keys.KeyA &&
-                                !this.game.keys.KeyD
-                            ) {
-                                this.velocity.x -= DEC_SKID * TICK;
-                            } else {
-                                this.velocity.x -= DEC_REL * TICK;
-                            }
-                        }
-                        if (this.facing === 1) {
-                            if (this.game.keys.KeyA && !this.game.keys.KeyD) {
-                                this.velocity.x -= ACC_RUN * TICK;
-                            } else if (
-                                this.game.keys.KeyD &&
-                                !this.game.keys.KeyA
-                            ) {
-                                this.velocity.x += DEC_SKID * TICK;
-                            } else {
-                                this.velocity.x += DEC_REL * TICK;
-                            }
-                        }
+                    if (this.game.keys.KeyD) {
+                        this.velocity.x += MIN_RUN;
                     }
-
-                    this.velocity.y += this.fallAcc * TICK;
-
-                    // Jump
-                    if (
-                        this.game.keys.Space &&
-                        !this.game.keys.KeyK &&
-                        !this.game.keys.KeyJ &&
-                        !this.isInAir
-                    ) {
-                        this.soundEffects.jump_voice.play();
-                        if (Math.abs(this.velocity.x) < 16) {
-                            // Jump height while idle
-                            this.velocity.y = STOP_JUMP;
-                            this.fallAcc = STOP_FALL;
+                } else if (Math.abs(this.velocity.x) >= MIN_RUN) {
+                    // faster than a walk
+                    // accelerating or decelerating
+                    if (this.facing === 0) {
+                        if (this.game.keys.KeyD && !this.game.keys.KeyA) {
+                            this.velocity.x += ACC_RUN * TICK;
+                        } else if (
+                            this.game.keys.KeyA &&
+                            !this.game.keys.KeyD
+                        ) {
+                            this.velocity.x -= DEC_SKID * TICK;
                         } else {
-                            // Jump height while there's side way momentum
-                            this.velocity.y = RUN_JUMP;
-                            this.fallAcc = RUN_FALL;
+                            this.velocity.x -= DEC_REL * TICK;
                         }
-
-                        // Set state to jump if not attack (3)
-                        // set to attack2 if it is
-                        if (!this.attacking) this.state = this.states.jump;
-                        else this.state = this.states.attack2;
-                        // Set the jump animation to start at the beginning
-                        this.animations[this.state][
-                            this.facing
-                        ].elapsedTime = 0;
                     }
-                } else {
-                    // air physics
-                    // vertical physics
-                    if (
-                        this.velocity.y < 0 &&
-                        (this.game.keys.Space || this.isPogo)
-                    ) {
-                        // holding space while jumping jumps higher
-                        if (this.fallAcc === STOP_FALL)
-                            this.velocity.y -= (STOP_FALL - STOP_FALL_A) * TICK;
-                        if (this.fallAcc === RUN_FALL)
-                            this.velocity.y -= (RUN_FALL - RUN_FALL_A) * TICK;
-                        this.isInAir = true; // moved into block
-                    } else if (
-                        !this.attacking &&
-                        this.velocity.y > 0 &&
-                        !this.game.keys.Space
-                    ) {
-                        this.state = this.states.fall;
-                        // console.log('set to fall');
-                        this.isInAir = true; // moved into the block
-                    }
-
-                    // horizontal physics
-                    if (this.game.keys.KeyD && !this.game.keys.KeyA) {
-                        this.velocity.x += ACC_RUN * TICK;
-                    } else if (this.game.keys.KeyA && !this.game.keys.KeyD) {
-                        this.velocity.x -= ACC_RUN * TICK;
-                    } else {
-                        // do nothing
-                    }
-                }
-                // END PHYSICS
-
-                // ACTIONS GOES BELOW HERE
-
-                // Dashing
-                if (this.game.keys.KeyK && !this.attacking) {
-                    if (this.isPogo) this.isPogo = false;
-                    else if (this.isInAir) this.airDashed = true;
-                    if (this.state !== this.states.wallHang) {
-                        //play dash sound effect
-                        this.soundEffects.dash.play();
+                    if (this.facing === 1) {
                         if (this.game.keys.KeyA && !this.game.keys.KeyD) {
-                            this.facing === 1;
-                            this.velocity.x = -MAX_DASH;
+                            this.velocity.x -= ACC_RUN * TICK;
                         } else if (
                             this.game.keys.KeyD &&
                             !this.game.keys.KeyA
                         ) {
-                            this.facing === 0;
-                            this.velocity.x = MAX_DASH;
+                            this.velocity.x += DEC_SKID * TICK;
                         } else {
-                            this.velocity.x =
-                                this.facing === 0 ? MAX_DASH : -MAX_DASH;
-                        }
-                        this.velocity.y = 0;
-                        this.fallAcc = 0;
-                        this.state = this.states.dash;
-                        if (this.animations[2][this.facing].elapsedTime >= 0.5)
-                            this.handleDashEnding(RUN_FALL, ACC_RUN, TICK);
-                    }
-                } else {
-                    this.animations[2][this.facing].elapsedTime = 0;
-                    this.fallAcc = STOP_FALL;
-                    //stop the dash sound if needed
-                    // this.soundEffects.dash.pause();
-                    // this.soundEffects.dash.load();
-                    if (
-                        this.velocity.y > 0 &&
-                        this.state !== this.states.wallHang
-                    )
-                        this.state = this.states.fall;
-                }
-                // End Dashing
-
-                // Pogo
-                if (
-                    this.game.keys.KeyS &&
-                    this.game.keys.KeyJ &&
-                    this.isInAir &&
-                    !this.game.keys.KeyK &&
-                    this.pogoTimer <= 0
-                ) {
-                    this.state = this.states.pogo;
-                    this.attacking = true;
-                    this.isPogo = true;
-                    this.updateAttackBB();
-                }
-                // End Pogo
-
-                //handle attacking
-                if (this.game.keys.KeyJ && this.game.keys.KeyK) {
-                    // Do nothing
-                } else if (
-                    this.game.keys.KeyJ &&
-                    this.state !== this.states.wallHang &&
-                    this.attackCooldown <= 0 &&
-                    !this.game.keys.KeyS
-                ) {
-                    // debugger;
-                    //play the attack sound
-                    this.soundEffects.attack.play();
-                    //set the player to attacking state
-                    this.attackCooldown = 10;
-                    // debugger;
-                    if (this.isInAir) {
-                        this.state = this.states.attack2;
-                        if (!this.animations[7][this.facing].isDone()) {
-                            this.state = this.states.attack2;
-                        }
-                    } else {
-                        this.state = this.states.attack1;
-                        if (!this.animations[6][this.facing].isDone()) {
-                            this.state = this.states.attack1;
+                            this.velocity.x += DEC_REL * TICK;
                         }
                     }
-                    this.updateBB();
-                    if (!this.attacking) {
-                        this.attacking = true;
-                    }
                 }
-                this.updateAttackBB(); //TODO potentially costly
-                //stop when attacking
-
-                // END ACTIONS
 
                 this.velocity.y += this.fallAcc * TICK;
 
-                this.handleVelocity();
-
-                if (this.game.keys.ArrowUp) {
-                    // console.log('pressed');
-                    this.velocity.y -= 80;
-                }
-
-                this.handlePosition();
-
-                // Fall off map = dead
-                // Assuming block width is 64
-                if (this.y > 64 * 16 || this.health <= 0) this.dead = true;
-
-                if (this.currentIFrameTimer > 0) {
-                    this.currentIFrameTimer -= 1;
-                    // console.log(this.currentIFrameTimer);
-                }
-                // console.log(this.currentIFrameTimer);
-
-                this.handleCollision();
-
-                // update state
+                // Jump
                 if (
-                    !this.attacking &&
-                    this.state !== this.states.jump &&
-                    this.state !== this.states.fall &&
-                    this.state !== this.states.wallHang &&
-                    !this.isPogo
+                    this.game.keys.Space &&
+                    !this.game.keys.KeyK &&
+                    !this.game.keys.KeyJ &&
+                    !this.isInAir
                 ) {
-                    if (
-                        Math.abs(this.velocity.x) > MAX_RUN ||
-                        Math.abs(this.velocity.x) === MAX_DASH
-                    ) {
-                        this.state = this.states.dash;
-                    } else if (Math.abs(this.velocity.x) >= MIN_RUN) {
-                        this.state = this.states.run;
-                    } else if (!this.attacking) {
-                        this.state = this.states.idle;
+                    this.soundEffects.jump_voice.play();
+                    if (Math.abs(this.velocity.x) < 16) {
+                        // Jump height while idle
+                        this.velocity.y = STOP_JUMP;
+                        this.fallAcc = STOP_FALL;
+                    } else {
+                        // Jump height while there's side way momentum
+                        this.velocity.y = RUN_JUMP;
+                        this.fallAcc = RUN_FALL;
                     }
+
+                    // Set state to jump if not attack (3)
+                    // set to attack2 if it is
+                    if (!this.attacking) this.state = this.states.jump;
+                    else this.state = this.states.attack2;
+                    // Set the jump animation to start at the beginning
+                    this.animations[this.state][this.facing].elapsedTime = 0;
                 }
-                // Falling or jumping
-                else if (
-                    (this.velocity.y > 0 || this.velocity.y < 0) &&
-                    this.state !== this.states.wallHang
+            } else {
+                // air physics
+                // vertical physics
+                if (
+                    this.velocity.y < 0 &&
+                    (this.game.keys.Space || this.isPogo)
                 ) {
-                    // Set state to either Air Attack, Jump, or Fall
-                    this.state = this.attacking
-                        ? this.isPogo
-                            ? this.states.pogo
-                            : this.states.attack2
-                        : this.velocity.y > 0
-                        ? this.states.fall
-                        : this.states.jump;
-                    this.isInAir = true;
+                    // holding space while jumping jumps higher
+                    if (this.fallAcc === STOP_FALL)
+                        this.velocity.y -= (STOP_FALL - STOP_FALL_A) * TICK;
+                    if (this.fallAcc === RUN_FALL)
+                        this.velocity.y -= (RUN_FALL - RUN_FALL_A) * TICK;
+                    this.isInAir = true; // moved into block
+                } else if (
+                    !this.attacking &&
+                    this.velocity.y > 0 &&
+                    !this.game.keys.Space
+                ) {
+                    this.state = this.states.fall;
+                    // console.log('set to fall');
+                    this.isInAir = true; // moved into the block
+                }
+
+                // horizontal physics
+                if (this.game.keys.KeyD && !this.game.keys.KeyA) {
+                    this.velocity.x += ACC_RUN * TICK;
+                } else if (this.game.keys.KeyA && !this.game.keys.KeyD) {
+                    this.velocity.x -= ACC_RUN * TICK;
                 } else {
                     // do nothing
                 }
-
-                // update direction
-                if (this.velocity.x < 0) this.facing = 1;
-                if (this.velocity.x > 0) this.facing = 0;
-                if (this.state == this.states.wallHang) {
-                }
-
-                this.updateBB();
             }
+            // END PHYSICS
+
+            // ACTIONS GOES BELOW HERE
+
+            // Dashing
+            if (this.game.keys.KeyK && !this.attacking) {
+                if (this.isPogo) this.isPogo = false;
+                else if (this.isInAir) this.airDashed = true;
+                if (this.state !== this.states.wallHang) {
+                    //play dash sound effect
+                    this.soundEffects.dash.play();
+                    if (this.game.keys.KeyA && !this.game.keys.KeyD) {
+                        this.facing === 1;
+                        this.velocity.x = -MAX_DASH;
+                    } else if (this.game.keys.KeyD && !this.game.keys.KeyA) {
+                        this.facing === 0;
+                        this.velocity.x = MAX_DASH;
+                    } else {
+                        this.velocity.x =
+                            this.facing === 0 ? MAX_DASH : -MAX_DASH;
+                    }
+                    this.velocity.y = 0;
+                    this.fallAcc = 0;
+                    this.state = this.states.dash;
+                    if (this.animations[2][this.facing].elapsedTime >= 0.5)
+                        this.handleDashEnding(RUN_FALL, ACC_RUN, TICK);
+                }
+            } else {
+                this.animations[2][this.facing].elapsedTime = 0;
+                this.fallAcc = STOP_FALL;
+                //stop the dash sound if needed
+                // this.soundEffects.dash.pause();
+                // this.soundEffects.dash.load();
+                if (this.velocity.y > 0 && this.state !== this.states.wallHang)
+                    this.state = this.states.fall;
+            }
+            // End Dashing
+
+            // Pogo
+            if (
+                this.game.keys.KeyS &&
+                this.game.keys.KeyJ &&
+                this.isInAir &&
+                !this.game.keys.KeyK &&
+                this.pogoTimer <= 0
+            ) {
+                this.state = this.states.pogo;
+                this.attacking = true;
+                this.isPogo = true;
+                this.updateAttackBB();
+            }
+            // End Pogo
+
+            //handle attacking
+            if (this.game.keys.KeyJ && this.game.keys.KeyK) {
+                // Do nothing
+            } else if (
+                this.game.keys.KeyJ &&
+                this.state !== this.states.wallHang &&
+                this.attackCooldown <= 0 &&
+                !this.game.keys.KeyS
+            ) {
+                // debugger;
+                //play the attack sound
+                this.soundEffects.attack.play();
+                //set the player to attacking state
+                this.attackCooldown = 10;
+                // debugger;
+                if (this.isInAir) {
+                    this.state = this.states.attack2;
+                    if (!this.animations[7][this.facing].isDone()) {
+                        this.state = this.states.attack2;
+                    }
+                } else {
+                    this.state = this.states.attack1;
+                    if (!this.animations[6][this.facing].isDone()) {
+                        this.state = this.states.attack1;
+                    }
+                }
+                this.updateBB();
+                if (!this.attacking) {
+                    this.attacking = true;
+                }
+            }
+            this.updateAttackBB(); //TODO potentially costly
+            //stop when attacking
+
+            // END ACTIONS
+
+            this.velocity.y += this.fallAcc * TICK;
+
+            this.handleVelocity();
+
+            if (this.game.keys.ArrowUp) {
+                // console.log('pressed');
+                this.velocity.y -= 80;
+            }
+
+            this.handlePosition();
+
+            // Fall off map = dead
+            // Assuming block width is 64
+            if (this.y > 64 * 16 || this.health <= 0) this.dead = true;
+
+            if (this.currentIFrameTimer > 0) {
+                this.currentIFrameTimer -= 1;
+                // console.log(this.currentIFrameTimer);
+            }
+            // console.log(this.currentIFrameTimer);
+
+            this.handleCollision();
+
+            // update state
+            if (
+                !this.attacking &&
+                this.state !== this.states.jump &&
+                this.state !== this.states.fall &&
+                this.state !== this.states.wallHang &&
+                !this.isPogo
+            ) {
+                if (
+                    Math.abs(this.velocity.x) > MAX_RUN ||
+                    Math.abs(this.velocity.x) === MAX_DASH
+                ) {
+                    this.state = this.states.dash;
+                } else if (Math.abs(this.velocity.x) >= MIN_RUN) {
+                    this.state = this.states.run;
+                } else if (!this.attacking) {
+                    this.state = this.states.idle;
+                }
+            }
+            // Falling or jumping
+            else if (
+                (this.velocity.y > 0 || this.velocity.y < 0) &&
+                this.state !== this.states.wallHang
+            ) {
+                // Set state to either Air Attack, Jump, or Fall
+                this.state = this.attacking
+                    ? this.isPogo
+                        ? this.states.pogo
+                        : this.states.attack2
+                    : this.velocity.y > 0
+                    ? this.states.fall
+                    : this.states.jump;
+                this.isInAir = true;
+            } else {
+                // do nothing
+            }
+
+            // update direction
+            if (this.velocity.x < 0) this.facing = 1;
+            if (this.velocity.x > 0) this.facing = 0;
+            if (this.state == this.states.wallHang) {
+            }
+
+            this.updateBB();
         }
 
         // Display values for Debug mode
