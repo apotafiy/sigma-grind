@@ -840,9 +840,9 @@ class Player {
                 // console.log(this.currentIFrameTimer);
             }
             // console.log(this.currentIFrameTimer);
-
+          
             this.handleCollision();
-
+          
             // update state
             if (
                 !this.attacking &&
