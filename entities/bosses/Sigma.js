@@ -69,6 +69,13 @@ class Sigma {
         this.sigmaHead = new SigmaHead(game, null, null, true);
         this.game.addEntityAtIndex(this.sigmaHead, this.entityArrayPos);
         this.game.addEntityAtIndex(this.sigmaHead.beam, this.entityArrayPos);
+        this.wave = new Wave(game, null, null);
+        this.game.addEntityAtIndex(this.wave, this.entityArrayPos);
+        this.topWave = new Wave(game, null, null);
+        this.bottomWave = new Wave(game, null, null);
+        this.game.addEntityAtIndex(this.topWave, this.entityArrayPos);
+        this.game.addEntityAtIndex(this.bottomWave, this.entityArrayPos);
+        this.wave2StartTime = 0.9;
     }
 
     loadAnimation() {
@@ -247,6 +254,34 @@ class Sigma {
             true,
             false
         );
+
+        // Energy wave - attack2
+        // face right
+        this.animations[this.states.attack2][0] = new Animator(
+            ASSET_MANAGER.getAsset('./sprites/sigma/sigma-attack2-117x124.png'),
+            468,
+            0,
+            117,
+            124,
+            4,
+            0.09,
+            0,
+            true,
+            false
+        );
+        // face left
+        this.animations[this.states.attack2][1] = new Animator(
+            ASSET_MANAGER.getAsset('./sprites/sigma/sigma-attack2-117x124.png'),
+            0,
+            0,
+            117,
+            124,
+            4,
+            0.09,
+            0,
+            false,
+            false
+        );
     }
 
     // TODO
@@ -283,6 +318,10 @@ class Sigma {
             case this.states.attack1:
                 this.spriteOffset.x = this.facing === 0 ? -8 : -51;
                 this.spriteOffset.y = 0;
+                break;
+            case this.states.attack2:
+                this.spriteOffset.x = this.facing === 0 ? 0 : -130;
+                this.spriteOffset.y = -40;
                 break;
             default:
                 this.spriteOffset.x = 0;
@@ -329,9 +368,9 @@ class Sigma {
                         // after intro is done
                         this.state = this.states.idle;
 
-                        // KAMEHAMEHA after intro is done
+                        // TELEPORT after intro is done
                         // for testing only, remove when done
-                        // this.state = this.states.attack1;
+                        this.state = this.states.teleportOut;
 
                         this.game.player.immobilized = false;
                         this.game.player.meetBoss = false;
@@ -361,6 +400,24 @@ class Sigma {
                 this.kamehameha();
             }
 
+            // energy wave - attack2
+            if (this.state === this.states.attack2) {
+                this.wave2StartTime -= this.game.clockTick;
+                this.wave2StartTime = Math.max(this.wave2StartTime, 0);
+                this.energyWave();
+                if (
+                    this.animations[this.states.attack2][
+                        this.facing
+                    ].isDone() &&
+                    this.wave2StartTime === 0
+                ) {
+                    this.state = this.states.idle;
+                    this.animations[this.states.attack2][
+                        this.facing
+                    ].elapsedTime = 0;
+                    this.wave2StartTime = 0.9;
+                }
+            }
             // END ACTION
 
             if (!this.isIntro) {
@@ -371,6 +428,7 @@ class Sigma {
                 // Update position
                 this.y += this.velocity.y * TICK * this.scale;
             }
+
             // Collision
             this.game.entities.forEach((entity) => {
                 // Collide with player attacks
@@ -411,6 +469,7 @@ class Sigma {
                         if (this.state === this.states.dash) {
                             this.state = this.states.idle;
                             this.facing = 1;
+                            // Do something after dash here
                         }
                     } else if (
                         entity instanceof Ground &&
@@ -422,6 +481,7 @@ class Sigma {
                         if (this.state === this.states.dash) {
                             this.state = this.states.idle;
                             this.facing = 0;
+                            // Do something after dash here
                         }
                     }
                 }
@@ -444,7 +504,6 @@ class Sigma {
         this.isPog = false;
 
         // set state to teleport out
-        // console.log(this.state + ' ' + this.facing);
         if (this.animations[this.states.teleportOut][this.facing].isDone()) {
             this.x = x;
             this.y = y;
@@ -466,8 +525,8 @@ class Sigma {
             this.isPog = true;
             this.facing = type === 'right' ? 1 : 0;
 
-            // Kamehameha after teleport, delete later
-            this.state = this.states.attack1;
+            // Do something after teleport here
+            this.state = this.states.attack2;
         }
     }
 
@@ -478,7 +537,6 @@ class Sigma {
     }
 
     kamehameha() {
-        // console.log(this.sigmaHead.beamEnd);
         if (this.sigmaHead.beamEnd > 0) {
             this.sigmaHead.isHidden = false;
             this.sigmaHead.spawnIn = true;
@@ -492,7 +550,6 @@ class Sigma {
         } else {
             this.sigmaHead.spawnIn = false;
             this.sigmaHead.spawnOut = true;
-            // this.entityArrayPos -= 1;
             this.state = this.states.idle;
 
             // Reset Kamehameha
@@ -502,22 +559,32 @@ class Sigma {
                 this.sigmaHead.beam,
                 this.entityArrayPos
             );
+        }
+    }
 
-            // this.sigmaHead.beam = new Beam(
-            //     this.game,
-            //     null,
-            //     null,
-            //     this.sigmaHead
-            // );
-            // this.game.addEntityAtIndex(
-            //     this.sigmaHead.beam,
-            //     this.entityArrayPos + 1
-            // );
+    energyWave() {
+        let xOffset = this.facing === 0 ? 10 : -10;
+        if (!this.wave.started) {
+            this.wave.start(this.x + xOffset, this.y - 60, this.facing);
+        }
+        if (this.wave2StartTime === 0) {
+            if (!this.topWave.started && !this.bottomWave.started) {
+                this.bottomWave.start(
+                    this.x + xOffset,
+                    this.y + 65,
+                    this.facing
+                );
+                this.topWave.start(
+                    this.x + xOffset,
+                    this.bottomWave.y - 450,
+                    this.facing
+                );
+            }
         }
     }
 
     draw(ctx) {
-        // console.log(getDistance(this, this.game.player));
+        // console.log(this.state + ' ' + this.facing);
 
         // damage blink
         if (this.iframes >= 0) {
@@ -529,7 +596,6 @@ class Sigma {
             this.scale = 0;
         }
 
-        // console.log(this.state + ' ' + this.facing);
         if (getDistance(this, this.game.player) < 1200) {
             this.animations[this.state][this.facing].drawFrame(
                 this.game.clockTick,
@@ -543,25 +609,6 @@ class Sigma {
             }
             this.healthBar.drawBossHealthBar(ctx);
         }
-
-        // ctx.lineWidth = 2;
-        // ctx.strokeStyle = '#000000';
-        // ctx.strokeRect(
-        //     this.x - this.game.camera.x + 60,
-        //     this.y - this.game.camera.y - 40,
-        //     200,
-        //     30
-        // );
-
-        // ctx.lineWidth = 2;
-        // ctx.strokeStyle = '#00FF00';
-        // ctx.fillStyle = '#00FF00';
-        // ctx.fillRect(
-        //     this.x - this.game.camera.x + 60,
-        //     this.y - this.game.camera.y - 40,
-        //     (this.health / this.maxHealth) * 200,
-        //     30
-        // );
 
         if (params.debug) {
             ctx.strokeStyle = 'Orange';
