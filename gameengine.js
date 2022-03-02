@@ -53,18 +53,20 @@ class GameEngine {
         this.stats.showPanel(0);
         this.stats.dom.id = 'fpsCounter';
         this.stats.dom.style.marginLeft = '7em';
+        this.gui = new dat.GUI();
+        this.gui.hide();
 
         this.player = this.getPlayer();
     }
 
-    start(fps) {
-        let fpsInterval = 1000 / fps;
+    start() {
         let then = Date.now();
 
         this.running = true;
         const gameLoop = () => {
             requestAnimFrame(gameLoop, this.ctx.canvas);
 
+            let fpsInterval = 1000 / params.fps;
             let now = Date.now();
             let elapsed = now - then;
             if (elapsed > fpsInterval) {
@@ -174,6 +176,10 @@ class GameEngine {
      * Remove everything besides the scene manager from the list
      */
     clear() {
+        // Remove the player value sliders to prevent adding the same
+        // sliders on respawn
+        this.gui.removeFolder(this.player.playerFolder);
+
         let newEntities = [];
         for (const entity of this.entities) {
             if (entity instanceof SceneManager) {
@@ -216,8 +222,11 @@ class GameEngine {
 
         if (params.debug) {
             document.body.appendChild(this.stats.dom);
+            this.gui.show();
         } else if (!params.debug && document.getElementById('fpsCounter')) {
             document.getElementById('fpsCounter').remove();
+        } else {
+            this.gui.hide();
         }
     }
 

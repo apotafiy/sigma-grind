@@ -29,7 +29,7 @@ class Ground {
         for (let i = 0; i < horizontal; i++) {
             this.dontDrawGrass.push(false);
         }
-        if(dontCollide){
+        if (dontCollide) {
             this.dontCollide = ture;
         }
         this.type = type;
@@ -67,7 +67,7 @@ class Ground {
             this.xstart + 10,
             this.ystart + 64 * vertical,
             64 * horizontal - 20,
-            (64 * vertical) / 12 // Making it thinner
+            10 // Making it thinner
         );
 
         // Need this to fix player wall hanging
@@ -75,9 +75,9 @@ class Ground {
         // like he just dont care
         this.topBB = new BoundingBox(
             this.xstart,
-            this.ystart - (64 * vertical) / 50 + 5, // Making it goes above the ground a bit
+            this.ystart - 10, // Making it goes above the ground a bit
             64 * horizontal,
-            (64 * vertical) / 50 // Making it thinner
+            10 // Making it thinner
         );
     }
 
@@ -180,7 +180,7 @@ class Ground {
     // }
     draw(ctx) {
         let that = this;
-        // console.log(that.vertical);
+
         for (let i = 0; i < that.vertical; i++) {
             for (let j = 0; j < that.horizontal; j++) {
                 if (i === 0 && that.includeTop && !that.dontDrawGrass[j]) {
