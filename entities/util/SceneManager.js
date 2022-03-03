@@ -19,6 +19,8 @@ class SceneManager {
         this.soundEffects.select = SOUND_MANAGER.getSound('menu_select');
         this.soundEffects.cycle = SOUND_MANAGER.getSound('menu_cycle');
         this.soundEffects.menu_music = SOUND_MANAGER.getSound('menu_music');
+        this.currentLevel = 0;
+        this.totalLevels = 3;
         this.currentMS = 0;
         //only when on the menu
         if (this.currentState == 0) {
@@ -287,14 +289,11 @@ class SceneManager {
                     params.hardcore = true;
                 }
                 //stop current background music and load the level
-                this.soundEffects.menu_music.pause();
-                loadLevelOne(this.game);
+                // this.soundEffects.menu_music.pause();
+                // loadLevelOne(this.game);
+                this.loadLevel();
 
-                // sigmaArena(this.game);
-                //loadPurpleMountain(this.game);
-
-                this.currentState = -1;
-                this.setGameMode(this.game);
+                // this.setGameMode(this.game);
             }
         }
         //handle game over
@@ -309,17 +308,52 @@ class SceneManager {
 
         //handle win over
         if (this.currentState == 3) {
+            console.log('Hit state 3');
             if (this.game.keys.Enter && this.menuCooldown <= 0) {
                 this.soundEffects.select.play();
                 this.isLevel = false;
-                this.currentState = 0;
                 this.menuCooldown = 0.2;
+                if (this.currentLevel == this.totalLevels) {
+                    this.currentState = 0; // this needs to change based on what level we are in
+                    this.currentLevel = 0;
+                    this.soundEffects.menu_music.pause();
+                } else {
+                    // if (this.menuIndex == 1) {
+                    //     params.hardcore = true;
+                    // }
+                    this.loadLevel();
+                }
             }
         }
-        document.getElementById('state').innerHTML =
-            'Entity Count: ' + this.game.entities.length;
+        // document.getElementById('state').innerHTML =
+        //     'Entity Count: ' + this.game.entities.length;
     }
 
+    loadLevel() {
+        this.currentLevel++;
+        switch (this.currentLevel) {
+            case 1:
+                // loadLevelOne(this.game);
+                // loadTestLevel(this.game);
+                // sigmaArena(this.game);
+                loadPurpleMountain(this.game);
+                break;
+            case 2:
+                loadLevelTwo(this.game);
+                break;
+            case 3:
+                loadTestLevel(this.game);
+                break;
+        }
+        //needs to happen each time
+        this.soundEffects.select.play();
+        this.currentState = -1;
+        this.isLevel = true;
+
+        //stop current background music and load the level
+        this.soundEffects.menu_music.pause();
+        this.setGameMode(this.game);
+    }
     draw(ctx) {
         let that = this;
         if (

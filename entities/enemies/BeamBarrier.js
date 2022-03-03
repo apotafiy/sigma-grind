@@ -23,6 +23,9 @@ class BeamBarrier {
             this.height = 20;
             this.orientationSheet = 'horizontal';
         }
+        this.isPog = false;
+        this.isHostile = true;
+        this.collisionDamage = 10;
         this.scale = 3;
         this.state = 0;
         this.loadAnimations();
@@ -100,12 +103,21 @@ class BeamBarrier {
             }
         }
         if (this.state > 1) {
-            this.BB = new BoundingBox(
-                this.x,
-                this.y,
-                this.width * this.scale,
-                this.height * this.scale
-            );
+            if (this.orientation == 0) {
+                this.BB = new BoundingBox(
+                    this.x + 8,
+                    this.y,
+                    (this.width - 6) * this.scale,
+                    this.height * this.scale
+                );
+            } else if (this.orientation == 1) {
+                this.BB = new BoundingBox(
+                    this.x,
+                    this.y + 8,
+                    this.width * this.scale,
+                    (this.height - 6) * this.scale
+                );
+            }
         } else {
             this.BB = undefined;
         }
