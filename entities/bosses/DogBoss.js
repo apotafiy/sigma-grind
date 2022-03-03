@@ -30,7 +30,7 @@ class DogBoss {
         }
         this.isPog = true;
         this.flashframes = 0;
-
+        this.alwaysRender = false;
         // Boss health
         this.maxHealth = 320;
         this.health = this.maxHealth;
@@ -569,26 +569,26 @@ class DogBoss {
         if (this.iframes >= 0 || this.currentState == 4) {
             ctx.filter = 'none';
         }
-        //draw health bar bove him
+        // //draw health bar bove him
 
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = '#000000';
-        ctx.strokeRect(
-            this.x - this.game.camera.x + 60,
-            this.y - this.game.camera.y - 40,
-            200,
-            30
-        );
+        // ctx.lineWidth = 2;
+        // ctx.strokeStyle = '#000000';
+        // ctx.strokeRect(
+        //     this.x - this.game.camera.x + 60,
+        //     this.y - this.game.camera.y - 40,
+        //     200,
+        //     30
+        // );
 
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = '#00FF00';
-        ctx.fillStyle = '#00FF00';
-        ctx.fillRect(
-            this.x - this.game.camera.x + 60,
-            this.y - this.game.camera.y - 40,
-            (this.health / this.maxHealth) * 200,
-            30
-        );
+        // ctx.lineWidth = 2;
+        // ctx.strokeStyle = '#00FF00';
+        // ctx.fillStyle = '#00FF00';
+        // ctx.fillRect(
+        //     this.x - this.game.camera.x + 60,
+        //     this.y - this.game.camera.y - 40,
+        //     (this.health / this.maxHealth) * 200,
+        //     30
+        // );
 
         //signal wall attack
         if (this.currentState === 3) {

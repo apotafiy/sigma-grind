@@ -202,10 +202,11 @@ clear() {
     for (let i = this.entities.length - 1; i >= 0; i--) {
       if (
         this.player &&
-        (getDistance(this.entities[i], this.player) < 700 ||
+        (getDistance(this.entities[i], this.player) < 800 ||
           this.entities[i] instanceof Water ||
           this.entities[i] instanceof Spike ||
-          this.entities[i] instanceof SceneManager)
+          this.entities[i] instanceof SceneManager || this.entities[i].alwaysRender
+          || (this.entities[i] instanceof DogBoss && getDistance(this.entities[i], this.player) < 1200 ))
       ) {
         //if the player exists draw things close enough to the player
         this.entities[i].draw(this.ctx, this);
@@ -222,7 +223,6 @@ clear() {
             this.cullingOffset
         ) {
           this.entities[i].draw(this.ctx, this);
-          console.log("hittin this");
         }
       }
     }
@@ -236,34 +236,18 @@ clear() {
       this.clear_level = false;
     }
     let entitiesCount = this.entities.length;
-    //Update code!
-    // for (let i = 0; i < entitiesCount; i++) {
-    //   let entity = this.entities[i];
-
-    //   if (!entity.removeFromWorld) {
-    //     entity.update();
-    //     updatedThisTic ++;
-    //   }
-    // }
-
     //Player radius updates only
     for (let i = this.entities.length - 1; i >= 0; i--) {
       if (
         this.player &&
-        (getDistance(this.entities[i], this.player) < 700 ||
+        (getDistance(this.entities[i], this.player) < 800) ||
           this.entities[i] instanceof Water ||
           this.entities[i] instanceof Spike ||
           this.entities[i] instanceof SceneManager ||
-          this.entities[i] instanceof Drill)
+          this.entities[i] instanceof Drill ||
+          this.entities[i].alwaysRender  || (this.entities[i] instanceof DogBoss && getDistance(this.entities[i], this.player) < 2000 )
       ) {
         //if the player exists update things close to the player
-        let entity = this.entities[i];
-        if (!entity.removeFromWorld) {
-          entity.update();
-          updatedThisTic++;
-        }
-      } else if (!this.player) {
-        //if no player update everythign so we dont crash
         let entity = this.entities[i];
         if (!entity.removeFromWorld) {
           entity.update();
@@ -284,13 +268,19 @@ clear() {
               updatedThisTic++;
             }
         }
-
+      } else if (!this.player) {
+        //if no player update everythign so we dont crash
+        let entity = this.entities[i];
+        if (!entity.removeFromWorld) {
+          entity.update();
+          updatedThisTic++;
+        }
+      } 
         for (let i = this.entities.length - 1; i >= 0; --i) {
             if (this.entities[i].removeFromWorld) {
                 this.entities.splice(i, 1);
             }
         }
-      }
         if (params.debug) {
             document.body.appendChild(this.stats.dom);
             this.gui.show();
