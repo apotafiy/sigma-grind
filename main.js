@@ -101,6 +101,10 @@ ASSET_MANAGER.queueDownload('./sprites/rush/rush_spawn_37x48.png');
 ASSET_MANAGER.queueDownload('./sprites/misc/sign_64x64.png');
 //Explosion
 ASSET_MANAGER.queueDownload('./sprites/misc/explosion.png');
+//Lava
+ASSET_MANAGER.queueDownload('./sprites/misc/lava-1400x26.png');
+ASSET_MANAGER.queueDownload('./sprites/misc/lavaBottom.png');
+
 //player attack Animations
 ASSET_MANAGER.queueDownload(
     './sprites/player/zero_attack_right_one_92_64_2.png'

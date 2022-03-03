@@ -333,10 +333,10 @@ class SceneManager {
         this.currentLevel++;
         switch (this.currentLevel) {
             case 1:
-                // loadLevelOne(this.game);
+                loadLevelOne(this.game);
                 // loadTestLevel(this.game);
                 // sigmaArena(this.game);
-                loadPurpleMountain(this.game);
+                // loadPurpleMountain(this.game);
                 break;
             case 2:
                 loadLevelTwo(this.game);
