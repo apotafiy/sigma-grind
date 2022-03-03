@@ -185,6 +185,8 @@ class Mettaur {
             this.isDead = true;
             this.deathTimer = 20;
             this.xVelocity = 0;
+            // console.log(this);
+            this.game.camera.msOffset += 5000;
         }
     }
     updateBB() {

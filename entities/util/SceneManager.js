@@ -32,6 +32,9 @@ class SceneManager {
                 this.backgroundMusicVolume.value / 100
             );
         }
+
+        this.msOffset = 0;
+
         this.xVelocity = 0;
         this.yVelocity = 0;
         this.acceleration = 2000;
@@ -48,78 +51,8 @@ class SceneManager {
         this.interpolation = 0.06;
         this.background_songs = {};
         this.background_songs.intro = SOUND_MANAGER.getSound('background_1');
-
-        this.initGUI();
-    }
-
-    initGUI() {
-        // Dat GUI stuff
-        this.gui = new dat.GUI();
-        this.cameraFolder = this.gui.addFolder('Camera values');
-        this.testValues = {
-            accel: this.acceleration,
-            frixn: this.friction,
-            frixnMult: this.FRICTON_MULT,
-            frictionx: this.FRICTON_X,
-            frictiony: this.FRICTON_Y,
-            interpolation: this.interpolation,
-        };
-        this.cameraFolder
-            .add(this.testValues, 'accel')
-            .min(0)
-            .max(2000)
-            .step(1)
-            .onChange((val) => {
-                this.acceleration = val;
-            })
-            .name('Acceleration');
-        this.cameraFolder
-            .add(this.testValues, 'frixn')
-            .min(0.0000001)
-            .max(2)
-            .step(0.00000001)
-            .onChange((val) => {
-                this.friction = val;
-            })
-            .name('Friction');
-        this.cameraFolder
-            .add(this.testValues, 'frixnMult')
-            .min(0)
-            .max(10)
-            .step(1)
-            .onChange((val) => {
-                this.FRICTON_MULT = val;
-            })
-            .name('FrictionMultiplier');
-        this.cameraFolder
-            .add(this.testValues, 'frictionx')
-            .min(0.000000001)
-            .max(2)
-            .step(0.000000001)
-            .onChange((val) => {
-                this.FRICTON_X = val;
-            })
-            .name('Friction X');
-        this.cameraFolder
-            .add(this.testValues, 'frictiony')
-            .min(0.000000001)
-            .max(2)
-            .step(0.000000001)
-            .onChange((val) => {
-                this.FRICTON_y = val;
-            })
-            .name('Friction Y');
-        this.cameraFolder
-            .add(this.testValues, 'interpolation')
-            .min(0)
-            .max(1)
-            .step(0.001)
-            .onChange((val) => {
-                this.interpolation = val;
-            })
-            .name('Interpolation');
-
-        dat.GUI.toggleHide();
+      
+        SceneManagerDatGUI(game, this);
     }
 
     setGameMode(game) {
@@ -141,8 +74,14 @@ class SceneManager {
         }
     }
     getFormattedTime() {
-        let now = Date.now();
-        let timeDifference = now - this.fullStartTime ;
+        let now = Date.now() - this.msOffset;
+        let timeDifference = now - this.fullStartTime;
+
+        // If current time (in ms) ever goes negative, set it to 0
+        if (timeDifference < 0) {
+            this.fullStartTime = now + this.msOffset;
+            this.msOffset = 0;
+        }
         let m = 0;
         let s = 0;
         let ms = 0;
@@ -350,6 +289,10 @@ class SceneManager {
                 //stop current background music and load the level
                 this.soundEffects.menu_music.pause();
                 loadLevelOne(this.game);
+              
+                // sigmaArena(this.game);
+                //loadPurpleMountain(this.game);
+              
                 this.currentState = -1;
                 this.setGameMode(this.game);
             }

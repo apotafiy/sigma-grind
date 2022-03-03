@@ -29,7 +29,7 @@ class Ground {
         for (let i = 0; i < horizontal; i++) {
             this.dontDrawGrass.push(false);
         }
-        if(dontCollide){
+        if (dontCollide) {
             this.dontCollide = ture;
         }
         this.type = type;
@@ -69,7 +69,7 @@ class Ground {
             this.xstart + 10,
             this.ystart + 64 * vertical,
             64 * horizontal - 20,
-            (64 * vertical) / 12 // Making it thinner
+            10 // Making it thinner
         );
 
         // Need this to fix player wall hanging
@@ -77,9 +77,9 @@ class Ground {
         // like he just dont care
         this.topBB = new BoundingBox(
             this.xstart,
-            this.ystart - (64 * vertical) / 50 + 5, // Making it goes above the ground a bit
+            this.ystart - 10, // Making it goes above the ground a bit
             64 * horizontal,
-            (64 * vertical) / 50 // Making it thinner
+            10 // Making it thinner
         );
     }
 
@@ -153,7 +153,6 @@ class Ground {
             ASSET_MANAGER.getAsset('./sprites/ground/ground_tiles.png'),
             0 + 1 * 64 * 3,
             0 + (this.type - 1)* 64,
-            0 ,
             64,
             64,
             0,
@@ -162,6 +161,7 @@ class Ground {
             0,
             1
         );
+
         //right facing grass edge
         this.animations[3] = new Animator(
             ASSET_MANAGER.getAsset('./sprites/ground/ground_tiles.png'),
