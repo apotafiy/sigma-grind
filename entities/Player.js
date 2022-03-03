@@ -1261,6 +1261,9 @@ class Player {
         // checkpoint, he respawns at the spawn location
         this.x = this.checkpointX;
         this.y = this.checkpointY;
+        //Update camera position
+        this.game.camera.x = this.checkpointX;
+        this.game.camera.y = this.checkpointY;
         this.health = this.maxHealth; // Replenish health
         this.livesLeft--; // Loses a life
     }

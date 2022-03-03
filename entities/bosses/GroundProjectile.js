@@ -21,7 +21,7 @@ class GroundProjectile {
         this.dieOnCollide = false;
         this.isHostile = true;
         this.collisionDamage = 10;
-
+        this.alwaysRender = true;
         this.loadAnimation();
         //bounding box
         this.BB = new BoundingBox(this.x, this.y, 37 * this.scale , 32 * this.scale);
