@@ -69,6 +69,7 @@ ASSET_MANAGER.queueDownload('./sprites/dogboss/dogboss_projectile_37x32.png');
 ASSET_MANAGER.queueDownload('./sprites/eregion/eregion_main_64x109.png');
 ASSET_MANAGER.queueDownload('./sprites/eregion/eregion_wings_118x142.png');
 ASSET_MANAGER.queueDownload('./sprites/dogboss/spike_96x96.png');
+ASSET_MANAGER.queueDownload('./sprites/eregion/yellow_ball_66x70.png');
 //Sigma Animations
 ASSET_MANAGER.queueDownload('./sprites/sigma/sigma-beam-1202x177.png');
 ASSET_MANAGER.queueDownload('./sprites/sigma/beam-aim-30x110.png');

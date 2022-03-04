@@ -1,16 +1,27 @@
 class Eregion {
   constructor(game, x, y) {
     //     gameEngine.addEntity(new Eregion(gameEngine,19,-245));
+    //  gameEngine.addEntity(new Lava(gameEngine, -1, -200));
+    this.attacksPerformed = 0;
+    this.teleportLocations = [
+      { x: 9, y: -246 },
+      { x: 29, y: -246 },
+      { x: 19, y: -246 },
+      { x: 11, y: -249 },
+      { x: 27, y: -249 },
+      { x: 17, y: -249 },
+    ];
     this.x = x * 64;
     this.y = y * 64;
     this.game = game;
     this.isActive = false;
     this.player = this.game.getPlayer();
+    this.entityArrayPos = game.entities.length;
     this.lifeExpectancy = 999999999;
     this.cache = [];
     this.xVelocity = 0;
     this.yVelocity = 0;
-    this.health = 25;
+    // this.health = 300;
     this.acceleration = 3000;
     this.DISTANCE_MULT = 1;
     this.frames = 0;
@@ -22,8 +33,9 @@ class Eregion {
     this.drawOffset = 0;
     this.flashframes = 0;
     this.iframes = 0;
+    this.attackCooldown = 3;
     // Boss health
-    this.maxHealth = 20;
+    this.maxHealth = 300;
     this.health = this.maxHealth;
     this.healthBar = new HealthBar(this);
 
@@ -34,7 +46,7 @@ class Eregion {
       (51 / 2) * this.scale
     );
     this.state = 0;
-
+    this.alwaysRender = true;
     // this.isHostile = true;
     // this.collisionDamage = 5;
 
@@ -99,36 +111,47 @@ class Eregion {
     //TODO add actual good death logic
     console.log(this.deathTimer);
     if (!this.isDead) {
-        this.isDead = true;
-        this.deathTimer = 2;
-        this.xVelocity = 0;
+      this.isDead = true;
+      this.deathTimer = 2;
+      this.xVelocity = 0;
     } else {
-        this.deathTimer -= 1 * this.game.clockTick;
-        if (this.deathTimer <= 0) {
-            this.game.camera.finalTime =
-                this.game.camera.getFormattedTime();
-            this.game.camera.isLevel = false;
-            this.game.camera.currentState = 3;
-            this.game.camera.setMenuMode(this.game);
-            this.removeFromWorld = true;
-        }
+      this.deathTimer -= 1 * this.game.clockTick;
+      if (this.deathTimer <= 0) {
+        this.game.camera.finalTime = this.game.camera.getFormattedTime();
+        this.game.camera.isLevel = false;
+        this.game.camera.currentState = 3;
+        this.game.camera.setMenuMode(this.game);
+        this.removeFromWorld = true;
+      }
     }
-}
+  }
   update() {
     this.updateBB();
     this.drawBobOffset += 2 * this.game.clockTick;
     this.drawOffset = Math.sin(this.drawBobOffset) * 30;
 
-    //Invincibility frames 
+    //Invincibility frames
     if (this.iframes >= 0) {
-        this.flashframes =
-            (this.flashframes + 60 * this.game.clockTick) % 10;
+      this.flashframes = (this.flashframes + 60 * this.game.clockTick) % 10;
     } else {
-        this.flashframes = 0;
+      this.flashframes = 0;
     }
 
     if (this.health <= 0) this.die();
     this.iframes -= 1 * this.game.clockTick;
+    this.attackCooldown -= 1 * this.game.clockTick;
+    if (this.attackCooldown <= 0) {
+      //on every 3 attacks have boss teleport
+      if(Math.floor(this.attacksPerformed % 3) == 0){
+          this.teleport();
+      }
+      this.attackCooldown = 4;
+      this.game.addEntityAtIndex(
+        new HomingBall(this.game, this.x / 64, this.y / 64, 1),
+        this.entityArrayPos + 1
+      );
+      this.attacksPerformed++;
+    }
   }
 
   draw(ctx) {
@@ -148,7 +171,7 @@ class Eregion {
       that.scale
     );
     if (this.iframes >= 0) {
-        ctx.filter = ` brightness(${this.flashframes})`;
+      ctx.filter = ` brightness(${this.flashframes})`;
     }
     that.animations[0].drawFrame(
       that.game.clockTick,
@@ -158,7 +181,7 @@ class Eregion {
       that.scale
     );
     if (this.iframes >= 0) {
-        ctx.filter = 'none';
+      ctx.filter = "none";
     }
     //Draw the boss health_bar
     this.healthBar.drawBossHealthBar(ctx);
@@ -171,5 +194,16 @@ class Eregion {
         this.BB.height
       );
     }
+  }
+  teleport(){
+      let location = this.getRandomInt(0, this.teleportLocations.length);
+      this.x = this.teleportLocations[location].x * 64
+      this.y = this.teleportLocations[location].y * 64;
+      console.log("teleported", location);
+  }
+  getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min) + min);
   }
 }
