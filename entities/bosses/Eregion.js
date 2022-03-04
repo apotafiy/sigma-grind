@@ -148,7 +148,7 @@ class Eregion {
       this.attackCooldown = 4;
       this.game.addEntityAtIndex(
         new HomingBall(this.game, this.x / 64, this.y / 64, 1),
-        this.entityArrayPos + 1
+        this.entityArrayPos - 1
       );
       this.attacksPerformed++;
     }
