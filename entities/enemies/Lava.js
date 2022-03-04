@@ -5,9 +5,10 @@ class Lava {
         this.x = x * 64;
         this.y = y * 64;
         this.scale = 2;
-        this.speed = -174;
+        this.speed = -150;
         this.isHostile = true;
         this.collisionDamage = 999999;
+        this.alwaysRender = true;
         this.animation = new Animator(
             ASSET_MANAGER.getAsset('./sprites/misc/lava-1400x26.png'),
             0,
@@ -57,7 +58,7 @@ class Lava {
         // reset to origin when player die and respawn
         if (this.game.player.state === this.game.player.states.dead) {
             this.y = this.origin;
-        } else if (this.y >= -239 * 64) {
+        } else if (this.y >= -238 * 64) {
             this.y += this.speed * this.game.clockTick;
         } else {
             // do nothing

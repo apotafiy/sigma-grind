@@ -289,14 +289,6 @@ class GameEngine {
                     this.entities.splice(i, 1);
                 }
             }
-            if (params.debug) {
-                document.body.appendChild(this.stats.dom);
-                this.gui.show();
-            } else if (!params.debug && document.getElementById('fpsCounter')) {
-                document.getElementById('fpsCounter').remove();
-            } else {
-                this.gui.hide();
-            }
         }
         //END PLAYER RAD UPDATE
         for (let i = this.entities.length - 1; i >= 0; --i) {
@@ -306,9 +298,13 @@ class GameEngine {
         }
 
         if (params.debug) {
-            document.body.appendChild(this.stats.dom);
+            if (!document.getElementById('fpsCounter'))
+                document.body.appendChild(this.stats.dom);
+            this.gui.show();
         } else if (!params.debug && document.getElementById('fpsCounter')) {
             document.getElementById('fpsCounter').remove();
+        } else {
+            this.gui.hide();
         }
         //display entities we are updating per tic!
         document.getElementById('state').innerHTML =
