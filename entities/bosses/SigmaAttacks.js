@@ -131,6 +131,7 @@ class SigmaHead {
 
     die() {
         this.removeFromWorld = true;
+        this.beam.die();
     }
 
     updateBB() {
