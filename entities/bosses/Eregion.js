@@ -10,7 +10,7 @@ class Eregion {
       { x: 11, y: -249 },
       { x: 27, y: -249 },
       { x: 17, y: -249 },
-    ];
+    ]; // Update this to be based on star coordinates
     this.x = x * 64;
     this.y = y * 64;
     this.game = game;
@@ -110,7 +110,6 @@ class Eregion {
   }
   die() {
     //TODO add actual good death logic
-    console.log(this.deathTimer);
     if (!this.isDead) {
       this.isDead = true;
       this.deathTimer = 2;
@@ -159,10 +158,10 @@ class Eregion {
                     this.gravity / 360
                     // true
                 ),
-                this.entityArrayPos + 1
+                this.entityArrayPos - 1
             );
             //make them live longer
-            this.game.entities[this.entityArrayPos + 1].time = 200;
+            // this.game.entities[this.entityArrayPos -1].time = 200;
             this.game.addEntityAtIndex(
                 new GroundProjectile(
                     this.game,
@@ -174,10 +173,10 @@ class Eregion {
                     this.gravity / 360
                     // true
                 ),
-                this.entityArrayPos + 1
+                this.entityArrayPos - 1
             );
             //make them live longer
-            this.game.entities[this.entityArrayPos + 1].time = 200;
+            // this.game.entities[this.entityArrayPos - 1].time = 200;
         }
         this.attackCooldown = 2;
       } else {

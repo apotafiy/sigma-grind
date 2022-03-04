@@ -283,8 +283,9 @@ function loadLevelOne(gameEngine) {
 /**LEVEL 2 */
 function loadLevelTwo(gameEngine) {
   let gravity = 0.2;
-  gameEngine.addEntity(new Lava(gameEngine, -1, -230));
-  gameEngine.addEntity(new Player(gameEngine, 16, -242));
+  gameEngine.addEntity(new Player(gameEngine, 9, -11));
+  // gameEngine.addEntity(new Player(gameEngine, 9, -220));
+  gameEngine.addEntity(new Lava(gameEngine, -1, -1));
   gameEngine.addEntity(new Ground(gameEngine, 2, 0, -262, 41, 8, 1, 0, 0));
   gameEngine.addEntity(new Ground(gameEngine, 2, 0, -254, 7, 254, 1, 0, 0));
   gameEngine.addEntity(new Spike(gameEngine, 7, -254, 27, 1, 2));
@@ -317,6 +318,7 @@ function loadLevelTwo(gameEngine) {
   gameEngine.addEntity(new SpikeBall(gameEngine, 10, -114, gravity));
   gameEngine.addEntity(new SpikeBall(gameEngine, 10, -111, gravity));
   gameEngine.addEntity(new SpikeBall(gameEngine, 10, -108, gravity));
+  gameEngine.addEntity(new SpikeBall(gameEngine, 10, -105, gravity));
   gameEngine.addEntity(new Ground(gameEngine, 2, 10, -88, 1, 6, 1, 0, 0));
   gameEngine.addEntity(new Ground(gameEngine, 2, 10, -16, 2, 3, 1, 0, 0));
   gameEngine.addEntity(new Ground(gameEngine, 2, 11, -239, 6, 1, 1, 0, 0));
@@ -410,6 +412,7 @@ function loadLevelTwo(gameEngine) {
   gameEngine.addEntity(new SpikeBall(gameEngine, 30, -114, gravity));
   gameEngine.addEntity(new SpikeBall(gameEngine, 30, -111, gravity));
   gameEngine.addEntity(new SpikeBall(gameEngine, 30, -108, gravity));
+  gameEngine.addEntity(new SpikeBall(gameEngine, 30, -105, gravity));
   gameEngine.addEntity(new Spike(gameEngine, 30, -99, 4, 1, 2));
   gameEngine.addEntity(new Ground(gameEngine, 2, 30, -88, 11, 1, 1, 0, 0));
   gameEngine.addEntity(new Ground(gameEngine, 2, 30, -50, 2, 4, 1, 0, 0));
@@ -428,6 +431,7 @@ function loadLevelTwo(gameEngine) {
   gameEngine.addEntity(new Spike(gameEngine, 33, -76, 1, 30, 3));
   gameEngine.addEntity(new Spike(gameEngine, 33, -25, 1, 1, 2));
   gameEngine.addEntity(new Spike(gameEngine, 33, -23, 1, 1, 0));
+  gameEngine.addEntity(new Eregion(gameEngine,19,-245));
   gameEngine.addEntity(new Ground(gameEngine, 2, 33, -22, 8, 1, 1, 0, 0));
   gameEngine.addEntity(new Ground(gameEngine, 2, 34, -254, 7, 23, 1, 0, 0));
   gameEngine.addEntity(new Ground(gameEngine, 2, 34, -218, 7, 52, 1, 0, 0));
@@ -436,8 +440,7 @@ function loadLevelTwo(gameEngine) {
   gameEngine.addEntity(new Ground(gameEngine, 2, 34, -82, 7, 36, 1, 0, 0));
   gameEngine.addEntity(new Ground(gameEngine, 2, 34, -44, 7, 16, 1, 0, 0));
   gameEngine.addEntity(new Ground(gameEngine, 2, 34, -25, 7, 3, 1, 0, 0));
-  gameEngine.addEntity(new Eregion(gameEngine,19,-245));
-  // gameEngine.addEntity(new HomingBall(gameEngine,19,-244,1));
+
   gameEngine.entities.forEach(function (entity) {
     if (entity instanceof Ground) entity.checkForGrass();
   });
@@ -1058,7 +1061,7 @@ function loadTestLevel(gameEngine) {
   gameEngine.addEntity(new Ground(gameEngine, 2, 247, -92, 9, 1, 1, 0, 0));
   gameEngine.addEntity(new Ground(gameEngine, 2, 247, -85, 9, 1, 1, 0, 0));
   gameEngine.addEntity(new Ground(gameEngine, 2, 247, -53, 9, 1, 1, 0, 0));
-      //     gameEngine.addEntity(new Eregion(gameEngine,19,-245));
+  //     gameEngine.addEntity(new Eregion(gameEngine,19,-245));
   gameEngine.entities.forEach(function (entity) {
     if (entity instanceof Ground) entity.checkForGrass();
   });

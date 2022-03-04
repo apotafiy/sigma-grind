@@ -5,7 +5,7 @@ class Lava {
         this.x = x * 64;
         this.y = y * 64;
         this.scale = 2;
-        this.speed = -150;
+        this.speed = -140;
         this.isHostile = true;
         this.collisionDamage = 999999;
         this.alwaysRender = true;
