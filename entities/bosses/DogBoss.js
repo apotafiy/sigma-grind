@@ -356,8 +356,8 @@ class DogBoss {
             // }
         } else if (this.currentState == 2) {
             //up facing rain down attack
-            document.getElementById('state').innerHTML =
-                'Attacking Val: ' + this.attacking.toFixed(2);
+            // document.getElementById('state').innerHTML =
+            //     'Attacking Val: ' + this.attacking.toFixed(2);
             if (
                 this.attacking < 2.5 &&
                 (this.attacking.toFixed(2) % 0.2).toFixed(1) == 0

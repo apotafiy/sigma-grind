@@ -2,7 +2,7 @@ class Eregion {
   constructor(game, x, y) {
     //     gameEngine.addEntity(new Eregion(gameEngine,19,-245));
     //  gameEngine.addEntity(new Lava(gameEngine, -1, -200));
-    this.attacksPerformed = 0;
+    this.attacksPerformed = 1;
     this.teleportLocations = [
       { x: 9, y: -246 },
       { x: 29, y: -246 },
@@ -21,6 +21,7 @@ class Eregion {
     this.cache = [];
     this.xVelocity = 0;
     this.yVelocity = 0;
+    this.gravity = 200 * 0.2;
     // this.health = 300;
     this.acceleration = 3000;
     this.DISTANCE_MULT = 1;
@@ -142,14 +143,50 @@ class Eregion {
     this.attackCooldown -= 1 * this.game.clockTick;
     if (this.attackCooldown <= 0) {
       //on every 3 attacks have boss teleport
-      if(Math.floor(this.attacksPerformed % 3) == 0){
-          this.teleport();
+      if (Math.floor(this.attacksPerformed % 3) == 0) {
+        this.teleport();
       }
-      this.attackCooldown = 4;
-      this.game.addEntityAtIndex(
-        new HomingBall(this.game, this.x / 64, this.y / 64, 1),
-        this.entityArrayPos - 1
-      );
+      if (Math.floor(this.attacksPerformed % 5) == 0) {
+        for (let i = 0; i <= 6; i += 2) {
+            this.game.addEntityAtIndex(
+                new GroundProjectile(
+                    this.game,
+                    this.x + 130,
+                    this.y + 150,
+                    i,
+                    -8,
+                    1,
+                    this.gravity / 360
+                    // true
+                ),
+                this.entityArrayPos + 1
+            );
+            //make them live longer
+            this.game.entities[this.entityArrayPos + 1].time = 200;
+            this.game.addEntityAtIndex(
+                new GroundProjectile(
+                    this.game,
+                    this.x + 130,
+                    this.y + 150,
+                    i,
+                    -8,
+                    -1,
+                    this.gravity / 360
+                    // true
+                ),
+                this.entityArrayPos + 1
+            );
+            //make them live longer
+            this.game.entities[this.entityArrayPos + 1].time = 200;
+        }
+        this.attackCooldown = 2;
+      } else {
+        this.game.addEntityAtIndex(
+          new HomingBall(this.game, this.x / 64, this.y / 64, 1),
+          this.entityArrayPos - 1
+        );
+        this.attackCooldown = 4;
+      }
       this.attacksPerformed++;
     }
   }
@@ -195,11 +232,11 @@ class Eregion {
       );
     }
   }
-  teleport(){
-      let location = this.getRandomInt(0, this.teleportLocations.length);
-      this.x = this.teleportLocations[location].x * 64
-      this.y = this.teleportLocations[location].y * 64;
-      console.log("teleported", location);
+  teleport() {
+    let location = this.getRandomInt(0, this.teleportLocations.length);
+    this.x = this.teleportLocations[location].x * 64;
+    this.y = this.teleportLocations[location].y * 64;
+
   }
   getRandomInt(min, max) {
     min = Math.ceil(min);
