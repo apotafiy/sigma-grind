@@ -22,6 +22,14 @@ class SceneManager {
         this.currentLevel = 0;
         this.totalLevels = 3;
         this.currentMS = 0;
+        //allow the user to change the sound of all the stuff 
+        this.soundVolume = document.getElementById("volume");
+        this.soundVolume.oninput = function () {
+            SOUND_MANAGER.setAllVolume (this.value / 100);
+        };
+        SOUND_MANAGER.setAllVolume(
+            this.soundVolume.value / 100
+        );
         //only when on the menu
         if (this.currentState == 0) {
             SOUND_MANAGER.autoRepeat('menu_music');
@@ -308,7 +316,6 @@ class SceneManager {
 
         //handle win over
         if (this.currentState == 3) {
-            console.log('Hit state 3');
             if (this.game.keys.Enter && this.menuCooldown <= 0) {
                 this.soundEffects.select.play();
                 this.isLevel = false;

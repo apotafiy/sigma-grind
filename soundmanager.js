@@ -42,4 +42,10 @@ class SoundManager {
     setVolume(path, volume) {
         this.soundEffects.get(path).volume = volume;
     }
+
+    setAllVolume(volume){
+        for(let [key, value] of this.soundEffects.entries()){
+            this.setVolume(key, volume);
+        } 
+    }
 }
