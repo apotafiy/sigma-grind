@@ -31,6 +31,7 @@ class Sigma {
         this.teleportPoints = [
             { x: (x + 2) * 64, y: (y - 2.5) * 64, type: 'right' },
             { x: (x - 12) * 64, y: (y - 2.5) * 64, type: 'left' },
+            { x: (x - 5) * 64, y: (y - 7) * 64, type: 'mid' },
         ];
 
         this.facing = 1;
@@ -42,6 +43,7 @@ class Sigma {
         this.isHostile = true;
         this.collisionDamage = 10;
         this.isDead = false;
+        this.alwaysRender = true;
 
         // Boss health
         this.maxHealth = 320;
@@ -49,6 +51,9 @@ class Sigma {
         this.healthBar = new HealthBar(this);
         this.iframes = 0;
         this.flashframes = 0;
+        this.ballTimeout = 0.1;
+        this.ballOffset = 0;
+        this.ballSpeedOffset = 0;
 
         //sound imports
         this.soundEffects = {};
@@ -282,6 +287,34 @@ class Sigma {
             false,
             false
         );
+
+        // Balls attack - attack3
+        // face right
+        this.animations[this.states.attack3][0] = new Animator(
+            ASSET_MANAGER.getAsset('./sprites/sigma/sigma-attack3-70x101.png'),
+            140,
+            0,
+            70,
+            101,
+            2,
+            0.12,
+            0,
+            true,
+            true
+        );
+        // face left
+        this.animations[this.states.attack3][1] = new Animator(
+            ASSET_MANAGER.getAsset('./sprites/sigma/sigma-attack3-70x101.png'),
+            0,
+            0,
+            70,
+            101,
+            2,
+            0.12,
+            0,
+            false,
+            true
+        );
     }
 
     // TODO
@@ -368,10 +401,6 @@ class Sigma {
                         // after intro is done
                         this.state = this.states.idle;
 
-                        // TELEPORT after intro is done
-                        // for testing only, remove when done
-                        this.state = this.states.teleportOut;
-
                         this.game.player.immobilized = false;
                         this.game.player.meetBoss = false;
                     }
@@ -387,7 +416,11 @@ class Sigma {
                 this.state === this.states.teleportIn ||
                 this.state === this.states.teleportOut
             ) {
-                this.teleport(this.teleportPoints[randomInt(2)]);
+                this.teleport(
+                    // this.teleportPoints[randomInt(2)],
+                    this.teleportPoints[randomInt(2)],
+                    this.states.idle
+                );
             }
 
             // dash
@@ -416,8 +449,19 @@ class Sigma {
                         this.facing
                     ].elapsedTime = 0;
                     this.wave2StartTime = 0.9;
+
+                    // do something after wave attack
+                    this.state = this.states.attack1;
                 }
             }
+
+            // balls - attack3
+            if (this.state === this.states.attack3) {
+                if (this.game.player.x <= this.x) this.facing = 1;
+                else this.facing = 0;
+                this.spawnBalls();
+            }
+
             // END ACTION
 
             if (!this.isIntro) {
@@ -496,7 +540,7 @@ class Sigma {
         this.setOffset();
     }
 
-    teleport({ x, y, type }) {
+    teleport({ x, y, type }, action) {
         // When teleporting, should not:
         // - deal damage/ take damage
         // - pogo
@@ -526,7 +570,7 @@ class Sigma {
             this.facing = type === 'right' ? 1 : 0;
 
             // Do something after teleport here
-            this.state = this.states.attack2;
+            this.state = action;
         }
     }
 
@@ -550,7 +594,12 @@ class Sigma {
         } else {
             this.sigmaHead.spawnIn = false;
             this.sigmaHead.spawnOut = true;
-            this.state = this.states.idle;
+            this.sigmaHead.isHostile = false;
+            this.sigmaHead.isPog = false;
+            this.sigmaHead.collisionDamage = 0;
+
+            // this.state = this.states.idle;
+            this.state = this.states.dash;
 
             // Reset Kamehameha
             this.sigmaHead = new SigmaHead(this.game, null, null, true);
@@ -580,6 +629,75 @@ class Sigma {
                     this.facing
                 );
             }
+        }
+    }
+
+    spawnBalls() {
+        this.ballTimeout -= this.game.clockTick;
+        this.ballTimeout = Math.max(this.ballTimeout, 0);
+        let ballSpeed = 300;
+        // increase offset
+        this.ballOffset += this.game.clockTick * 90;
+        this.ballOffset = Math.min(this.ballOffset, this.BB.height);
+
+        this.ballSpeedOffset += this.game.clockTick * 180;
+        this.ballSpeedOffset = Math.min(this.ballSpeedOffset, ballSpeed * 2);
+
+        if (this.ballTimeout === 0) {
+            // top left
+            this.game.addEntityAtIndex(
+                new SigmaBall(
+                    this.game,
+                    this.x + this.ballOffset,
+                    this.y,
+                    -ballSpeed + this.ballSpeedOffset,
+                    -ballSpeed
+                ),
+                this.entityArrayPos + 1
+            );
+            // top right
+            this.game.addEntityAtIndex(
+                new SigmaBall(
+                    this.game,
+                    this.x + this.BB.width,
+                    this.y + this.ballOffset,
+                    ballSpeed,
+                    -ballSpeed + this.ballSpeedOffset
+                ),
+                this.entityArrayPos + 1
+            );
+            // bottom left
+            this.game.addEntityAtIndex(
+                new SigmaBall(
+                    this.game,
+                    this.x,
+                    this.y + this.BB.height - this.ballOffset,
+                    -ballSpeed,
+                    ballSpeed - this.ballSpeedOffset
+                ),
+                this.entityArrayPos + 1
+            );
+            // bottom right
+            this.game.addEntityAtIndex(
+                new SigmaBall(
+                    this.game,
+                    this.x + this.BB.width - this.ballOffset,
+                    this.y + this.BB.height,
+                    ballSpeed - this.ballSpeedOffset,
+                    ballSpeed
+                ),
+                this.entityArrayPos + 1
+            );
+            // reset timeout
+            this.ballTimeout = 0.1;
+        }
+
+        // stop attack and reset
+        if (this.ballSpeedOffset === ballSpeed * 2) {
+            this.ballTimeout = 0.1;
+            this.ballOffset = 0;
+            this.ballSpeedOffset = 0;
+            this.state = this.states.idle;
         }
     }
 

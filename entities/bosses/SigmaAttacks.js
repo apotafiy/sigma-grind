@@ -17,6 +17,7 @@ class SigmaHead {
         this.idleTime = 0.3;
         this.beamTime = 3;
         this.beamEnd = 5;
+        this.alwaysRender = true;
 
         this.animations = [];
 
@@ -146,15 +147,13 @@ class SigmaHead {
         if (!this.isHidden) {
             const TICK = this.game.clockTick;
 
-            // During spawn in, no interaction with player
-            if (this.spawnIn) {
-                this.isPog = false;
-                this.isHostile = false;
-                this.collisionDamage = 0;
-            } else {
+            if (
+                this.state === this.states.idle ||
+                this.state === this.states.attack
+            ) {
                 this.isPog = true;
                 this.isHostile = true;
-                this.collisionDamage = 10;
+                this.collisionDamage = 30;
             }
 
             // wait a bit after spawn to attack
@@ -225,9 +224,6 @@ class SigmaHead {
         if (this.spawnOut) {
             this.fadeValue -= this.game.clockTick;
             this.fadeValue = Math.max(this.fadeValue, 0);
-            this.isHostile = false;
-            this.isPog = false;
-            this.collisionDamage = 0;
             ctx.filter = `opacity(${this.fadeValue})`;
             if (this.fadeValue === 0) {
                 this.spawnOut = false;
@@ -318,6 +314,7 @@ class Beam {
         this.isHostile = true;
         this.isPog = false;
         this.collisionDamage = 10;
+        this.alwaysRender = true;
 
         this.animations = [];
         this.loadAnimation();
@@ -404,6 +401,96 @@ class Beam {
     }
 }
 
+class SigmaBall {
+    constructor(game, x, y, speedX, speedY) {
+        this.scale = 2;
+        this.game = game;
+        this.activeTime = 200;
+        this.x = x;
+        this.y = y;
+        this.speed = {
+            x: speedX,
+            y: speedY,
+        };
+
+        this.isHostile = true;
+        this.collisionDamage = 10;
+        this.alwaysRender = true;
+        this.dead = false;
+
+        this.animation = new Animator(
+            ASSET_MANAGER.getAsset('./sprites/sigma/sigma-balls-32x32.png'),
+            0,
+            0,
+            32,
+            32,
+            10,
+            0.08,
+            0,
+            false,
+            true
+        );
+
+        this.updateBB();
+    }
+
+    updateBB() {
+        this.lastBB = this.BB;
+        this.BB = new BoundingBox(
+            this.x,
+            this.y,
+            32 * this.scale,
+            32 * this.scale
+        );
+    }
+
+    die() {
+        this.removeFromWorld = true;
+    }
+
+    update() {
+        const TICK = this.game.clockTick;
+
+        this.activeTime -= 1;
+        if (this.activeTime <= 0) this.die();
+
+        this.x += this.speed.x * TICK;
+        this.y += this.speed.y * TICK;
+        this.updateBB();
+
+        // Collision
+        this.game.entities.forEach((entity) => {
+            if (
+                entity.BB &&
+                this.BB.collide(entity.BB) &&
+                entity instanceof Ground
+            ) {
+                this.die();
+            }
+        });
+    }
+
+    draw(ctx) {
+        this.animation.drawFrame(
+            this.game.clockTick,
+            ctx,
+            this.x - this.game.camera.x,
+            this.y - this.game.camera.y,
+            this.scale
+        );
+
+        if (params.debug) {
+            ctx.strokeStyle = 'Purple';
+            ctx.strokeRect(
+                this.BB.x - this.game.camera.x,
+                this.BB.y - this.game.camera.y,
+                this.BB.width,
+                this.BB.height
+            );
+        }
+    }
+}
+
 class Wave {
     constructor(game, x, y) {
         this.game = game;
@@ -415,6 +502,7 @@ class Wave {
         this.isPog = false;
         this.isHidden = true;
         this.collisionDamage = 10;
+        this.alwaysRender = true;
 
         this.started = false;
 
