@@ -35,8 +35,8 @@ class Eregion {
     );
     this.state = 0;
 
-    this.isHostile = true;
-    this.collisionDamage = 5;
+    // this.isHostile = true;
+    // this.collisionDamage = 5;
 
     this.animations = [];
     this.loadAnimations();
