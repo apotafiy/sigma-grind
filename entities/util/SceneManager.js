@@ -53,7 +53,7 @@ class SceneManager {
         this.interpolation = 0.06;
         this.background_songs = {};
         this.background_songs.intro = SOUND_MANAGER.getSound('background_1');
-      
+
         SceneManagerDatGUI(game, this);
     }
 
@@ -291,10 +291,8 @@ class SceneManager {
                 //stop current background music and load the level
                 // this.soundEffects.menu_music.pause();
                 // loadLevelOne(this.game);
-              this.loadLevel();
-                // sigmaArena(this.game);
-                //loadPurpleMountain(this.game);
-            
+                this.loadLevel();
+
                 // this.setGameMode(this.game);
             }
         }
@@ -310,12 +308,12 @@ class SceneManager {
 
         //handle win over
         if (this.currentState == 3) {
-            console.log("Hit state 3")
+            console.log('Hit state 3');
             if (this.game.keys.Enter && this.menuCooldown <= 0) {
                 this.soundEffects.select.play();
                 this.isLevel = false;
                 this.menuCooldown = 0.2;
-                if(this.currentLevel == this.totalLevels){
+                if (this.currentLevel == this.totalLevels) {
                     this.currentState = 0; // this needs to change based on what level we are in
                     this.currentLevel = 0;
                     this.soundEffects.menu_music.pause();
@@ -324,7 +322,6 @@ class SceneManager {
                     //     params.hardcore = true;
                     // }
                     this.loadLevel();
-
                 }
             }
         }
@@ -332,23 +329,22 @@ class SceneManager {
         //     'Entity Count: ' + this.game.entities.length;
     }
 
-    loadLevel(){
+    loadLevel() {
         this.currentLevel++;
-        switch(this.currentLevel){
+        switch (this.currentLevel) {
             case 1:
                 // loadLevelOne(this.game);
                 loadLevelTwo(this.game);
                 // loadTestLevel(this.game);
+                // sigmaArena(this.game);
+                // loadPurpleMountain(this.game);
                 break;
-            case 2: 
+            case 2:
                 loadLevelTwo(this.game);
                 break;
-            case 3: 
+            case 3:
                 loadTestLevel(this.game);
                 break;
-                
-  
-
         }
         //needs to happen each time
         this.soundEffects.select.play();
@@ -358,7 +354,6 @@ class SceneManager {
         //stop current background music and load the level
         this.soundEffects.menu_music.pause();
         this.setGameMode(this.game);
-        
     }
     draw(ctx) {
         let that = this;

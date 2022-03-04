@@ -14,8 +14,8 @@ class SigmaHead {
         this.spawnOut = false;
         this.initDone = false;
         this.fadeValue = 0;
-        this.idleTime = 0.5;
-        this.beamTime = 4;
+        this.idleTime = 0.3;
+        this.beamTime = 3;
         this.beamEnd = 5;
 
         this.animations = [];
@@ -225,6 +225,9 @@ class SigmaHead {
         if (this.spawnOut) {
             this.fadeValue -= this.game.clockTick;
             this.fadeValue = Math.max(this.fadeValue, 0);
+            this.isHostile = false;
+            this.isPog = false;
+            this.collisionDamage = 0;
             ctx.filter = `opacity(${this.fadeValue})`;
             if (this.fadeValue === 0) {
                 this.spawnOut = false;
@@ -386,6 +389,146 @@ class Beam {
                 this.x - this.game.camera.x,
                 this.y - this.game.camera.y,
                 1
+            );
+        }
+
+        if (params.debug) {
+            ctx.strokeStyle = 'Purple';
+            ctx.strokeRect(
+                this.BB.x - this.game.camera.x,
+                this.BB.y - this.game.camera.y,
+                this.BB.width,
+                this.BB.height
+            );
+        }
+    }
+}
+
+class Wave {
+    constructor(game, x, y) {
+        this.game = game;
+        this.scale = 2;
+        this.x = x;
+        this.y = y;
+        this.facing = 1;
+        this.isHostile = true;
+        this.isPog = false;
+        this.isHidden = true;
+        this.collisionDamage = 10;
+
+        this.started = false;
+
+        this.animations = [];
+        this.loadAnimation();
+        this.updateBB();
+    }
+
+    loadAnimation() {
+        // Face right
+        this.animations[0] = new Animator(
+            ASSET_MANAGER.getAsset('./sprites/sigma/sigma-wave-70x146.png'),
+            210,
+            0,
+            70,
+            146,
+            3,
+            0.06,
+            0,
+            true,
+            true
+        );
+        // Face left
+        this.animations[1] = new Animator(
+            ASSET_MANAGER.getAsset('./sprites/sigma/sigma-wave-70x146.png'),
+            0,
+            0,
+            70,
+            146,
+            3,
+            0.06,
+            0,
+            false,
+            true
+        );
+    }
+
+    updateBB() {
+        this.lastBB = this.BB;
+        if (this.started) {
+            this.BB = new BoundingBox(
+                this.x,
+                this.y,
+                70 * this.scale,
+                146 * this.scale
+            );
+        } else {
+            this.BB = new BoundingBox(0, 0, 0, 0);
+        }
+    }
+
+    die() {
+        this.removeFromWorld = true;
+    }
+
+    start(x, y, facing) {
+        this.x = x;
+        this.y = y;
+        this.facing = facing;
+        this.started = true;
+        this.isHidden = false;
+        this.speed = 300;
+    }
+
+    reset() {
+        this.started = false;
+        this.isHidden = true;
+        // this.updateBB();
+    }
+
+    update() {
+        const TICK = this.game.clockTick;
+
+        if (!this.isHidden) {
+            this.isHostile = true;
+            this.collisionDamage = 30;
+
+            this.x +=
+                (this.facing === 0 ? this.speed : -this.speed) *
+                TICK *
+                this.scale;
+
+            // Collision
+            this.game.entities.forEach((entity) => {
+                if (
+                    entity.BB &&
+                    this.BB.collide(entity.BB) &&
+                    entity instanceof Ground
+                ) {
+                    if (this.BB.collide(entity.leftBB)) {
+                        this.x = entity.BB.left - this.BB.width;
+                        if (this.speed > 0) this.speed = 0;
+                    } else if (this.BB.collide(entity.rightBB)) {
+                        this.x = entity.BB.right;
+                        if (this.speed < 0) this.speed = 0;
+                    }
+                    this.reset();
+                }
+            });
+        } else {
+            this.isHostile = false;
+            this.collisionDamage = 0;
+        }
+        this.updateBB();
+    }
+
+    draw(ctx) {
+        if (!this.isHidden) {
+            this.animations[this.facing].drawFrame(
+                this.game.clockTick,
+                ctx,
+                this.x - this.game.camera.x,
+                this.y - this.game.camera.y,
+                this.scale
             );
         }
 
