@@ -73,7 +73,6 @@ class SmallHealthPack {
     }
     update() {
         this.bobTimer += 10 * this.game.clockTick;
-        console.log(Math.sin(this.bobTimer));
         // this.updateBB();
         let that = this;
         this.game.entities.forEach(function (entity) {
