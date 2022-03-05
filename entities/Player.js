@@ -824,11 +824,6 @@ class Player {
 
             this.handleVelocity();
 
-            if (this.game.keys.ArrowUp) {
-                // console.log('pressed');
-                this.velocity.y -= 80;
-            }
-
             this.handlePosition();
 
             // Fall off map = dead
