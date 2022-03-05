@@ -285,21 +285,24 @@ class SceneManager {
             //     this.game.player.y - vertmidpoint,
             //     this.interpolation
             // );
-
+            let moveFast = 1;
+            if(this.game.keys.Space) {
+                moveFast = 10;
+            }
             if(this.game.keys.KeyA){
-                this.x -=2;
+                this.x -=2 * moveFast;
                 this.game.player.x = this.x + midpoint;
             }
             if(this.game.keys.KeyD){
-                this.x +=2;
+                this.x +=2 * moveFast;
                 this.game.player.x = this.x + midpoint;
             }
             if(this.game.keys.KeyS){
-                this.y +=2;
+                this.y +=2 * moveFast;
                 this.game.player.y= this.y + vertmidpoint;
             }
             if(this.game.keys.KeyW){
-                this.y -=2;
+                this.y -=2 * moveFast;
                 this.game.player.y= this.y + vertmidpoint;
             }
             //remove some of the shake for friction
@@ -392,9 +395,9 @@ class SceneManager {
         this.currentLevel++;
         switch (this.currentLevel) {
             case 1:
-                loadLevelOne(this.game);
+                // loadLevelOne(this.game);
                 // loadLevelTwo(this.game);
-                // loadTestLevel(this.game);
+                loadTestLevel(this.game);
                 // sigmaArena(this.game);
                 // loadPurpleMountain(this.game);
                 break;

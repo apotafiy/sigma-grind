@@ -150,53 +150,53 @@ class Eregion {
       //on every 3 attacks have boss teleport
       if (Math.floor(this.attacksPerformed % 3) == 0) {
           this.soundEffects.teleport.play();
-        this.teleport();
+        // this.teleport();
       }
-      if (Math.floor(this.attacksPerformed % 5) == 0) {
-          this.soundEffects.up_attack.play();
-        for (let i = 0; i <= 6; i += 2) {
-            this.game.addEntityAtIndex(
-                new GroundProjectile(
-                    this.game,
-                    this.x + 130,
-                    this.y + 150,
-                    i,
-                    -8,
-                    1,
-                    this.gravity / 360
-                    // true
-                ),
-                this.entityArrayPos - 1
-            );
-            //make them live longer
-            // this.game.entities[this.entityArrayPos -1].time = 200;
-            this.game.addEntityAtIndex(
-                new GroundProjectile(
-                    this.game,
-                    this.x + 130,
-                    this.y + 150,
-                    i,
-                    -8,
-                    -1,
-                    this.gravity / 360
-                    // true
-                ),
-                this.entityArrayPos - 1
-            );
+      // if (Math.floor(this.attacksPerformed % 5) == 0) {
+      //     this.soundEffects.up_attack.play();
+      //   for (let i = 0; i <= 6; i += 2) {
+      //       this.game.addEntityAtIndex(
+      //           new GroundProjectile(
+      //               this.game,
+      //               this.x + 130,
+      //               this.y + 150,
+      //               i,
+      //               -8,
+      //               1,
+      //               this.gravity / 360
+      //               // true
+      //           ),
+      //           this.entityArrayPos - 1
+      //       );
+      //       //make them live longer
+      //       // this.game.entities[this.entityArrayPos -1].time = 200;
+      //       this.game.addEntityAtIndex(
+      //           new GroundProjectile(
+      //               this.game,
+      //               this.x + 130,
+      //               this.y + 150,
+      //               i,
+      //               -8,
+      //               -1,
+      //               this.gravity / 360
+      //               // true
+      //           ),
+      //           this.entityArrayPos - 1
+      //       );
             //make them live longer
             // this.game.entities[this.entityArrayPos - 1].time = 200;
         }
         this.attackCooldown = 2;
-      } else {
-          this.soundEffects.ball_attack.play();
-        this.game.addEntityAtIndex(
-          new HomingBall(this.game, this.x / 64, this.y / 64, 1),
-          this.entityArrayPos - 1
-        );
-        this.attackCooldown = 4;
-      }
-      this.attacksPerformed++;
-    }
+    //   } else {
+    //       this.soundEffects.ball_attack.play();
+    //     this.game.addEntityAtIndex(
+    //       new HomingBall(this.game, this.x / 64, this.y / 64, 1),
+    //       this.entityArrayPos - 1
+    //     );
+    //     this.attackCooldown = 4;
+    //   }
+    //   this.attacksPerformed++;
+    // }
   }
 
   draw(ctx) {

@@ -193,45 +193,45 @@ class GameEngine {
     this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
 
     // Draw latest things first
-    for (let i = this.entities.length - 1; i >= 0; i--) {
-      this.entities[i].draw(this.ctx, this);
-    }
-    //Updated Draw Loop With Distance Draw Disabling
     // for (let i = this.entities.length - 1; i >= 0; i--) {
-    //     if (
-    //         this.player &&
-    //         (getDistance(this.entities[i], this.player) < 800 ||
-    //             this.entities[i] instanceof Water ||
-    //             this.entities[i] instanceof PurpleMountain ||
-    //             this.entities[i] instanceof Lava ||
-    //             this.entities[i] instanceof Spike ||
-    //             this.entities[i] instanceof SceneManager ||
-    //             this.entities[i].alwaysRender ||
-    //             (this.entities[i] instanceof DogBoss &&
-    //                 getDistance(this.entities[i], this.player) < 1200) ||
-    //             (this.entities[i] instanceof Eregion &&
-    //                 getDistance(this.entities[i], this.player) < 1500) ||
-    //             (this.entities[i] instanceof Sigma &&
-    //                 getDistance(this.entities[i], this.player) < 2000))
-    //     ) {
-    //         //if the player exists draw things close enough to the player
-    //         this.entities[i].draw(this.ctx, this);
-    //     } else if (!this.player) {
-    //         //otherwise draw everything
-    //         this.entities[i].draw(this.ctx, this);
-    //     } else if (this.entities[i] instanceof Ground) {
-    //         if (
-    //             getDistance(this.entities[i], this.player) <
-    //             Math.max(
-    //                 this.entities[i].horizontal * 64,
-    //                 this.entities[i].vertical * 64
-    //             ) +
-    //                 this.cullingOffset
-    //         ) {
-    //             this.entities[i].draw(this.ctx, this);
-    //         }
-    //     }
+    //   this.entities[i].draw(this.ctx, this);
     // }
+    // Updated Draw Loop With Distance Draw Disabling
+    for (let i = this.entities.length - 1; i >= 0; i--) {
+        if (
+            this.player &&
+            (getDistance(this.entities[i], this.player) < 800 ||
+                this.entities[i] instanceof Water ||
+                this.entities[i] instanceof PurpleMountain ||
+                this.entities[i] instanceof Lava ||
+                this.entities[i] instanceof Spike ||
+                this.entities[i] instanceof SceneManager ||
+                this.entities[i].alwaysRender ||
+                (this.entities[i] instanceof DogBoss &&
+                    getDistance(this.entities[i], this.player) < 1200) ||
+                (this.entities[i] instanceof Eregion &&
+                    getDistance(this.entities[i], this.player) < 1500) ||
+                (this.entities[i] instanceof Sigma &&
+                    getDistance(this.entities[i], this.player) < 2000))
+        ) {
+            //if the player exists draw things close enough to the player
+            this.entities[i].draw(this.ctx, this);
+        } else if (!this.player) {
+            //otherwise draw everything
+            this.entities[i].draw(this.ctx, this);
+        } else if (this.entities[i] instanceof Ground) {
+            if (
+                getDistance(this.entities[i], this.player) <
+                Math.max(
+                    this.entities[i].horizontal * 64,
+                    this.entities[i].vertical * 64
+                ) +
+                    this.cullingOffset
+            ) {
+                this.entities[i].draw(this.ctx, this);
+            }
+        }
+    }
   }
 
   update() {
