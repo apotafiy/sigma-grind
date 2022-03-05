@@ -32,7 +32,7 @@ class DogBoss {
         this.flashframes = 0;
         this.alwaysRender = false;
         // Boss health
-        this.maxHealth =320;
+        this.maxHealth = 320;
         this.health = this.maxHealth;
         this.healthBar = new HealthBar(this);
         this.opacity = 1;
@@ -218,11 +218,13 @@ class DogBoss {
             this.xVelocity = 0;
         } else {
             this.deathTimer -= 1 * this.game.clockTick;
-          this.opacity = Math.max(0, this.opacity - 1 * this.game.clockTick);
+            this.opacity = Math.max(0, this.opacity - 1 * this.game.clockTick);
             if (this.deathTimer <= 0) {
                 this.game.camera.finalTime =
                     this.game.camera.getFormattedTime();
-                params.totalTime += this.game.camera.parseTime(this.game.camera.finalTime);
+                params.totalTime += this.game.camera.parseTime(
+                    this.game.camera.finalTime
+                );
                 this.game.camera.isLevel = false;
                 this.game.camera.currentState = 3;
                 this.game.camera.setMenuMode(this.game);
@@ -543,7 +545,7 @@ class DogBoss {
         });
 
         // Display values for debugging
-        document.getElementById('attacking').innerHTML = this.currentState;
+        // document.getElementById('attacking').innerHTML = this.currentState;
         // // //always apply gravity
         // that.y += that.yVelocity * that.game.clockTick;
     }

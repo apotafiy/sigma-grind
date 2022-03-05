@@ -73,15 +73,13 @@ class Sigma {
         this.ballOffset = 0;
         this.ballSpeedOffset = 0;
         this.attackCooldown = 0.6;
-        this.deathDelay = 2.4;
 
         //sound imports
         this.soundEffects = {};
-        // this.soundEffects.attack = SOUND_MANAGER.getSound('dogboss_roar');
-        // this.soundEffects.launch_attack = SOUND_MANAGER.getSound(
-        //     'dogboss_launch_projectile'
-        // );
-        // this.soundEffects.walk = SOUND_MANAGER.getSound('dogboss_walk');
+        this.soundEffects.teleport = SOUND_MANAGER.getSound('teleport');
+        this.soundEffects.dash = SOUND_MANAGER.getSound('dash');
+        this.soundEffects.wave = SOUND_MANAGER.getSound('wave');
+        this.soundEffects.balls = SOUND_MANAGER.getSound('balls');
 
         this.animations = [];
         this.spriteOffset = {
@@ -339,29 +337,29 @@ class Sigma {
         // dead
         // face right
         this.animations[this.states.dead][0] = new Animator(
-            ASSET_MANAGER.getAsset('./sprites/sigma/sigma-death-78x95.png'),
-            78,
+            ASSET_MANAGER.getAsset('./sprites/sigma/sigma-death-119x113.png'),
+            4998,
             0,
-            78,
-            95,
-            1,
-            0.1,
+            119,
+            113,
+            42,
+            0.06,
             0,
-            false,
-            true
+            true,
+            false
         );
         // face left
         this.animations[this.states.dead][1] = new Animator(
-            ASSET_MANAGER.getAsset('./sprites/sigma/sigma-death-78x95.png'),
+            ASSET_MANAGER.getAsset('./sprites/sigma/sigma-death-119x113.png'),
             0,
             0,
-            78,
-            95,
-            1,
-            0.1,
+            119,
+            113,
+            42,
+            0.06,
             0,
             false,
-            true
+            false
         );
     }
 
@@ -410,6 +408,10 @@ class Sigma {
                 this.spriteOffset.x = this.facing === 0 ? 0 : -130;
                 this.spriteOffset.y = -40;
                 break;
+            case this.states.dead:
+                this.spriteOffset.x = this.facing === 0 ? -69 : -64;
+                this.spriteOffset.y = -35;
+                break;
             default:
                 this.spriteOffset.x = 0;
                 this.spriteOffset.y = 0;
@@ -432,17 +434,17 @@ class Sigma {
 
         if (this.isDead) {
             this.state = this.states.dead;
+            this.isHostile = false;
+            this.isPog = false;
+            this.collisionDamage = 0;
             this.sigmaHead.die();
             this.wave.die();
             this.topWave.die();
             this.bottomWave.die();
-
-            this.deathDelay -= TICK;
-            this.deathDelay = Math.max(this.deathDelay, 0);
             this.setOffset();
-            if (this.deathDelay === 0) {
+
+            if (this.animations[this.states.dead][this.facing].isDone())
                 this.die();
-            }
         } else {
             // ACTIONS
             if (this.isIntro) {
@@ -467,6 +469,8 @@ class Sigma {
 
                         // after intro is done
                         this.state = this.states.idle;
+                        this.game.player.checkpointX = 148 * BLOCK_DIMENSION;
+                        this.game.player.checkpointY = -161 * BLOCK_DIMENSION;
 
                         this.game.player.immobilized = false;
                         this.game.player.meetBoss = false;
@@ -498,6 +502,7 @@ class Sigma {
             // dash
             if (this.state === this.states.dash) {
                 this.dashAttack(this.dashEndAction);
+                this.soundEffects.dash.play();
             }
 
             // kamehameha - attack1
@@ -675,6 +680,7 @@ class Sigma {
             // play teleport animation, when done set to new position
             // state is now teleport in
             this.state = this.states.teleportIn;
+            this.soundEffects.teleport.play();
         }
         if (this.animations[this.states.teleportIn][this.facing].isDone()) {
             this.state = this.states.idle;
@@ -736,9 +742,11 @@ class Sigma {
     energyWave() {
         let xOffset = this.facing === 0 ? 10 : -30;
         if (!this.wave.started) {
+            this.soundEffects.wave.play();
             this.wave.start(this.x + xOffset, this.y - 60, this.facing);
         }
         if (this.wave2StartTime === 0) {
+            this.soundEffects.wave.play();
             if (!this.topWave.started && !this.bottomWave.started) {
                 this.bottomWave.start(
                     this.x + xOffset,
@@ -766,6 +774,7 @@ class Sigma {
         this.ballSpeedOffset = Math.min(this.ballSpeedOffset, ballSpeed * 2);
 
         if (this.ballTimeout === 0) {
+            this.soundEffects.balls.play();
             // top left
             this.game.addEntityAtIndex(
                 new SigmaBall(
@@ -827,11 +836,6 @@ class Sigma {
         // damage blink
         if (this.iframes >= 0) {
             ctx.filter = ` brightness(${this.flashframes})`;
-        }
-
-        if (this.health <= 0) {
-            // make scale = 0 so he disappear for now
-            this.scale = 0;
         }
 
         if (getDistance(this, this.game.player) < 1200) {

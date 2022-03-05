@@ -78,7 +78,7 @@ ASSET_MANAGER.queueDownload('./sprites/sigma/sigma-attack2-117x124.png');
 ASSET_MANAGER.queueDownload('./sprites/sigma/sigma-attack3-70x101.png');
 ASSET_MANAGER.queueDownload('./sprites/sigma/sigma-balls-32x32.png');
 ASSET_MANAGER.queueDownload('./sprites/sigma/sigma-dash-97x100.png');
-ASSET_MANAGER.queueDownload('./sprites/sigma/sigma-death-78x95.png');
+ASSET_MANAGER.queueDownload('./sprites/sigma/sigma-death-119x113.png');
 ASSET_MANAGER.queueDownload('./sprites/sigma/sigma-head-158x168.png');
 ASSET_MANAGER.queueDownload('./sprites/sigma/sigma-headAttack-158x168.png');
 ASSET_MANAGER.queueDownload('./sprites/sigma/sigma-headSpawn-156x170.png');
@@ -109,7 +109,8 @@ ASSET_MANAGER.queueDownload('./sprites/misc/explosion.png');
 //Lava
 ASSET_MANAGER.queueDownload('./sprites/misc/lava-1400x26.png');
 ASSET_MANAGER.queueDownload('./sprites/misc/lavaBottom.png');
-
+//Boss Door
+ASSET_MANAGER.queueDownload('./sprites/misc/bossDoor-30x64.png');
 
 //player attack Animations
 ASSET_MANAGER.queueDownload(
@@ -149,15 +150,30 @@ SOUND_MANAGER.queueDownload(
     'dogboss_launch_projectile',
     './sounds/dogboss/launch_attack.wav'
 );
+// sigma SFX
+SOUND_MANAGER.queueDownload('teleport', './sounds/sigma/teleport.wav');
+SOUND_MANAGER.queueDownload('dash', './sounds/sigma/dash.wav');
+SOUND_MANAGER.queueDownload('laser', './sounds/sigma/laser.wav');
+SOUND_MANAGER.queueDownload('wave', './sounds/sigma/wave.wav');
+SOUND_MANAGER.queueDownload('balls', './sounds/sigma/balls.wav');
 
 //Eregion sound effects
-SOUND_MANAGER.queueDownload('eregion_roar', "./sounds/eregion/roar.mp3");
-SOUND_MANAGER.queueDownload('eregion_teleport', "./sounds/eregion/teleport.ogg");
-SOUND_MANAGER.queueDownload('eregion_death', "./sounds/eregion/death.ogg");
-SOUND_MANAGER.queueDownload('eregion_ball_attack', "./sounds/eregion/ball_attack.WAV");
-SOUND_MANAGER.queueDownload('eregion_up_attack', "./sounds/eregion/up_attack.ogg");
+SOUND_MANAGER.queueDownload('eregion_roar', './sounds/eregion/roar.mp3');
+SOUND_MANAGER.queueDownload(
+    'eregion_teleport',
+    './sounds/eregion/teleport.ogg'
+);
+SOUND_MANAGER.queueDownload('eregion_death', './sounds/eregion/death.ogg');
+SOUND_MANAGER.queueDownload(
+    'eregion_ball_attack',
+    './sounds/eregion/ball_attack.WAV'
+);
+SOUND_MANAGER.queueDownload(
+    'eregion_up_attack',
+    './sounds/eregion/up_attack.ogg'
+);
 //turret sound effects
-SOUND_MANAGER.queueDownload('turret_fire',"./sounds/turret/fire.ogg");
+SOUND_MANAGER.queueDownload('turret_fire', './sounds/turret/fire.ogg');
 //rush soundEffects
 SOUND_MANAGER.queueDownload('rush_teleport', './sounds/rush/teleport.mp3');
 //background Music

@@ -5,6 +5,8 @@ function sigmaArena(gameEngine) {
     // Make sure to spawn sigma on or near the ground for this coords
     gameEngine.addEntity(new Sigma(gameEngine, 36, -21));
 
+    gameEngine.addEntity(new BossDoor(gameEngine, 23, -20));
+
     gameEngine.addEntity(new Ground(gameEngine, 2, 0, -48, 48, 14, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 0, -34, 24, 14, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 0, -18, 48, 18, 1, 0, 0));

@@ -840,9 +840,9 @@ class Player {
                 // console.log(this.currentIFrameTimer);
             }
             // console.log(this.currentIFrameTimer);
-          
+
             this.handleCollision();
-          
+
             // update state
             if (
                 !this.attacking &&
@@ -889,18 +889,6 @@ class Player {
             }
 
             this.updateBB();
-        }
-
-        // Display values for Debug mode
-        if (params.debug) {
-            document.getElementById('stateP').innerHTML =
-                'State Player: ' + this.state;
-            document.getElementById('velo').innerHTML =
-                'x-velo ' +
-                this.velocity.x +
-                ' ' +
-                'y-velo: ' +
-                this.velocity.y;
         }
 
         // -------------- DEATH AND LOSING CONDITION ----------------
@@ -1085,7 +1073,9 @@ class Player {
 
                 // Side collisions
                 if (
-                    (entity instanceof Ground || entity instanceof Spike) &&
+                    (entity instanceof Ground ||
+                        entity instanceof Spike ||
+                        (entity instanceof BossDoor && entity.canCollide)) &&
                     this.BB.collide(entity.leftBB)
                 ) {
                     // Right side collision
@@ -1093,7 +1083,9 @@ class Player {
                     this.facing = 0;
                     if (this.velocity.x > 0) this.velocity.x = 0;
                 } else if (
-                    (entity instanceof Ground || entity instanceof Spike) &&
+                    (entity instanceof Ground ||
+                        entity instanceof Spike ||
+                        (entity instanceof BossDoor && entity.canCollide)) &&
                     this.BB.collide(entity.rightBB)
                 ) {
                     // Left side collision
@@ -1105,7 +1097,8 @@ class Player {
 
                 // Wall hang collision
                 if (
-                    entity instanceof Ground &&
+                    (entity instanceof Ground ||
+                        (entity instanceof BossDoor && entity.canCollide)) &&
                     !this.BB.collide(entity.topBB) &&
                     !this.BB.collide(entity.bottomBB)
                 ) {

@@ -20,16 +20,14 @@ class SceneManager {
         this.soundEffects.cycle = SOUND_MANAGER.getSound('menu_cycle');
         this.soundEffects.menu_music = SOUND_MANAGER.getSound('menu_music');
         this.currentLevel = 0;
-        this.totalLevels = 4;// needs to be 1 higher than actual count
+        this.totalLevels = 4; // needs to be 1 higher than actual count
         this.currentMS = 0;
-        //allow the user to change the sound of all the stuff 
-        this.soundVolume = document.getElementById("volume");
+        //allow the user to change the sound of all the stuff
+        this.soundVolume = document.getElementById('volume');
         this.soundVolume.oninput = function () {
-            SOUND_MANAGER.setAllVolume (this.value / 100);
+            SOUND_MANAGER.setAllVolume(this.value / 100);
         };
-        SOUND_MANAGER.setAllVolume(
-            this.soundVolume.value / 100
-        );
+        SOUND_MANAGER.setAllVolume(this.soundVolume.value / 100);
         //only when on the menu
         if (this.currentState == 0) {
             SOUND_MANAGER.autoRepeat('menu_music');
@@ -65,15 +63,14 @@ class SceneManager {
         SceneManagerDatGUI(game, this);
     }
     parseTime(time) {
-        const times = time.split(":");
+        const times = time.split(':');
         let timeInMs = 0;
         //add minutes
-        timeInMs += parseInt(times[1],10) * 60000;
-        timeInMs +=  parseInt(times[2],10) * 1000;
-        timeInMs +=  parseInt(times[3],10);
+        timeInMs += parseInt(times[1], 10) * 60000;
+        timeInMs += parseInt(times[2], 10) * 1000;
+        timeInMs += parseInt(times[3], 10);
         // console.log(times, timeInMs);
-        this.currentMS+= timeInMs;
-
+        this.currentMS += timeInMs;
     }
     setGameMode(game) {
         if (this.currentState != 0 && this.currentState != 1) {
@@ -124,7 +121,7 @@ class SceneManager {
     }
 
     parseOutTime() {
-        let timeDifference = this.currentMS
+        let timeDifference = this.currentMS;
 
         let m = 0;
         let s = 0;
@@ -331,7 +328,7 @@ class SceneManager {
                 if (this.menuIndex == 1) {
                     params.hardcore = true;
                 }
-                this.cu
+                this.currentMS = 0;
                 //stop current background music and load the level
                 // this.soundEffects.menu_music.pause();
                 // loadLevelOne(this.game);
@@ -348,6 +345,7 @@ class SceneManager {
                 this.currentState = 0;
                 this.menuCooldown = 0.2;
                 this.currentLevel = 0;
+                this.currentMS = 0;
             }
         }
 
@@ -542,12 +540,16 @@ class SceneManager {
             );
 
             ctx.strokeText(
-               "Total: " +this.parseOutTime(this.currentMS),
+                'Total: ' + this.parseOutTime(this.currentMS),
                 400, // offset on purpose
                 200
             );
             ctx.fillText(this.finalTime, 400, 100);
-            ctx.fillText("Total: " +this.parseOutTime(this.currentMS), 400, 200);
+            ctx.fillText(
+                'Total: ' + this.parseOutTime(this.currentMS),
+                400,
+                200
+            );
             ctx.lineWidth = 1;
             ctx.filter = `brightness(${this.enterBrightness})`;
             that.animations[1].drawFrame(
