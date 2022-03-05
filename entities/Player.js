@@ -562,6 +562,21 @@ class Player {
     }
 
     update() {
+        // console.log(this.x + ' ' + this.y);
+        // // console.log(Math.floor(this.x) + ' ' + Math.floor(this.y));
+        // if (Math.floor(this.x) === 833) {
+        //     // this.checkpointX = 12 * BLOCK_DIMENSION;
+        //     // this.checkpointY = 5 * BLOCK_DIMENSION;
+        //     console.log('Checkpoint hit!');
+        // }
+
+        // if (
+        //     Math.floor(this.x) >= 833 - 1 * BLOCK_DIMENSION &&
+        //     Math.floor(this.x) <= 833 + 1 * BLOCK_DIMENSION
+        // ) {
+        //     console.log('Checkpoint hit');
+        // }
+
         /**
          * flash while invincible
          */
@@ -840,9 +855,9 @@ class Player {
                 // console.log(this.currentIFrameTimer);
             }
             // console.log(this.currentIFrameTimer);
-          
+
             this.handleCollision();
-          
+
             // update state
             if (
                 !this.attacking &&
@@ -965,7 +980,7 @@ class Player {
 
     handleCollision() {
         // collision
-        this.game.entities.forEach((entity) => {
+        this.game.entities.forEach(entity => {
             //check for the enemy colliding with sword
             // || entity instanceof Drill
             if (entity.BB && this.attackBB.collide(entity.BB)) {
@@ -998,6 +1013,11 @@ class Player {
                         entity.iframes = 0.5;
                     }
                 }
+                // if (entity && entity instanceof Checkpoint) {
+                //     console.log('Checkpoint reached!');
+                //     this.checkpointX = entity.x;
+                //     this.checkpointY = entity.y;
+                // }
                 if (entity.isPog && this.isPogo) {
                     this.animations[3][0].elapsedTime = 0;
                     this.animations[3][1].elapsedTime = 0;
@@ -1261,6 +1281,9 @@ class Player {
         // checkpoint, he respawns at the spawn location
         this.x = this.checkpointX;
         this.y = this.checkpointY;
+        // Moves camera back to checkpoint location
+        this.game.camera.x = this.checkpointX;
+        this.game.camera.y = this.checkpointY;
         this.health = this.maxHealth; // Replenish health
         this.livesLeft--; // Loses a life
     }
