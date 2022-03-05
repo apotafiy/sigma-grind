@@ -32,7 +32,7 @@ class DogBoss {
         this.flashframes = 0;
         this.alwaysRender = false;
         // Boss health
-        this.maxHealth = 320;
+        this.maxHealth =320;
         this.health = this.maxHealth;
         this.healthBar = new HealthBar(this);
         this.opacity = 1;
@@ -211,7 +211,6 @@ class DogBoss {
     }
     die() {
         //TODO add actual good death logic
-        console.log(this.deathTimer);
         if (!this.isDead) {
             this.soundEffects.death.play();
             this.isDead = true;
@@ -223,6 +222,7 @@ class DogBoss {
             if (this.deathTimer <= 0) {
                 this.game.camera.finalTime =
                     this.game.camera.getFormattedTime();
+                params.totalTime += this.game.camera.parseTime(this.game.camera.finalTime);
                 this.game.camera.isLevel = false;
                 this.game.camera.currentState = 3;
                 this.game.camera.setMenuMode(this.game);

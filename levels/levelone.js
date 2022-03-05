@@ -464,6 +464,8 @@ function loadLevelTwo(gameEngine) {
 function loadTestLevel(gameEngine) {
   let gravity = 0.2;
   gameEngine.addEntity(new Player(gameEngine, 3, -5));
+  // gameEngine.addEntity(new Player(gameEngine,200, -160));
+  gameEngine.addEntity(new Sigma(gameEngine, 200, -160));
   gameEngine.addEntity(new Ground(gameEngine, 2, 0, -32, 108, 2, 1, 0, 0));
   gameEngine.addEntity(new Ground(gameEngine, 2, 0, -30, 2, 30, 1, 0, 0));
   gameEngine.addEntity(new Spike(gameEngine, 2, -30, 28, 1, 2));
@@ -509,7 +511,7 @@ function loadTestLevel(gameEngine) {
   gameEngine.addEntity(new Ground(gameEngine, 2, 14, -49, 10, 1, 1, 0, 0));
   gameEngine.addEntity(new Ground(gameEngine, 2, 14, -46, 13, 1, 1, 0, 0));
   gameEngine.addEntity(
-    new Rush(gameEngine, 14, -5, 5, "Bark! Bark! Whimper! Bark! Bark!")
+    new Rush(gameEngine, 14, -5, 5, "We are in the last stretch! Rumor has it Sigma is hiding somewhere in this base. Your time has come Zero! Go take him out and restore order to our world!")
   );
   gameEngine.addEntity(new Ground(gameEngine, 2, 15, -81, 6, 1, 1, 0, 0));
   gameEngine.addEntity(new Ground(gameEngine, 2, 15, -69, 6, 1, 1, 0, 0));
@@ -845,7 +847,7 @@ function loadTestLevel(gameEngine) {
   gameEngine.addEntity(new Ground(gameEngine, 2, 141, -11, 6, 1, 1, 0, 0));
   gameEngine.addEntity(new Ground(gameEngine, 2, 145, -159, 6, 1, 1, 0, 0));
   gameEngine.addEntity(
-    new Rush(gameEngine, 146, -160, 5, "Bark! Bark! Whimper! Bark! Bark!")
+    new Rush(gameEngine, 146, -160, 5, "Zero! You made it! Sigma is through that door. Finish him and reclaim your title! I'm counting on you!")
   );
   gameEngine.addEntity(new Ground(gameEngine, 2, 147, -73, 4, 7, 1, 0, 0));
   gameEngine.addEntity(new FullHealthPack(gameEngine, 148, -160));
@@ -931,7 +933,7 @@ function loadTestLevel(gameEngine) {
   gameEngine.addEntity(new Ground(gameEngine, 2, 173, -90, 6, 1, 1, 0, 0));
   gameEngine.addEntity(new Ground(gameEngine, 2, 173, -75, 1, 3, 1, 0, 0));
   gameEngine.addEntity(
-    new Rush(gameEngine, 174, -107, 5, "Bark! Bark! Whimper! Bark! Bark!")
+    new Rush(gameEngine, 174, -107, 5, "You look pretty beat up! Here! Take this! You will need it!")
   );
   gameEngine.addEntity(new SmallHealthPack(gameEngine, 175, -93));
   gameEngine.addEntity(new Ground(gameEngine, 2, 175, -83, 2, 1, 1, 0, 0));
@@ -989,7 +991,6 @@ function loadTestLevel(gameEngine) {
   gameEngine.addEntity(new Ground(gameEngine, 2, 199, -57, 2, 10, 1, 0, 0));
   gameEngine.addEntity(new BeamBarrier(gameEngine, 199, -47, 0, 1));
   gameEngine.addEntity(new SpikeBall(gameEngine, 200, -87, gravity));
-  gameEngine.addEntity(new Sigma(gameEngine, 201, -160));
   gameEngine.addEntity(new Ground(gameEngine, 2, 201, -49, 5, 2, 1, 0, 0));
   gameEngine.addEntity(new BeamBarrier(gameEngine, 202, -47, 0, 1));
   gameEngine.addEntity(new BeamBarrier(gameEngine, 203, -47, 0, 1));

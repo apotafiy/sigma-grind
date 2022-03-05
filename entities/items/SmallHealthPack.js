@@ -79,9 +79,9 @@ class SmallHealthPack {
             if (entity.BB && that.BB.collide(entity.BB)) {
                 //if its the player give health
                 if (entity instanceof Player) {
-                    entity.currentHitpoints = Math.min(
-                        entity.maxHitpoints,
-                        entity.currentHitpoints + 30
+                    entity.health = Math.min(
+                        entity.maxHealth,
+                        entity.health + 30
                     );
                     that.die();
                 }

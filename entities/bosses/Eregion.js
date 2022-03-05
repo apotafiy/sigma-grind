@@ -123,6 +123,7 @@ class Eregion {
       this.opacity = Math.max(0, this.opacity - 1 * this.game.clockTick);
       if (this.deathTimer <= 0) {
         this.game.camera.finalTime = this.game.camera.getFormattedTime();
+        params.totalTime += this.game.camera.parseTime(this.game.camera.finalTime);
         this.game.camera.isLevel = false;
         this.game.camera.currentState = 3;
         this.game.camera.setMenuMode(this.game);
