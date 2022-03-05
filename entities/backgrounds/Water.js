@@ -33,6 +33,31 @@ class Water {
             0,
             1
         );
+
+        this.animations[1] = new Animator(
+            ASSET_MANAGER.getAsset('./sprites/backgrounds/mountains.png'),
+            0,
+            0,
+            2800,
+            240,
+            1,
+            1,
+            0,
+            0,
+            1
+        );
+        this.animations[2] = new Animator(
+            ASSET_MANAGER.getAsset('./sprites/backgrounds/sky.png'),
+            0,
+            0,
+            2800,
+            240,
+            1,
+            1,
+            0,
+            0,
+            1
+        );
     }
     update() {
         let that = this;
@@ -45,7 +70,7 @@ class Water {
     }
 
     draw(ctx) {
-        this.animations[0].drawFrame(
+        this.animations[2].drawFrame(
             this.game.clockTick,
             ctx,
             -200 + this.xoffset,

@@ -29,12 +29,14 @@ class Ground {
         for (let i = 0; i < horizontal; i++) {
             this.dontDrawGrass.push(false);
         }
-        if(dontCollide){
+        if (dontCollide) {
             this.dontCollide = ture;
         }
         this.type = type;
         this.xstart = xstart * 64;
         this.ystart = ystart * 64;
+        this.x = this.xstart;
+        this.y = this.ystart;
         this.horizontal = horizontal;
         this.vertical = vertical;
         this.includeTop = includeTop || false;
@@ -67,7 +69,7 @@ class Ground {
             this.xstart + 10,
             this.ystart + 64 * vertical,
             64 * horizontal - 20,
-            (64 * vertical) / 12 // Making it thinner
+            10 // Making it thinner
         );
 
         // Need this to fix player wall hanging
@@ -75,9 +77,9 @@ class Ground {
         // like he just dont care
         this.topBB = new BoundingBox(
             this.xstart,
-            this.ystart - (64 * vertical) / 50 + 5, // Making it goes above the ground a bit
+            this.ystart - 10, // Making it goes above the ground a bit
             64 * horizontal,
-            (64 * vertical) / 50 // Making it thinner
+            10 // Making it thinner
         );
     }
 
@@ -122,8 +124,8 @@ class Ground {
         //shift over by the type of tile we want
         this.animations[0] = new Animator(
             ASSET_MANAGER.getAsset('./sprites/ground/ground_tiles.png'),
-            0 + this.type * 64,
-            0,
+            0 + 1* 64,
+            0 + (this.type - 1)* 64,
             64,
             64,
             0,
@@ -135,8 +137,8 @@ class Ground {
         //general grass tile
         this.animations[1] = new Animator(
             ASSET_MANAGER.getAsset('./sprites/ground/ground_tiles.png'),
-            0 + this.type * 64 * 2,
-            0,
+            0 + 1 * 64 * 2,
+            0 + (this.type - 1)* 64,
             64,
             64,
             0,
@@ -149,8 +151,8 @@ class Ground {
         //shift over by the type of tile we want
         this.animations[2] = new Animator(
             ASSET_MANAGER.getAsset('./sprites/ground/ground_tiles.png'),
-            0 + this.type * 64 * 3,
-            0,
+            0 + 1 * 64 * 3,
+            0 + (this.type - 1)* 64,
             64,
             64,
             0,
@@ -159,11 +161,12 @@ class Ground {
             0,
             1
         );
+
         //right facing grass edge
         this.animations[3] = new Animator(
             ASSET_MANAGER.getAsset('./sprites/ground/ground_tiles.png'),
-            0 + this.type * 64 * 4,
-            0,
+            0 + 1 * 64 * 4,
+            0 + (this.type - 1)* 64,
             64,
             64,
             0,
@@ -180,7 +183,7 @@ class Ground {
     // }
     draw(ctx) {
         let that = this;
-        // console.log(that.vertical);
+
         for (let i = 0; i < that.vertical; i++) {
             for (let j = 0; j < that.horizontal; j++) {
                 if (i === 0 && that.includeTop && !that.dontDrawGrass[j]) {

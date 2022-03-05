@@ -6,6 +6,8 @@ class GameEngine {
         // Documentation: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
         this.ctx = null;
 
+        //Offsert of when to stop drawing ground
+        this.cullingOffset = 1024;
         // Everything that will be updated and drawn each frame
         this.entities = [];
 
@@ -53,18 +55,20 @@ class GameEngine {
         this.stats.showPanel(0);
         this.stats.dom.id = 'fpsCounter';
         this.stats.dom.style.marginLeft = '7em';
+        this.gui = new dat.GUI();
+        this.gui.hide();
 
         this.player = this.getPlayer();
     }
 
-    start(fps) {
-        let fpsInterval = 1000 / fps;
+    start() {
         let then = Date.now();
 
         this.running = true;
         const gameLoop = () => {
             requestAnimFrame(gameLoop, this.ctx.canvas);
 
+            let fpsInterval = 1000 / params.fps;
             let now = Date.now();
             let elapsed = now - then;
             if (elapsed > fpsInterval) {
@@ -174,6 +178,10 @@ class GameEngine {
      * Remove everything besides the scene manager from the list
      */
     clear() {
+        // Remove the player value sliders to prevent adding the same
+        // sliders on respawn
+        this.gui.removeFolder(this.player.playerFolder);
+
         let newEntities = [];
         for (const entity of this.entities) {
             if (entity instanceof SceneManager) {
@@ -187,27 +195,105 @@ class GameEngine {
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
 
         // Draw latest things first
+        // for (let i = this.entities.length - 1; i >= 0; i--) {
+        //     this.entities[i].draw(this.ctx, this);
+        // }
+        //Updated Draw Loop With Distance Draw Disabling
         for (let i = this.entities.length - 1; i >= 0; i--) {
-            this.entities[i].draw(this.ctx, this);
+            if (
+                this.player &&
+                (getDistance(this.entities[i], this.player) < 800 ||
+                    this.entities[i] instanceof Water ||
+                    this.entities[i] instanceof PurpleMountain ||
+                    this.entities[i] instanceof Lava ||
+                    this.entities[i] instanceof Spike ||
+                    this.entities[i] instanceof SceneManager ||
+                    this.entities[i].alwaysRender ||
+                    (this.entities[i] instanceof DogBoss &&
+                        getDistance(this.entities[i], this.player) < 1200) ||
+                    (this.entities[i] instanceof Eregion &&
+                        getDistance(this.entities[i], this.player) < 1500) ||
+                    (this.entities[i] instanceof Sigma &&
+                        getDistance(this.entities[i], this.player) < 2000))
+            ) {
+                //if the player exists draw things close enough to the player
+                this.entities[i].draw(this.ctx, this);
+            } else if (!this.player) {
+                //otherwise draw everything
+                this.entities[i].draw(this.ctx, this);
+            } else if (this.entities[i] instanceof Ground) {
+                if (
+                    getDistance(this.entities[i], this.player) <
+                    Math.max(
+                        this.entities[i].horizontal * 64,
+                        this.entities[i].vertical * 64
+                    ) +
+                        this.cullingOffset
+                ) {
+                    this.entities[i].draw(this.ctx, this);
+                }
+            }
         }
     }
 
     update() {
+        let updatedThisTic = 0;
         if (this.clear_level && this.clear_level == true) {
             //we know it is safe to clear everything Here
             this.clear();
             this.clear_level = false;
         }
         let entitiesCount = this.entities.length;
-
-        for (let i = 0; i < entitiesCount; i++) {
-            let entity = this.entities[i];
-
-            if (!entity.removeFromWorld) {
-                entity.update();
+        //Player radius updates only
+        for (let i = this.entities.length - 1; i >= 0; i--) {
+            if (
+                (this.player &&
+                    getDistance(this.entities[i], this.player) < 800) ||
+                this.entities[i] instanceof Water ||
+                this.entities[i] instanceof PurpleMountain ||
+                this.entities[i] instanceof Lava ||
+                this.entities[i] instanceof Spike ||
+                this.entities[i] instanceof SceneManager ||
+                this.entities[i] instanceof Drill ||
+                this.entities[i].alwaysRender ||
+                (this.entities[i] instanceof DogBoss &&
+                    getDistance(this.entities[i], this.player) < 2000) ||
+                (this.entities[i] instanceof Eregion &&
+                    getDistance(this.entities[i], this.player) < 1500) ||
+                (this.entities[i] instanceof Sigma &&
+                    getDistance(this.entities[i], this.player) < 2000)
+            ) {
+                //if the player exists update things close to the player
+                let entity = this.entities[i];
+                if (!entity.removeFromWorld) {
+                    entity.update();
+                    updatedThisTic++;
+                }
+            } else if (this.entities[i] instanceof Ground) {
+                if (
+                    getDistance(this.entities[i], this.player) <
+                    Math.max(
+                        this.entities[i].horizontal * 64,
+                        this.entities[i].vertical * 64
+                    ) +
+                        this.cullingOffset
+                ) {
+                    let entity = this.entities[i];
+                    if (!entity.removeFromWorld) {
+                        entity.update();
+                        updatedThisTic++;
+                    }
+                }
+            } else if (!this.player) {
+                //if no player update everythign so we dont crash
+                let entity = this.entities[i];
+                if (!entity.removeFromWorld) {
+                    entity.update();
+                    updatedThisTic++;
+                }
             }
         }
-
+        //END PLAYER RAD UPDATE
         for (let i = this.entities.length - 1; i >= 0; --i) {
             if (this.entities[i].removeFromWorld) {
                 this.entities.splice(i, 1);
@@ -215,9 +301,13 @@ class GameEngine {
         }
 
         if (params.debug) {
-            document.body.appendChild(this.stats.dom);
+            if (!document.getElementById('fpsCounter'))
+                document.body.appendChild(this.stats.dom);
+            this.gui.show();
         } else if (!params.debug && document.getElementById('fpsCounter')) {
             document.getElementById('fpsCounter').remove();
+        } else {
+            this.gui.hide();
         }
     }
 
