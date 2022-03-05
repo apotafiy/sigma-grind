@@ -1,15 +1,33 @@
 .center {
     margin: auto;
-    padding: 10px;
-    display:block;
-  }
-  
+    margin-top: none;
+    /* padding: 10px; */
+    display: block;
+}
 
 canvas {
     padding-left: 0;
     padding-right: 0;
     margin-left: auto;
     margin-right: auto;
+    /* padding-top: 142px; */
+    margin-top: 500 !important;
     display: block;
     /* width: 800px; */
+}
+
+body {
+    font-family: 'Press Start 2P', serif;
+    font-size: 24px;
+    padding: 0px;
+    background: no-repeat center url('./sprites//website_background.png');
+    background-color: rgb(45, 1, 38);
+    margin: 0;
+    height: 100%;
+}
+
+.debug {
+    color: white;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+        1px 1px 0 #000;
 }

@@ -73,16 +73,15 @@ class SmallHealthPack {
     }
     update() {
         this.bobTimer += 10 * this.game.clockTick;
-        console.log(Math.sin(this.bobTimer));
         // this.updateBB();
         let that = this;
         this.game.entities.forEach(function (entity) {
             if (entity.BB && that.BB.collide(entity.BB)) {
                 //if its the player give health
                 if (entity instanceof Player) {
-                    entity.currentHitpoints = Math.min(
-                        entity.maxHitpoints,
-                        entity.currentHitpoints + 30
+                    entity.health = Math.min(
+                        entity.maxHealth,
+                        entity.health + 30
                     );
                     that.die();
                 }

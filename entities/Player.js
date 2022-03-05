@@ -891,18 +891,6 @@ class Player {
             this.updateBB();
         }
 
-        // Display values for Debug mode
-        if (params.debug) {
-            document.getElementById('stateP').innerHTML =
-                'State Player: ' + this.state;
-            document.getElementById('velo').innerHTML =
-                'x-velo ' +
-                this.velocity.x +
-                ' ' +
-                'y-velo: ' +
-                this.velocity.y;
-        }
-
         // -------------- DEATH AND LOSING CONDITION ----------------
         if (
             (this.livesLeft >= 0 && this.health <= 0) ||
@@ -984,6 +972,14 @@ class Player {
                     entity.health -= 5;
                 }
                 if (entity && entity instanceof DogBoss) {
+                    // console.log('kILL dRILL');
+                    //if it has die method it should die
+                    if (entity.iframes <= 0 && entity.currentState != 4) {
+                        entity.health -= 5;
+                        entity.iframes = 0.5;
+                    }
+                }
+                if (entity && entity instanceof Eregion) {
                     // console.log('kILL dRILL');
                     //if it has die method it should die
                     if (entity.iframes <= 0 && entity.currentState != 4) {
@@ -1243,7 +1239,7 @@ class Player {
             case 1:
                 return this.soundEffects.grunt1;
             case 2:
-                return this.soundEffects.grunt2;
+                return this.soundEffects.grunt1;
             case 3:
                 return this.soundEffects.grunt3;
             case 4:
