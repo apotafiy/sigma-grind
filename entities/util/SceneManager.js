@@ -20,8 +20,16 @@ class SceneManager {
         this.soundEffects.cycle = SOUND_MANAGER.getSound('menu_cycle');
         this.soundEffects.menu_music = SOUND_MANAGER.getSound('menu_music');
         this.currentLevel = 0;
-        this.totalLevels = 3;
+        this.totalLevels = 4;// needs to be 1 higher than actual count
         this.currentMS = 0;
+        //allow the user to change the sound of all the stuff 
+        this.soundVolume = document.getElementById("volume");
+        this.soundVolume.oninput = function () {
+            SOUND_MANAGER.setAllVolume (this.value / 100);
+        };
+        SOUND_MANAGER.setAllVolume(
+            this.soundVolume.value / 100
+        );
         //only when on the menu
         if (this.currentState == 0) {
             SOUND_MANAGER.autoRepeat('menu_music');
@@ -53,10 +61,20 @@ class SceneManager {
         this.interpolation = 0.06;
         this.background_songs = {};
         this.background_songs.intro = SOUND_MANAGER.getSound('background_1');
-      
+
         SceneManagerDatGUI(game, this);
     }
+    parseTime(time) {
+        const times = time.split(":");
+        let timeInMs = 0;
+        //add minutes
+        timeInMs += parseInt(times[1],10) * 60000;
+        timeInMs +=  parseInt(times[2],10) * 1000;
+        timeInMs +=  parseInt(times[3],10);
+        // console.log(times, timeInMs);
+        this.currentMS+= timeInMs;
 
+    }
     setGameMode(game) {
         if (this.currentState != 0 && this.currentState != 1) {
             this.x = game.player.x - 1024 / 2;
@@ -103,6 +121,31 @@ class SceneManager {
         s = this.checkTime(s);
         ms = this.checkTime(ms);
         return `Time: ${m}:${s}:${ms}`;
+    }
+
+    parseOutTime() {
+        let timeDifference = this.currentMS
+
+        let m = 0;
+        let s = 0;
+        let ms = 0;
+        //count min
+        while (timeDifference >= 60000) {
+            m++;
+            timeDifference -= 60000;
+        }
+        //count second
+        while (timeDifference >= 1000) {
+            s++;
+            timeDifference -= 1000;
+        }
+        //rest goes into MS
+        // console.log("MS Amount", timeDifference)
+        ms = timeDifference;
+        m = this.checkTime(m);
+        s = this.checkTime(s);
+        ms = this.checkTime(ms);
+        return `${m}:${s}:${ms}`;
     }
     checkTime(i) {
         if (i < 10) {
@@ -288,13 +331,12 @@ class SceneManager {
                 if (this.menuIndex == 1) {
                     params.hardcore = true;
                 }
+                this.cu
                 //stop current background music and load the level
                 // this.soundEffects.menu_music.pause();
                 // loadLevelOne(this.game);
-              this.loadLevel();
-                // sigmaArena(this.game);
-                //loadPurpleMountain(this.game);
-            
+                this.loadLevel();
+
                 // this.setGameMode(this.game);
             }
         }
@@ -305,17 +347,17 @@ class SceneManager {
                 this.isLevel = false;
                 this.currentState = 0;
                 this.menuCooldown = 0.2;
+                this.currentLevel = 0;
             }
         }
 
         //handle win over
         if (this.currentState == 3) {
-            console.log("Hit state 3")
             if (this.game.keys.Enter && this.menuCooldown <= 0) {
                 this.soundEffects.select.play();
                 this.isLevel = false;
                 this.menuCooldown = 0.2;
-                if(this.currentLevel == this.totalLevels){
+                if (this.currentLevel == this.totalLevels) {
                     this.currentState = 0; // this needs to change based on what level we are in
                     this.currentLevel = 0;
                     this.soundEffects.menu_music.pause();
@@ -324,7 +366,6 @@ class SceneManager {
                     //     params.hardcore = true;
                     // }
                     this.loadLevel();
-
                 }
             }
         }
@@ -332,22 +373,22 @@ class SceneManager {
         //     'Entity Count: ' + this.game.entities.length;
     }
 
-    loadLevel(){
+    loadLevel() {
         this.currentLevel++;
-        switch(this.currentLevel){
+        switch (this.currentLevel) {
             case 1:
                 loadLevelOne(this.game);
+                // loadLevelTwo(this.game);
                 // loadTestLevel(this.game);
+                // sigmaArena(this.game);
+                // loadPurpleMountain(this.game);
                 break;
-            case 2: 
+            case 2:
                 loadLevelTwo(this.game);
                 break;
-            case 3: 
+            case 3:
                 loadTestLevel(this.game);
                 break;
-                
-  
-
         }
         //needs to happen each time
         this.soundEffects.select.play();
@@ -357,7 +398,6 @@ class SceneManager {
         //stop current background music and load the level
         this.soundEffects.menu_music.pause();
         this.setGameMode(this.game);
-        
     }
     draw(ctx) {
         let that = this;
@@ -497,10 +537,17 @@ class SceneManager {
             ctx.lineWidth = 10;
             ctx.strokeText(
                 this.finalTime,
-                500, // offset on purpose
+                400, // offset on purpose
                 100
             );
-            ctx.fillText(this.finalTime, 500, 100);
+
+            ctx.strokeText(
+               "Total: " +this.parseOutTime(this.currentMS),
+                400, // offset on purpose
+                200
+            );
+            ctx.fillText(this.finalTime, 400, 100);
+            ctx.fillText("Total: " +this.parseOutTime(this.currentMS), 400, 200);
             ctx.lineWidth = 1;
             ctx.filter = `brightness(${this.enterBrightness})`;
             that.animations[1].drawFrame(

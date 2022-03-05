@@ -45,7 +45,7 @@ class Spike {
             this.x + 10,
             this.y + 64 * vertical,
             64 * horizontal - 20,
-            (64 * vertical) / 12 // Making it thinner
+            10 // Making it thinner
         );
 
         // Need this to fix player wall hanging
@@ -53,9 +53,9 @@ class Spike {
         // like he just dont care
         this.topBB = new BoundingBox(
             this.x,
-            this.y - (64 * vertical) / 50 + 5, // Making it goes above the ground a bit
+            this.y - 10, // Making it goes above the ground a bit
             64 * horizontal,
-            (64 * vertical) / 50 // Making it thinner
+            10 // Making it thinner
         );
 
         this.animation = new Animator(

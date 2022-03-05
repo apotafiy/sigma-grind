@@ -32,10 +32,10 @@ class DogBoss {
         this.flashframes = 0;
         this.alwaysRender = false;
         // Boss health
-        this.maxHealth = 320;
+        this.maxHealth =320;
         this.health = this.maxHealth;
         this.healthBar = new HealthBar(this);
-
+        this.opacity = 1;
         this.chosendir = false;
         this.walkdelay = 0;
         this.skyDelay = 0;
@@ -47,6 +47,7 @@ class DogBoss {
             'dogboss_launch_projectile'
         );
         this.soundEffects.walk = SOUND_MANAGER.getSound('dogboss_walk');
+        this.soundEffects.death = SOUND_MANAGER.getSound('eregion_death');
 
         this.loadAnimation();
         //bounding box
@@ -210,16 +211,18 @@ class DogBoss {
     }
     die() {
         //TODO add actual good death logic
-        console.log(this.deathTimer);
         if (!this.isDead) {
+            this.soundEffects.death.play();
             this.isDead = true;
             this.deathTimer = 2;
             this.xVelocity = 0;
         } else {
             this.deathTimer -= 1 * this.game.clockTick;
+          this.opacity = Math.max(0, this.opacity - 1 * this.game.clockTick);
             if (this.deathTimer <= 0) {
                 this.game.camera.finalTime =
                     this.game.camera.getFormattedTime();
+                params.totalTime += this.game.camera.parseTime(this.game.camera.finalTime);
                 this.game.camera.isLevel = false;
                 this.game.camera.currentState = 3;
                 this.game.camera.setMenuMode(this.game);
@@ -356,8 +359,8 @@ class DogBoss {
             // }
         } else if (this.currentState == 2) {
             //up facing rain down attack
-            document.getElementById('state').innerHTML =
-                'Attacking Val: ' + this.attacking.toFixed(2);
+            // document.getElementById('state').innerHTML =
+            //     'Attacking Val: ' + this.attacking.toFixed(2);
             if (
                 this.attacking < 2.5 &&
                 (this.attacking.toFixed(2) % 0.2).toFixed(1) == 0
@@ -555,8 +558,7 @@ class DogBoss {
             ctx.filter = ` brightness(0) opacity(0.2)`;
         }
         if (this.health <= 0) {
-            ctx.filter = `brightness(100) hue-rotation(100deg)`;
-            this.scale = this.deathTimer;
+            ctx.filter = `opacity(${this.opacity})`;
         }
         that.animations[that.dirIndex][this.currentState].drawFrame(
             that.game.clockTick,
