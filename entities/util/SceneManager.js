@@ -71,7 +71,7 @@ class SceneManager {
         timeInMs += parseInt(times[1],10) * 60000;
         timeInMs +=  parseInt(times[2],10) * 1000;
         timeInMs +=  parseInt(times[3],10);
-        console.log(times, timeInMs);
+        // console.log(times, timeInMs);
         this.currentMS+= timeInMs;
 
     }
