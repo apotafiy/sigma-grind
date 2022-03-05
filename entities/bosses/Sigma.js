@@ -73,7 +73,6 @@ class Sigma {
         this.ballOffset = 0;
         this.ballSpeedOffset = 0;
         this.attackCooldown = 0.6;
-        this.deathDelay = 2.4;
 
         //sound imports
         this.soundEffects = {};
@@ -339,29 +338,29 @@ class Sigma {
         // dead
         // face right
         this.animations[this.states.dead][0] = new Animator(
-            ASSET_MANAGER.getAsset('./sprites/sigma/sigma-death-78x95.png'),
-            78,
+            ASSET_MANAGER.getAsset('./sprites/sigma/sigma-death-119x113.png'),
+            4998,
             0,
-            78,
-            95,
-            1,
-            0.1,
+            119,
+            113,
+            42,
+            0.06,
             0,
-            false,
-            true
+            true,
+            false
         );
         // face left
         this.animations[this.states.dead][1] = new Animator(
-            ASSET_MANAGER.getAsset('./sprites/sigma/sigma-death-78x95.png'),
+            ASSET_MANAGER.getAsset('./sprites/sigma/sigma-death-119x113.png'),
             0,
             0,
-            78,
-            95,
-            1,
-            0.1,
+            119,
+            113,
+            42,
+            0.06,
             0,
             false,
-            true
+            false
         );
     }
 
@@ -410,6 +409,10 @@ class Sigma {
                 this.spriteOffset.x = this.facing === 0 ? 0 : -130;
                 this.spriteOffset.y = -40;
                 break;
+            case this.states.dead:
+                this.spriteOffset.x = this.facing === 0 ? -69 : -64;
+                this.spriteOffset.y = -35;
+                break;
             default:
                 this.spriteOffset.x = 0;
                 this.spriteOffset.y = 0;
@@ -432,17 +435,17 @@ class Sigma {
 
         if (this.isDead) {
             this.state = this.states.dead;
+            this.isHostile = false;
+            this.isPog = false;
+            this.collisionDamage = 0;
             this.sigmaHead.die();
             this.wave.die();
             this.topWave.die();
             this.bottomWave.die();
-
-            this.deathDelay -= TICK;
-            this.deathDelay = Math.max(this.deathDelay, 0);
             this.setOffset();
-            if (this.deathDelay === 0) {
+
+            if (this.animations[this.states.dead][this.facing].isDone())
                 this.die();
-            }
         } else {
             // ACTIONS
             if (this.isIntro) {
@@ -827,11 +830,6 @@ class Sigma {
         // damage blink
         if (this.iframes >= 0) {
             ctx.filter = ` brightness(${this.flashframes})`;
-        }
-
-        if (this.health <= 0) {
-            // make scale = 0 so he disappear for now
-            this.scale = 0;
         }
 
         if (getDistance(this, this.game.player) < 1200) {

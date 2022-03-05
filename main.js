@@ -74,7 +74,7 @@ ASSET_MANAGER.queueDownload('./sprites/sigma/sigma-attack2-117x124.png');
 ASSET_MANAGER.queueDownload('./sprites/sigma/sigma-attack3-70x101.png');
 ASSET_MANAGER.queueDownload('./sprites/sigma/sigma-balls-32x32.png');
 ASSET_MANAGER.queueDownload('./sprites/sigma/sigma-dash-97x100.png');
-ASSET_MANAGER.queueDownload('./sprites/sigma/sigma-death-78x95.png');
+ASSET_MANAGER.queueDownload('./sprites/sigma/sigma-death-119x113.png');
 ASSET_MANAGER.queueDownload('./sprites/sigma/sigma-head-158x168.png');
 ASSET_MANAGER.queueDownload('./sprites/sigma/sigma-headAttack-158x168.png');
 ASSET_MANAGER.queueDownload('./sprites/sigma/sigma-headSpawn-156x170.png');
