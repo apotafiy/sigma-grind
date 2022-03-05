@@ -463,8 +463,8 @@ function loadLevelTwo(gameEngine) {
 }
 function loadTestLevel(gameEngine) {
     let gravity = 0.2;
-    // gameEngine.addEntity(new Player(gameEngine, 3, -5));
-    gameEngine.addEntity(new Player(gameEngine, 150, -160));
+    gameEngine.addEntity(new Player(gameEngine, 3, -5));
+    // gameEngine.addEntity(new Player(gameEngine, 150, -160));
     gameEngine.addEntity(new Sigma(gameEngine, 200, -160));
     gameEngine.addEntity(new BossDoor(gameEngine, 187, -159));
     gameEngine.addEntity(new Ground(gameEngine, 2, 0, -32, 108, 2, 1, 0, 0));
