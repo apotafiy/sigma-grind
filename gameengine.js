@@ -284,11 +284,6 @@ class GameEngine {
                     updatedThisTic++;
                 }
             }
-            for (let i = this.entities.length - 1; i >= 0; --i) {
-                if (this.entities[i].removeFromWorld) {
-                    this.entities.splice(i, 1);
-                }
-            }
         }
         //END PLAYER RAD UPDATE
         for (let i = this.entities.length - 1; i >= 0; --i) {

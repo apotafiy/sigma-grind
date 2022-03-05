@@ -343,7 +343,7 @@ class SceneManager {
                 // loadLevelOne(this.game);
                 loadLevelTwo(this.game);
                 // loadTestLevel(this.game);
-                // sigmaArena(this.game);
+                sigmaArena(this.game);
                 // loadPurpleMountain(this.game);
                 break;
             case 2:
