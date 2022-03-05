@@ -232,7 +232,7 @@ class Eregion {
       ctx.filter = "none";
     }
     //Draw the boss health_bar
-    this.healthBar.drawBossHealthBar(ctx);
+    // this.healthBar.drawBossHealthBar(ctx);
     if (params.debug && this.BB) {
       ctx.strokeStyle = "Red";
       ctx.strokeRect(

@@ -282,7 +282,7 @@ function loadLevelOne(gameEngine) {
 /**LEVEL 2 */
 function loadLevelTwo(gameEngine) {
     let gravity = 0.2;
-    gameEngine.addEntity(new Player(gameEngine, 9, -11));
+    gameEngine.addEntity(new Player(gameEngine,-4, -245));
     gameEngine.addEntity(new Eregion(gameEngine, 19, -245));
     gameEngine.addEntity(new Lava(gameEngine, -1, -1));
     gameEngine.addEntity(new Ground(gameEngine, 2, 0, -262, 41, 8, 1, 0, 0));

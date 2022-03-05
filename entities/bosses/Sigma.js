@@ -849,7 +849,7 @@ class Sigma {
             if (this.iframes >= 0) {
                 ctx.filter = 'none';
             }
-            this.healthBar.drawBossHealthBar(ctx);
+            // this.healthBar.drawBossHealthBar(ctx);
         }
 
         if (params.debug) {

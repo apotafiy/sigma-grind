@@ -287,16 +287,16 @@ class SceneManager {
             // );
 
             if(this.game.keys.KeyA){
-                this.x -=1;
+                this.x -=2;
             }
             if(this.game.keys.KeyD){
-                this.x +=1;
+                this.x +=2;
             }
             if(this.game.keys.KeyS){
-                this.y +=1;
+                this.y +=2;
             }
             if(this.game.keys.KeyW){
-                this.y -=1;
+                this.y -=2;
             }
             //remove some of the shake for friction
             this.shakeX -=
@@ -388,8 +388,8 @@ class SceneManager {
         this.currentLevel++;
         switch (this.currentLevel) {
             case 1:
-                loadLevelOne(this.game);
-                // loadLevelTwo(this.game);
+                // loadLevelOne(this.game);
+                loadLevelTwo(this.game);
                 // loadTestLevel(this.game);
                 // sigmaArena(this.game);
                 // loadPurpleMountain(this.game);

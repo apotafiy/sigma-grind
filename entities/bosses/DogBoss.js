@@ -614,7 +614,7 @@ class DogBoss {
                 );
             }
         }
-        this.healthBar.drawBossHealthBar(ctx);
+        // this.healthBar.drawBossHealthBar(ctx);
         if (params.debug) {
             ctx.strokeStyle = 'Orange';
             ctx.strokeRect(
