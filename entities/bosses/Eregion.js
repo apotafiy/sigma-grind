@@ -25,8 +25,6 @@ class Eregion {
     this.gravity = 200 * 0.2;
     // this.health = 300;
     this.acceleration = 3000;
-    this.DISTANCE_MULT = 1;
-    this.frames = 0;
     this.isPog = true;
     this.scale = 3.5;
     this.angle = 0;

@@ -210,7 +210,9 @@ class GameEngine {
                     this.entities[i] instanceof SceneManager ||
                     this.entities[i].alwaysRender ||
                     (this.entities[i] instanceof DogBoss &&
-                        getDistance(this.entities[i], this.player) < 1200))
+                        getDistance(this.entities[i], this.player) < 1200) ||
+                        (this.entities[i] instanceof Eregion &&
+                            getDistance(this.entities[i], this.player) < 1500))
             ) {
                 //if the player exists draw things close enough to the player
                 this.entities[i].draw(this.ctx, this);
@@ -253,7 +255,9 @@ class GameEngine {
                 this.entities[i] instanceof Drill ||
                 this.entities[i].alwaysRender ||
                 (this.entities[i] instanceof DogBoss &&
-                    getDistance(this.entities[i], this.player) < 2000)
+                    getDistance(this.entities[i], this.player) < 2000) || 
+                    (this.entities[i] instanceof Eregion &&
+                        getDistance(this.entities[i], this.player) < 1500)
             ) {
                 //if the player exists update things close to the player
                 let entity = this.entities[i];

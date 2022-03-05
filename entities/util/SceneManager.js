@@ -20,7 +20,7 @@ class SceneManager {
         this.soundEffects.cycle = SOUND_MANAGER.getSound('menu_cycle');
         this.soundEffects.menu_music = SOUND_MANAGER.getSound('menu_music');
         this.currentLevel = 0;
-        this.totalLevels = 3;
+        this.totalLevels = 4;// needs to be 1 higher than actual count
         this.currentMS = 0;
         //allow the user to change the sound of all the stuff 
         this.soundVolume = document.getElementById("volume");
@@ -340,10 +340,10 @@ class SceneManager {
         this.currentLevel++;
         switch (this.currentLevel) {
             case 1:
-                // loadLevelOne(this.game);
-                loadLevelTwo(this.game);
+                loadLevelOne(this.game);
+                // loadLevelTwo(this.game);
                 // loadTestLevel(this.game);
-                sigmaArena(this.game);
+                // sigmaArena(this.game);
                 // loadPurpleMountain(this.game);
                 break;
             case 2:
