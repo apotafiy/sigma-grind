@@ -104,6 +104,8 @@ ASSET_MANAGER.queueDownload('./sprites/misc/explosion.png');
 //Lava
 ASSET_MANAGER.queueDownload('./sprites/misc/lava-1400x26.png');
 ASSET_MANAGER.queueDownload('./sprites/misc/lavaBottom.png');
+//Boss Door
+ASSET_MANAGER.queueDownload('./sprites/misc/bossDoor-30x64.png');
 
 //player attack Animations
 ASSET_MANAGER.queueDownload(
