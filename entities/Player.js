@@ -946,9 +946,9 @@ class Player {
     handlePosition() {
         // UPDATE POSITION
         // scale = 3
-        this.x += this.velocity.x * this.game.clockTick * 3;
-        this.y += this.velocity.y * this.game.clockTick * 3;
-        this.updateBB();
+        // this.x += this.velocity.x * this.game.clockTick * 3;
+        // this.y += this.velocity.y * this.game.clockTick * 3;
+        // this.updateBB();
     }
 
     handleCollision() {

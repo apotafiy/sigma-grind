@@ -275,16 +275,29 @@ class SceneManager {
 
             // Using Lerp
             // Higher interpolation amount = less smoothing effect
-            this.x = lerp(
-                this.x + this.shakeX / 12, // Divide by 12 to lessen the amount of shake
-                this.game.player.x - midpoint,
-                this.interpolation
-            );
-            this.y = lerp(
-                this.y + this.shakeY / 12,
-                this.game.player.y - vertmidpoint,
-                this.interpolation
-            );
+            // this.x = lerp(
+            //     this.x + this.shakeX / 12, // Divide by 12 to lessen the amount of shake
+            //     this.game.player.x - midpoint,
+            //     this.interpolation
+            // );
+            // this.y = lerp(
+            //     this.y + this.shakeY / 12,
+            //     this.game.player.y - vertmidpoint,
+            //     this.interpolation
+            // );
+
+            if(this.game.keys.KeyA){
+                this.x -=1;
+            }
+            if(this.game.keys.KeyD){
+                this.x +=1;
+            }
+            if(this.game.keys.KeyS){
+                this.y +=1;
+            }
+            if(this.game.keys.KeyW){
+                this.y -=1;
+            }
             //remove some of the shake for friction
             this.shakeX -=
                 (this.FRICTON_MULT - this.FRICTON_X) *
