@@ -1,7 +1,8 @@
 class Eregion {
   constructor(game, x, y) {
-    //     gameEngine.addEntity(new Eregion(gameEngine,19,-245));
-    //  gameEngine.addEntity(new Lava(gameEngine, -1, -200));
+  // gameEngine.addEntity(new Player(gameEngine, 9, -220));
+//   gameEngine.addEntity(new Eregion(gameEngine,19,-245));
+//   gameEngine.addEntity(new Lava(gameEngine, -1, -1));
     this.attacksPerformed = 1;
     this.teleportLocations = [
       { x: 9, y: -246 },
@@ -36,10 +37,10 @@ class Eregion {
     this.iframes = 0;
     this.attackCooldown = 3;
     // Boss health
-    this.maxHealth = 300;
+    this.maxHealth = 250;
     this.health = this.maxHealth;
     this.healthBar = new HealthBar(this);
-
+    this.opacity = 1;
     this.BB = new BoundingBox(
       this.x + this.offSetBB,
       this.y + this.offSetBB,
@@ -53,10 +54,14 @@ class Eregion {
 
     this.animations = [];
     this.loadAnimations();
-  }
+    //Sound soundEffects
+    this.soundEffects = {};
+    this.soundEffects.roar = SOUND_MANAGER.getSound("eregion_roar");
+    this.soundEffects.teleport = SOUND_MANAGER.getSound("eregion_teleport");
+    this.soundEffects.death = SOUND_MANAGER.getSound("eregion_death");
+    this.soundEffects.ball_attack = SOUND_MANAGER.getSound("eregion_ball_attack");
+    this.soundEffects.up_attack = SOUND_MANAGER.getSound("eregion_up_attack");
 
-  die() {
-    this.state = 3;
   }
 
   loadAnimations() {
@@ -111,11 +116,13 @@ class Eregion {
   die() {
     //TODO add actual good death logic
     if (!this.isDead) {
+        this.soundEffects.death.play();
       this.isDead = true;
       this.deathTimer = 2;
       this.xVelocity = 0;
     } else {
       this.deathTimer -= 1 * this.game.clockTick;
+      this.opacity = Math.max(0, this.opacity - 1 * this.game.clockTick);
       if (this.deathTimer <= 0) {
         this.game.camera.finalTime = this.game.camera.getFormattedTime();
         this.game.camera.isLevel = false;
@@ -143,9 +150,11 @@ class Eregion {
     if (this.attackCooldown <= 0) {
       //on every 3 attacks have boss teleport
       if (Math.floor(this.attacksPerformed % 3) == 0) {
+          this.soundEffects.teleport.play();
         this.teleport();
       }
       if (Math.floor(this.attacksPerformed % 5) == 0) {
+          this.soundEffects.up_attack.play();
         for (let i = 0; i <= 6; i += 2) {
             this.game.addEntityAtIndex(
                 new GroundProjectile(
@@ -180,6 +189,7 @@ class Eregion {
         }
         this.attackCooldown = 2;
       } else {
+          this.soundEffects.ball_attack.play();
         this.game.addEntityAtIndex(
           new HomingBall(this.game, this.x / 64, this.y / 64, 1),
           this.entityArrayPos - 1
@@ -208,6 +218,9 @@ class Eregion {
     );
     if (this.iframes >= 0) {
       ctx.filter = ` brightness(${this.flashframes})`;
+    }
+    if(this.isDead){
+        ctx.filter = `brightness(${this.flashframes}) opacity(${this.opacity})`;
     }
     that.animations[0].drawFrame(
       that.game.clockTick,

@@ -1246,7 +1246,7 @@ class Player {
             case 1:
                 return this.soundEffects.grunt1;
             case 2:
-                return this.soundEffects.grunt2;
+                return this.soundEffects.grunt1;
             case 3:
                 return this.soundEffects.grunt3;
             case 4:

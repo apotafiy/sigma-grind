@@ -7,7 +7,6 @@ function loadLevelOne(gameEngine) {
   gameEngine.addEntity(new Player(gameEngine, 3, 0));
   // gameEngine.addEntity(new Player(gameEngine, 44, -1));
   gameEngine.addEntity(new DogBoss(gameEngine, 112, -36, gravity));
-  gameEngine.addEntity(new SpikeBall(gameEngine, 4, 4));
   //gameEngine.addEntity(new BeamBarrier(gameEngine, 5, 3, 0, 1));
   //gameEngine.addEntity(new BeamBarrier(gameEngine, 1, 3, 1, 0.5));
 
@@ -284,11 +283,12 @@ function loadLevelOne(gameEngine) {
 function loadLevelTwo(gameEngine) {
   let gravity = 0.2;
   gameEngine.addEntity(new Player(gameEngine, 9, -11));
-  // gameEngine.addEntity(new Player(gameEngine, 9, -220));
+    gameEngine.addEntity(new Eregion(gameEngine,19,-245));
   gameEngine.addEntity(new Lava(gameEngine, -1, -1));
   gameEngine.addEntity(new Ground(gameEngine, 2, 0, -262, 41, 8, 1, 0, 0));
   gameEngine.addEntity(new Ground(gameEngine, 2, 0, -254, 7, 254, 1, 0, 0));
   gameEngine.addEntity(new Spike(gameEngine, 7, -254, 27, 1, 2));
+  gameEngine.addEntity(new Turret(gameEngine, 7, -247, 1));
   gameEngine.addEntity(new Ground(gameEngine, 2, 7, -231, 2, 13, 1, 0, 0));
   gameEngine.addEntity(new Spike(gameEngine, 7, -218, 1, 21, 1));
   gameEngine.addEntity(new Ground(gameEngine, 2, 7, -167, 2, 26, 1, 0, 0));
@@ -324,6 +324,7 @@ function loadLevelTwo(gameEngine) {
   gameEngine.addEntity(new Ground(gameEngine, 2, 11, -239, 6, 1, 1, 0, 0));
   gameEngine.addEntity(new Ground(gameEngine, 2, 11, -229, 1, 9, 1, 0, 0));
   gameEngine.addEntity(new Ground(gameEngine, 2, 11, -165, 1, 24, 1, 0, 0));
+  gameEngine.addEntity(new Turret(gameEngine, 11, -141, 2));
   gameEngine.addEntity(new Ground(gameEngine, 2, 11, -87, 1, 5, 1, 0, 0));
   gameEngine.addEntity(new Ground(gameEngine, 2, 11, -46, 30, 2, 1, 0, 0));
   gameEngine.addEntity(new Spike(gameEngine, 11, -44, 23, 1, 2));
@@ -334,12 +335,14 @@ function loadLevelTwo(gameEngine) {
   gameEngine.addEntity(new Ground(gameEngine, 2, 12, -227, 1, 5, 1, 0, 0));
   gameEngine.addEntity(new Ground(gameEngine, 2, 12, -163, 1, 22, 1, 0, 0));
   gameEngine.addEntity(new Ground(gameEngine, 2, 12, -86, 6, 4, 1, 0, 0));
+  gameEngine.addEntity(new Turret(gameEngine, 12, -82, 2));
   gameEngine.addEntity(new Ground(gameEngine, 2, 12, -74, 4, 1, 1, 0, 0));
   gameEngine.addEntity(new Ground(gameEngine, 2, 12, -64, 4, 1, 1, 0, 0));
   gameEngine.addEntity(new Spike(gameEngine, 12, -63, 4, 1, 2));
   gameEngine.addEntity(new Ground(gameEngine, 2, 12, -15, 15, 2, 1, 0, 0));
   gameEngine.addEntity(new Ground(gameEngine, 2, 13, -150, 2, 9, 1, 0, 0));
   gameEngine.addEntity(new Spike(gameEngine, 13, -132, 1, 25, 3));
+  gameEngine.addEntity(new Turret(gameEngine, 13, -102, 1));
   gameEngine.addEntity(new Mettaur(gameEngine, 13, -17, gravity));
   gameEngine.addEntity(new Ground(gameEngine, 2, 14, -210, 13, 5, 1, 0, 0));
   gameEngine.addEntity(new SpikeBall(gameEngine, 14, -189, gravity));
@@ -351,6 +354,7 @@ function loadLevelTwo(gameEngine) {
   gameEngine.addEntity(new Ground(gameEngine, 2, 15, -135, 11, 2, 1, 0, 0));
   gameEngine.addEntity(new Drill(gameEngine, 15, -70, 8));
   gameEngine.addEntity(new Spike(gameEngine, 15, -24, 17, 1, 2));
+  gameEngine.addEntity(new Turret(gameEngine, 15, -22, 1));
   gameEngine.addEntity(new Ground(gameEngine, 2, 16, -213, 9, 1, 1, 0, 0));
   gameEngine.addEntity(new Ground(gameEngine, 2, 16, -203, 9, 1, 1, 0, 0));
   gameEngine.addEntity(new Ground(gameEngine, 2, 16, -144, 1, 3, 1, 0, 0));
@@ -369,6 +373,7 @@ function loadLevelTwo(gameEngine) {
   gameEngine.addEntity(new FullHealthPack(gameEngine, 19, -138));
   gameEngine.addEntity(new Ground(gameEngine, 2, 19, -79, 4, 2, 1, 0, 0));
   gameEngine.addEntity(new Spike(gameEngine, 19, -77, 4, 1, 2));
+  gameEngine.addEntity(new Turret(gameEngine, 20, -201, 2));
   gameEngine.addEntity(new SpikeBall(gameEngine, 20, -189, gravity));
   gameEngine.addEntity(new Drill(gameEngine, 20, -170, 8));
   gameEngine.addEntity(new Drill(gameEngine, 20, -142, 8));
@@ -376,6 +381,7 @@ function loadLevelTwo(gameEngine) {
   gameEngine.addEntity(new Ground(gameEngine, 2, 20, -60, 3, 1, 1, 0, 0));
   gameEngine.addEntity(new Mettaur(gameEngine, 20, -17, gravity));
   gameEngine.addEntity(new Drill(gameEngine, 21, -170, 8));
+  gameEngine.addEntity(new Turret(gameEngine, 21, -59, 2));
   gameEngine.addEntity(new Ground(gameEngine, 2, 22, -220, 2, 2, 1, 0, 0));
   gameEngine.addEntity(new Ground(gameEngine, 2, 23, -144, 18, 3, 1, 0, 0));
   gameEngine.addEntity(new Ground(gameEngine, 2, 23, -86, 18, 4, 1, 0, 0));
@@ -391,6 +397,9 @@ function loadLevelTwo(gameEngine) {
   gameEngine.addEntity(new Ground(gameEngine, 2, 26, -150, 15, 2, 1, 0, 0));
   gameEngine.addEntity(new Ground(gameEngine, 2, 26, -9, 15, 1, 1, 0, 0));
   gameEngine.addEntity(new SpikeBall(gameEngine, 27, -189, gravity));
+  gameEngine.addEntity(new Turret(gameEngine, 27, -141, 2));
+  gameEngine.addEntity(new Turret(gameEngine, 27, -102, 3));
+  gameEngine.addEntity(new Turret(gameEngine, 27, -82, 2));
   gameEngine.addEntity(new Ground(gameEngine, 2, 28, -227, 13, 5, 1, 0, 0));
   gameEngine.addEntity(new Ground(gameEngine, 2, 28, -163, 13, 13, 1, 0, 0));
   gameEngine.addEntity(new Ground(gameEngine, 2, 28, -103, 13, 4, 1, 0, 0));
@@ -416,6 +425,7 @@ function loadLevelTwo(gameEngine) {
   gameEngine.addEntity(new Spike(gameEngine, 30, -99, 4, 1, 2));
   gameEngine.addEntity(new Ground(gameEngine, 2, 30, -88, 11, 1, 1, 0, 0));
   gameEngine.addEntity(new Ground(gameEngine, 2, 30, -50, 2, 4, 1, 0, 0));
+  gameEngine.addEntity(new Turret(gameEngine, 30, -37, 1));
   gameEngine.addEntity(new Ground(gameEngine, 2, 31, -166, 10, 1, 1, 0, 0));
   gameEngine.addEntity(new Ground(gameEngine, 2, 31, -89, 10, 1, 1, 0, 0));
   gameEngine.addEntity(new Spike(gameEngine, 31, -21, 1, 1, 0));
@@ -425,13 +435,13 @@ function loadLevelTwo(gameEngine) {
   gameEngine.addEntity(new Ground(gameEngine, 2, 32, -93, 9, 4, 1, 0, 0));
   gameEngine.addEntity(new Spike(gameEngine, 32, -22, 1, 1, 0));
   gameEngine.addEntity(new Ground(gameEngine, 2, 32, -21, 9, 1, 1, 0, 0));
+  gameEngine.addEntity(new Turret(gameEngine, 33, -247, 3));
   gameEngine.addEntity(new Spike(gameEngine, 33, -190, 1, 24, 3));
   gameEngine.addEntity(new Spike(gameEngine, 33, -133, 1, 30, 3));
   gameEngine.addEntity(new Ground(gameEngine, 2, 33, -95, 8, 2, 1, 0, 0));
   gameEngine.addEntity(new Spike(gameEngine, 33, -76, 1, 30, 3));
   gameEngine.addEntity(new Spike(gameEngine, 33, -25, 1, 1, 2));
   gameEngine.addEntity(new Spike(gameEngine, 33, -23, 1, 1, 0));
-  gameEngine.addEntity(new Eregion(gameEngine,19,-245));
   gameEngine.addEntity(new Ground(gameEngine, 2, 33, -22, 8, 1, 1, 0, 0));
   gameEngine.addEntity(new Ground(gameEngine, 2, 34, -254, 7, 23, 1, 0, 0));
   gameEngine.addEntity(new Ground(gameEngine, 2, 34, -218, 7, 52, 1, 0, 0));
@@ -440,7 +450,6 @@ function loadLevelTwo(gameEngine) {
   gameEngine.addEntity(new Ground(gameEngine, 2, 34, -82, 7, 36, 1, 0, 0));
   gameEngine.addEntity(new Ground(gameEngine, 2, 34, -44, 7, 16, 1, 0, 0));
   gameEngine.addEntity(new Ground(gameEngine, 2, 34, -25, 7, 3, 1, 0, 0));
-
   gameEngine.entities.forEach(function (entity) {
     if (entity instanceof Ground) entity.checkForGrass();
   });

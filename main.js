@@ -147,6 +147,15 @@ SOUND_MANAGER.queueDownload(
     'dogboss_launch_projectile',
     './sounds/dogboss/launch_attack.wav'
 );
+
+//Eregion sound effects
+SOUND_MANAGER.queueDownload('eregion_roar', "./sounds/eregion/roar.mp3");
+SOUND_MANAGER.queueDownload('eregion_teleport', "./sounds/eregion/teleport.ogg");
+SOUND_MANAGER.queueDownload('eregion_death', "./sounds/eregion/death.ogg");
+SOUND_MANAGER.queueDownload('eregion_ball_attack', "./sounds/eregion/ball_attack.WAV");
+SOUND_MANAGER.queueDownload('eregion_up_attack', "./sounds/eregion/up_attack.ogg");
+//turret sound effects
+SOUND_MANAGER.queueDownload('turret_fire',"./sounds/turret/fire.ogg");
 //rush soundEffects
 SOUND_MANAGER.queueDownload('rush_teleport', './sounds/rush/teleport.mp3');
 //background Music
