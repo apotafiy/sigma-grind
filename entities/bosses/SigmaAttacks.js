@@ -32,6 +32,9 @@ class SigmaHead {
         this.loadAnimation();
         this.updateBB();
 
+        this.soundEffects = {};
+        this.soundEffects.laser = SOUND_MANAGER.getSound('laser');
+
         this.crosshair = new BeamCrosshair(game, null, null, this);
         this.beam = new Beam(game, null, null, this);
     }
@@ -216,6 +219,7 @@ class SigmaHead {
             this.fadeValue += this.game.clockTick;
             this.fadeValue = Math.min(this.fadeValue, 1);
             ctx.filter = `opacity(${this.fadeValue})`;
+            this.soundEffects.laser.play();
             if (this.fadeValue === 1) {
                 this.spawnIn = false;
                 this.initDone = true;

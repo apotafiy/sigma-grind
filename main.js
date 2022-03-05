@@ -145,6 +145,13 @@ SOUND_MANAGER.queueDownload(
     'dogboss_launch_projectile',
     './sounds/dogboss/launch_attack.wav'
 );
+// sigma SFX
+SOUND_MANAGER.queueDownload('teleport', './sounds/sigma/teleport.wav');
+SOUND_MANAGER.queueDownload('dash', './sounds/sigma/dash.wav');
+SOUND_MANAGER.queueDownload('laser', './sounds/sigma/laser.wav');
+SOUND_MANAGER.queueDownload('wave', './sounds/sigma/wave.wav');
+SOUND_MANAGER.queueDownload('balls', './sounds/sigma/balls.wav');
+
 //rush soundEffects
 SOUND_MANAGER.queueDownload('rush_teleport', './sounds/rush/teleport.mp3');
 //background Music

@@ -76,11 +76,10 @@ class Sigma {
 
         //sound imports
         this.soundEffects = {};
-        // this.soundEffects.attack = SOUND_MANAGER.getSound('dogboss_roar');
-        // this.soundEffects.launch_attack = SOUND_MANAGER.getSound(
-        //     'dogboss_launch_projectile'
-        // );
-        // this.soundEffects.walk = SOUND_MANAGER.getSound('dogboss_walk');
+        this.soundEffects.teleport = SOUND_MANAGER.getSound('teleport');
+        this.soundEffects.dash = SOUND_MANAGER.getSound('dash');
+        this.soundEffects.wave = SOUND_MANAGER.getSound('wave');
+        this.soundEffects.balls = SOUND_MANAGER.getSound('balls');
 
         this.animations = [];
         this.spriteOffset = {
@@ -470,6 +469,8 @@ class Sigma {
 
                         // after intro is done
                         this.state = this.states.idle;
+                        this.game.player.checkpointX = 148 * BLOCK_DIMENSION;
+                        this.game.player.checkpointY = -161 * BLOCK_DIMENSION;
 
                         this.game.player.immobilized = false;
                         this.game.player.meetBoss = false;
@@ -501,6 +502,7 @@ class Sigma {
             // dash
             if (this.state === this.states.dash) {
                 this.dashAttack(this.dashEndAction);
+                this.soundEffects.dash.play();
             }
 
             // kamehameha - attack1
@@ -678,6 +680,7 @@ class Sigma {
             // play teleport animation, when done set to new position
             // state is now teleport in
             this.state = this.states.teleportIn;
+            this.soundEffects.teleport.play();
         }
         if (this.animations[this.states.teleportIn][this.facing].isDone()) {
             this.state = this.states.idle;
@@ -739,9 +742,11 @@ class Sigma {
     energyWave() {
         let xOffset = this.facing === 0 ? 10 : -30;
         if (!this.wave.started) {
+            this.soundEffects.wave.play();
             this.wave.start(this.x + xOffset, this.y - 60, this.facing);
         }
         if (this.wave2StartTime === 0) {
+            this.soundEffects.wave.play();
             if (!this.topWave.started && !this.bottomWave.started) {
                 this.bottomWave.start(
                     this.x + xOffset,
@@ -769,6 +774,7 @@ class Sigma {
         this.ballSpeedOffset = Math.min(this.ballSpeedOffset, ballSpeed * 2);
 
         if (this.ballTimeout === 0) {
+            this.soundEffects.balls.play();
             // top left
             this.game.addEntityAtIndex(
                 new SigmaBall(

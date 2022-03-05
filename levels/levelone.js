@@ -447,7 +447,8 @@ function loadLevelTwo(gameEngine) {
 }
 function loadTestLevel(gameEngine) {
     let gravity = 0.2;
-    gameEngine.addEntity(new Player(gameEngine, 3, -6));
+    gameEngine.addEntity(new Player(gameEngine, 150, -160));
+    gameEngine.addEntity(new Sigma(gameEngine, 200, -160));
     gameEngine.addEntity(new Ground(gameEngine, 2, 0, -32, 108, 2, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 0, -30, 2, 30, 1, 0, 0));
     gameEngine.addEntity(new Spike(gameEngine, 2, -30, 28, 1, 2));
@@ -959,7 +960,6 @@ function loadTestLevel(gameEngine) {
     gameEngine.addEntity(new Ground(gameEngine, 2, 192, -112, 64, 3, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 192, -102, 2, 6, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 192, -64, 4, 24, 1, 0, 0));
-    gameEngine.addEntity(new DogBoss(gameEngine, 193, -162, gravity));
     gameEngine.addEntity(new Spike(gameEngine, 194, -82, 28, 1, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 194, -81, 42, 2, 1, 0, 0));
     gameEngine.addEntity(new SpikeBall(gameEngine, 195, -87, gravity));
