@@ -841,7 +841,7 @@ class Player {
             }
             // console.log(this.currentIFrameTimer);
 
-            this.handleCollision();
+            // this.handleCollision();
 
             // update state
             if (
@@ -1155,83 +1155,83 @@ class Player {
     }
 
     draw(ctx) {
-        //damage blink
-        if (this.currentIFrameTimer > 0) {
-            ctx.filter = ` brightness(${this.flashframes})`;
-        }
-        this.animations[this.state][this.facing].drawFrame(
-            this.game.clockTick,
-            ctx,
-            this.x - this.game.camera.x + this.spriteOffset.xOffset, // camera sidescrolling
-            this.y - this.game.camera.y + this.spriteOffset.yOffset,
-            2
-        );
+        // //damage blink
+        // if (this.currentIFrameTimer > 0) {
+        //     ctx.filter = ` brightness(${this.flashframes})`;
+        // }
+        // this.animations[this.state][this.facing].drawFrame(
+        //     this.game.clockTick,
+        //     ctx,
+        //     this.x - this.game.camera.x + this.spriteOffset.xOffset, // camera sidescrolling
+        //     this.y - this.game.camera.y + this.spriteOffset.yOffset,
+        //     2
+        // );
 
-        if (
-            this.state === this.states.attack1 ||
-            this.state === this.states.attack2 ||
-            this.state === this.states.attack3
-        ) {
-            if (this.animations[this.state][this.facing].isDone()) {
-                // console.log('finished');
-                this.attacking = false;
-                // this.comboState = (this.comboState + 1) % 3;
-                this.animations[this.state][this.facing].elapsedTime = 0;
-                //TODO possibly remove this
-            }
-            // console.log("attackl anim");
-        } else {
-            //obviously not attacking
-            this.attacking = false;
-            // console.log("normal anim");
-        }
-        if (this.currentIFrameTimer >= 0) {
-            ctx.filter = 'none';
-        }
-        if (params.debug) {
-            ctx.strokeStyle = 'Blue';
-            ctx.strokeRect(
-                this.BB.x - this.game.camera.x,
-                this.BB.y - this.game.camera.y,
-                this.BB.width,
-                this.BB.height
-            );
-            ctx.strokeStyle = 'Orange';
-            ctx.strokeRect(
-                this.attackBB.x - this.game.camera.x,
-                this.attackBB.y - this.game.camera.y,
-                this.attackBB.width,
-                this.attackBB.height
-            );
+        // if (
+        //     this.state === this.states.attack1 ||
+        //     this.state === this.states.attack2 ||
+        //     this.state === this.states.attack3
+        // ) {
+        //     if (this.animations[this.state][this.facing].isDone()) {
+        //         // console.log('finished');
+        //         this.attacking = false;
+        //         // this.comboState = (this.comboState + 1) % 3;
+        //         this.animations[this.state][this.facing].elapsedTime = 0;
+        //         //TODO possibly remove this
+        //     }
+        //     // console.log("attackl anim");
+        // } else {
+        //     //obviously not attacking
+        //     this.attacking = false;
+        //     // console.log("normal anim");
+        // }
+        // if (this.currentIFrameTimer >= 0) {
+        //     ctx.filter = 'none';
+        // }
+        // if (params.debug) {
+        //     ctx.strokeStyle = 'Blue';
+        //     ctx.strokeRect(
+        //         this.BB.x - this.game.camera.x,
+        //         this.BB.y - this.game.camera.y,
+        //         this.BB.width,
+        //         this.BB.height
+        //     );
+        //     ctx.strokeStyle = 'Orange';
+        //     ctx.strokeRect(
+        //         this.attackBB.x - this.game.camera.x,
+        //         this.attackBB.y - this.game.camera.y,
+        //         this.attackBB.width,
+        //         this.attackBB.height
+        //     );
 
-            ctx.font = '20px sans-serif';
-            ctx.textAlign = 'center';
-            ctx.fillStyle = 'black';
-            ctx.fillText(
-                Math.floor(this.x / BLOCK_DIMENSION) +
-                    ', ' +
-                    Math.floor(this.y / BLOCK_DIMENSION) +
-                    ', ' +
-                    this.health,
-                this.x - this.game.camera.x + this.spriteOffset.xOffset + 40, // camera sidescrolling
-                this.y - this.game.camera.y + this.spriteOffset.yOffset - 20
-            );
-        }
+        //     ctx.font = '20px sans-serif';
+        //     ctx.textAlign = 'center';
+        //     ctx.fillStyle = 'black';
+        //     ctx.fillText(
+        //         Math.floor(this.x / BLOCK_DIMENSION) +
+        //             ', ' +
+        //             Math.floor(this.y / BLOCK_DIMENSION) +
+        //             ', ' +
+        //             this.health,
+        //         this.x - this.game.camera.x + this.spriteOffset.xOffset + 40, // camera sidescrolling
+        //         this.y - this.game.camera.y + this.spriteOffset.yOffset - 20
+        //     );
+        // }
 
-        // ----------- PLAYER HEALTH BAR ----------------------
-        // Draws the health bar that follows the player
-        // this.healthBar.drawHealthBarFollow(ctx);
+        // // ----------- PLAYER HEALTH BAR ----------------------
+        // // Draws the health bar that follows the player
+        // // this.healthBar.drawHealthBarFollow(ctx);
 
-        // Draws the health bar that is static at the top-left
-        this.healthBar.drawPlayerHealthBar(ctx);
+        // // Draws the health bar that is static at the top-left
+        // // this.healthBar.drawPlayerHealthBar(ctx);
 
-        // Draws the player lives
-        this.healthBar.drawPlayerLives(
-            ctx,
-            this.game.clockTick,
-            this.livesLeft
-        );
-        // ----------------------------------------------------
+        // // Draws the player lives
+        // // this.healthBar.drawPlayerLives(
+        // //     ctx,
+        // //     this.game.clockTick,
+        // //     this.livesLeft
+        // // );
+        // // ----------------------------------------------------
     }
     getRandomGrunt() {
         let theGrunt = this.getRandomInt(1, 5);

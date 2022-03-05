@@ -288,15 +288,19 @@ class SceneManager {
 
             if(this.game.keys.KeyA){
                 this.x -=2;
+                this.game.player.x = this.x + midpoint;
             }
             if(this.game.keys.KeyD){
                 this.x +=2;
+                this.game.player.x = this.x + midpoint;
             }
             if(this.game.keys.KeyS){
                 this.y +=2;
+                this.game.player.y= this.y + vertmidpoint;
             }
             if(this.game.keys.KeyW){
                 this.y -=2;
+                this.game.player.y= this.y + vertmidpoint;
             }
             //remove some of the shake for friction
             this.shakeX -=
@@ -388,8 +392,8 @@ class SceneManager {
         this.currentLevel++;
         switch (this.currentLevel) {
             case 1:
-                // loadLevelOne(this.game);
-                loadLevelTwo(this.game);
+                loadLevelOne(this.game);
+                // loadLevelTwo(this.game);
                 // loadTestLevel(this.game);
                 // sigmaArena(this.game);
                 // loadPurpleMountain(this.game);
@@ -434,21 +438,21 @@ class SceneManager {
             );
             ctx.stroke();
         }
-        if (this.isLevel) {
-            //draw in timer
-            ctx.font = '25px "Zen Dots"';
-            ctx.textAlign = 'left';
-            ctx.fillStyle = 'White';
-            ctx.strokeStyle = 'Light blue';
-            ctx.lineWidth = 10;
-            ctx.strokeText(
-                this.getFormattedTime(),
-                30, // offset on purpose
-                50
-            );
-            ctx.fillText(this.getFormattedTime(), 30, 50);
-            ctx.lineWidth = 1;
-        }
+        // if (this.isLevel) {
+        //     //draw in timer
+        //     ctx.font = '25px "Zen Dots"';
+        //     ctx.textAlign = 'left';
+        //     ctx.fillStyle = 'White';
+        //     ctx.strokeStyle = 'Light blue';
+        //     ctx.lineWidth = 10;
+        //     ctx.strokeText(
+        //         this.getFormattedTime(),
+        //         30, // offset on purpose
+        //         50
+        //     );
+        //     ctx.fillText(this.getFormattedTime(), 30, 50);
+        //     ctx.lineWidth = 1;
+        // }
         if (!this.isLevel && this.currentState == 0) {
             that.animations[0].drawFrame(that.game.clockTick, ctx, 0, 0, 1);
             ctx.filter = `brightness(${this.enterBrightness})`;
