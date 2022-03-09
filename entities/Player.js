@@ -562,21 +562,6 @@ class Player {
     }
 
     update() {
-        // console.log(this.x + ' ' + this.y);
-        // // console.log(Math.floor(this.x) + ' ' + Math.floor(this.y));
-        // if (Math.floor(this.x) === 833) {
-        //     // this.checkpointX = 12 * BLOCK_DIMENSION;
-        //     // this.checkpointY = 5 * BLOCK_DIMENSION;
-        //     console.log('Checkpoint hit!');
-        // }
-
-        // if (
-        //     Math.floor(this.x) >= 833 - 1 * BLOCK_DIMENSION &&
-        //     Math.floor(this.x) <= 833 + 1 * BLOCK_DIMENSION
-        // ) {
-        //     console.log('Checkpoint hit');
-        // }
-
         /**
          * flash while invincible
          */
@@ -1013,11 +998,6 @@ class Player {
                         entity.iframes = 0.5;
                     }
                 }
-                // if (entity && entity instanceof Checkpoint) {
-                //     console.log('Checkpoint reached!');
-                //     this.checkpointX = entity.x;
-                //     this.checkpointY = entity.y;
-                // }
                 if (entity.isPog && this.isPogo) {
                     this.animations[3][0].elapsedTime = 0;
                     this.animations[3][1].elapsedTime = 0;
@@ -1044,8 +1024,6 @@ class Player {
                     this.health = Math.max(this.health, 0);
                     this.currentIFrameTimer = this.maxIFrameTimer;
                     this.immobilized = true;
-                    // console.log('Took ' + entity.collisionDamage + ' damage');
-                    // console.log('Current HP: ' + this.health);
                 }
                 if (this.velocity.y > 0) {
                     // falling
