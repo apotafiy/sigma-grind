@@ -35,6 +35,7 @@ class Drill {
     die() {
         this.state = 3;
         this.BB = undefined;
+        console.log('no BB');
     }
 
     drawAngle(ctx, angle) {
@@ -178,6 +179,9 @@ class Drill {
     }
 
     updateBB() {
+        if (this.state == 3) {
+            return;
+        }
         this.BB = new BoundingBox(
             this.x + this.offSetBB,
             this.y + this.offSetBB,
@@ -191,7 +195,7 @@ class Drill {
         let dist = getDistance(this, this.player);
         const that = this;
         if (this.health <= 0) {
-            this.state = 3;
+            this.die();
         }
         if (this.state === 3) {
             this.angle = 0;
