@@ -1,8 +1,8 @@
 class Clock {
     constructor(game, x, y, time) {
         this.game = game;
-        this.x = x * 64;
-        this.y = y * 64;
+        this.x = x * BLOCK_DIMENSION;
+        this.y = y * BLOCK_DIMENSION;
 
         // Clock sprite sheet
         this.clockSprite = ASSET_MANAGER.getAsset(
@@ -34,6 +34,7 @@ class Clock {
             0,
             0
         );
+
         this.bobTimer = 0;
         this.bobHeight = 10;
         this.scale = 2.5;
@@ -53,14 +54,13 @@ class Clock {
 
         // Sound effect(s)
         this.soundEffects = {};
-        // TODO: Load sound effect here
+        // TODO: Load sound effect(s) here
     }
 
     update() {
-        // console.log(this.game.timer.gameTime); // TODO: Delete later
-        this.bobTimer += 5 * this.game.clockTick;
         let that = this;
-        this.game.entities.forEach(function (entity) {
+        that.bobTimer += 5 * that.game.clockTick;
+        that.game.entities.forEach(function (entity) {
             if (entity.BB && that.BB.collide(entity.BB)) {
                 if (entity instanceof Player) {
                     that.game.camera.msOffset += that.decrementOffset;
@@ -69,7 +69,7 @@ class Clock {
                 }
             }
         });
-        this.updateBB();
+        that.updateBB();
     }
 
     // Updates bounding box for collision
@@ -105,9 +105,9 @@ class Clock {
                 that.x - that.game.camera.x,
                 that.y -
                     that.game.camera.y +
-                    this.yOffset +
-                    Math.sin(this.bobTimer) * this.bobHeight,
-                this.scale
+                    that.yOffset +
+                    Math.sin(this.bobTimer) * that.bobHeight,
+                that.scale
             );
         } else {
             that.clockGrabbed.drawFrame(
@@ -116,9 +116,9 @@ class Clock {
                 that.x - that.game.camera.x,
                 that.y -
                     that.game.camera.y +
-                    this.yOffset +
-                    Math.sin(this.bobTimer) * this.bobHeight,
-                this.scale
+                    that.yOffset +
+                    Math.sin(that.bobTimer) * that.bobHeight,
+                that.scale
             );
             if (that.clockGrabbed.isDone()) {
                 that.removeFromWorld = true;

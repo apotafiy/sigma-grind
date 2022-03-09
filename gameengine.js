@@ -90,7 +90,6 @@ class GameEngine {
             x: e.clientX - this.ctx.canvas.getBoundingClientRect().left,
             y: e.clientY - this.ctx.canvas.getBoundingClientRect().top,
         });
-
         this.ctx.canvas.addEventListener('mousemove', (e) => {
             if (this.options.debugging) {
                 console.log('MOUSE_MOVE', getXandY(e));
@@ -306,8 +305,6 @@ class GameEngine {
             this.gui.show();
         } else if (!params.debug && document.getElementById('fpsCounter')) {
             document.getElementById('fpsCounter').remove();
-        } else {
-            this.gui.hide();
         }
     }
 

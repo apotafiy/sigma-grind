@@ -948,7 +948,7 @@ class Player {
 
     handleCollision() {
         // collision
-        this.game.entities.forEach((entity) => {
+        this.game.entities.forEach(entity => {
             //check for the enemy colliding with sword
             // || entity instanceof Drill
             if (entity.BB && this.attackBB.collide(entity.BB)) {
@@ -1015,8 +1015,6 @@ class Player {
                     this.health = Math.max(this.health, 0);
                     this.currentIFrameTimer = this.maxIFrameTimer;
                     this.immobilized = true;
-                    // console.log('Took ' + entity.collisionDamage + ' damage');
-                    // console.log('Current HP: ' + this.health);
                 }
                 if (this.velocity.y > 0) {
                     // falling
@@ -1257,7 +1255,7 @@ class Player {
         // checkpoint, he respawns at the spawn location
         this.x = this.checkpointX;
         this.y = this.checkpointY;
-        //Update camera position
+        // Moves camera back to checkpoint location
         this.game.camera.x = this.checkpointX;
         this.game.camera.y = this.checkpointY;
         this.health = this.maxHealth; // Replenish health
