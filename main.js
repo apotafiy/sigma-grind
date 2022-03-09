@@ -10,6 +10,10 @@ ASSET_MANAGER.queueDownload('./sprites/title_screen/normal.png');
 ASSET_MANAGER.queueDownload('./sprites/title_screen/hardcore.png');
 ASSET_MANAGER.queueDownload('./sprites/title_screen/game_over.png');
 ASSET_MANAGER.queueDownload('./sprites/title_screen/mission_complete.png');
+ASSET_MANAGER.queueDownload('./sprites/title_screen/level_select.png');
+ASSET_MANAGER.queueDownload('./sprites/title_screen/level_1.png');
+ASSET_MANAGER.queueDownload('./sprites/title_screen/level_2.png');
+ASSET_MANAGER.queueDownload('./sprites/title_screen/level_3.png');
 // Beams
 ASSET_MANAGER.queueDownload('./sprites/verticalBeam.png');
 ASSET_MANAGER.queueDownload('./sprites/horizontalBeam.png');
