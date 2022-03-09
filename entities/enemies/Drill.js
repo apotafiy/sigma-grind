@@ -35,7 +35,6 @@ class Drill {
     die() {
         this.state = 3;
         this.BB = undefined;
-        console.log('no BB');
     }
 
     drawAngle(ctx, angle) {
