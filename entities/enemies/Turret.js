@@ -30,11 +30,11 @@ class Turret {
         );
         this.player = this.game.getPlayer();
         this.animations = [];
-        this.aggroDistance = 250;
+        this.aggroDistance = 350;
         this.loadAnimations();
 
         this.soundEffects = {};
-        this.soundEffects.fire = SOUND_MANAGER.getSound("turret_fire");
+        this.soundEffects.fire = SOUND_MANAGER.getSound('turret_fire');
     }
 
     die() {
@@ -81,7 +81,7 @@ class Turret {
             this.width,
             this.height,
             3,
-            0.3,
+            0.2,
             0,
             false,
             false
