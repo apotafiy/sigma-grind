@@ -86,26 +86,25 @@ class GameEngine {
     }
 
     startInput() {
-        const getXandY = e => ({
+        const getXandY = (e) => ({
             x: e.clientX - this.ctx.canvas.getBoundingClientRect().left,
             y: e.clientY - this.ctx.canvas.getBoundingClientRect().top,
         });
-
-        this.ctx.canvas.addEventListener('mousemove', e => {
+        this.ctx.canvas.addEventListener('mousemove', (e) => {
             if (this.options.debugging) {
                 console.log('MOUSE_MOVE', getXandY(e));
             }
             this.mouse = getXandY(e);
         });
 
-        this.ctx.canvas.addEventListener('click', e => {
+        this.ctx.canvas.addEventListener('click', (e) => {
             if (this.options.debugging) {
                 console.log('CLICK', getXandY(e));
             }
             this.click = getXandY(e);
         });
 
-        this.ctx.canvas.addEventListener('wheel', e => {
+        this.ctx.canvas.addEventListener('wheel', (e) => {
             if (this.options.debugging) {
                 console.log('WHEEL', getXandY(e), e.wheelDelta);
             }
@@ -113,7 +112,7 @@ class GameEngine {
             this.wheel = e;
         });
 
-        this.ctx.canvas.addEventListener('contextmenu', e => {
+        this.ctx.canvas.addEventListener('contextmenu', (e) => {
             if (this.options.debugging) {
                 console.log('RIGHT_CLICK', getXandY(e));
             }
@@ -121,7 +120,7 @@ class GameEngine {
             this.rightclick = getXandY(e);
         });
 
-        this.ctx.canvas.addEventListener('keydown', event => {
+        this.ctx.canvas.addEventListener('keydown', (event) => {
             // Prevent Dashing continuously when holding down 'k' button
             if (event.code === 'KeyK' && event.repeat) return;
 
@@ -163,7 +162,7 @@ class GameEngine {
         });
         this.ctx.canvas.addEventListener(
             'keyup',
-            event => (this.keys[event.code] = false)
+            (event) => (this.keys[event.code] = false)
         );
     }
 
@@ -202,10 +201,19 @@ class GameEngine {
         for (let i = this.entities.length - 1; i >= 0; i--) {
             if (
                 this.player &&
-                (getDistance(this.entities[i], this.player) < 700 ||
+                (getDistance(this.entities[i], this.player) < 800 ||
                     this.entities[i] instanceof Water ||
+                    this.entities[i] instanceof PurpleMountain ||
+                    this.entities[i] instanceof Lava ||
                     this.entities[i] instanceof Spike ||
-                    this.entities[i] instanceof SceneManager)
+                    this.entities[i] instanceof SceneManager ||
+                    this.entities[i].alwaysRender ||
+                    (this.entities[i] instanceof DogBoss &&
+                        getDistance(this.entities[i], this.player) < 1200) ||
+                    (this.entities[i] instanceof Eregion &&
+                        getDistance(this.entities[i], this.player) < 1500) ||
+                    (this.entities[i] instanceof Sigma &&
+                        getDistance(this.entities[i], this.player) < 2000))
             ) {
                 //if the player exists draw things close enough to the player
                 this.entities[i].draw(this.ctx, this);
@@ -235,34 +243,26 @@ class GameEngine {
             this.clear_level = false;
         }
         let entitiesCount = this.entities.length;
-        //Update code!
-        // for (let i = 0; i < entitiesCount; i++) {
-        //   let entity = this.entities[i];
-
-        //   if (!entity.removeFromWorld) {
-        //     entity.update();
-        //     updatedThisTic ++;
-        //   }
-        // }
-
         //Player radius updates only
         for (let i = this.entities.length - 1; i >= 0; i--) {
             if (
-                this.player &&
-                (getDistance(this.entities[i], this.player) < 700 ||
-                    this.entities[i] instanceof Water ||
-                    this.entities[i] instanceof Spike ||
-                    this.entities[i] instanceof SceneManager ||
-                    this.entities[i] instanceof Drill)
+                (this.player &&
+                    getDistance(this.entities[i], this.player) < 800) ||
+                this.entities[i] instanceof Water ||
+                this.entities[i] instanceof PurpleMountain ||
+                this.entities[i] instanceof Lava ||
+                this.entities[i] instanceof Spike ||
+                this.entities[i] instanceof SceneManager ||
+                this.entities[i] instanceof Drill ||
+                this.entities[i].alwaysRender ||
+                (this.entities[i] instanceof DogBoss &&
+                    getDistance(this.entities[i], this.player) < 2000) ||
+                (this.entities[i] instanceof Eregion &&
+                    getDistance(this.entities[i], this.player) < 1500) ||
+                (this.entities[i] instanceof Sigma &&
+                    getDistance(this.entities[i], this.player) < 2000)
             ) {
                 //if the player exists update things close to the player
-                let entity = this.entities[i];
-                if (!entity.removeFromWorld) {
-                    entity.update();
-                    updatedThisTic++;
-                }
-            } else if (!this.player) {
-                //if no player update everythign so we dont crash
                 let entity = this.entities[i];
                 if (!entity.removeFromWorld) {
                     entity.update();
@@ -283,20 +283,13 @@ class GameEngine {
                         updatedThisTic++;
                     }
                 }
-
-                for (let i = this.entities.length - 1; i >= 0; --i) {
-                    if (this.entities[i].removeFromWorld) {
-                        this.entities.splice(i, 1);
-                    }
+            } else if (!this.player) {
+                //if no player update everythign so we dont crash
+                let entity = this.entities[i];
+                if (!entity.removeFromWorld) {
+                    entity.update();
+                    updatedThisTic++;
                 }
-            }
-            if (params.debug) {
-                document.body.appendChild(this.stats.dom);
-                this.gui.show();
-            } else if (!params.debug && document.getElementById('fpsCounter')) {
-                document.getElementById('fpsCounter').remove();
-            } else {
-                this.gui.hide();
             }
         }
         //END PLAYER RAD UPDATE
@@ -307,13 +300,12 @@ class GameEngine {
         }
 
         if (params.debug) {
-            document.body.appendChild(this.stats.dom);
+            if (!document.getElementById('fpsCounter'))
+                document.body.appendChild(this.stats.dom);
+            this.gui.show();
         } else if (!params.debug && document.getElementById('fpsCounter')) {
             document.getElementById('fpsCounter').remove();
         }
-        //display entities we are updating per tic!
-        document.getElementById('state').innerHTML =
-            'Updating: ' + updatedThisTic;
     }
 
     getPlayer() {

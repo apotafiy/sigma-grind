@@ -32,6 +32,9 @@ class Turret {
         this.animations = [];
         this.aggroDistance = 250;
         this.loadAnimations();
+
+        this.soundEffects = {};
+        this.soundEffects.fire = SOUND_MANAGER.getSound("turret_fire");
     }
 
     die() {
@@ -40,8 +43,11 @@ class Turret {
         this.isFiring = false;
     }
     fire() {
+        this.soundEffects.fire.play();
+
         this.game.addEntityAtIndex(
-            new TurretBullet(this.game, this.x / 64, this.y / 64)
+            new TurretBullet(this.game, this.x / 64, this.y / 64),
+            2
         );
     }
 
@@ -106,13 +112,26 @@ class Turret {
             true,
             false
         );
+        // death
+        // this.animations[4] = new Animator(
+        //     ASSET_MANAGER.getAsset('./sprites/mettaur/fire.png'),
+        //     0,
+        //     0,
+        //     32,
+        //     46,
+        //     7,
+        //     0.05,
+        //     0,
+        //     false,
+        //     false
+        // );
         this.animations[4] = new Animator(
-            ASSET_MANAGER.getAsset('./sprites/mettaur/fire.png'),
-            0,
-            0,
-            32,
-            46,
-            7,
+            ASSET_MANAGER.getAsset('./sprites/misc/explosion.png'),
+            10,
+            80,
+            65,
+            50,
+            9,
             0.05,
             0,
             false,

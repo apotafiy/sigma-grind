@@ -3,6 +3,7 @@ const params = {
     debug: false,
     hardcore: false,
     fps: 60,
+    totaltime: 0
 };
 
 /**

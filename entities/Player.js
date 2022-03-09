@@ -824,11 +824,6 @@ class Player {
 
             this.handleVelocity();
 
-            if (this.game.keys.ArrowUp) {
-                // console.log('pressed');
-                this.velocity.y -= 80;
-            }
-
             this.handlePosition();
 
             // Fall off map = dead
@@ -889,18 +884,6 @@ class Player {
             }
 
             this.updateBB();
-        }
-
-        // Display values for Debug mode
-        if (params.debug) {
-            document.getElementById('stateP').innerHTML =
-                'State Player: ' + this.state;
-            document.getElementById('velo').innerHTML =
-                'x-velo ' +
-                this.velocity.x +
-                ' ' +
-                'y-velo: ' +
-                this.velocity.y;
         }
 
         // -------------- DEATH AND LOSING CONDITION ----------------
@@ -984,6 +967,14 @@ class Player {
                     entity.health -= 5;
                 }
                 if (entity && entity instanceof DogBoss) {
+                    // console.log('kILL dRILL');
+                    //if it has die method it should die
+                    if (entity.iframes <= 0 && entity.currentState != 4) {
+                        entity.health -= 5;
+                        entity.iframes = 0.5;
+                    }
+                }
+                if (entity && entity instanceof Eregion) {
                     // console.log('kILL dRILL');
                     //if it has die method it should die
                     if (entity.iframes <= 0 && entity.currentState != 4) {
@@ -1075,7 +1066,9 @@ class Player {
 
                 // Side collisions
                 if (
-                    (entity instanceof Ground || entity instanceof Spike) &&
+                    (entity instanceof Ground ||
+                        entity instanceof Spike ||
+                        (entity instanceof BossDoor && entity.canCollide)) &&
                     this.BB.collide(entity.leftBB)
                 ) {
                     // Right side collision
@@ -1083,7 +1076,9 @@ class Player {
                     this.facing = 0;
                     if (this.velocity.x > 0) this.velocity.x = 0;
                 } else if (
-                    (entity instanceof Ground || entity instanceof Spike) &&
+                    (entity instanceof Ground ||
+                        entity instanceof Spike ||
+                        (entity instanceof BossDoor && entity.canCollide)) &&
                     this.BB.collide(entity.rightBB)
                 ) {
                     // Left side collision
@@ -1095,7 +1090,8 @@ class Player {
 
                 // Wall hang collision
                 if (
-                    entity instanceof Ground &&
+                    (entity instanceof Ground ||
+                        (entity instanceof BossDoor && entity.canCollide)) &&
                     !this.BB.collide(entity.topBB) &&
                     !this.BB.collide(entity.bottomBB)
                 ) {
@@ -1236,7 +1232,7 @@ class Player {
             case 1:
                 return this.soundEffects.grunt1;
             case 2:
-                return this.soundEffects.grunt2;
+                return this.soundEffects.grunt1;
             case 3:
                 return this.soundEffects.grunt3;
             case 4:

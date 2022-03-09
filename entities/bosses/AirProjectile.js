@@ -19,7 +19,7 @@ class AirProjectile {
     this.gravity = gravity;
     this.direction = direction;
     this.dieOnCollide = true;
-
+    this.alwaysRender = true;
     this.isHostile = true;
     this.collisionDamage = 10;
 

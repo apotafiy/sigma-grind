@@ -23,6 +23,9 @@ class BeamBarrier {
             this.height = 20;
             this.orientationSheet = 'horizontal';
         }
+        this.isPog = false;
+        this.isHostile = true;
+        this.collisionDamage = 10;
         this.scale = 3;
         this.state = 0;
         this.isPog = false;

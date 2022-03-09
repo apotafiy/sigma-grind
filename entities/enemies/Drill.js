@@ -150,14 +150,26 @@ class Drill {
             false,
             true
         );
-        this.animations[3] = new Animator( // die
-            ASSET_MANAGER.getAsset('./sprites/mettaur/fire.png'),
-            0,
-            0,
-            32,
-            60,
-            7,
-            0.08,
+        // this.animations[3] = new Animator( // die
+        //     ASSET_MANAGER.getAsset('./sprites/mettaur/fire.png'),
+        //     0,
+        //     0,
+        //     32,
+        //     60,
+        //     7,
+        //     0.08,
+        //     0,
+        //     false,
+        //     false
+        // );
+        this.animations[3] = new Animator(
+            ASSET_MANAGER.getAsset('./sprites/misc/explosion.png'),
+            10,
+            80,
+            65,
+            50,
+            9,
+            0.05,
             0,
             false,
             false
@@ -181,6 +193,7 @@ class Drill {
             this.state = 3;
         }
         if (this.state === 3) {
+            this.angle = 0;
             // death animation
             if (this.animations[this.state].isDone()) {
                 this.removeFromWorld = true;
@@ -262,8 +275,19 @@ class Drill {
         //     }
         // }
         if (getDistance(this, this.player) < 700) {
-            this.drawAngle(ctx, this.angle);
-            this.myDrawFrame(this.game.clockTick, ctx);
+            if (this.state == 3) {
+                this.animations[this.state].drawFrame(
+                    this.game.clockTick,
+                    ctx,
+                    this.x - this.game.camera.x,
+                    this.y - this.game.camera.y,
+                    2
+                );
+            } else {
+                this.drawAngle(ctx, this.angle);
+                this.myDrawFrame(this.game.clockTick, ctx);
+            }
+
             if (params.debug && this.BB) {
                 ctx.strokeStyle = 'Red';
                 ctx.strokeRect(
