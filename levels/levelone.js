@@ -9,9 +9,6 @@ function loadLevelOne(gameEngine) {
     gameEngine.addEntity(new Clock(gameEngine, 20, 6, 10000));
     // gameEngine.addEntity(new Player(gameEngine, 44, -1));
     gameEngine.addEntity(new DogBoss(gameEngine, 112, -36, gravity));
-    gameEngine.addEntity(new SpikeBall(gameEngine, 4, 4));
-    gameEngine.addEntity(new BeamBarrier(gameEngine, 5, 3, 0, 1));
-    gameEngine.addEntity(new BeamBarrier(gameEngine, 1, 3, 1, 0.5));
 
     //gameEngine.addEntity(new Player(gameEngine, 67, -37));
     // gameEngine.addEntity(new Drill(gameEngine, 10, -1, 60));
@@ -468,7 +465,7 @@ function loadTestLevel(gameEngine) {
     let gravity = 0.2;
     gameEngine.addEntity(new Player(gameEngine, 3, -5));
     // gameEngine.addEntity(new Player(gameEngine, 150, -160));
-    
+
     gameEngine.addEntity(new Sigma(gameEngine, 200, -160));
     gameEngine.addEntity(new BossDoor(gameEngine, 187, -159));
     gameEngine.addEntity(new Ground(gameEngine, 2, 0, -32, 108, 2, 1, 0, 0));
