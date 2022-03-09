@@ -81,7 +81,7 @@ class Turret {
             this.width,
             this.height,
             3,
-            0.1,
+            0.2,
             0,
             false,
             false
