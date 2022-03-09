@@ -129,6 +129,9 @@ ASSET_MANAGER.queueDownload('./sprites/items/health_pack_full_22x31.png');
 ASSET_MANAGER.queueDownload('./sprites/items/health_pack_small_25x16.png');
 ASSET_MANAGER.queueDownload('./sprites/items/clock-16x20.png');
 
+// Checkpoint
+ASSET_MANAGER.queueDownload('./sprites/misc/checkpoint.png')
+
 // Player sound effects
 SOUND_MANAGER.queueDownload('player_jump', './sounds/player/jump_voice.wav');
 SOUND_MANAGER.queueDownload('player_walk', './sounds/player/player_walk.wav');
