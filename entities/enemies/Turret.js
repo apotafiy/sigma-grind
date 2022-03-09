@@ -30,7 +30,7 @@ class Turret {
         );
         this.player = this.game.getPlayer();
         this.animations = [];
-        this.aggroDistance = 300;
+        this.aggroDistance = 350;
         this.loadAnimations();
 
         this.soundEffects = {};
@@ -81,7 +81,7 @@ class Turret {
             this.width,
             this.height,
             3,
-            0.3,
+            0.1,
             0,
             false,
             false
