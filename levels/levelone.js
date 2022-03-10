@@ -9,9 +9,6 @@ function loadLevelOne(gameEngine) {
     gameEngine.addEntity(new Clock(gameEngine, 20, 6, 10000));
     // gameEngine.addEntity(new Player(gameEngine, 44, -1));
     gameEngine.addEntity(new DogBoss(gameEngine, 112, -36, gravity));
-    gameEngine.addEntity(new SpikeBall(gameEngine, 4, 4));
-    gameEngine.addEntity(new BeamBarrier(gameEngine, 5, 3, 0, 1));
-    gameEngine.addEntity(new BeamBarrier(gameEngine, 1, 3, 1, 0.5));
 
     //gameEngine.addEntity(new Player(gameEngine, 67, -37));
     // gameEngine.addEntity(new Drill(gameEngine, 10, -1, 60));
@@ -286,7 +283,7 @@ function loadLevelOne(gameEngine) {
 function loadLevelTwo(gameEngine) {
     let gravity = 0.2;
     gameEngine.addEntity(new Player(gameEngine, 9, -11));
-    // gameEngine.addEntity(new Eregion(gameEngine, 19, -245));
+    gameEngine.addEntity(new Eregion(gameEngine, 19, -245));
     gameEngine.addEntity(new Lava(gameEngine, -1, -1));
     gameEngine.addEntity(new Ground(gameEngine, 2, 0, -262, 41, 8, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 0, -254, 7, 254, 1, 0, 0));
@@ -468,7 +465,7 @@ function loadTestLevel(gameEngine) {
     let gravity = 0.2;
     gameEngine.addEntity(new Player(gameEngine, 3, -5));
     // gameEngine.addEntity(new Player(gameEngine, 150, -160));
-    
+
     gameEngine.addEntity(new Sigma(gameEngine, 200, -160));
     gameEngine.addEntity(new BossDoor(gameEngine, 187, -159));
     gameEngine.addEntity(new Ground(gameEngine, 2, 0, -32, 108, 2, 1, 0, 0));
@@ -643,33 +640,33 @@ function loadTestLevel(gameEngine) {
     gameEngine.addEntity(new Ground(gameEngine, 2, 46, -159, 3, 1, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 46, -26, 4, 22, 1, 0, 0));
     gameEngine.addEntity(new Drill(gameEngine, 47, -174, 8));
-    gameEngine.addEntity(new PopUpEnemy(gameEngine, 47, -74, true, 0));
+    gameEngine.addEntity(new PopUpEnemy(gameEngine, 47, -74, false, 1));
     gameEngine.addEntity(new Clock(gameEngine, 47, -27, 5000));
-    gameEngine.addEntity(new PopUpEnemy(gameEngine, 49, -74, true, 0));
+    gameEngine.addEntity(new PopUpEnemy(gameEngine, 49, -74, false, 1));
     gameEngine.addEntity(new Ground(gameEngine, 2, 51, -183, 4, 2, 1, 0, 0));
     gameEngine.addEntity(new Spike(gameEngine, 51, -181, 4, 1, 2));
-    gameEngine.addEntity(new PopUpEnemy(gameEngine, 51, -74, true, 0));
+    gameEngine.addEntity(new PopUpEnemy(gameEngine, 51, -74, false, 1));
     gameEngine.addEntity(new SmallHealthPack(gameEngine, 52, -184));
     gameEngine.addEntity(new Ground(gameEngine, 2, 52, -164, 3, 1, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 52, -4, 3, 1, 1, 0, 0));
     gameEngine.addEntity(new Clock(gameEngine, 53, -184, 5000));
-    gameEngine.addEntity(new PopUpEnemy(gameEngine, 53, -74, true, 0));
+    gameEngine.addEntity(new PopUpEnemy(gameEngine, 53, -74, false, 1));
     gameEngine.addEntity(new Ground(gameEngine, 2, 53, -23, 4, 1, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 53, -13, 4, 1, 1, 0, 0));
     gameEngine.addEntity(new Spike(gameEngine, 53, -12, 4, 1, 2));
-    gameEngine.addEntity(new PopUpEnemy(gameEngine, 54, -74, true, 0));
-    gameEngine.addEntity(new PopUpEnemy(gameEngine, 55, -74, true, 0));
-    gameEngine.addEntity(new PopUpEnemy(gameEngine, 56, -74, true, 0));
+    gameEngine.addEntity(new PopUpEnemy(gameEngine, 54, -74, false, 1));
+    gameEngine.addEntity(new PopUpEnemy(gameEngine, 55, -74, false, 1));
+    gameEngine.addEntity(new PopUpEnemy(gameEngine, 56, -74, false, 1));
     gameEngine.addEntity(new Ground(gameEngine, 2, 57, -178, 4, 1, 1, 0, 0));
     gameEngine.addEntity(new Drill(gameEngine, 57, -174, 8));
     gameEngine.addEntity(new Ground(gameEngine, 2, 57, -168, 4, 1, 1, 0, 0));
     gameEngine.addEntity(new Spike(gameEngine, 57, -167, 4, 1, 2));
     gameEngine.addEntity(new Ground(gameEngine, 2, 57, -18, 4, 1, 1, 0, 0));
-    gameEngine.addEntity(new PopUpEnemy(gameEngine, 58, -74, true, 0));
-    gameEngine.addEntity(new PopUpEnemy(gameEngine, 60, -74, true, 0));
+    gameEngine.addEntity(new PopUpEnemy(gameEngine, 58, -74, false, 1));
+    gameEngine.addEntity(new PopUpEnemy(gameEngine, 60, -74, false, 1));
     gameEngine.addEntity(new Spike(gameEngine, 60, -30, 2, 1, 2));
     gameEngine.addEntity(new Ground(gameEngine, 2, 61, -173, 4, 1, 1, 0, 0));
-    gameEngine.addEntity(new PopUpEnemy(gameEngine, 62, -74, true, 0));
+    gameEngine.addEntity(new PopUpEnemy(gameEngine, 62, -74, false, 1));
     gameEngine.addEntity(new Ground(gameEngine, 2, 62, -30, 4, 23, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 63, -73, 4, 1, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 64, -134, 128, 2, 1, 0, 0));
