@@ -662,11 +662,11 @@ function loadTestLevel(gameEngine) {
     gameEngine.addEntity(new Ground(gameEngine, 2, 57, -168, 4, 1, 1, 0, 0));
     gameEngine.addEntity(new Spike(gameEngine, 57, -167, 4, 1, 2));
     gameEngine.addEntity(new Ground(gameEngine, 2, 57, -18, 4, 1, 1, 0, 0));
-    gameEngine.addEntity(new PopUpEnemy(gameEngine, 58, -74, true, 1));
-    gameEngine.addEntity(new PopUpEnemy(gameEngine, 60, -74, true, 1));
+    gameEngine.addEntity(new PopUpEnemy(gameEngine, 58, -74, false, 1));
+    gameEngine.addEntity(new PopUpEnemy(gameEngine, 60, -74, false, 1));
     gameEngine.addEntity(new Spike(gameEngine, 60, -30, 2, 1, 2));
     gameEngine.addEntity(new Ground(gameEngine, 2, 61, -173, 4, 1, 1, 0, 0));
-    gameEngine.addEntity(new PopUpEnemy(gameEngine, 62, -74, true, 1));
+    gameEngine.addEntity(new PopUpEnemy(gameEngine, 62, -74, false, 1));
     gameEngine.addEntity(new Ground(gameEngine, 2, 62, -30, 4, 23, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 63, -73, 4, 1, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 64, -134, 128, 2, 1, 0, 0));
