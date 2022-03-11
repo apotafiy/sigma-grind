@@ -105,7 +105,6 @@ class Lava {
             this.y >= -238 * 64
         )
             this.drawIndicator(ctx);
-        this.drawIndicator(ctx);
         if (params.debug) {
             ctx.strokeStyle = '#FF06B5';
             ctx.strokeRect(
