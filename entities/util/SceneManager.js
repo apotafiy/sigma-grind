@@ -384,7 +384,7 @@ class SceneManager {
           // loadLevelOne(this.game);
           this.loadLevel();
         } else {
-          this.currentState = 4;
+          this.currentState = 5;
           this.menuCooldown = 0.2;
           this.menuIndex = 0;
         }
@@ -393,7 +393,7 @@ class SceneManager {
     }
 
     //handle Level selection
-    if (this.currentState === 4) {
+    if (this.currentState === 5) {
       if (this.game.keys.KeyW && this.menuCooldown <= 0) {
         //move up selection
         this.soundEffects.cycle.play();
@@ -433,7 +433,7 @@ class SceneManager {
     }
 
     //handle win over
-    if (this.currentState == 4) {
+    if (this.currentState == 3) {
       if (this.game.keys.Enter && this.menuCooldown <= 0) {
         this.soundEffects.select.play();
         this.isLevel = false;
@@ -647,7 +647,7 @@ class SceneManager {
       );
       ctx.filter = "none";
     }
-    if (!this.isLevel && this.currentState == 4) {
+    if (!this.isLevel && this.currentState == 5) {
       that.animations[0].drawFrame(that.game.clockTick, ctx, 0, 0, 1);
       that.animations[7].drawFrame(
         that.game.clockTick,
