@@ -496,6 +496,7 @@ function loadTestLevel(gameEngine) {
             'You look pretty beat up! Here! Take this! You will need it!'
         )
     );
+    gameEngine.addEntity(new Sigma(gameEngine, 200, -160));
     gameEngine.addEntity(new Drill(gameEngine, 47, -174, 8));
     gameEngine.addEntity(new BossDoor(gameEngine, 187, -159));
     gameEngine.addEntity(new Ground(gameEngine, 2, 0, -32, 108, 2, 1, 0, 0));
@@ -1016,7 +1017,6 @@ function loadTestLevel(gameEngine) {
     gameEngine.addEntity(new Ground(gameEngine, 2, 199, -65, 8, 8, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 199, -57, 2, 10, 1, 0, 0));
     gameEngine.addEntity(new BeamBarrier(gameEngine, 199, -47, 0, 1));
-    gameEngine.addEntity(new Sigma(gameEngine, 200, -160));
     gameEngine.addEntity(new SpikeBall(gameEngine, 200, -87, gravity));
     gameEngine.addEntity(new Ground(gameEngine, 2, 201, -49, 5, 2, 1, 0, 0));
     gameEngine.addEntity(new BeamBarrier(gameEngine, 202, -47, 0, 1));
