@@ -15,7 +15,8 @@ class SigmaHead {
         this.initDone = false;
         this.fadeValue = 0;
         this.idleTime = 0.3;
-        this.beamTime = 3;
+        if (params.hardcore) this.beamTime = 1.5;
+        else this.beamTime = 3;
         this.beamEnd = 5;
         this.alwaysRender = true;
 
@@ -27,7 +28,7 @@ class SigmaHead {
 
         this.isPog = true;
         this.isHostile = true;
-        this.collisionDamage = 30;
+        this.collisionDamage = 10;
 
         this.loadAnimation();
         this.updateBB();
@@ -157,7 +158,7 @@ class SigmaHead {
             ) {
                 this.isPog = true;
                 this.isHostile = true;
-                this.collisionDamage = 30;
+                this.collisionDamage = 10;
             }
 
             // wait a bit after spawn to attack
@@ -299,7 +300,7 @@ class BeamCrosshair {
 
         ctx.font = '15px "Zen Dots"';
         ctx.textAlign = 'left';
-        ctx.fillStyle = '#34f5ff';
+        ctx.fillStyle = '#ff3b34';
         ctx.fillText(
             `${Math.round(this.sigmaHead.beamTime * 100) / 100}`,
             this.x - this.game.camera.x,
@@ -318,7 +319,8 @@ class Beam {
         this.facing = 1;
         this.isHostile = true;
         this.isPog = false;
-        this.collisionDamage = 10;
+        if (params.hardcore) this.collisionDamage = 30;
+        else this.collisionDamage = 10;
         this.alwaysRender = true;
 
         this.animations = [];
@@ -419,7 +421,8 @@ class SigmaBall {
         };
 
         this.isHostile = true;
-        this.collisionDamage = 10;
+        if (params.hardcore) this.collisionDamage = 30;
+        else this.collisionDamage = 10;
         this.alwaysRender = true;
         this.dead = false;
 
@@ -506,7 +509,8 @@ class Wave {
         this.isHostile = true;
         this.isPog = false;
         this.isHidden = true;
-        this.collisionDamage = 10;
+        if (params.hardcore) this.collisionDamage = 30;
+        else this.collisionDamage = 10;
         this.alwaysRender = true;
 
         this.started = false;
@@ -569,7 +573,8 @@ class Wave {
         this.facing = facing;
         this.started = true;
         this.isHidden = false;
-        this.speed = 300;
+        if (params.hardcore) this.speed = 400;
+        else this.speed = 300;
     }
 
     reset() {

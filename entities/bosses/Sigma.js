@@ -374,12 +374,21 @@ class Sigma {
 
     updateBB() {
         this.lastBB = this.BB;
-        this.BB = new BoundingBox(
-            this.x,
-            this.y,
-            51 * this.scale,
-            87 * this.scale
-        );
+        if (this.state === this.states.dash) {
+            this.BB = new BoundingBox(
+                this.x,
+                this.y + 37 * this.scale,
+                51 * this.scale,
+                50 * this.scale
+            );
+        } else {
+            this.BB = new BoundingBox(
+                this.x,
+                this.y,
+                51 * this.scale,
+                87 * this.scale
+            );
+        }
     }
 
     setOffset() {
@@ -561,7 +570,8 @@ class Sigma {
                     // Going down - check bottom collision
                     if (this.velocity.y > 0) {
                         if (
-                            entity instanceof Ground &&
+                            (entity instanceof Ground ||
+                                entity instanceof BossDoor) &&
                             this.lastBB.bottom <= entity.BB.top
                         ) {
                             this.y = entity.BB.top - this.BB.height;
@@ -572,7 +582,8 @@ class Sigma {
                     // Going up - check top collision
                     if (this.velocity.y < 0) {
                         if (
-                            entity instanceof Ground &&
+                            (entity instanceof Ground ||
+                                entity instanceof BossDoor) &&
                             this.lastBB.top >= entity.BB.bottom
                         ) {
                             this.velocity.y = 0;
@@ -580,7 +591,8 @@ class Sigma {
                     }
                     // Side collisions
                     if (
-                        entity instanceof Ground &&
+                        (entity instanceof Ground ||
+                            entity instanceof BossDoor) &&
                         this.BB.collide(entity.leftBB)
                     ) {
                         this.x = entity.BB.left - this.BB.width;
@@ -593,7 +605,8 @@ class Sigma {
                             this.state = this.dashEndAction;
                         }
                     } else if (
-                        entity instanceof Ground &&
+                        (entity instanceof Ground ||
+                            entity instanceof BossDoor) &&
                         this.BB.collide(entity.rightBB)
                     ) {
                         this.x = entity.BB.right;
