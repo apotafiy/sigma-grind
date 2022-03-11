@@ -191,7 +191,7 @@ class Mettaur {
                 new TimeIndicator(this.game, this.x / 64, this.y / 64, 5000),
                 10
             ); // idk the index is arbitrary
-            console.log('Dead Met');
+            // console.log('Dead Met');
         }
     }
     updateBB() {
