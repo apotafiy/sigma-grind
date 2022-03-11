@@ -70,17 +70,14 @@ class Lava {
     }
 
     update() {
+        // If player is above the s turn, start rising
         if (this.game.player.y < -46 * 64 && !this.start) this.start = true;
 
         if (this.start) {
             // reset to below player when player die and respawn
-            if (
-                this.game.player.dead &&
-                this.game.player.animations[this.game.player.states.dead][
-                    this.game.player.facing
-                ].isDone()
-            ) {
-                this.y = this.game.player.y + 1500;
+            if (this.game.player.respawned) {
+                this.y = this.game.player.y + 1000;
+                // if player respawn but is below the s turn, dont start
                 if (this.game.player.y > -46 * 64 && this.start)
                     this.start = false;
             } else if (this.y >= -238 * 64) {
@@ -102,8 +99,13 @@ class Lava {
             this.scale
         );
         this.drawBottom(ctx, this.y + 26);
-        if (this.start && this.getYDistance(this.y, this.game.player.y) > 420)
+        if (
+            this.start &&
+            this.getYDistance(this.y, this.game.player.y) > 450 &&
+            this.y >= -238 * 64
+        )
             this.drawIndicator(ctx);
+        this.drawIndicator(ctx);
         if (params.debug) {
             ctx.strokeStyle = '#FF06B5';
             ctx.strokeRect(
@@ -128,6 +130,15 @@ class Lava {
 
     drawIndicator(ctx) {
         this.indicator.drawFrame(1, ctx, 450, 660, 0.69);
+
+        ctx.font = '18px "Arial"';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#ff3b34';
+        ctx.fillText(
+            `${Math.round(this.getYDistance(this.y, this.game.player.y))}`,
+            518,
+            723
+        );
     }
 
     getYDistance(y1, y2) {
