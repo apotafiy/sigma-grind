@@ -32,6 +32,15 @@ https://www.youtube.com/watch?v=Qkf74Izk0QM
   * K:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dash
   * S + J:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pogo
 
+| Button        |Action     |
+|    :----:     |          :---: |
+| A             | Left    |
+| D             |Right      |
+| Space         | Jump      |
+| J             | Attack     |
+| K             | Dash   
+| S + J         | Pogo     |
+
   ## Built With
   * JavaScript
   * HTML
