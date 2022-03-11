@@ -9,17 +9,8 @@ function loadLevelOne(gameEngine) {
     gameEngine.addEntity(new Clock(gameEngine, 20, 6, 10000));
     // gameEngine.addEntity(new Player(gameEngine, 44, -1));
     gameEngine.addEntity(new DogBoss(gameEngine, 112, -36, gravity));
-
-    //gameEngine.addEntity(new Player(gameEngine, 67, -37));
-    // gameEngine.addEntity(new Drill(gameEngine, 10, -1, 60));
-    // gameEngine.addEntity(new Drill(gameEngine, 12, -1, 60));
-    // gameEngine.addEntity(new Drill(gameEngine, 14, -1, 60));
-    // gameEngine.addEntity(new Drill(gameEngine, 16, -1, 60));
-    // gameEngine.addEntity(new Drill(gameEngine, 18, -1, 60));
-    // gameEngine.addEntity(new Drill(gameEngine, 20, -1, 60));
-    // gameEngine.addEntity(new Drill(gameEngine, 22, -1, 60));
-    // gameEngine.addEntity(new Drill(gameEngine, 24, -1, 60));
-    // gameEngine.addEntity(new Drill(gameEngine, 26, -1, 60));
+    gameEngine.addEntity(new Drill(gameEngine, 85, -18, 8));
+    gameEngine.addEntity(new Drill(gameEngine, 95, -18, 8));
 
     gameEngine.addEntity(new Ground(gameEngine, 1, -5, -6, 6, 20, 1, 0, 1));
     //start ground
@@ -265,8 +256,6 @@ function loadLevelOne(gameEngine) {
         )
     );
     //drills to dodge
-    gameEngine.addEntity(new Drill(gameEngine, 85, -18, 8));
-    gameEngine.addEntity(new Drill(gameEngine, 95, -18, 8));
 
     gameEngine.addEntity(new FullHealthPack(gameEngine, 105, -35));
     // gameEngine.addEntity(new SmallHealthPack(gameEngine, 103,-35))
@@ -294,6 +283,8 @@ function loadLevelTwo(gameEngine) {
             "Those floating spikes look mean! But don't worry, you can still safely pogo on them!"
         )
     );
+    gameEngine.addEntity(new Drill(gameEngine, 15, -70, 8));
+    gameEngine.addEntity(new Drill(gameEngine, 19, -142, 8));
     gameEngine.addEntity(new Checkpoint(gameEngine, 20, -217));
     gameEngine.addEntity(new Ground(gameEngine, 2, 0, -262, 41, 8, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 0, -254, 7, 254, 1, 0, 0));
@@ -363,7 +354,6 @@ function loadLevelTwo(gameEngine) {
     gameEngine.addEntity(new Ground(gameEngine, 2, 15, -205, 11, 2, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 15, -148, 1, 7, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 15, -135, 11, 2, 1, 0, 0));
-    gameEngine.addEntity(new Drill(gameEngine, 15, -70, 8));
     gameEngine.addEntity(new Spike(gameEngine, 15, -24, 17, 1, 2));
     gameEngine.addEntity(new Turret(gameEngine, 15, -22, 1));
     gameEngine.addEntity(new Ground(gameEngine, 2, 16, -213, 9, 1, 1, 0, 0));
@@ -381,7 +371,6 @@ function loadLevelTwo(gameEngine) {
     gameEngine.addEntity(new Spike(gameEngine, 18, -95, 5, 1, 2));
     gameEngine.addEntity(new Mettaur(gameEngine, 18, -17, gravity));
     gameEngine.addEntity(new Clock(gameEngine, 19, -215, 5000));
-    gameEngine.addEntity(new Drill(gameEngine, 19, -142, 8));
     gameEngine.addEntity(new FullHealthPack(gameEngine, 19, -138));
     gameEngine.addEntity(new Ground(gameEngine, 2, 19, -79, 4, 2, 1, 0, 0));
     gameEngine.addEntity(new Spike(gameEngine, 19, -77, 4, 1, 2));
@@ -480,9 +469,34 @@ function loadLevelTwo(gameEngine) {
 function loadTestLevel(gameEngine) {
     let gravity = 0.2;
     gameEngine.addEntity(new Player(gameEngine, 3, -5));
-    // gameEngine.addEntity(new Player(gameEngine, 150, -160));
-
-    gameEngine.addEntity(new Sigma(gameEngine, 200, -160));
+    gameEngine.addEntity(
+        new Rush(
+            gameEngine,
+            14,
+            -5,
+            5,
+            'We are in the last stretch! Rumor has it Sigma is hiding somewhere in this base. Your time has come Zero! Go take him out and restore order to our world!'
+        )
+    );
+    gameEngine.addEntity(
+        new Rush(
+            gameEngine,
+            146,
+            -160,
+            5,
+            "Zero! You made it! Sigma is through that door. Finish him and reclaim your title! I'm counting on you!"
+        )
+    );
+    gameEngine.addEntity(
+        new Rush(
+            gameEngine,
+            174,
+            -107,
+            5,
+            'You look pretty beat up! Here! Take this! You will need it!'
+        )
+    );
+    gameEngine.addEntity(new Drill(gameEngine, 47, -174, 8));
     gameEngine.addEntity(new BossDoor(gameEngine, 187, -159));
     gameEngine.addEntity(new Ground(gameEngine, 2, 0, -32, 108, 2, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 0, -30, 2, 30, 1, 0, 0));
@@ -528,15 +542,6 @@ function loadTestLevel(gameEngine) {
     gameEngine.addEntity(new Ground(gameEngine, 2, 14, -54, 9, 1, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 14, -49, 10, 1, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 14, -46, 13, 1, 1, 0, 0));
-    gameEngine.addEntity(
-        new Rush(
-            gameEngine,
-            14,
-            -5,
-            5,
-            'We are in the last stretch! Rumor has it Sigma is hiding somewhere in this base. Your time has come Zero! Go take him out and restore order to our world!'
-        )
-    );
     gameEngine.addEntity(new Ground(gameEngine, 2, 15, -81, 6, 1, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 15, -69, 6, 1, 1, 0, 0));
     gameEngine.addEntity(new FullHealthPack(gameEngine, 15, -55));
@@ -599,6 +604,7 @@ function loadTestLevel(gameEngine) {
     gameEngine.addEntity(new Ground(gameEngine, 2, 28, -56, 2, 1, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 28, -48, 6, 1, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 28, -45, 4, 1, 1, 0, 0));
+    gameEngine.addEntity(new Checkpoint(gameEngine, 29, -112));
     gameEngine.addEntity(new Ground(gameEngine, 2, 29, -111, 10, 1, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 29, -104, 10, 1, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 29, -94, 1, 5, 1, 0, 0));
@@ -655,34 +661,33 @@ function loadTestLevel(gameEngine) {
     gameEngine.addEntity(new Spike(gameEngine, 44, -167, 4, 1, 2));
     gameEngine.addEntity(new Ground(gameEngine, 2, 46, -159, 3, 1, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 46, -26, 4, 22, 1, 0, 0));
-    gameEngine.addEntity(new Drill(gameEngine, 47, -174, 8));
-    gameEngine.addEntity(new PopUpEnemy(gameEngine, 47, -74, false, 1));
+    gameEngine.addEntity(new PopUpEnemy(gameEngine, 47, -74, false, 0));
     gameEngine.addEntity(new Clock(gameEngine, 47, -27, 5000));
-    gameEngine.addEntity(new PopUpEnemy(gameEngine, 49, -74, false, 1));
+    gameEngine.addEntity(new PopUpEnemy(gameEngine, 49, -74, false, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 51, -183, 4, 2, 1, 0, 0));
     gameEngine.addEntity(new Spike(gameEngine, 51, -181, 4, 1, 2));
-    gameEngine.addEntity(new PopUpEnemy(gameEngine, 51, -74, false, 1));
+    gameEngine.addEntity(new PopUpEnemy(gameEngine, 51, -74, false, 0));
     gameEngine.addEntity(new SmallHealthPack(gameEngine, 52, -184));
     gameEngine.addEntity(new Ground(gameEngine, 2, 52, -164, 3, 1, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 52, -4, 3, 1, 1, 0, 0));
     gameEngine.addEntity(new Clock(gameEngine, 53, -184, 5000));
-    gameEngine.addEntity(new PopUpEnemy(gameEngine, 53, -74, false, 1));
+    gameEngine.addEntity(new PopUpEnemy(gameEngine, 53, -74, false, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 53, -23, 4, 1, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 53, -13, 4, 1, 1, 0, 0));
     gameEngine.addEntity(new Spike(gameEngine, 53, -12, 4, 1, 2));
-    gameEngine.addEntity(new PopUpEnemy(gameEngine, 54, -74, false, 1));
-    gameEngine.addEntity(new PopUpEnemy(gameEngine, 55, -74, false, 1));
-    gameEngine.addEntity(new PopUpEnemy(gameEngine, 56, -74, false, 1));
+    gameEngine.addEntity(new PopUpEnemy(gameEngine, 54, -74, false, 0));
+    gameEngine.addEntity(new PopUpEnemy(gameEngine, 55, -74, false, 0));
+    gameEngine.addEntity(new PopUpEnemy(gameEngine, 56, -74, false, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 57, -178, 4, 1, 1, 0, 0));
     gameEngine.addEntity(new Drill(gameEngine, 57, -174, 8));
     gameEngine.addEntity(new Ground(gameEngine, 2, 57, -168, 4, 1, 1, 0, 0));
     gameEngine.addEntity(new Spike(gameEngine, 57, -167, 4, 1, 2));
     gameEngine.addEntity(new Ground(gameEngine, 2, 57, -18, 4, 1, 1, 0, 0));
-    gameEngine.addEntity(new PopUpEnemy(gameEngine, 58, -74, false, 1));
-    gameEngine.addEntity(new PopUpEnemy(gameEngine, 60, -74, false, 1));
+    gameEngine.addEntity(new PopUpEnemy(gameEngine, 58, -74, false, 0));
+    gameEngine.addEntity(new PopUpEnemy(gameEngine, 60, -74, false, 0));
     gameEngine.addEntity(new Spike(gameEngine, 60, -30, 2, 1, 2));
     gameEngine.addEntity(new Ground(gameEngine, 2, 61, -173, 4, 1, 1, 0, 0));
-    gameEngine.addEntity(new PopUpEnemy(gameEngine, 62, -74, false, 1));
+    gameEngine.addEntity(new PopUpEnemy(gameEngine, 62, -74, false, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 62, -30, 4, 23, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 63, -73, 4, 1, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 64, -134, 128, 2, 1, 0, 0));
@@ -803,6 +808,7 @@ function loadTestLevel(gameEngine) {
     gameEngine.addEntity(new Ground(gameEngine, 2, 108, -24, 8, 1, 1, 0, 0));
     gameEngine.addEntity(new Spike(gameEngine, 110, -59, 1, 22, 1));
     gameEngine.addEntity(new SpikeBall(gameEngine, 111, -128, gravity));
+    gameEngine.addEntity(new Checkpoint(gameEngine, 111, -31));
     gameEngine.addEntity(new Ground(gameEngine, 2, 111, -30, 2, 4, 1, 0, 0));
     gameEngine.addEntity(new Spike(gameEngine, 113, -59, 1, 22, 3));
     gameEngine.addEntity(new Ground(gameEngine, 2, 114, -64, 14, 2, 1, 0, 0));
@@ -870,15 +876,6 @@ function loadTestLevel(gameEngine) {
     gameEngine.addEntity(new Ground(gameEngine, 2, 141, -22, 6, 1, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 141, -11, 6, 1, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 145, -159, 6, 1, 1, 0, 0));
-    gameEngine.addEntity(
-        new Rush(
-            gameEngine,
-            146,
-            -160,
-            5,
-            "Zero! You made it! Sigma is through that door. Finish him and reclaim your title! I'm counting on you!"
-        )
-    );
     gameEngine.addEntity(new Ground(gameEngine, 2, 147, -73, 4, 7, 1, 0, 0));
     gameEngine.addEntity(new FullHealthPack(gameEngine, 148, -160));
     gameEngine.addEntity(new Ground(gameEngine, 2, 148, -106, 3, 1, 1, 0, 0));
@@ -894,6 +891,7 @@ function loadTestLevel(gameEngine) {
     gameEngine.addEntity(new Ground(gameEngine, 2, 149, -88, 16, 1, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 149, -87, 15, 1, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 149, -19, 13, 6, 1, 0, 0));
+    gameEngine.addEntity(new Checkpoint(gameEngine, 150, -160));
     gameEngine.addEntity(new Ground(gameEngine, 2, 150, -86, 14, 1, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 150, -20, 12, 1, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 150, -13, 28, 1, 1, 0, 0));
@@ -962,15 +960,6 @@ function loadTestLevel(gameEngine) {
     gameEngine.addEntity(new Ground(gameEngine, 2, 173, -106, 6, 1, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 173, -90, 6, 1, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 173, -75, 1, 3, 1, 0, 0));
-    gameEngine.addEntity(
-        new Rush(
-            gameEngine,
-            174,
-            -107,
-            5,
-            'You look pretty beat up! Here! Take this! You will need it!'
-        )
-    );
     gameEngine.addEntity(new SmallHealthPack(gameEngine, 175, -93));
     gameEngine.addEntity(new Ground(gameEngine, 2, 175, -83, 2, 1, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 175, -75, 2, 4, 1, 0, 0));
@@ -985,6 +974,7 @@ function loadTestLevel(gameEngine) {
     gameEngine.addEntity(new Ground(gameEngine, 2, 177, -80, 7, 1, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 177, -79, 6, 1, 1, 0, 0));
     gameEngine.addEntity(new SpikeBall(gameEngine, 177, -17, gravity));
+    gameEngine.addEntity(new Checkpoint(gameEngine, 178, -107));
     gameEngine.addEntity(new Ground(gameEngine, 2, 178, -75, 1, 3, 1, 0, 0));
     gameEngine.addEntity(new Spike(gameEngine, 178, -12, 12, 1, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 179, -94, 15, 1, 1, 0, 0));
@@ -1026,6 +1016,7 @@ function loadTestLevel(gameEngine) {
     gameEngine.addEntity(new Ground(gameEngine, 2, 199, -65, 8, 8, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 199, -57, 2, 10, 1, 0, 0));
     gameEngine.addEntity(new BeamBarrier(gameEngine, 199, -47, 0, 1));
+    gameEngine.addEntity(new Sigma(gameEngine, 200, -160));
     gameEngine.addEntity(new SpikeBall(gameEngine, 200, -87, gravity));
     gameEngine.addEntity(new Ground(gameEngine, 2, 201, -49, 5, 2, 1, 0, 0));
     gameEngine.addEntity(new BeamBarrier(gameEngine, 202, -47, 0, 1));
