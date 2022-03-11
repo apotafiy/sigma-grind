@@ -38,8 +38,8 @@ https://www.youtube.com/watch?v=Qkf74Izk0QM
   * CSS
   * Love and Care
   ## How to Contribute:
-  * Want to make your own levels? Check out the levle builder at [this repo](https://github.com/treguv/sigma-grind-level-builder)
-  * Checkout the github repo and please raise any issues with Sigma Grind you may come across.
+  * Want to make your own levels? Check out the [level builder](https://github.com/treguv/sigma-grind-level-builder).
+  * Checkout the GitHub repo and please raise any issues with Sigma Grind you may come across.
   * New feature ideas? Fork the project and implement it!
   * Follow the code of conduct for contribution outlined in [Contributor Covenant](https://www.contributor-covenant.org/) 
 
