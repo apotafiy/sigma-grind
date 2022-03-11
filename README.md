@@ -15,11 +15,6 @@ Sigma Grind is an action packed, movement-based platformer where you run, jump, 
 
   ### Trailer:
 https://www.youtube.com/watch?v=Qkf74Izk0QM
-  ### Gameplay:
-  <!-- ![Title Card](readme/title_card.png)
-  ![Pogo](readme/pogo.png)
-  ![Drills](readme/drills.png)\
-  ![Sigma](readme/sigma.png); -->
   ## Installation Instructions:
   [Click Here To Play!](https://apotafiy.github.io/sigma-grind/)
   ## Controls
@@ -57,3 +52,9 @@ https://www.youtube.com/watch?v=Qkf74Izk0QM
   [Daniel Jiang](https://github.com/imdanieljiang)
 
   [Vlad Tregubov](https://github.com/treguv)
+
+   ### Gameplay:
+  ![Title Card](readme/title_card.png)
+  ![Pogo](readme/pogo.png)
+  ![Drills](readme/drills.png)\
+  ![Sigma](readme/sigma.png);
