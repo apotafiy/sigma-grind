@@ -1,4 +1,4 @@
-  # Project Title: SuperHeroSmash
+  # Sigma Grind
   
   ## Table of contents:
   1. [Project Description](#Project-Description)
@@ -16,21 +16,21 @@ Sigma Grind is an action packed, movement-based platformer where you run, jump, 
   ### Trailer:
 https://www.youtube.com/watch?v=Qkf74Izk0QM
   ### Gameplay:
-  ![Title Card](readme/title_card.png)
+  <!-- ![Title Card](readme/title_card.png)
   ![Pogo](readme/pogo.png)
   ![Drills](readme/drills.png)\
-  ![Sigma](readme/sigma.png);
+  ![Sigma](readme/sigma.png); -->
   ## Installation Instructions:
   [Click Here To Play!](https://apotafiy.github.io/sigma-grind/)
   ## Controls
   Your four legged friend Rush will teach you everything you need to know! 
   But Just in case, here is a cheat sheet!
-  * A:Left
-  * D:Right
-  * Space :Jump 
-  * J:Attack
-  * K:Dash
-  * S + J:Pogo
+  * A:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Left
+  * D:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Right
+  * Space:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Jump 
+  * J:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Attack
+  * K:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dash
+  * S + J:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pogo
 
   ## Built With
   * JavaScript
