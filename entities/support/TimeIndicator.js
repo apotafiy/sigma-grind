@@ -27,7 +27,7 @@ class TimeIndicator {
         if (this.lifespan < 500) {
             ctx.filter = `opacity(${this.opacity})`;
         }
-        ctx.lineWidth = 5;
+        ctx.lineWidth = 2;
         ctx.strokeText(
             text,
             this.x - this.game.camera.x,
