@@ -3,8 +3,6 @@ function loadLevelOne(gameEngine) {
 
     // gameEngine.addEntity(new Player(gameEngine, 108, -35));
     gameEngine.addEntity(new Player(gameEngine, 3, 0));
-    gameEngine.addEntity(new Checkpoint(gameEngine, 12, 6));
-    gameEngine.addEntity(new Checkpoint(gameEngine, 16, 6));
     gameEngine.addEntity(new Clock(gameEngine, 14, 6, 5000));
     gameEngine.addEntity(new Clock(gameEngine, 20, 6, 10000));
     // gameEngine.addEntity(new Player(gameEngine, 44, -1));
