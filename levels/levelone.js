@@ -294,6 +294,7 @@ function loadLevelTwo(gameEngine) {
             "Those floating spikes look mean! But don't worry, you can still safely pogo on them!"
         )
     );
+    gameEngine.addEntity(new Checkpoint(gameEngine, 20, -217));
     gameEngine.addEntity(new Ground(gameEngine, 2, 0, -262, 41, 8, 1, 0, 0));
     gameEngine.addEntity(new Ground(gameEngine, 2, 0, -254, 7, 254, 1, 0, 0));
     gameEngine.addEntity(new Spike(gameEngine, 7, -254, 27, 1, 2));
@@ -390,6 +391,7 @@ function loadLevelTwo(gameEngine) {
     gameEngine.addEntity(new Drill(gameEngine, 20, -170, 8));
     gameEngine.addEntity(new Drill(gameEngine, 20, -142, 8));
     gameEngine.addEntity(new Drill(gameEngine, 20, -100, 8));
+    gameEngine.addEntity(new Checkpoint(gameEngine, 20, -81));
     gameEngine.addEntity(new Clock(gameEngine, 20, -71, 5000));
     gameEngine.addEntity(new Ground(gameEngine, 2, 20, -60, 3, 1, 1, 0, 0));
     gameEngine.addEntity(new Mettaur(gameEngine, 20, -17, gravity));
@@ -474,6 +476,7 @@ function loadLevelTwo(gameEngine) {
     });
     gameEngine.addEntity(new Water(gameEngine));
 }
+
 function loadTestLevel(gameEngine) {
     let gravity = 0.2;
     gameEngine.addEntity(new Player(gameEngine, 3, -5));
