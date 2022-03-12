@@ -113,6 +113,7 @@ ASSET_MANAGER.queueDownload('./sprites/misc/explosion.png');
 //Lava
 ASSET_MANAGER.queueDownload('./sprites/misc/lava-1400x26.png');
 ASSET_MANAGER.queueDownload('./sprites/misc/lavaBottom.png');
+ASSET_MANAGER.queueDownload('./sprites/misc/lavaRising.png');
 //Boss Door
 ASSET_MANAGER.queueDownload('./sprites/misc/bossDoor-30x64.png');
 
@@ -134,7 +135,7 @@ ASSET_MANAGER.queueDownload('./sprites/items/health_pack_small_25x16.png');
 ASSET_MANAGER.queueDownload('./sprites/items/clock-16x20.png');
 
 // Checkpoint
-ASSET_MANAGER.queueDownload('./sprites/misc/checkpoint.png')
+ASSET_MANAGER.queueDownload('./sprites/misc/checkpoint.png');
 
 // Player sound effects
 SOUND_MANAGER.queueDownload('player_jump', './sounds/player/jump_voice.wav');

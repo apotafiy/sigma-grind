@@ -26,6 +26,7 @@ class Player {
         this.attacking = false;
         this.attackBB = new BoundingBox(0, 0, 0, 0);
         this.isPogo = false;
+        this.respawned = false;
         this.pogoTimer = 0;
 
         // PLAYER HEALTH AND IFRAME SYSTEM
@@ -893,6 +894,7 @@ class Player {
         ) {
             this.dead = true;
         }
+        this.respawned = false;
 
         // Player dies
         if (this.dead) {
@@ -1258,6 +1260,7 @@ class Player {
         // checkpoint, he respawns at the spawn location
         this.x = this.checkpointX;
         this.y = this.checkpointY;
+        this.respawned = true;
         // Moves camera back to checkpoint location
         this.game.camera.x = this.checkpointX;
         this.game.camera.y = this.checkpointY;
