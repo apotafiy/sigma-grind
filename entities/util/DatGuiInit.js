@@ -13,7 +13,7 @@ function SceneManagerDatGUI(game, sceneManager) {
     sceneManager.cameraFolder
         .add(sceneManager.testValues, 'interpolation')
         .min(0)
-        .max(1)
+        .max(10)
         .step(0.001)
         .onChange((val) => {
             sceneManager.interpolation = val;

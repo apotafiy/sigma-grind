@@ -19,32 +19,33 @@ class Spike {
         this.isHostile = true;
         this.collisionDamage = 20;
         this.isPog = true;
+        const offSet = 5;
         this.BB = new BoundingBox(
-            this.x + 5,
-            this.y + 5,
-            64 * this.horizontal - 5,
-            64 * this.vertical - 5
+            this.x + offSet,
+            this.y + offSet,
+            64 * this.horizontal - offSet * 2,
+            64 * this.vertical - offSet * 2
         );
 
         this.leftBB = new BoundingBox(
-            this.x,
-            this.y + 5,
-            (64 * horizontal) / 2,
-            64 * vertical - 15
+            this.BB.x,
+            this.BB.y + offSet,
+            this.BB.width / 2,
+            this.BB.height - offSet * 2
         );
         this.rightBB = new BoundingBox(
-            this.x + (64 * horizontal) / 2,
-            this.y + 5,
-            (64 * horizontal) / 2,
-            64 * vertical - 15
+            this.BB.x + this.BB.width / 2,
+            this.BB.y + offSet,
+            this.BB.width / 2,
+            this.BB.height - offSet * 2
         );
 
         // Need bottom bounding box to prevent
         // player teleportation when head hit top platform
         this.bottomBB = new BoundingBox(
-            this.x + 10,
-            this.y + 64 * vertical,
-            64 * horizontal - 20,
+            this.BB.x + offSet * 2,
+            this.BB.y + this.BB.height - offSet * 2,
+            this.BB.width - offSet * 4,
             10 // Making it thinner
         );
 
@@ -52,9 +53,9 @@ class Spike {
         // too high with his hand in the air
         // like he just dont care
         this.topBB = new BoundingBox(
-            this.x,
-            this.y - 10, // Making it goes above the ground a bit
-            64 * horizontal,
+            this.BB.x,
+            this.BB.y - 10, // Making it goes above the ground a bit
+            this.BB.width,
             10 // Making it thinner
         );
 
@@ -118,24 +119,24 @@ class Spike {
                 );
             }
             ctx.strokeStyle = 'Green';
-            if (this.bottomBB) {
-                ctx.strokeRect(
-                    this.bottomBB.x - this.game.camera.x,
-                    this.bottomBB.y - this.game.camera.y,
-                    this.bottomBB.width,
-                    this.bottomBB.height
-                );
-            }
+            // if (this.bottomBB) {
+            //     ctx.strokeRect(
+            //         this.bottomBB.x - this.game.camera.x,
+            //         this.bottomBB.y - this.game.camera.y,
+            //         this.bottomBB.width,
+            //         this.bottomBB.height
+            //     );
+            // }
 
             ctx.strokeStyle = 'Pink';
-            if (this.topBB) {
-                ctx.strokeRect(
-                    this.topBB.x - this.game.camera.x,
-                    this.topBB.y - this.game.camera.y,
-                    this.topBB.width,
-                    this.topBB.height
-                );
-            }
+            // if (this.topBB) {
+            //     ctx.strokeRect(
+            //         this.topBB.x - this.game.camera.x,
+            //         this.topBB.y - this.game.camera.y,
+            //         this.topBB.width,
+            //         this.topBB.height
+            //     );
+            // }
         }
     }
 }

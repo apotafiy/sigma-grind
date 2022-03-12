@@ -56,7 +56,7 @@ class SceneManager {
         this.player_width = 45 / 2;
         this.shakeX = 0;
         this.shakeY = 0;
-        this.interpolation = 0.06;
+        this.interpolation = 3;
         this.background_songs = {};
         this.background_songs.intro = SOUND_MANAGER.getSound('background_1');
 
@@ -245,6 +245,58 @@ class SceneManager {
             0,
             1
         );
+
+        this.animations[7] = new Animator(
+            ASSET_MANAGER.getAsset('./sprites/title_screen/level_select.png'),
+            0,
+            0,
+            300,
+            71,
+            1,
+            11,
+            0,
+            0,
+            1
+        );
+
+        this.animations[8] = new Animator(
+            ASSET_MANAGER.getAsset('./sprites/title_screen/level_1.png'),
+            0,
+            0,
+            300,
+            71,
+            1,
+            11,
+            0,
+            0,
+            1
+        );
+
+        this.animations[9] = new Animator(
+            ASSET_MANAGER.getAsset('./sprites/title_screen/level_2.png'),
+            0,
+            0,
+            300,
+            71,
+            1,
+            11,
+            0,
+            0,
+            1
+        );
+
+        this.animations[10] = new Animator(
+            ASSET_MANAGER.getAsset('./sprites/title_screen/level_3.png'),
+            0,
+            0,
+            300,
+            71,
+            1,
+            11,
+            0,
+            0,
+            1
+        );
     }
     shake(x, y) {
         this.shakeX += x;
@@ -278,12 +330,12 @@ class SceneManager {
             this.x = lerp(
                 this.x + this.shakeX / 12, // Divide by 12 to lessen the amount of shake
                 this.game.player.x - midpoint,
-                this.interpolation
+                this.interpolation * this.game.clockTick
             );
             this.y = lerp(
                 this.y + this.shakeY / 12,
                 this.game.player.y - vertmidpoint,
-                this.interpolation
+                this.interpolation * this.game.clockTick
             );
             //remove some of the shake for friction
             this.shakeX -=
@@ -313,27 +365,61 @@ class SceneManager {
             if (this.game.keys.KeyW && this.menuCooldown <= 0) {
                 //move up selection
                 this.soundEffects.cycle.play();
-                this.menuIndex = (this.menuIndex + 1) % 2;
-                this.menuCooldown = 0.2;
-            } else if (this.game.keys.KeyS && this.menuCooldown <= 0) {
                 this.menuIndex -= 1;
-                this.soundEffects.cycle.play();
-                if (this.menuIndex < 0) this.menuIndex = 1;
                 this.menuCooldown = 0.2;
+                if (this.menuIndex < 0) this.menuIndex = 2;
+            } else if (this.game.keys.KeyS && this.menuCooldown <= 0) {
+                this.menuIndex = (this.menuIndex + 1) % 3;
+                this.soundEffects.cycle.play();
+                this.menuCooldown = 0.2;
+            } else if (this.game.keys.Enter && this.menuCooldown <= 0) {
+                //we want to start the level
+                this.soundEffects.select.play();
+                if (this.menuIndex != 2) {
+                    this.currentState = -1;
+                    this.isLevel = true;
+                    if (this.menuIndex == 1) {
+                        params.hardcore = true;
+                    }
+                    this.currentMS = 0;
+                    //stop current background music and load the level
+                    // this.soundEffects.menu_music.pause();
+                    // loadLevelOne(this.game);
+                    this.loadLevel();
+                } else {
+                    this.currentState = 5;
+                    this.menuCooldown = 0.2;
+                    this.menuIndex = 0;
+                }
+                // this.setGameMode(this.game);
+            }
+        }
+
+        //handle Level selection
+        if (this.currentState === 5) {
+            if (this.game.keys.KeyW && this.menuCooldown <= 0) {
+                //move up selection
+                this.soundEffects.cycle.play();
+                this.menuIndex -= 1;
+                this.menuCooldown = 0.2;
+                if (this.menuIndex < 0) this.menuIndex = 2;
+                console.log(this.menuIndex);
+            } else if (this.game.keys.KeyS && this.menuCooldown <= 0) {
+                this.menuIndex = (this.menuIndex + 1) % 3;
+                this.soundEffects.cycle.play();
+                this.menuCooldown = 0.2;
+                console.log(this.menuIndex);
             } else if (this.game.keys.Enter && this.menuCooldown <= 0) {
                 //we want to start the level
                 this.soundEffects.select.play();
                 this.currentState = -1;
                 this.isLevel = true;
-                if (this.menuIndex == 1) {
-                    params.hardcore = true;
-                }
                 this.currentMS = 0;
-                //stop current background music and load the level
-                // this.soundEffects.menu_music.pause();
-                // loadLevelOne(this.game);
+                //make sure we update the correct level to be played
+                if (this.menuIndex == 0) this.currentLevel = 0;
+                if (this.menuIndex == 1) this.currentLevel = 1;
+                if (this.menuIndex == 2) this.currentLevel = 2;
                 this.loadLevel();
-
                 // this.setGameMode(this.game);
             }
         }
@@ -402,7 +488,8 @@ class SceneManager {
         if (
             params.debug &&
             !this.currentState == 0 &&
-            !this.currentState == 1
+            !this.currentState == 1 &&
+            !this.currentState == 4
         ) {
             ctx.strokeStyle = 'Blue';
             ctx.strokelin;
@@ -479,7 +566,7 @@ class SceneManager {
                 that.game.clockTick,
                 ctx,
                 this.canvasWidth / 2 - 202 / 2,
-                this.canvasHeight / 2 + 100,
+                this.canvasHeight / 2 + 80,
                 1
             );
             ctx.filter = 'none';
@@ -490,8 +577,19 @@ class SceneManager {
                 that.game.clockTick,
                 ctx,
                 this.canvasWidth / 2 - 242 / 2,
-                this.canvasHeight / 2 + 200,
+                this.canvasHeight / 2 + 180,
                 1.2
+            );
+            ctx.filter = 'none';
+            if (this.menuIndex === 2) {
+                ctx.filter = `brightness(${this.enterBrightness})`;
+            }
+            that.animations[7].drawFrame(
+                that.game.clockTick,
+                ctx,
+                this.canvasWidth / 2 - 300 / 2 - 20,
+                this.canvasHeight / 2 + 310,
+                1.0
             );
             ctx.filter = 'none';
         }
@@ -558,6 +656,49 @@ class SceneManager {
                 this.canvasWidth / 2 - 486 / 2,
                 (this.canvasHeight / 3) * 2,
                 1
+            );
+            ctx.filter = 'none';
+        }
+        if (!this.isLevel && this.currentState == 5) {
+            that.animations[0].drawFrame(that.game.clockTick, ctx, 0, 0, 1);
+            that.animations[7].drawFrame(
+                that.game.clockTick,
+                ctx,
+                this.canvasWidth / 2 - 600 / 2,
+                30,
+                2
+            );
+            if (this.menuIndex === 0) {
+                ctx.filter = `brightness(${this.enterBrightness})`;
+            }
+            that.animations[8].drawFrame(
+                that.game.clockTick,
+                ctx,
+                this.canvasWidth / 2 - 300 / 2 - 20,
+                this.canvasHeight / 2 + 80,
+                1
+            );
+            ctx.filter = 'none';
+            if (this.menuIndex === 1) {
+                ctx.filter = `brightness(${this.enterBrightness})`;
+            }
+            that.animations[9].drawFrame(
+                that.game.clockTick,
+                ctx,
+                this.canvasWidth / 2 - 300 / 2 - 20,
+                this.canvasHeight / 2 + 180,
+                1
+            );
+            ctx.filter = 'none';
+            if (this.menuIndex === 2) {
+                ctx.filter = `brightness(${this.enterBrightness})`;
+            }
+            that.animations[10].drawFrame(
+                that.game.clockTick,
+                ctx,
+                this.canvasWidth / 2 - 300 / 2 - 20,
+                this.canvasHeight / 2 + 280,
+                1.0
             );
             ctx.filter = 'none';
         }

@@ -187,6 +187,11 @@ class Mettaur {
             this.xVelocity = 0;
             // console.log(this);
             this.game.camera.msOffset += 5000;
+            this.game.addEntityAtIndex(
+                new TimeIndicator(this.game, this.x / 64, this.y / 64, 5000),
+                10
+            ); // idk the index is arbitrary
+            // console.log('Dead Met');
         }
     }
     updateBB() {

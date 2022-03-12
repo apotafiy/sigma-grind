@@ -10,6 +10,10 @@ ASSET_MANAGER.queueDownload('./sprites/title_screen/normal.png');
 ASSET_MANAGER.queueDownload('./sprites/title_screen/hardcore.png');
 ASSET_MANAGER.queueDownload('./sprites/title_screen/game_over.png');
 ASSET_MANAGER.queueDownload('./sprites/title_screen/mission_complete.png');
+ASSET_MANAGER.queueDownload('./sprites/title_screen/level_select.png');
+ASSET_MANAGER.queueDownload('./sprites/title_screen/level_1.png');
+ASSET_MANAGER.queueDownload('./sprites/title_screen/level_2.png');
+ASSET_MANAGER.queueDownload('./sprites/title_screen/level_3.png');
 // Beams
 ASSET_MANAGER.queueDownload('./sprites/verticalBeam.png');
 ASSET_MANAGER.queueDownload('./sprites/horizontalBeam.png');
@@ -109,6 +113,7 @@ ASSET_MANAGER.queueDownload('./sprites/misc/explosion.png');
 //Lava
 ASSET_MANAGER.queueDownload('./sprites/misc/lava-1400x26.png');
 ASSET_MANAGER.queueDownload('./sprites/misc/lavaBottom.png');
+ASSET_MANAGER.queueDownload('./sprites/misc/lavaRising.png');
 //Boss Door
 ASSET_MANAGER.queueDownload('./sprites/misc/bossDoor-30x64.png');
 
@@ -128,6 +133,9 @@ ASSET_MANAGER.queueDownload('./sprites/player/health-bars.png');
 ASSET_MANAGER.queueDownload('./sprites/items/health_pack_full_22x31.png');
 ASSET_MANAGER.queueDownload('./sprites/items/health_pack_small_25x16.png');
 ASSET_MANAGER.queueDownload('./sprites/items/clock-16x20.png');
+
+// Checkpoint
+ASSET_MANAGER.queueDownload('./sprites/misc/checkpoint.png');
 
 // Player sound effects
 SOUND_MANAGER.queueDownload('player_jump', './sounds/player/jump_voice.wav');

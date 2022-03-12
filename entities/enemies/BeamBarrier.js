@@ -25,9 +25,13 @@ class BeamBarrier {
         }
         this.isPog = false;
         this.isHostile = true;
+        this.alwaysRender = true;
         this.collisionDamage = 10;
         this.scale = 3;
         this.state = 0;
+        this.isPog = false;
+        this.isHostile = true;
+        this.collisionDamage = 10;
         this.loadAnimations();
     }
 

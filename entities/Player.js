@@ -26,6 +26,7 @@ class Player {
         this.attacking = false;
         this.attackBB = new BoundingBox(0, 0, 0, 0);
         this.isPogo = false;
+        this.respawned = false;
         this.pogoTimer = 0;
 
         // PLAYER HEALTH AND IFRAME SYSTEM
@@ -893,6 +894,7 @@ class Player {
         ) {
             this.dead = true;
         }
+        this.respawned = false;
 
         // Player dies
         if (this.dead) {
@@ -1015,8 +1017,9 @@ class Player {
                     this.health = Math.max(this.health, 0);
                     this.currentIFrameTimer = this.maxIFrameTimer;
                     this.immobilized = true;
-                    // console.log('Took ' + entity.collisionDamage + ' damage');
-                    // console.log('Current HP: ' + this.health);
+                    if (entity instanceof TurretBullet) {
+                        entity.die();
+                    }
                 }
                 if (this.velocity.y > 0) {
                     // falling
@@ -1257,7 +1260,8 @@ class Player {
         // checkpoint, he respawns at the spawn location
         this.x = this.checkpointX;
         this.y = this.checkpointY;
-        //Update camera position
+        this.respawned = true;
+        // Moves camera back to checkpoint location
         this.game.camera.x = this.checkpointX;
         this.game.camera.y = this.checkpointY;
         this.health = this.maxHealth; // Replenish health
