@@ -57,4 +57,4 @@ https://www.youtube.com/watch?v=Qkf74Izk0QM
   ![Title Card](readme/title_card.png)
   ![Pogo](readme/pogo.png)
   ![Drills](readme/drills.png)\
-  ![Sigma](readme/sigma.png);
+  ![Sigma](readme/sigma.png)
