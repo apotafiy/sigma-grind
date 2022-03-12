@@ -33,8 +33,22 @@ class Drill {
     }
 
     die() {
-        this.state = 3;
-        this.BB = undefined;
+        if (this.state != 3) {
+            this.state = 3;
+            this.BB = undefined;
+            if (!this.selfDestructed) {
+                this.game.camera.msOffset += 5000;
+                this.game.addEntityAtIndex(
+                    new TimeIndicator(
+                        this.game,
+                        this.x / 64,
+                        this.y / 64,
+                        5000
+                    ),
+                    10
+                ); // idk the index is arbitrary
+            }
+        }
     }
 
     drawAngle(ctx, angle) {
@@ -208,6 +222,7 @@ class Drill {
             // idle or ready
             if (dist < 450 && this.state == 0) {
                 setTimeout(() => {
+                    this.selfDestructed = true;
                     this.die();
                 }, 1000 * that.lifeExpectancy);
                 this.state = 1;

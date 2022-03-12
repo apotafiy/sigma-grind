@@ -948,7 +948,7 @@ class Player {
 
     handleCollision() {
         // collision
-        this.game.entities.forEach(entity => {
+        this.game.entities.forEach((entity) => {
             //check for the enemy colliding with sword
             // || entity instanceof Drill
             if (entity.BB && this.attackBB.collide(entity.BB)) {
@@ -1015,6 +1015,9 @@ class Player {
                     this.health = Math.max(this.health, 0);
                     this.currentIFrameTimer = this.maxIFrameTimer;
                     this.immobilized = true;
+                    if (entity instanceof TurretBullet) {
+                        entity.die();
+                    }
                 }
                 if (this.velocity.y > 0) {
                     // falling
