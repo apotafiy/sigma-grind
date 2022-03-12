@@ -1017,6 +1017,9 @@ class Player {
                     this.health = Math.max(this.health, 0);
                     this.currentIFrameTimer = this.maxIFrameTimer;
                     this.immobilized = true;
+                    if (entity instanceof TurretBullet) {
+                        entity.die();
+                    }
                 }
                 if (this.velocity.y > 0) {
                     // falling
