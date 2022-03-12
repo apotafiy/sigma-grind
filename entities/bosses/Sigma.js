@@ -753,7 +753,8 @@ class Sigma {
     }
 
     energyWave() {
-        let xOffset = this.facing === 0 ? 10 : -30;
+        let xOffset =
+            this.facing === 0 ? this.BB.width / 2 : -(this.BB.width / 2);
         if (!this.wave.started) {
             this.soundEffects.wave.play();
             this.wave.start(this.x + xOffset, this.y - 60, this.facing);

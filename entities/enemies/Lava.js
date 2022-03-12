@@ -5,7 +5,8 @@ class Lava {
         this.x = x * 64;
         this.y = y * 64;
         this.scale = 2;
-        this.speed = -140;
+        if (params.hardcore) this.speed = -200;
+        else this.speed = -180;
         this.isHostile = true;
         this.collisionDamage = 999999;
         this.alwaysRender = true;
@@ -134,7 +135,9 @@ class Lava {
         ctx.textAlign = 'center';
         ctx.fillStyle = '#ff3b34';
         ctx.fillText(
-            `${Math.round(this.getYDistance(this.y, this.game.player.y))}`,
+            `${Math.round(
+                this.getYDistance(this.y, this.game.player.y) - 450
+            )}`,
             518,
             723
         );
