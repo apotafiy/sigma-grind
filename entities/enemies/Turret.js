@@ -139,7 +139,6 @@ class Turret {
         );
     }
     update() {
-        console.log(this.state);
         if (this.isAlive && this.health <= 0) {
             this.die();
         }
