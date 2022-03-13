@@ -6,6 +6,7 @@ class TimeIndicator {
         this.ms = milliseconds;
         this.lifespan = 1000;
         this.opacity = 1;
+        this.fadeInflection = 200;
     }
 
     update() {
@@ -24,7 +25,7 @@ class TimeIndicator {
         ctx.textAlign = 'left';
         ctx.fillStyle = 'Green';
         ctx.strokeStyle = 'Light blue';
-        if (this.lifespan < 500) {
+        if (this.lifespan < this.fadeInflection) {
             ctx.filter = `opacity(${this.opacity})`;
         }
         ctx.lineWidth = 2;
@@ -39,7 +40,7 @@ class TimeIndicator {
             this.y - this.game.camera.y - (1000 - this.lifespan) * 0.2
         );
         ctx.lineWidth = 1;
-        if (this.lifespan < 500) {
+        if (this.lifespan < this.fadeInflection) {
             ctx.filter = `opacity(1)`;
         }
     }
