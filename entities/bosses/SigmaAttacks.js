@@ -182,7 +182,7 @@ class SigmaHead {
                     this.beamTime -= TICK;
                     this.beamTime = Math.max(this.beamTime, 0);
 
-                    this.y = lerp(this.y, this.game.player.y - 200, 0.069);
+                    this.y = lerp(this.y, this.game.player.y - 200, 4.5 * TICK);
 
                     // Position crosshair x to be next to player
                     let playerX = this.game.player.x;
