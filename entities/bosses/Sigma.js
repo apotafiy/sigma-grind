@@ -460,7 +460,7 @@ class Sigma {
         } else {
             // ACTIONS
             if (this.isIntro) {
-                if (getDistance(this.introObject, this.game.player) <= 300) {
+                if (this.getXDistance(this.x, this.game.player.x) <= 300) {
                     this.game.player.immobilized = true;
                     this.game.player.meetBoss = true;
                     this.state = this.states.spawnIn;
@@ -919,5 +919,9 @@ class Sigma {
                 this.y - this.game.camera.y - 20
             );
         }
+    }
+
+    getXDistance(x1, x2) {
+        return Math.abs(x1 - x2);
     }
 }
