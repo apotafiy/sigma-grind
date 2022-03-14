@@ -588,7 +588,8 @@ class Wave {
 
         if (!this.isHidden) {
             this.isHostile = true;
-            this.collisionDamage = 30;
+            if (params.hardcore) this.collisionDamage = 30;
+            else this.collisionDamage = 10;
 
             this.x +=
                 (this.facing === 0 ? this.speed : -this.speed) *
