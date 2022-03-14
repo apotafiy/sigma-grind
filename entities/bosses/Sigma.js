@@ -31,8 +31,8 @@ class Sigma {
         };
         this.teleportPoints = [
             // Ground level
-            { x: (x + 2.406) * 64, y: (y + 0.3) * 64, type: 'right' },
-            { x: (x - 12) * 64, y: (y + 0.3) * 64, type: 'left' },
+            { x: (x + 2.406) * 64, y: (y + 0.27) * 64, type: 'right' },
+            { x: (x - 12) * 64, y: (y + 0.27) * 64, type: 'left' },
             // mid air
             { x: (x + 2.406) * 64, y: (y - 2.5) * 64, type: 'right' },
             { x: (x - 12) * 64, y: (y - 2.5) * 64, type: 'left' },
@@ -72,6 +72,9 @@ class Sigma {
         this.ballTimeout = 0.1;
         this.ballOffset = 0;
         this.ballSpeedOffset = 0;
+        this.ballOffsetCounterCW = 0;
+        this.ballSpeedOffsetCounterCW = 0;
+        this.ballsDir = null;
         this.attackCooldown = 0.6;
 
         //sound imports
@@ -694,20 +697,18 @@ class Sigma {
             // state is now teleport in
             this.state = this.states.teleportIn;
             this.soundEffects.teleport.play();
+            if (type !== 'mid') this.facing = type === 'right' ? 1 : 0;
         }
         if (this.animations[this.states.teleportIn][this.facing].isDone()) {
             this.state = this.states.idle;
-            this.animations[this.states.teleportOut][
-                this.facing
-            ].elapsedTime = 0;
-            this.animations[this.states.teleportIn][
-                this.facing
-            ].elapsedTime = 0;
+            this.animations[this.states.teleportOut][0].elapsedTime = 0;
+            this.animations[this.states.teleportOut][1].elapsedTime = 0;
+            this.animations[this.states.teleportIn][0].elapsedTime = 0;
+            this.animations[this.states.teleportIn][1].elapsedTime = 0;
 
             // teleport done, set these back to true
             this.isHostile = true;
             this.isPog = true;
-            if (type !== 'mid') this.facing = type === 'right' ? 1 : 0;
 
             // Do something after teleport here
             this.state = action;
@@ -780,12 +781,40 @@ class Sigma {
         this.ballTimeout -= this.game.clockTick;
         this.ballTimeout = Math.max(this.ballTimeout, 0);
         let ballSpeed = 300;
-        // increase offset
-        this.ballOffset += this.game.clockTick * 90;
-        this.ballOffset = Math.min(this.ballOffset, this.BB.height);
 
-        this.ballSpeedOffset += this.game.clockTick * 180;
-        this.ballSpeedOffset = Math.min(this.ballSpeedOffset, ballSpeed * 2);
+        if (this.ballsDir === null) this.ballsDir = randomInt(2);
+
+        switch (this.ballsDir) {
+            case 0:
+                // Rotate Clockwise
+                this.ballOffset += this.game.clockTick * 90;
+                this.ballOffset = Math.min(this.ballOffset, this.BB.height);
+
+                this.ballSpeedOffset += this.game.clockTick * 180;
+                this.ballSpeedOffset = Math.min(
+                    this.ballSpeedOffset,
+                    ballSpeed * 2
+                );
+                this.ballOffsetCounterCW = 0;
+                this.ballSpeedOffsetCounterCW = 0;
+                break;
+            case 1:
+                // Rotate Counter-Clockwise
+                this.ballOffsetCounterCW += this.game.clockTick * 90;
+                this.ballOffsetCounterCW = Math.min(
+                    this.ballOffsetCounterCW,
+                    this.BB.height
+                );
+
+                this.ballSpeedOffsetCounterCW += this.game.clockTick * 180;
+                this.ballSpeedOffsetCounterCW = Math.min(
+                    this.ballSpeedOffsetCounterCW,
+                    ballSpeed * 2
+                );
+                this.ballOffset = 0;
+                this.ballSpeedOffset = 0;
+                break;
+        }
 
         if (this.ballTimeout === 0) {
             this.soundEffects.balls.play();
@@ -794,9 +823,9 @@ class Sigma {
                 new SigmaBall(
                     this.game,
                     this.x + this.ballOffset,
-                    this.y,
+                    this.y + this.ballOffsetCounterCW,
                     -ballSpeed + this.ballSpeedOffset,
-                    -ballSpeed
+                    -ballSpeed + this.ballSpeedOffsetCounterCW
                 ),
                 this.entityArrayPos + 1
             );
@@ -804,9 +833,9 @@ class Sigma {
             this.game.addEntityAtIndex(
                 new SigmaBall(
                     this.game,
-                    this.x + this.BB.width,
+                    this.x + this.BB.width - this.ballOffsetCounterCW,
                     this.y + this.ballOffset,
-                    ballSpeed,
+                    ballSpeed - this.ballSpeedOffsetCounterCW,
                     -ballSpeed + this.ballSpeedOffset
                 ),
                 this.entityArrayPos + 1
@@ -815,9 +844,9 @@ class Sigma {
             this.game.addEntityAtIndex(
                 new SigmaBall(
                     this.game,
-                    this.x,
+                    this.x + this.ballOffsetCounterCW,
                     this.y + this.BB.height - this.ballOffset,
-                    -ballSpeed,
+                    -ballSpeed + this.ballSpeedOffsetCounterCW,
                     ballSpeed - this.ballSpeedOffset
                 ),
                 this.entityArrayPos + 1
@@ -827,9 +856,9 @@ class Sigma {
                 new SigmaBall(
                     this.game,
                     this.x + this.BB.width - this.ballOffset,
-                    this.y + this.BB.height,
+                    this.y + this.BB.height - this.ballOffsetCounterCW,
                     ballSpeed - this.ballSpeedOffset,
-                    ballSpeed
+                    ballSpeed - this.ballSpeedOffsetCounterCW
                 ),
                 this.entityArrayPos + 1
             );
@@ -838,10 +867,16 @@ class Sigma {
         }
 
         // stop attack and reset
-        if (this.ballSpeedOffset === ballSpeed * 2) {
+        if (
+            this.ballSpeedOffset === ballSpeed * 2 ||
+            this.ballSpeedOffsetCounterCW === ballSpeed * 2
+        ) {
             this.ballTimeout = 0.1;
             this.ballOffset = 0;
             this.ballSpeedOffset = 0;
+            this.ballOffsetCounterCW = 0;
+            this.ballSpeedOffsetCounterCW = 0;
+            this.ballsDir = null;
             this.state = action;
         }
     }

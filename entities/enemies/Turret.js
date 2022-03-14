@@ -159,6 +159,8 @@ class Turret {
                         this.isFiring = true;
                         this.startFiring();
                     }
+                } else if (this.state == 3) {
+                    this.state = 2;
                 }
             } else {
                 if (this.state != 0) {

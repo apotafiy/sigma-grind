@@ -403,12 +403,12 @@ class SceneManager {
                 this.menuIndex -= 1;
                 this.menuCooldown = 0.2;
                 if (this.menuIndex < 0) this.menuIndex = 2;
-                console.log(this.menuIndex);
+                // console.log(this.menuIndex);
             } else if (this.game.keys.KeyS && this.menuCooldown <= 0) {
                 this.menuIndex = (this.menuIndex + 1) % 3;
                 this.soundEffects.cycle.play();
                 this.menuCooldown = 0.2;
-                console.log(this.menuIndex);
+                // console.log(this.menuIndex);
             } else if (this.game.keys.Enter && this.menuCooldown <= 0) {
                 //we want to start the level
                 this.soundEffects.select.play();
