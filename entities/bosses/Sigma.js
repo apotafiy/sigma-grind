@@ -369,6 +369,9 @@ class Sigma {
     // TODO
     die() {
         this.game.camera.finalTime = this.game.camera.getFormattedTime();
+        params.totalTime += this.game.camera.parseTime(
+            this.game.camera.finalTime
+        );
         this.game.camera.isLevel = false;
         this.game.camera.currentState = 3;
         this.game.camera.setMenuMode(this.game);
