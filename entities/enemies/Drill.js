@@ -6,7 +6,6 @@ class Drill {
         this.isActive = false;
         this.player = this.game.getPlayer();
         this.lifeExpectancy = lifeExpectancy;
-        this.cache = [];
         this.xVelocity = 0;
         this.yVelocity = 0;
         this.health = 25;
@@ -55,22 +54,23 @@ class Drill {
         if (angle < 0 || angle > 359) return;
         const width = 51;
 
-        if (this.cache[this.state] === undefined) {
-            this.cache[this.state] = [];
+        if (params.cache[this.state] === undefined) {
+            params.cache[this.state] = [];
         }
         if (
-            this.cache[this.state][
+            params.cache[this.state][
                 this.animations[this.state].currentFrame()
             ] === undefined
         ) {
             // if doesnt have array for frame
-            this.cache[this.state][this.animations[this.state].currentFrame()] =
-                [];
+            params.cache[this.state][
+                this.animations[this.state].currentFrame()
+            ] = [];
         }
         if (
-            this.cache[this.state][this.animations[this.state].currentFrame()][
-                angle
-            ] === undefined
+            params.cache[this.state][
+                this.animations[this.state].currentFrame()
+            ][angle] === undefined
         ) {
             let radians = (angle / 360) * 2 * Math.PI;
             let offscreenCanvas = document.createElement('canvas');
@@ -103,15 +103,15 @@ class Drill {
                 width * this.scale
             );
             offscreenCtx.restore();
-            this.cache[this.state][this.animations[this.state].currentFrame()][
-                angle
-            ] = offscreenCanvas;
+            params.cache[this.state][
+                this.animations[this.state].currentFrame()
+            ][angle] = offscreenCanvas;
         }
 
         ctx.drawImage(
-            this.cache[this.state][this.animations[this.state].currentFrame()][
-                angle
-            ],
+            params.cache[this.state][
+                this.animations[this.state].currentFrame()
+            ][angle],
             this.x - this.game.camera.x,
             this.y - this.game.camera.y,
             width * this.scale,

@@ -6,6 +6,8 @@ class TimeIndicator {
         this.ms = milliseconds;
         this.lifespan = 1000;
         this.opacity = 1;
+        this.fadeInflection = 200;
+        this.rgb = { r: 17, g: 140, b: 79 };
     }
 
     update() {
@@ -15,18 +17,21 @@ class TimeIndicator {
             return;
         }
         this.lifespan -= 1500 * this.game.clockTick;
-        this.opacity = Math.max(0, this.lifespan / 1000);
     }
 
     draw(ctx) {
         const text = '-' + Math.floor(this.ms / 1000);
         ctx.font = '20px "Zen Dots"';
         ctx.textAlign = 'left';
-        ctx.fillStyle = 'Green';
-        ctx.strokeStyle = 'Light blue';
-        if (this.lifespan < 500) {
-            ctx.filter = `opacity(${this.opacity})`;
+        const fill = ctx.fillStyle;
+        const stroke = ctx.strokeStyle;
+        let color = `rgba(${this.rgb.r},${this.rgb.g},${this.rgb.b}, 1)`;
+        this.opacity = Math.max(0, this.lifespan / 1000);
+        if (this.lifespan < this.fadeInflection) {
+            color = `rgba(${this.rgb.r},${this.rgb.g},${this.rgb.b}, ${this.opacity})`;
         }
+        ctx.fillStyle = color;
+        ctx.strokeStyle = color;
         ctx.lineWidth = 2;
         ctx.strokeText(
             text,
@@ -39,8 +44,8 @@ class TimeIndicator {
             this.y - this.game.camera.y - (1000 - this.lifespan) * 0.2
         );
         ctx.lineWidth = 1;
-        if (this.lifespan < 500) {
-            ctx.filter = `opacity(1)`;
-        }
+        ctx.fillStyle = fill;
+        ctx.strokeStyle = stroke;
     }
 }
+//ligma balls
