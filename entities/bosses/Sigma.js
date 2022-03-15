@@ -32,7 +32,7 @@ class Sigma {
         this.teleportPoints = [
             // Ground level
             { x: (x + 2.406) * 64, y: (y + 0.27) * 64, type: 'right' },
-            { x: (x - 12) * 64, y: (y + 0.27) * 64, type: 'left' },
+            { x: (x - 11.7) * 64, y: (y + 0.27) * 64, type: 'left' },
             // mid air
             { x: (x + 2.406) * 64, y: (y - 2.5) * 64, type: 'right' },
             { x: (x - 12) * 64, y: (y - 2.5) * 64, type: 'left' },
@@ -369,6 +369,9 @@ class Sigma {
     // TODO
     die() {
         this.game.camera.finalTime = this.game.camera.getFormattedTime();
+        params.totalTime += this.game.camera.parseTime(
+            this.game.camera.finalTime
+        );
         this.game.camera.isLevel = false;
         this.game.camera.currentState = 3;
         this.game.camera.setMenuMode(this.game);
@@ -460,7 +463,7 @@ class Sigma {
         } else {
             // ACTIONS
             if (this.isIntro) {
-                if (getDistance(this.introObject, this.game.player) <= 300) {
+                if (this.getXDistance(this.x, this.game.player.x) <= 300) {
                     this.game.player.immobilized = true;
                     this.game.player.meetBoss = true;
                     this.state = this.states.spawnIn;
@@ -700,18 +703,18 @@ class Sigma {
             if (type !== 'mid') this.facing = type === 'right' ? 1 : 0;
         }
         if (this.animations[this.states.teleportIn][this.facing].isDone()) {
-            this.state = this.states.idle;
+            // Do something after teleport here
+            this.state = action;
+
             this.animations[this.states.teleportOut][0].elapsedTime = 0;
             this.animations[this.states.teleportOut][1].elapsedTime = 0;
-            this.animations[this.states.teleportIn][0].elapsedTime = 0;
-            this.animations[this.states.teleportIn][1].elapsedTime = 0;
+            this.animations[this.states.teleportIn][
+                this.facing
+            ].elapsedTime = 0;
 
             // teleport done, set these back to true
             this.isHostile = true;
             this.isPog = true;
-
-            // Do something after teleport here
-            this.state = action;
         }
     }
 
@@ -919,5 +922,9 @@ class Sigma {
                 this.y - this.game.camera.y - 20
             );
         }
+    }
+
+    getXDistance(x1, x2) {
+        return Math.abs(x1 - x2);
     }
 }
